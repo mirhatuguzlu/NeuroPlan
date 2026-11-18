@@ -170,6 +170,7 @@ Kaçınılacaklar (frontend-design): her etikette TÜMÜ BÜYÜK HARF, başlıkt
 - **Hareket hassasiyeti:** §5'teki azaltılmış hareket kuralı.
 - **Otomatik test:** widget testlerinde Flutter'ın `androidTapTargetGuideline`, `labeledTapTargetGuideline` ve `textContrastGuideline` eşleyicileri her ekran için çalıştırılır.
 - **3D beyin:** aynı bilginin metin / liste alternatifi zorunlu.
+- **Sürükle-bırak:** yalnız basılı tutmaya güvenilmez; görünür bir `drag_indicator` tutamacı olur ve tutamaçtan hemen sürüklenir. Parmak liste kenarına gelince liste kendiliğinden kayar (`lib/ui/core/drag.dart` → `DragItem`). Her sürükleme işinin dokunarak yapılan bir alternatifi vardır (ör. "Taşı").
 
 ## 10. Metin ve ton
 - Her tema kendi tonunu taşır (Ciddi: net ve kısa; Eğlenceli / Genç: sıcak, oyunbaz; Kodcu: teknik esprili) ama hiçbir tonda suçlama, utandırma ya da sahte aciliyet yok. Örn. sönen beyin bölgeleri için “İhmal ettin!” değil, nötr bir hatırlatma.

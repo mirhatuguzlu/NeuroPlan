@@ -255,7 +255,7 @@
   "catInUse": "First move or delete the categories and items inside it.",
   "catMoved": "{name} moved",
   "catEmpty": "No subcategories or items yet.",
-  "catDragHint": "Long-press and drop onto a category to move.",
+  "catDragHint": "To move a row, drag it by the handle on the left and drop it onto a category or a root heading.",
   "moveTitle": "Move where?",
   "moveCannotIntoSelf": "A category can't be moved under itself.",
 
@@ -279,7 +279,7 @@
   "riskMoveDeadline": "Move deadline",
   "riskApplied": "Setting updated; the plan was recalculated.",
   "manualTitle": "Free slots",
-  "manualHint": "Drag the chunk onto a free slot or tap a slot.",
+  "manualHint": "Drag the chunk by its handle onto a free slot, or tap a slot.",
   "manualChunk": "{duration} chunk",
   "manualPlaced": "Chunk placed",
   "manualNoSlots": "No suitable free slots in the coming days.",

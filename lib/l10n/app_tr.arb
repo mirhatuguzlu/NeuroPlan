@@ -288,7 +288,7 @@
   "catMoved": "{name} taşındı",
   "@catMoved": {"placeholders": {"name": {"type": "String"}}},
   "catEmpty": "Henüz alt kategori ya da iş yok.",
-  "catDragHint": "Taşımak için basılı tut ve bir kategorinin üstüne bırak.",
+  "catDragHint": "Taşımak için satırı soldaki tutamaçtan sürükle, bir kategorinin ya da kök kategori başlığının üstüne bırak.",
   "moveTitle": "Nereye taşınsın?",
   "moveCannotIntoSelf": "Bir kategori kendi altına taşınamaz.",
 
@@ -317,7 +317,7 @@
   "riskMoveDeadline": "Son tarihi taşı",
   "riskApplied": "Ayar güncellendi; plan yeniden hesaplandı.",
   "manualTitle": "Boş dilimler",
-  "manualHint": "Parçayı bir boş dilime sürükle ya da dilime dokun.",
+  "manualHint": "Parçayı tutamaçtan bir boş dilime sürükle ya da dilime dokun.",
   "manualChunk": "{duration} parça",
   "@manualChunk": {"placeholders": {"duration": {"type": "String"}}},
   "manualPlaced": "Parça yerleştirildi",

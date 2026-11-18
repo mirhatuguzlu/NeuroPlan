@@ -1,8 +1,10 @@
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:neuroplan/app/providers.dart';
+import 'package:neuroplan/ui/core/app_shell.dart';
 import 'package:neuroplan/data/local/app_database.dart';
 import 'package:neuroplan/app/router.dart';
 import 'package:neuroplan_core/neuroplan_core.dart';
@@ -156,6 +158,76 @@ void main() {
     expect(find.textContaining('Güçlü kanıt'), findsOneWidget);
   });
 
+  testWidgets('Beyin: tutamaçtan sürükleyince iş kategoriye taşınır', (
+    t,
+  ) async {
+    late String catId, actId;
+    final h = await pumpApp(
+      t,
+      seed: (c) async {
+        actId = await addDaily(c, 'Okuma');
+        final cat = await c
+            .read(categoryRepositoryProvider)
+            .create(name: 'Kitaplar', rootCategoryKey: 'learning_memory');
+        catId = cat.id;
+      },
+    );
+    await h.tap(find.text('Beyin').last);
+    await h.tap(find.text('Öğrenme ve Bellek'));
+    await centre(t, find.text('Okuma'));
+    final g = await t.startGesture(t.getCenter(handleOf('Okuma')));
+    await g.moveBy(const Offset(0, 20));
+    await t.pump();
+    await g.moveTo(t.getCenter(find.text('Kitaplar')));
+    await t.pump();
+    await g.up();
+    await h.settle();
+    expect(find.text('Okuma taşındı'), findsOneWidget);
+    final data = await t.runAsync(() => h.read(planDataProvider.future));
+    expect(data!.activities[actId]!.categoryId, catId);
+  });
+
+  testWidgets(
+    'Beyin: alt kenarda tutunca liste kayar, bırakınca altına gelen başlığa taşınır',
+    (t) async {
+      late String actId;
+      final h = await pumpApp(
+        t,
+        seed: (c) async => actId = await addDaily(c, 'Okuma'),
+      );
+      await h.tap(find.text('Beyin').last);
+      await h.tap(find.text('Öğrenme ve Bellek'));
+      await centre(t, find.text('Okuma'));
+      final scroll = t.state<ScrollableState>(
+        find.byType(Scrollable).hitTestable().first,
+      );
+      final before = scroll.position.pixels;
+      // Alt menünün hemen üstü: kayma bölgesinde ama liste içeriğinin üzerinde.
+      final list = t.getRect(find.byWidget(scroll.widget));
+      final hold = Offset(
+        list.center.dx,
+        list.bottom - AppShell.bottomInset(scroll.context) - 36,
+      );
+      final g = await t.startGesture(t.getCenter(handleOf('Okuma')));
+      await g.moveBy(const Offset(0, 20));
+      await t.pump();
+      await g.moveTo(hold);
+      for (var last = -1.0; last != scroll.position.pixels;) {
+        last = scroll.position.pixels;
+        for (var i = 0; i < 5; i++) {
+          await t.pump(const Duration(milliseconds: 20));
+        }
+      }
+      expect(scroll.position.pixels, scroll.position.maxScrollExtent);
+      expect(scroll.position.pixels, greaterThan(before));
+      // Parmak hiç oynamadan bırakılır; hedef kaymadan sonraki başlık olmalı.
+      await g.up();
+      await h.settle();
+      final data = await t.runAsync(() => h.read(planDataProvider.future));
+      expect(data!.activities[actId]!.rootCategoryKey, 'rest_sleep');
+    },
+  );
+
   testWidgets(
     'yazı ölçeği 2.0: Bugün, sihirbaz ve alt menü taşmaz (UX_RULES §9)',
     (t) async {
@@ -211,4 +283,58 @@ void main() {
     await h.tap(find.text('Hepsini onayla'));
     expect(find.textContaining('parça onaylandı'), findsOneWidget);
   });
+
+  testWidgets('Proje (elle): parça tutamaçtan boş dilime sürüklenir', (
+    t,
+  ) async {
+    late String id;
+    final h = await pumpApp(
+      t,
+      seed: (c) async {
+        final repo = c.read(activityRepositoryProvider);
+        final a = await repo.create(
+          ActivitiesCompanion.insert(
+            id: newId(),
+            kind: 'project',
+            title: 'Tez',
+          ),
+        );
+        id = a.id;
+        await repo.saveProject(
+          a.id,
+          ProjectsCompanion(
+            totalMinutes: const Value(120),
+            deadlineAt: Value(DateTime.utc(2026, 11, 25, 20)),
+            splitMode: const Value('manual'),
+          ),
+        );
+      },
+    );
+    h.read(routerProvider).push('/project/$id');
+    await h.settle();
+    final handle = find.byIcon(Symbols.drag_indicator_rounded);
+    await centre(t, handle);
+    final g = await t.startGesture(t.getCenter(handle));
+    await g.moveBy(const Offset(0, 20));
+    await t.pump();
+    await g.moveTo(
+      t.getCenter(find.byIcon(Symbols.hourglass_empty_rounded).first),
+    );
+    await t.pump();
+    await g.up();
+    await h.settle();
+    expect(find.text('Parça yerleştirildi'), findsOneWidget);
+  });
+}
+
+/// [title] satırındaki sürükleme tutamacı.
+Finder handleOf(String title) => find.descendant(
+  of: find.widgetWithText(Row, title).first,
+  matching: find.byIcon(Symbols.drag_indicator_rounded),
+);
+
+/// [f]'yi listenin ortasına kaydırır; kenardaki otomatik kayma bölgesine düşmesin.
+Future<void> centre(WidgetTester t, Finder f) async {
+  await Scrollable.ensureVisible(t.element(f), alignment: 0.5);
+  await t.pump();
 }

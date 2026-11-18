@@ -873,7 +873,7 @@ class L10nTr extends L10n {
 
   @override
   String get catDragHint =>
-      'Taşımak için basılı tut ve bir kategorinin üstüne bırak.';
+      'Taşımak için satırı soldaki tutamaçtan sürükle, bir kategorinin ya da kök kategori başlığının üstüne bırak.';
 
   @override
   String get moveTitle => 'Nereye taşınsın?';
@@ -954,7 +954,8 @@ class L10nTr extends L10n {
   String get manualTitle => 'Boş dilimler';
 
   @override
-  String get manualHint => 'Parçayı bir boş dilime sürükle ya da dilime dokun.';
+  String get manualHint =>
+      'Parçayı tutamaçtan bir boş dilime sürükle ya da dilime dokun.';
 
   @override
   String manualChunk(String duration) {

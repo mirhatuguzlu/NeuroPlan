@@ -9,6 +9,7 @@ import '../../../app/theme.dart';
 import '../../../data/local/app_database.dart';
 import '../../../data/repositories/category_repository.dart';
 import '../../core/app_shell.dart';
+import '../../core/drag.dart';
 import '../../core/format.dart';
 import '../../core/states.dart';
 
@@ -215,28 +216,26 @@ class _RootCardState extends ConsumerState<_RootCard> {
           DragTarget<Dragged>(
             onAcceptWithDetails: (d) =>
                 moveItem(context, ref, d.data, root: root.key),
-            builder: (context, candidates, _) => Container(
-              color: candidates.isEmpty
-                  ? null
-                  : theme.colorScheme.secondaryContainer,
-              child: MergeSemantics(
-                child: ListTile(
-                  minTileHeight: 72,
-                  leading: RootBadge(icon: root.icon, color: root.color),
-                  title: Text(
-                    root.name(context),
-                    style: theme.textTheme.titleMedium,
-                  ),
-                  subtitle: Text(root.description(context)),
-                  trailing: ExcludeSemantics(
-                    child: Icon(
-                      _open
-                          ? Symbols.expand_less_rounded
-                          : Symbols.expand_more_rounded,
-                    ),
-                  ),
-                  onTap: () => setState(() => _open = !_open),
+            builder: (context, candidates, _) => MergeSemantics(
+              child: ListTile(
+                tileColor: candidates.isEmpty
+                    ? null
+                    : theme.colorScheme.secondaryContainer,
+                minTileHeight: 72,
+                leading: RootBadge(icon: root.icon, color: root.color),
+                title: Text(
+                  root.name(context),
+                  style: theme.textTheme.titleMedium,
                 ),
+                subtitle: Text(root.description(context)),
+                trailing: ExcludeSemantics(
+                  child: Icon(
+                    _open
+                        ? Symbols.expand_less_rounded
+                        : Symbols.expand_more_rounded,
+                  ),
+                ),
+                onTap: () => setState(() => _open = !_open),
               ),
             ),
           ),
@@ -330,7 +329,7 @@ class _RootCardState extends ConsumerState<_RootCard> {
   );
 }
 
-/// Ağaçtaki düğüm: basılı tutup sürüklenir; kategoriyse üstüne bırakılabilir.
+/// Ağaçtaki düğüm: tutamaçtan ya da basılı tutup sürüklenir; kategoriyse üstüne bırakılabilir.
 class _NodeTile extends ConsumerWidget {
   const _NodeTile({
     required this.item,
@@ -350,53 +349,47 @@ class _NodeTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l = context.l10n;
     final scheme = Theme.of(context).colorScheme;
-    Widget tile(bool highlighted) => Container(
-      color: highlighted ? scheme.secondaryContainer : null,
-      padding: EdgeInsetsDirectional.only(start: depth * Gap.l),
-      child: ListTile(
-        leading: ExcludeSemantics(
-          child: Icon(icon, size: item.isCategory ? 24 : 12),
-        ),
-        title: Text(item.name),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
+    Widget tile(bool highlighted) => DragItem<Dragged>(
+      data: item,
+      label: item.name,
+      bottomOverlay: AppShell.bottomInset(context),
+      builder: (context, handle) => Container(
+        color: highlighted ? scheme.secondaryContainer : null,
+        padding: EdgeInsetsDirectional.only(start: depth * Gap.l),
+        child: Row(
           children: [
-            IconButton(
-              tooltip: l.catMove,
-              icon: const Icon(Symbols.drive_file_move_rounded),
-              onPressed: () => context.push(
-                '/move/${item.isCategory ? 'category' : 'activity'}/${item.id}',
+            handle,
+            Expanded(
+              child: ListTile(
+                contentPadding: const EdgeInsetsDirectional.only(end: Gap.s),
+                leading: ExcludeSemantics(
+                  child: Icon(icon, size: item.isCategory ? 24 : 12),
+                ),
+                title: Text(item.name),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      tooltip: l.catMove,
+                      icon: const Icon(Symbols.drive_file_move_rounded),
+                      onPressed: () => context.push(
+                        '/move/${item.isCategory ? 'category' : 'activity'}/${item.id}',
+                      ),
+                    ),
+                    ...actions,
+                  ],
+                ),
               ),
             ),
-            ...actions,
           ],
         ),
       ),
     );
-    final draggable = LongPressDraggable<Dragged>(
-      data: item,
-      feedback: Material(
-        elevation: 6,
-        borderRadius: BorderRadius.circular(AppTokens.of(context).radius),
-        child: Padding(
-          padding: const EdgeInsets.all(Gap.m),
-          child: Text(item.name),
-        ),
-      ),
-      childWhenDragging: Opacity(opacity: 0.4, child: tile(false)),
-      child: tile(false),
-    );
-    if (onDrop == null) return draggable;
+    if (onDrop == null) return tile(false);
     return DragTarget<Dragged>(
       onWillAcceptWithDetails: (d) => d.data.id != item.id,
       onAcceptWithDetails: (d) => onDrop!(d.data),
-      builder: (_, candidates, _) => candidates.isEmpty
-          ? draggable
-          : LongPressDraggable<Dragged>(
-              data: item,
-              feedback: const SizedBox.shrink(),
-              child: tile(true),
-            ),
+      builder: (_, candidates, _) => tile(candidates.isNotEmpty),
     );
   }
 }

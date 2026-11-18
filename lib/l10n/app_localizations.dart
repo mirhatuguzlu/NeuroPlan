@@ -1564,7 +1564,7 @@ abstract class L10n {
   /// No description provided for @catDragHint.
   ///
   /// In tr, this message translates to:
-  /// **'Taşımak için basılı tut ve bir kategorinin üstüne bırak.'**
+  /// **'Taşımak için satırı soldaki tutamaçtan sürükle, bir kategorinin ya da kök kategori başlığının üstüne bırak.'**
   String get catDragHint;
 
   /// No description provided for @moveTitle.
@@ -1702,7 +1702,7 @@ abstract class L10n {
   /// No description provided for @manualHint.
   ///
   /// In tr, this message translates to:
-  /// **'Parçayı bir boş dilime sürükle ya da dilime dokun.'**
+  /// **'Parçayı tutamaçtan bir boş dilime sürükle ya da dilime dokun.'**
   String get manualHint;
 
   /// No description provided for @manualChunk.

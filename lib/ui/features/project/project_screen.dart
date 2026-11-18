@@ -7,6 +7,7 @@ import 'package:neuroplan_core/neuroplan_core.dart';
 import '../../../app/providers.dart';
 import '../../../app/theme.dart';
 import '../../../data/local/app_database.dart';
+import '../../core/drag.dart';
 import '../../core/format.dart';
 import '../../core/states.dart';
 
@@ -428,10 +429,7 @@ class _ManualSlots extends ConsumerWidget {
       if (ok && context.mounted) showSnack(context, l.manualPlaced);
     }
 
-    final chip = Chip(
-      avatar: const Icon(Symbols.drag_indicator_rounded),
-      label: Text(l.manualChunk(durationText(l, chunk))),
-    );
+    final label = l.manualChunk(durationText(l, chunk));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -441,10 +439,20 @@ class _ManualSlots extends ConsumerWidget {
         const SizedBox(height: Gap.m),
         Align(
           alignment: AlignmentDirectional.centerStart,
-          child: LongPressDraggable<int>(
+          child: DragItem<int>(
             data: chunk,
-            feedback: Material(color: Colors.transparent, child: chip),
-            child: chip,
+            label: label,
+            builder: (context, handle) => Card.outlined(
+              margin: EdgeInsets.zero,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  handle,
+                  Flexible(child: Text(label)),
+                  const SizedBox(width: Gap.l),
+                ],
+              ),
+            ),
           ),
         ),
         const SizedBox(height: Gap.m),

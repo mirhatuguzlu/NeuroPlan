@@ -875,7 +875,8 @@ class L10nEn extends L10n {
   String get catEmpty => 'No subcategories or items yet.';
 
   @override
-  String get catDragHint => 'Long-press and drop onto a category to move.';
+  String get catDragHint =>
+      'To move a row, drag it by the handle on the left and drop it onto a category or a root heading.';
 
   @override
   String get moveTitle => 'Move where?';
@@ -956,7 +957,8 @@ class L10nEn extends L10n {
   String get manualTitle => 'Free slots';
 
   @override
-  String get manualHint => 'Drag the chunk onto a free slot or tap a slot.';
+  String get manualHint =>
+      'Drag the chunk by its handle onto a free slot, or tap a slot.';
 
   @override
   String manualChunk(String duration) {
