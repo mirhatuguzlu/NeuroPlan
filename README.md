@@ -4,22 +4,28 @@
 
 NöroPlan; rutinlerini, işlerini ve projelerini esnek bir şablonla tanımladığın, zorunlu işlerden sonra kalan boş zamanı hesaplayıp projelerini bu boşluklara bölen ve odak oturumlarını bilimsel dayanaklı kategorilere göre 3D bir beyin üzerinde görselleştiren bir mobil uygulamadır.
 
-> **Durum: Aşama 1 — mimari ve veritabanı hazır.** Mimari, veri modeli, Supabase şeması (RLS dahil), yerel veritabanı ve eşitleme kuyruğunun iskeleti yazıldı ve testlerle doğrulandı. Kullanıcı arayüzü henüz yok; aşağıdaki özellikler **planlanan** kapsamdır.
+> **Durum: Aşama 2 — şablon ve plan motoru.** Uygulama cihazda çalışıyor: ilk kurulum, Bugün, Plan, aktivite sihirbazı, kategori ağacı, proje bölme, sıradaki iş bildirimi ve ana ekran widget'ı var. Giriş ve eşitleme, odak oturumu, 3D beyin, analiz, temalar ve sosyal özellikler **planlanan** kapsamdadır.
 
 [English summary below](#english)
 
 ---
 
+## Var olan özellikler
+- **Tamamen esnek yaşam şablonu** — Rutinler, tek seferlik işler, son tarihli görevler, projeler, serbest zamanlar. Tekrar türleri: bir kez, her gün, haftanın günleri, her N günde, ayda bir, dönüşümlü vardiya, seçili tarihler, gün vermeden "haftada N kez" ve başka bir işle birlikte. Saat türleri: sabit, aralık, başka işe göre, gün doğumu / namaz vaktine göre ya da saatsiz. Uygulama senin hayatın hakkında hiçbir şey varsaymaz; her şeyi sen oluşturursun.
+- **Plan motoru** — Kesin işler önce yerleşir; göreli işler bağlı oldukları işe göre kayar; kaydırılabilir işler en yakın boşluğa taşınır. Sığmayanlar "tampon"a düşer. İki kesin iş çakışırsa motor karar vermez, sana gösterir. Yaz saati, gece yarısını aşan işler ve saat dilimi değişimi doğru çalışır. Aynı girdi her zaman aynı planı üretir (bir hafta ~4 ms).
+- **Boş zaman ve proje bölme** — Boş dilimler hesaplanır. Projeler son tarihe göre otomatik önerilir (sen onaylarsın) ya da boş dilimlere elle sürüklenir. Süre yetmiyorsa "bu tempoyla X tarihine N saat eksik" uyarısı ve üç seçenek çıkar.
+- **Namaz vakitleri (isteğe bağlı)** — Konumdan internetsiz hesaplanır; Diyanet yöntemi varsayılandır. Vakitler yalnız çapadır: "akşam namazından sonra 30 dk" gibi.
+- **Bilimsel kök kategoriler** — 9 sabit kök kategori; altlarına sınırsız derinlikte kendi kategorilerin, sürükle-bırakla taşıma. Her kökte hangi beyin bölgelerine bağlı olduğu ve kanıt düzeyi görünür.
+- **Sıradaki iş** — Seçtiğin kadar önce yerel bildirim ve "Sıradaki: X, 15 dk sonra" ana ekran widget'ı.
+- **Türkçe ve İngilizce**, açık / koyu görünüm, önce cihazda çalışan (offline-first) yapı.
+
 ## Planlanan özellikler
-- **Tamamen esnek yaşam şablonu** — Rutinler, tek seferlik işler, son tarihli görevler, projeler, serbest zamanlar ve plansız günler. Uygulama senin hayatın hakkında hiçbir şey varsaymaz; her şeyi sen oluşturursun.
-- **Boş zaman hesaplama** — Zorunlu işler yerleşince kalan boşluklar bulunur; projeler bu boşluklara otomatik ya da elle bölünür.
-- **Bilimsel kök kategoriler** — 9 sabit kök kategori (Bedensel Hareket, Öğrenme ve Bellek, Dinlenme ve Uyku…), altlarına sınırsız derinlikte kendi kategorilerin.
 - **Odak oturumları** — Serbest, Pomodoro veya derin çalışma. Oturum sırasında uygulamadan çıkarsan 10 saniye içinde dönmen gerekir, yoksa oturum bozulur.
 - **3D neon beyin** — Tamamlanan oturumlar, ilgili bölgelerde nöron ve bağlantı olarak büyür. İhmal edilen bölgeler söner ama silinmez.
 - **Kişisel analiz** — Grafiklerle zaman dağılımı, planlanan ve gerçekleşen, hangi odak modunun sana daha iyi geldiği.
 - **Temalar** — Ciddi, Eğlenceli, Genç, Kodcu ve daha fazlası.
 - **Davetle sosyal** — Arkadaş ve partner yalnız davetle; kategori bazında görünürlük, canlı ortak odak oturumu, ortak boş zaman bulma, mesajlaşma, beyin karşılaştırma.
-- **Türkçe ve İngilizce**, önce cihazda çalışan (offline-first) yapı.
+- **Giriş ve eşitleme** — Google ya da misafir girişi, cihazlar arası eşitleme (altyapısı Aşama 1'de hazır).
 
 Hedef kitle 13 yaş ve üstü. Ayrıntılar: [docs/PRODUCT.md](docs/PRODUCT.md).
 
@@ -32,10 +38,12 @@ Hedef kitle 13 yaş ve üstü. Ayrıntılar: [docs/PRODUCT.md](docs/PRODUCT.md).
 | Katman | Seçim |
 |---|---|
 | Uygulama | Flutter 3.50 (Dart 3.14) — önce Android, sonra iOS |
-| Alan katmanı | Saf Dart paketi `packages/neuroplan_core` (Flutter'sız; plan motoru ve beyin hesabı burada yazılacak) |
+| Alan katmanı | Saf Dart paketi `packages/neuroplan_core` (Flutter'sız): plan motoru, proje bölme, tekrar ve zaman kuralları; beyin hesabı planlanan |
 | Arka uç | Supabase: Auth (Google + misafir), Postgres, Row Level Security, RPC, Edge Functions |
 | Veri | Önce cihazda (Drift / SQLite); outbox kuyruğuyla Supabase'e eşitleme, çakışmada alan bazlı son yazan kazanır |
-| Arayüz durumu ve gezinme | Riverpod, go_router (planlanan; ilk ekranlarla eklenecek) |
+| Arayüz | Material 3 (`material_ui`), Riverpod, go_router, Material Symbols; TR + EN (ARB) |
+| Zaman | `timezone` (IANA), `rrule` (RFC 5545), `adhan_dart` (namaz vakti, çevrimdışı) |
+| Bildirim ve widget | `flutter_local_notifications`, `home_widget` + Kotlin widget sağlayıcısı |
 | 3D beyin | Uygulamaya gömülü WebView içinde yerel Three.js sahnesi (planlanan) |
 
 Mimari: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · Veri modeli: [docs/DB_SCHEMA.md](docs/DB_SCHEMA.md) · Tarihli kararlar: [docs/DECISIONS.md](docs/DECISIONS.md).
@@ -43,6 +51,7 @@ Mimari: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · Veri modeli: [docs/DB_SC
 ## Yol haritası
 - [x] **Aşama 0** — Proje iskeleti, araçlar, ürün / UX / bilim belgeleri, Supabase altyapısı
 - [x] **Aşama 1** — Mimari, veri modeli ve senaryo testi, Supabase migration'ları + RLS + sistem seed'i, Drift yerel veritabanı, eşitleme kuyruğu iskeleti, depolar ve testler
+- [x] **Aşama 2** — Plan motoru ve proje bölme (saf Dart; senaryo, sınır durumu ve performans testli), uygulama kabuğu, ilk kurulum, Bugün, Plan, aktivite sihirbazı, kategori ağacı, proje ve profil ekranları, bildirim ve ana ekran widget'ı
 - [ ] Tema, font ve ikon kararları (font testi; tema aşamasında)
 - [ ] Sonraki aşamalar [PRODUCT.md](docs/PRODUCT.md)'deki modüllere göre planlanacak
 
@@ -74,8 +83,10 @@ supabase start && supabase test db             # şema + RLS testleri (Docker ge
 ## Proje yapısı
 ```
 lib/data/                 Yerel veritabanı (Drift), eşitleme kuyruğu, depolar
-lib/ui/                   Ekranlar (planlanan)
-packages/neuroplan_core/  Saf Dart alan katmanı: tekrar/zaman kuralları, HLC, sistem verisi
+lib/app/                  Uygulama kabuğu: tema, gezinme, sağlayıcılar, bildirim ve widget eşitleme
+lib/ui/                   Ekranlar ve ortak arayüz parçaları
+lib/l10n/                 TR + EN metinler (ARB)
+packages/neuroplan_core/  Saf Dart alan katmanı: plan motoru, proje bölme, tekrar/zaman kuralları, HLC, sistem verisi
 assets/seed/system.json   Sistem verisinin tek kaynağı (SCIENCE.md'den)
 tool/                     Yardımcı betikler (seed migration üretici)
 test/                     Uygulama ve veri katmanı testleri
@@ -106,4 +117,4 @@ CLAUDE.md            Projenin değişmez kuralları (AI destekli geliştirme iç
 ## English summary
 **NeuroPlan** is a mobile planning and focus app (Flutter, Android first). You describe your life with a fully flexible template — routines, one-off tasks, deadlines, projects, free time, unplanned days. The app computes the free time left after your fixed commitments and splits your projects into those gaps. Focus sessions (free, Pomodoro or deep work) grow neurons in a 3D neon brain, mapped to nine science-based root categories. The brain is a visualization, not a measurement; every scientific claim is sourced in [docs/SCIENCE.md](docs/SCIENCE.md).
 
-**Status:** Stage 1 — architecture and database. Architecture, data model, Supabase schema with RLS, local Drift database and the sync-queue skeleton are written and tested; there is no user interface yet. Stack: Flutter, a pure-Dart domain package, Supabase (Google + guest auth, Postgres, RLS), offline-first Drift/SQLite with field-level last-writer-wins sync, embedded Three.js in a WebView (planned). Languages: Turkish and English. License: AGPL-3.0.
+**Status:** Stage 2 — template and plan engine. The app runs on the device with onboarding, Today, Plan, the add-item wizard, the category tree, project splitting (automatic suggestions or manual drag), an up-next notification and a home-screen widget. The deterministic plan engine (pure Dart) places fixed, astronomical/prayer-anchored, relative, windowed and untimed items, reports conflicts and overflow, and is covered by scenario, edge-case and performance tests (a week plans in ~4 ms). Sign-in and sync, focus sessions, the 3D brain, analytics, themes and social features are planned. Stack: Flutter, a pure-Dart domain package, Supabase (Google + guest auth, Postgres, RLS), offline-first Drift/SQLite with field-level last-writer-wins sync, embedded Three.js in a WebView (planned). Languages: Turkish and English. License: AGPL-3.0.

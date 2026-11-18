@@ -104,4 +104,103 @@ class PlanRepository {
         id,
         PlanInstancesCompanion(variantId: Value(variantId)),
       );
+
+  /// Motorun bellekte ürettiği oluşumu kullanıcı dokunduğunda satıra yazar (D22):
+  /// satır yoksa motorun deterministik kimliğiyle eklenir, varsa [fields] güncellenir.
+  Future<PlanInstance> touch(
+    PlannedInstance instance,
+    PlanInstancesCompanion fields,
+  ) async {
+    final existing = await _writer.find(_db.planInstances, instance.id);
+    if (existing != null) {
+      return _writer.update(_db.planInstances, instance.id, fields);
+    }
+    return _writer.insert(
+      _db.planInstances,
+      fields.copyWith(
+        id: Value(instance.id),
+        activityId: Value(instance.activityId),
+        ruleId: Value(instance.ruleId),
+        occurrenceDate: Value(instance.date),
+        source: Value(instance.source.name),
+        variantId: fields.variantId.present
+            ? fields.variantId
+            : Value(instance.variantId),
+      ),
+    );
+  }
+
+  /// "Bitti": gerçek bitiş [now] kaydedilir; bu işe bağlı göreli işler buna göre kayar.
+  Future<PlanInstance> complete(PlannedInstance i, DateTime now) {
+    final end = now.toUtc();
+    final length = i.isTimed ? i.end! - i.start! : 0;
+    final planned = i.start == null ? null : _utc(i.start!);
+    final start = planned != null && planned.isBefore(end)
+        ? planned
+        : end.subtract(Duration(minutes: length));
+    return touch(
+      i,
+      PlanInstancesCompanion(
+        status: const Value('done'),
+        startAt: Value(start),
+        endAt: Value(end),
+      ),
+    );
+  }
+
+  Future<PlanInstance> skip(PlannedInstance i) =>
+      touch(i, const PlanInstancesCompanion(status: Value('skipped')));
+
+  /// Yalnız bu sefer başka saate alınır; motor bu satırı bir daha kımıldatmaz.
+  Future<PlanInstance> moveOnce(
+    PlannedInstance i,
+    DateTime start,
+    DateTime end,
+  ) => touch(
+    i,
+    PlanInstancesCompanion(
+      startAt: Value(start.toUtc()),
+      endAt: Value(end.toUtc()),
+      isManual: const Value(true),
+    ),
+  );
+
+  Future<PlanInstance> selectVariant(VariantChoice c, String variantId) =>
+      touch(
+        PlannedInstance(
+          id: c.instanceId,
+          activityId: c.activityId,
+          ruleId: c.ruleId,
+          date: c.date,
+          status: InstanceStatus.planned,
+          source: InstanceSource.rule,
+          flexibility: Flexibility.fixed,
+        ),
+        PlanInstancesCompanion(variantId: Value(variantId)),
+      );
+
+  /// Onaylanan proje parçası ya da elle yerleştirilen parça (UUIDv7).
+  Future<PlanInstance> addChunk({
+    required String activityId,
+    required String date,
+    required DateTime start,
+    required DateTime end,
+    bool manual = false,
+  }) => _writer.insert(
+    _db.planInstances,
+    PlanInstancesCompanion.insert(
+      id: newId(),
+      activityId: activityId,
+      occurrenceDate: date,
+      startAt: Value(start.toUtc()),
+      endAt: Value(end.toUtc()),
+      source: manual ? 'manual' : 'auto',
+      engineVersion: Value(manual ? null : planEngineVersion),
+    ),
+  );
+
+  Future<void> remove(String id) => _writer.softDelete(_db.planInstances, id);
+
+  static DateTime _utc(int minute) =>
+      DateTime.fromMillisecondsSinceEpoch(minute * 60000, isUtc: true);
 }

@@ -58,7 +58,7 @@ Asla: iç içe diyalog, açılışta tanıtım / reklam pop-up'ı, ilk kullanım
 
 ## 5. Hareket dili (geçişler)
 - **Tek ortak dil, 60 fps.** Süreler ve eğriler yalnız Flutter'ın Material 3 tokenlarından seçilir: `Durations` (ör. `short4`, `medium2`, `long2`) ve `Easing` (`emphasizedDecelerate` girişte, `emphasizedAccelerate` çıkışta, `standard` ekran içi). Koda gelişigüzel `Duration(milliseconds: …)` yazılmaz; tokenlar bir `ThemeExtension`'da toplanır.
-- Sayfa geçişleri üç desenle sınırlıdır ve her desenin tek anlamı vardır (`animations` paketi):
+- Sayfa geçişleri üç desenle sınırlıdır ve her desenin tek anlamı vardır (`lib/app/transitions.dart`; `animations` paketi `material_ui` ile uyumsuz olduğu için kullanılmaz, D28):
   | Desen | Anlam |
   |---|---|
   | Shared axis (yatay) | Hiyerarşide ileri / geri (liste → detay, sihirbaz adımları) |
@@ -71,7 +71,7 @@ Asla: iç içe diyalog, açılışta tanıtım / reklam pop-up'ı, ilk kullanım
 
 ## 6. Floating alt menü
 - Ekran kenarlarından ayrık, havada duran yuvarlatılmış bir çubuk: yanlardan ve alttan 16dp boşluk + sistem güvenli alanı.
-- 3–5 hedef (öneri: Bugün · Plan · Odak · Beyin · Profil). Her hedefte ikon **ve** etiket her zaman görünür.
+- 3–5 hedef. Aşama 2: Bugün · Plan · Beyin · Profil; sağda ayrık, yuvarlak "Ekle" butonu (sekme değil, eylem; D28). Her hedefte ikon **ve** etiket her zaman görünür.
 - Her hedef en az 48×48dp; seçili hedef belirgin gösterge + `Semantics(selected: true)`.
 - `Scaffold(extendBody: true)` ile içerik menünün altına uzanır; listelerin son öğesi menünün arkasında kalmasın diye alt dolgu eklenir.
 - Klavye açıkken gizlenir. Odak oturumu ve sihirbazlarda görünmez (tek amaç kuralı).
@@ -132,6 +132,34 @@ Kaçınılacaklar (frontend-design): her etikette TÜMÜ BÜYÜK HARF, başlıkt
 | Kök: Dikkat ve Tefekkür | `self_improvement` |
 | Kök: Yaratıcılık ve Sanat | `palette` |
 | Kök: Dinlenme ve Uyku | `bedtime` |
+| Uyku penceresi (ayar) | `bedtime` (aynı kavram) |
+| Bitti / yapıldı | `check_circle` |
+| Atla | `skip_next` |
+| Saat / saati değiştir | `schedule` |
+| Uyarı (çakışma, döngü, eksik ayar, hata) | `warning` |
+| Bilgi | `info` |
+| Boş zaman dilimi | `hourglass_empty` |
+| Proje / proje önerisi | `flag` |
+| Varyant seçimi | `alt_route` |
+| Önerilen saat | `lightbulb` |
+| Göreli bağlantı ("X sonrası") | `link` |
+| Aç / kapa (genişlet) | `expand_more` · `expand_less` |
+| Önceki / sonraki hafta | `chevron_left` · `chevron_right` |
+| Alt kategori | `folder` |
+| Ağaçta iş | `circle` |
+| İç içe düzey | `subdirectory_arrow_right` |
+| Taşı | `drive_file_move` |
+| Sürükleme tutamacı | `drag_indicator` |
+| Beyin bölgeleri / kanıt | `science` |
+| Tarih | `event` |
+| Plansız gün | `event_busy` |
+| Dil | `translate` |
+| Görünüm | `contrast` |
+| Dokunsal geri bildirim | `vibration` |
+| Konum | `location_on` |
+| Bildirim | `notifications` |
+| Tam zamanlı bildirim | `alarm` |
+| Odak gerektirir (etiket) | `timer` (Odak oturumu ile aynı kavram) |
 
 ## 9. Erişilebilirlik
 - **Kontrast (WCAG 2.2 AA):** normal metin ≥ 4.5:1; büyük metin, ikon ve arayüz bileşeni sınırları ≥ 3:1. Yüksek Kontrast teması AAA (7:1) hedefler. Her tema açık ve koyu modda ölçülür.

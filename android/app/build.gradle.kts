@@ -6,10 +6,13 @@ plugins {
 
 android {
     namespace = "com.mirhatuguzlu.neuroplan"
-    compileSdk = flutter.compileSdkVersion
+    // flutter_local_notifications 23 androidx.core 1.19 ister (compileSdk ≥ 37); targetSdk Flutter varsayılanı.
+    compileSdk = 37
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
+        // flutter_local_notifications zamanlanmış bildirimler için ister.
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -46,4 +49,8 @@ kotlin {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }

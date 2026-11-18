@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Taban temanın yüzey tonları (lib/app/theme.dart, tohum #5B57D9); kontrast ≥ 7:1. -->
+    <color name="widget_background">#FFF3F0FA</color>
+    <color name="widget_text">#FF1B1B21</color>
+    <color name="widget_text_secondary">#FF46464F</color>
+</resources>

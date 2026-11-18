@@ -1,5 +1,5 @@
 name: neuroplan
-description: "A new Flutter project."
+description: "NöroPlan — planlama ve odak uygulaması."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -43,6 +43,18 @@ dependencies:
   uuid: ^4.6.0
   neuroplan_core:
     path: packages/neuroplan_core
+  flutter_riverpod: ^3.5.0
+  go_router: ^18.1.4
+  material_symbols_icons: ^4.2960.0
+  drift_flutter: ^0.3.1
+  flutter_timezone: ^5.1.1
+  geolocator: ^14.1.2
+  intl: ^0.20.3
+  flutter_localizations:
+    sdk: flutter
+  flutter_local_notifications: ^23.0.3
+  home_widget: ^0.10.0
+  timezone: ^0.11.2
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +79,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  generate: true
+  assets:
+    - assets/seed/system.json
 
   # To add assets to your application, add an assets section, like this:
   # assets:

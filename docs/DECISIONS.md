@@ -159,3 +159,49 @@ Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem 
 
 **Neden:** Aşama 2 talimatı. Akıllı planlayıcı ileride aynı arayüzle takılabilsin diye bölme ayrı tutuldu.
 **Durum:** Kabul.
+
+## 2026-11-18 — D25: Aşama 2 sekmeleri ve Odaklan butonu
+**Karar:**
+- Alt menüde dört sekme var: Bugün, Plan, Beyin, Profil.
+- Beyin sekmesi bu aşamada kategori ağacını gösterir: her kök kategori, çalıştırdığı beyin bölgeleri ve kanıt düzeyiyle. Bu liste 3D beyin gelince sahnenin metin alternatifi olur (BRAIN-6).
+- Profil sekmesi ayarları tutar: dil, görünüm, uyku, konum, namaz vakitleri, bildirim, parça ayarları.
+- "Odaklan" butonu odak oturumu ekranıyla birlikte gelecek. Şimdilik odak gerektiren işte yalnız bir etiket görünür.
+
+**Neden:** Proje sahibinin seçimi. İşlevsiz buton yasak (CLAUDE.md kural 3) ve odak ekranı henüz yok.
+**Durum:** Kabul.
+
+## 2026-11-18 — D26: Tema bu aşamada
+**Karar:** Tek bir taban Material 3 teması var (tohum renk `#5B57D9`). Görünüm açık, koyu ya da cihazla aynı olur; varsayılan sistem fontu kullanılır. Ciddi / Eğlenceli / Genç / Kodcu temaları ve font testi tema aşamasında eklenecek; ilk kurulumdaki görünüm adımı o zaman tema seçeneklerini kazanacak.
+**Neden:** Proje sahibinin seçimi; font kararı gerçek cihaz testine bağlı (D10).
+**Durum:** Geçici.
+
+## 2026-11-18 — D27: Bildirim, ana ekran widget'ı, cihaz tercihleri
+**Karar:**
+- **Sıradaki iş bildirimi varsayılan olarak kapalıdır.** Kullanıcı Profil'de kaç dakika önce geleceğini seçer; Android 13+ bildirim izni o anda istenir, açılışta değil.
+- **Zamanlama varsayılan olarak esnektir** (`inexactAllowWhileIdle`). "Tam zamanında" anahtarı `SCHEDULE_EXACT_ALARM` iznini sistem ayarlarından ister.
+- Plan değiştikçe önümüzdeki 7 günün saatli işleri için en çok 50 bildirim yeniden kurulur. Uygulama 7 gün açılmazsa bildirimler biter (`shortcut:` notu).
+- **Widget** "Sıradaki: X · 14:30 · 15 dk sonra" gösterir (`home_widget` + Kotlin `NextUpWidgetProvider`).
+  - Metin kalıpları ARB'den gelir, göreli süreyi Kotlin hesaplar.
+  - Tazeleme `scheduleWidgetUpdates` iledir: 24 saat boyunca 15 dakikada bir ve her işin başlangıcında. Ayrı bir alarm kodu yoktur.
+- Bildirim tercihleri cihaza özeldir, eşitlenmez. `sync_state` tablosunda `pref.*` anahtarlarıyla tutulur; şema değişmedi.
+
+**Neden:** Proje sahibinin seçimi (esnek varsayılan + isteğe bağlı tam). `USE_EXACT_ALARM` Play incelemesi gerektirir. Android `compileSdk` 37'ye çıkarıldı: `flutter_local_notifications` 23, `androidx.core` 1.19 ister. `targetSdk` Flutter varsayılanında kaldı.
+**Durum:** Kabul.
+
+## 2026-11-18 — D28: Arayüz kabuğu
+**Karar:**
+- **Alt menü:** havada duran 4 sekmeli çubuk ve sağında ayrık, yuvarlak "Ekle" butonu. Sekmeler yalnız hedeftir, Ekle yalnız eylemdir (Material 3; ui-ux-pro-max `bottom-nav-top-level`, `primary-action`). Klavye açıkken ve sihirbazlarda gizlenir.
+- **Material paketi:** Flutter 3.50'de Material ayrı paket oldu (`material_ui`) ve `flutter/material` kullanımdan kalktı. Uygulama yalnız `material_ui` kullanır; yerelleştirme `material_ui`'nin `GlobalMaterialLocalizations.delegates`'iyle kurulur. gen-l10n çıktısı eski kütüphaneye atıf verdiği için analizden hariçtir.
+- **Geçişler:** `animations` paketi eski `flutter/material`'e bağlı olduğu için kullanılmadı. Shared axis (sihirbaz, alt sayfalar) ve fade through'nun giriş yarısı (sekmeler) `lib/app/transitions.dart`'ta Material 3 süre ve eğri tokenlarıyla yazıldı. Azaltılmış hareket açıksa anlık geçilir.
+- **Okunur genişlik:** Geniş ekranda içerik 720dp'de ortalanır. Tablet düzeni (navigation rail) sonra gelecek.
+
+**Durum:** Kabul.
+
+## 2026-11-18 — D29: Sistem saat ve tarih seçicileri
+**Karar:** `showTimePicker` / `showDatePicker` platformun giriş denetimi sayılır; UX_RULES §3'teki pop-up kısıtına girmez. "Yalnız bu sefer mi, her zaman mı?" sorusu iki seçenekli, akışı durduran bir karar olduğu için diyalogdur (§3'e uygun).
+**Durum:** Kabul.
+
+## 2026-11-18 — D30: Uyku penceresi
+**Karar:** Uyku penceresi ayrı bir şema alanı değildir. Sıradan, kesin bir aktivitedir: Dinlenme ve Uyku kökünde, her gün, başlangıcı ve bitişi saat olan bir kural. Motor onu dolu blok olarak korur; otomatik yerleştirme oraya hiçbir şey koymaz. Profil ekranı bu izle bulup düzenler (`SleepWindow`). Sihirbazdan astronomik kalkışla kurulan uyku (S1) bu izle bulunmaz; Plan ekranından düzenlenir.
+**Neden:** Motor açısından ayrı bir kavram gerekmiyor; şema ve migration değişmeden kalıyor.
+**Durum:** Geçici. Birden çok uyku kuralı ya da seyahat modu gerekirse profile alan eklenir.

@@ -1,0 +1,218 @@
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:material_symbols_icons/symbols.dart';
+import 'package:material_ui/material_ui.dart';
+
+import '../../app/providers.dart';
+import '../../app/theme.dart';
+import '../../app/transitions.dart';
+import 'format.dart';
+
+/// Alt menü sekmeleri + havada duran çubuk + ayrık "Ekle" butonu (UX_RULES §6, D28).
+/// Sekmeler yalnız hedeftir; Ekle yalnız eylemdir.
+class AppShell extends ConsumerWidget {
+  const AppShell({super.key, required this.shell});
+
+  final StatefulNavigationShell shell;
+
+  static const barHeight = 72.0;
+
+  /// Listelerin son öğesi çubuğun arkasında kalmasın diye eklenecek alt dolgu.
+  static double bottomInset(BuildContext context) =>
+      barHeight + Gap.l * 2 + MediaQuery.viewPaddingOf(context).bottom;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l = context.l10n;
+    final haptics = ref.watch(profileProvider).value?.hapticsEnabled ?? true;
+    final keyboard = MediaQuery.viewInsetsOf(context).bottom > 0;
+    final destinations = [
+      (Symbols.today_rounded, l.navToday),
+      (Symbols.calendar_month_rounded, l.navPlan),
+      (Symbols.psychology_rounded, l.navBrain),
+      (Symbols.person_rounded, l.navProfile),
+    ];
+    return Scaffold(
+      extendBody: true,
+      body: Stack(
+        children: [
+          FadeThroughOnChange(index: shell.currentIndex, child: shell),
+          if (!keyboard)
+            Positioned(
+              left: Gap.l,
+              right: Gap.l,
+              bottom: Gap.l + MediaQuery.viewPaddingOf(context).bottom,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: _Bar(
+                      destinations: destinations,
+                      selected: shell.currentIndex,
+                      onSelect: (i) {
+                        if (haptics) HapticFeedback.selectionClick();
+                        shell.goBranch(
+                          i,
+                          initialLocation: i == shell.currentIndex,
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: Gap.m),
+                  _AddButton(
+                    label: l.actionAdd,
+                    onPressed: () => context.push('/add'),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _Bar extends StatelessWidget {
+  const _Bar({
+    required this.destinations,
+    required this.selected,
+    required this.onSelect,
+  });
+
+  final List<(IconData, String)> destinations;
+  final int selected;
+  final ValueChanged<int> onSelect;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final tokens = AppTokens.of(context);
+    return Material(
+      elevation: 3,
+      color: scheme.surfaceContainer,
+      shadowColor: scheme.shadow,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(tokens.navRadius),
+        side: BorderSide(color: scheme.outlineVariant),
+      ),
+      child: SizedBox(
+        height: AppShell.barHeight,
+        child: Row(
+          children: [
+            for (final (i, (icon, label)) in destinations.indexed)
+              Expanded(
+                child: _Destination(
+                  icon: icon,
+                  label: label,
+                  selected: i == selected,
+                  onTap: () => onSelect(i),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Destination extends StatelessWidget {
+  const _Destination({
+    required this.icon,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final tokens = AppTokens.of(context);
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      excludeSemantics: true,
+      child: InkWell(
+        onTap: onTap,
+        customBorder: const StadiumBorder(),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AnimatedContainer(
+              duration: AppTokens.duration(context, Durations.medium1),
+              curve: tokens.standardCurve,
+              width: 56,
+              height: 32,
+              decoration: ShapeDecoration(
+                shape: const StadiumBorder(),
+                color: selected
+                    ? scheme.secondaryContainer
+                    : Colors.transparent,
+              ),
+              child: Icon(
+                icon,
+                fill: selected ? 1 : 0,
+                color: selected
+                    ? scheme.onSecondaryContainer
+                    : scheme.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(height: Gap.xs),
+            Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: theme.textTheme.labelMedium?.copyWith(
+                color: selected ? scheme.onSurface : scheme.onSurfaceVariant,
+                fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AddButton extends StatelessWidget {
+  const _AddButton({required this.label, required this.onPressed});
+
+  final String label;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Tooltip(
+      message: label,
+      child: Semantics(
+        button: true,
+        label: label,
+        excludeSemantics: true,
+        child: Material(
+          elevation: 3,
+          color: scheme.primary,
+          shape: const CircleBorder(),
+          child: InkWell(
+            customBorder: const CircleBorder(),
+            onTap: onPressed,
+            child: SizedBox.square(
+              dimension: AppShell.barHeight,
+              child: Icon(
+                Symbols.add_rounded,
+                size: 32,
+                color: scheme.onPrimary,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

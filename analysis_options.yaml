@@ -14,6 +14,7 @@ analyzer:
     - build/**
     - android/**
     - ios/**
+    - lib/l10n/app_localizations*.dart # gen-l10n çıktısı (eski Material yerelleştirmesine atıf verir)
 
 linter:
   # The lint rules applied to this project can be customized in the
