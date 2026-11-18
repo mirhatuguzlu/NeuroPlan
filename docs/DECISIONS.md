@@ -132,3 +132,30 @@ Durumlar: **Kabul** · **Geçici** (değişmesi bekleniyor) · **Açık** (karar
 ## 2026-11-18 — D21: Canlı sesli oturum altyapısı
 **Karar:** WebRTC sağlayıcısı Aşama 4B'de seçilecek. Şemada yalnız sağlayıcıdan bağımsız `cofocus_sessions.room_id` alanı var; ses kaydedilmez.
 **Durum:** Açık.
+
+## 2026-11-18 — D22: Plan oluşumlarının kalıcılığı
+**Karar:** Plan motorunun çıktısı bellekte tutulur ve her değişiklikte yeniden hesaplanır. `plan_instances` satırı yalnız kullanıcı bir oluşuma dokununca yazılır:
+- bitti, atla
+- saat değiştir ("yalnız bu sefer")
+- varyant seç
+- proje parçasını onayla, elle parça ekle
+
+Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem başına N kez" için `v5(kural, dönem başı, sıra)`.
+**Neden:** Her plan değişikliğinde 14 günlük oluşum yazmak her satırı outbox'a ve sunucuya taşırdı. Proje sahibi "yalnız dokunulunca"yı seçti.
+**Durum:** Kabul.
+
+## 2026-11-18 — D23: Namaz vakti paketi
+**Karar:** `adhan` yerine `adhan_dart` 2.0 kullanılır (saf Dart, bağımlılıksız). Varsayılan hesap yöntemi `turkiye`'dir (Diyanet): fecir 18°, yatsı 17°, temkin düzeltmeleri (güneş −7, öğle +5, ikindi +4, akşam +7 dk). Gün doğumu ve batımı, yöntem düzeltmesi uygulanmadan hesaplanır. Namaz vakitleri yalnız çapa olarak kullanılır.
+**Neden:** `adhan` 2023'ten beri güncellenmiyor ve indirmesi çok az. `adhan_dart` bakımda ve Diyanet yöntemini hazır veriyor. 19.11.2026 İstanbul için çıktısı Diyanet'in yayımladığı vakitlerle örtüşüyor (akşam 17:49).
+**Durum:** Kabul.
+
+## 2026-11-18 — D24: Plan motoru ilkeleri
+**Karar:** Yerleştirme sırası, çakışma, tampon ve döngü kuralları ARCHITECTURE §6'dadır. Özeti:
+- Kesin işler önce yerleşir. Esnek işler kesinlerin hepsinden sonra gelir, en yakın boşluğa taşınır.
+- İki kesin iş çakışırsa motor karar vermez, kullanıcıya gösterir.
+- Sığmayan işler tampona düşer; plan çökmez.
+- Proje bölme `ChunkPlanner` arayüzünün arkasındadır. İlk uygulama "son tarihi en yakın önce"dir (`EarliestDeadlinePlanner`).
+- Senaryolar JSON vektör değil, Dart birim testidir; çünkü plan motoru sunucuda yeniden çalıştırılmaz.
+
+**Neden:** Aşama 2 talimatı. Akıllı planlayıcı ileride aynı arayüzle takılabilsin diye bölme ayrı tutuldu.
+**Durum:** Kabul.

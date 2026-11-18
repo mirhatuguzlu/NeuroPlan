@@ -175,7 +175,7 @@ O sütunları vardır; tek istisna `id = user_id = auth.users.id` olmasıdır. Y
 | `onboarding_completed_at` | timestamptz null | null = ilk kurulum bitmedi. Sihirbaz taslağı yalnız cihazda tutulur. |
 | `location_lat`, `location_lon` | numeric(4,1) null | Gün doğumu ve namaz vakti için. 0,1°'ye yuvarlanır (≈ 11 km), gizlilik içindir. |
 | `location_label` | text null | Kullanıcının yazdığı yer adı |
-| `prayer_method` | text null | null = namaz vakitleri kapalı. Hesap yöntemi anahtarı (ör. `turkey`). |
+| `prayer_method` | text null | null = namaz vakitleri kapalı. Hesap yöntemi anahtarı (ör. `turkiye` = Diyanet; liste `neuroplan_core` `prayerMethods`). |
 | `prayer_madhab` | text null: `shafi` · `hanafi` | İkindi vakti hesabı için |
 | `min_chunk_minutes`, `chunk_buffer_minutes`, `daily_focus_cap_minutes` | int null | SLOT-4 varsayılanları; null = motor varsayılanı |
 | `haptics_enabled` | bool default true | UX_RULES §6 |

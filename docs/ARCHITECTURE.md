@@ -19,7 +19,7 @@ Veri modeli: [DB_SCHEMA.md](DB_SCHEMA.md).
 | Kimlik | `uuid` | 4.6 | Satırlarda v7 (zaman sıralı), motor çıktısında v5 (deterministik). | — |
 | Tekrar kuralı | `rrule` (saf Dart) | 0.2 | RFC 5545 standardı; ileride takvim (ICS) içe/dışa aktarımı mümkün olur. | Kendi ayrıştırıcımız. |
 | Saat dilimi | `timezone` + `flutter_timezone` | 0.11 / 5.1 | IANA veritabanı, yaz saati geçişleri. | — |
-| Gün doğumu / namaz vakti | `adhan` (saf Dart) | 2.0 | Hesap çevrimdışı yapılır. **Risk:** son sürüm 2023'te; uygulama aşamasında yeniden değerlendirilecek. | Kendi NOAA güneş hesabımız. |
+| Gün doğumu / namaz vakti | `adhan_dart` (saf Dart, bağımlılıksız) | 2.0 | Hesap çevrimdışı yapılır; Diyanet yöntemi (`turkiye`) hazır gelir. Aşama 2'de `adhan` yerine seçildi (D23). | `adhan` (2023'ten beri güncellenmiyor), kendi NOAA hesabımız. |
 | 3D köprü | `webview_flutter` | 4.14 | Resmi paket, `JavaScriptChannel` ve `loadFlutterAsset` destekler. | `flutter_inappwebview` |
 
 **Önerinin değerlendirmesi:** Önerilen dörtlü (Riverpod, go_router, Drift, supabase_flutter) korunuyor. Tek ekleme, alan katmanının ayrı bir saf Dart paketi olmasıdır (Dart pub workspace). Bunun iki nedeni var:
@@ -47,7 +47,7 @@ Kod üretimi yalnız Drift için kullanılır (`build_runner`). `riverpod_genera
 │  Tekrar/zaman kısıtı çözücü · sistem verisi okuyucu                    │
 └────────────────────────────────────────────────────────────────────────┘
 ```
-- Bağımlılık yönü: `ui → data → core`. `core` yalnız saf Dart paketlerini kullanır: `rrule`, `timezone`, `adhan`, `uuid`.
+- Bağımlılık yönü: `ui → data → core`. `core` yalnız saf Dart paketlerini kullanır: `rrule`, `timezone`, `adhan_dart`, `uuid`.
 - Ekran yalnız Notifier'ı bilir, Notifier yalnız depoyu bilir. Supabase'i yalnız `data/remote` bilir.
 - **Veri modeli:** Drift'in ürettiği satır sınıfları (`Activity`, `ScheduleRule`…) kullanılır; ayrı bir alan modeli kopyası yazılmaz. `core`'da yalnız şunlar bulunur: jsonb değer tipleri (`Recurrence`, `Timing`), HLC ve alan birleştirme, deterministik kimlikler, sistem verisi. Motorların girdi tipleri motor aşamasında `core`'a eklenir.
 - Her Notifier ekran durumunu tek bir değerle sunar: yükleniyor, boş, veri, hata ya da çevrimdışı (UX_RULES §4).
@@ -135,14 +135,34 @@ PlanInput : aktiviteler, kurallar, varyantlar, projeler, gün kuralları,
 PlanOutput: oluşturulacak / güncellenecek plan_instances, boş aralıklar,
             yerleştirme önerileri, uyarılar (SLOT-5), engineVersion
 ```
+Kod: `packages/neuroplan_core/lib/src/plan/` (Aşama 2). Girdi ve çıktı tipleri `plan_types.dart`'tadır. Zaman UTC dakika (tamsayı), gün `YYYY-MM-DD` olarak tutulur.
+
 **Adımlar:**
-1. Gün kurallarını (`day_overrides`) çöz.
-2. Kuralları tarih aralığında genişlet (RRULE, döngü, tarih listesi, dönem başına adet).
-3. O günün varyant seçimini uygula.
-4. Zaman kısıtlarını bağımlılık sırasıyla çöz: saat, astronomik çapa, göreli çapa. Döngü varsa kayıt anında reddedilir.
-5. Dolu blokları çıkarıp boşlukları bul (SLOT-2).
-6. Esnek işleri ve proje parçalarını yerleştir (SLOT-3).
-7. Son tarih riskini raporla (SLOT-5).
+1. Gün kurallarını (`day_overrides`) çöz: en kısıtlayıcı `keep` kazanır.
+2. Kuralları genişlet: RRULE, döngü, tarih listesi, tek tarih, `follow`. Çalışma aralığı istenen aralıktan geniştir: bir gün öncesini kapsar (gece yarısını aşan işler bugünü doldurur) ve "dönem başına N kez" kurallarının dönemlerini tam alır.
+3. Varyantı uygula: o günkü seçim, yoksa varsayılan. İptal eden varyant oluşumu siler ama seçim yine `variantChoices`'ta sunulur. Varyanta özel alt aktivite yalnız o varyant seçiliyse oluşur.
+4. **Yerleştirme sırası:** dolu bloklar tek ve sürekli bir zaman çizgisinde (`Timeline`) tutulur.
+   0. Kullanıcının sabitlediği oluşumlar: elle düzenlenen, "bitti" ile kapatılan, onaylı proje parçası.
+   1. Sabit saatli ve astronomik çapalı kesin işler. Uyku da buradadır: sıradan, kesin bir aktivitedir.
+   2. Göreli kesin işler, çapalarından sonra. Bağımlılık derinliğine göre sıralanır, çapanın gerçek saati kullanılır. Bu yüzden geç biten bir iş, ona bağlı işleri kaydırır.
+   3. Zaman pencereliler ve saati olan esnek işler. Esnek işler bütün kesin işlerden sonra yerleşir.
+   4. Saatsiz işler: süresi varsa saat önerilir (`suggested`). "Dönem başına N kez" oluşumları bu adımda dağıtılır: ilk ölçüt en az oluşum alan gün, sonra boş zamanı en çok olan gün, eşitlikte erken gün.
+   5. Proje parçaları (`ChunkPlanner`).
+   6. Kalan süre boş zamandır. Plansız günlerde (`auto_placement = false`) boş zaman hesaplanmaz.
+5. **Çakışma:** İki taşınamaz iş çakışırsa ikisi de kalır ve `Overlap` raporlanır; motor karar vermez. Kaydırılabilir iş kısıtları içindeki en yakın boşluğa taşınır (eşitlikte erken olana). Yer yoksa `Overflow` olur: arayüzdeki "tampon" listesi. İsteğe bağlı iş yer yoksa düşer (`dropped`).
+6. **Döngü:** Göreli çapalardaki döngü (Tarjan) `DependencyCycle` olarak raporlanır; döngüdeki işler saatsiz kalır, motor çökmez. Kayıt anında da reddedilir.
+7. **Eksik veri:** Konum ya da namaz yöntemi yoksa astronomik kısıt düşer ve `MissingAnchorData` raporlanır.
+8. **Proje bölme** (`ChunkPlanner` arayüzü; ilk uygulama `EarliestDeadlinePlanner`):
+   - Son tarihi en yakın proje önce gelir, en erken uygun boşluk kullanılır.
+   - Parça süresi min/maks sınırları içinde kalır, parçalar arası tampon bırakılır.
+   - Günlük sınırlar uygulanır: projenin kendi sınırı ve profilin günlük azami odak süresi.
+   - Tercih edilen pencereler önce doldurulur, güvenlik payı bırakılır.
+   - Yetmeyen süre `DeadlineRisk.missingMinutes` olarak döner (SLOT-5).
+   - Son tarihi olmayan ya da elle bölünen projeye öneri üretilmez.
+   - Motor varsayılanları: en kısa parça 30 dk, en uzun 120 dk, tampon 10 dk.
+   - Akıllı planlayıcı ileride aynı arayüzle takılır.
+9. **Kalıcılık (D22):** Motor çıktısı bellekte kalır. `plan_instances` satırı yalnız kullanıcı bir oluşuma dokununca yazılır: bitti, atla, saat değiştir, varyant seç, parçayı onayla. Kimlik deterministiktir: `v5(kural, gün)` ya da `v5(kural, dönem başı, sıra)`.
+10. Proje önerileri ve son tarih riski, istenen aralığın içinde hesaplanır. Bu yüzden arayüz aralığı en geç son tarihe kadar ister.
 
 **Determinizm kuralları:**
 1. Motor saati kendisi okumaz; "şimdi" (`asOf`) girdi olarak verilir.
@@ -150,7 +170,8 @@ PlanOutput: oluşturulacak / güncellenecek plan_instances, boş aralıklar,
 3. Zaman tamsayıdır (dakika). Kayan nokta yalnız astronomik hesapta kullanılır ve sonuç dakikaya yuvarlanır.
 4. Girdi koleksiyonları işlenmeden önce sıralanır; Map sırası sonucu etkilemez.
 5. Çıktı `engineVersion` taşır; algoritma değişince sürüm artar.
-6. Her kural bir **test vektörüyle** (girdi JSON → beklenen çıktı JSON) korunur. Aynı vektörler sunucu doğrulamasında da çalıştırılır.
+6. Her kural bir testle korunur. Plan motoru sunucuda doğrulanmadığı için senaryolar (DB_SCHEMA §8) Dart birim testidir (D24). JSON test vektörleri, sunucuda yeniden çalışan beyin motoru için kullanılır.
+7. Performans testi gerçekçi yükle (~30 kural) bir yıllık aralığı ölçer. Hedef: bir hafta < 50 ms. Aşama 2 ölçümü: hafta ortalama ~4 ms, yıl ~0,7 sn.
 
 ## 7. Beyin: olay kaynağı
 ```
@@ -205,6 +226,6 @@ Mesaj biçimi: `{"v": 1, "type": "...", "payload": {...}}`
 
 ## 11. Riskler
 1. Dart kodunun `dart compile js` ile Edge Function'da (Deno) çalışması prototiple doğrulanmalı.
-2. `adhan` paketinin bakımı durmuş görünüyor; gerekirse NOAA güneş hesabı + namaz vakti formülleri `core`'a taşınır.
+2. Namaz vakti `adhan_dart` paketine bağlı (D23). Paket bırakılırsa NOAA güneş hesabı ve namaz vakti formülleri `core`'a taşınır.
 3. Kullanıcı başına sayaç satırı yazmaları sıraya sokar. Bu tek kullanıcı ölçeğinde sorun değildir ama toplu sunucu işleri kullanıcı başına küçük işlemlerle yapılmalıdır.
 4. Saat dilimi değiştiren (seyahat eden) kullanıcı: duvar saatleri profilin saat dilimine göre yorumlanır. Seyahat modu ileride değerlendirilir.

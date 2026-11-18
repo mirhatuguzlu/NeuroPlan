@@ -12,3 +12,7 @@ String newId() => _uuid.v7();
 /// sunucuda tek satır olur (docs/DB_SCHEMA.md §3.8).
 String ruleInstanceId(String ruleId, String occurrenceDate) =>
     _uuid.v5(neuroplanNamespace, 'rule:$ruleId:$occurrenceDate');
+
+/// "Dönem başına N kez" oluşumunun kimliği: dönemin ilk günü + sıra (DB_SCHEMA §3.8).
+String perPeriodInstanceId(String ruleId, String periodStart, int index) =>
+    _uuid.v5(neuroplanNamespace, 'period:$ruleId:$periodStart:$index');
