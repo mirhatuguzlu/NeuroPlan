@@ -43,7 +43,7 @@ Durumlar: **Kabul** · **Geçici** (değişmesi bekleniyor) · **Açık** (karar
 **Durum:** Kabul.
 
 ## 2026-11-18 — D9: Geliştirme araçları (AI skill / plugin)
-**Karar:** Kullanıcı (global) kapsamında kurulu: `dart-flutter` (flutter/agent-plugins), `dart-lang/skills` (15 skill), `frontend-design` (anthropics/skills), `ui-ux-pro-max`, `impeccable` (hook'suz). Kurulum komutları CLAUDE.md'de. Supabase MCP, Supabase projesi açılınca kullanıcı kapsamında, başlangıçta salt-okunur eklenir.
+**Karar:** Kullanıcı (global) kapsamında kurulu: `dart-flutter` (flutter/agent-plugins), `dart-lang/skills` (15 skill), `frontend-design` (anthropics/skills), `ui-ux-pro-max`, `impeccable` (hook'suz). Kurulum komutları CLAUDE.md'de. Supabase MCP kullanıcı kapsamında, projeye sabitlenmiş ve salt-okunur (`read_only=true`) eklendi; şema değişiklikleri MCP ile değil migration'larla yapılır. Python 3.14 (ui-ux-pro-max arama betiği için) kullanıcı kapsamında kuruldu.
 **Neden:** Proje sahibinin tercihi (repo temiz kalır). impeccable hook'ları JSX/HTML odaklı, Dart'ta işe yaramaz; “live mode” izinleri atlayarak ajan çalıştırabildiği için yasak. Web odaklı skill'lerin Flutter'a uyarlanışı UX_RULES.md'de.
 **Durum:** Kabul.
 

@@ -20,6 +20,7 @@ Ayrıntı her zaman `docs/` altında; bu dosya kısa kalır.
 7. Gizli anahtar asla commit'lenmez. Supabase değerleri yalnız `.env`'de (git-ignored); `service_role` / secret key istemciye ve repoya hiç girmez. Güvenlik RLS ile sağlanır.
 8. Kullanıcıya görünen her metin TR + EN yerelleştirme dosyasından gelir; koda sabit metin yazılmaz.
 9. Mimari bir karar alındığında `docs/DECISIONS.md`'ye tarihli kayıt düşülür.
+10. `README.md` uygulamayla birlikte güncellenir: her aşama ya da özellik bitince durum, özellikler ve yol haritası README'ye yansıtılır. README yalnız var olanı “var”, planlananı “planlanan” diye yazar.
 
 ## Komutlar
 ```bash
