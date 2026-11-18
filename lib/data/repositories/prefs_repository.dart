@@ -10,6 +10,19 @@ class PrefsRepository {
   static const notifyLead = 'pref.notify_lead_minutes';
   static const exactAlarms = 'pref.exact_alarms';
 
+  /// Odakta Rahatsız Etmeyin ('1' = açık).
+  static const focusDnd = 'pref.focus_dnd';
+
+  /// Son kullanılan Pomodoro / derin çalışma ayarları: `{"pomodoro":{…},"deep":{…}}`.
+  static const focusSettings = 'pref.focus_settings';
+
+  /// Süren oturumun cihaza özel durumu: `{"session":id,"pause":"normal"|"emergency"|null,
+  /// "guard":{…}}` (D32).
+  static const focusRuntime = 'focus.runtime';
+
+  /// Bugün kullanılan acil durum hakkı: `YYYY-MM-DD:n` (D34).
+  static const focusEmergency = 'focus.emergency';
+
   Stream<String?> watch(String key) =>
       (_db.select(_db.syncState)..where((s) => s.key.equals(key)))
           .watchSingleOrNull()

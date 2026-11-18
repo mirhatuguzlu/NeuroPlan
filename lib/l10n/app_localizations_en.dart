@@ -1085,4 +1085,310 @@ class L10nEn extends L10n {
 
   @override
   String get widgetNow => 'Starting now';
+
+  @override
+  String get commonCancel => 'Cancel';
+
+  @override
+  String get actionFocus => 'Focus';
+
+  @override
+  String get secFocus => 'Focus';
+
+  @override
+  String get focusStart => 'Start';
+
+  @override
+  String get focusMissingTitle => 'This item is no longer in your plan';
+
+  @override
+  String get focusMissingBody =>
+      'Your plan may have changed. Pick it again from Today.';
+
+  @override
+  String get focusChangeDurations => 'Change durations';
+
+  @override
+  String get focusRuleHint =>
+      'If you leave the app or pull down the notification shade during focus, come back within 10 seconds or the session breaks. Turning off the screen and incoming calls don\'t count, and leaving during a break is fine.';
+
+  @override
+  String get focusSummaryFree => 'No time limit; stop when you\'re done.';
+
+  @override
+  String focusSummaryPomodoro(int work, int rest, int every, int long) {
+    return '$work min focus, $rest min break; a $long min long break every $every cycles.';
+  }
+
+  @override
+  String focusSummaryDeep(int target) {
+    return 'Target: $target min of uninterrupted focus. You can take a break, suggested from how long you\'ve focused so far.';
+  }
+
+  @override
+  String get focusFieldWork => 'Focus (min)';
+
+  @override
+  String get focusFieldBreak => 'Break (min)';
+
+  @override
+  String get focusFieldLongBreak => 'Long break (min)';
+
+  @override
+  String get focusFieldLongEvery => 'Long break every … cycles';
+
+  @override
+  String get focusFieldTarget => 'Target (min)';
+
+  @override
+  String get focusPause => 'Pause';
+
+  @override
+  String get focusResume => 'Resume';
+
+  @override
+  String get focusFinish => 'Finish';
+
+  @override
+  String get focusEndBreak => 'End break';
+
+  @override
+  String focusTakeBreak(int minutes) {
+    return 'Take a break · $minutes min suggested';
+  }
+
+  @override
+  String focusEmergency(int left) {
+    return 'Emergency ($left left)';
+  }
+
+  @override
+  String get focusEmergencyNone => 'No emergency pauses left today';
+
+  @override
+  String get focusEmergencyTitle => 'Emergency';
+
+  @override
+  String focusEmergencyBody(int left) {
+    return 'The session pauses without penalty and you can leave the app. Tap Resume when you\'re back. Left today after this: $left.';
+  }
+
+  @override
+  String get focusEmergencyConfirm => 'Pause';
+
+  @override
+  String focusPhaseCycle(int n) {
+    return 'Focus · cycle $n';
+  }
+
+  @override
+  String focusPhaseDeep(int target) {
+    return 'Deep work · target $target min';
+  }
+
+  @override
+  String get focusPhaseBreak => 'Break · you can leave the app';
+
+  @override
+  String get focusPhaseBreakOver => 'Break over · resume when ready';
+
+  @override
+  String get focusPhasePaused => 'Paused · stay in the app';
+
+  @override
+  String get focusPhaseEmergency => 'Emergency · you can leave the app';
+
+  @override
+  String focusTimeLeft(String time) {
+    return '$time left';
+  }
+
+  @override
+  String focusTimeElapsed(String time) {
+    return '$time elapsed';
+  }
+
+  @override
+  String focusTotal(String time) {
+    return '$time of focus this session';
+  }
+
+  @override
+  String get focusBackHint => 'Tap Finish to end the session.';
+
+  @override
+  String focusOverlaySeconds(int seconds) {
+    return 'Come back within $seconds s';
+  }
+
+  @override
+  String get focusPardonTitle => 'Looks like you were on a call';
+
+  @override
+  String get focusPardonBody =>
+      'You were away for more than 10 seconds, but the phone showed a call. If you were on a call, the session continues and the call time isn\'t counted as focus.';
+
+  @override
+  String get focusPardonYes => 'Yes, I was on a call';
+
+  @override
+  String get focusPardonNo => 'No';
+
+  @override
+  String get focusOngoingChannel => 'Running focus session';
+
+  @override
+  String get focusAlertChannel => 'Focus alerts';
+
+  @override
+  String get focusAlertTitle => 'You\'re breaking your plan';
+
+  @override
+  String get focusAlertBody =>
+      'Come back within 10 seconds or the session breaks. Tap to return.';
+
+  @override
+  String get focusBrokenTitle => 'Focus broken';
+
+  @override
+  String get focusBrokenBody =>
+      'You didn\'t come back within 10 seconds. Start again whenever you\'re ready.';
+
+  @override
+  String get focusBreakTitle => 'Break time';
+
+  @override
+  String focusBreakBody(int minutes) {
+    return '$minutes min break. You can leave the app.';
+  }
+
+  @override
+  String get focusBreakOverTitle => 'Break over';
+
+  @override
+  String get focusBreakOverBody => 'Come back and resume when you\'re ready.';
+
+  @override
+  String get focusTargetTitle => 'Target reached';
+
+  @override
+  String focusTargetBody(int minutes) {
+    return '$minutes min of deep work done. Keep going or finish.';
+  }
+
+  @override
+  String get focusBrokenHeading => 'Session broken';
+
+  @override
+  String focusBrokenWhat(String time) {
+    return 'At $time the app was left and nobody came back within 10 seconds, so the session stopped.';
+  }
+
+  @override
+  String focusBrokenBrain(String root, int minutes) {
+    return 'This session wasn\'t added to the brain. In regions associated with $root, $minutes minutes\' worth went dark; it lights up again as you focus.';
+  }
+
+  @override
+  String get focusBrokenBrainNone =>
+      'This session wasn\'t added to the brain; nothing went dark.';
+
+  @override
+  String get focusBrokenAgain =>
+      'It happens. Start again whenever you\'re ready.';
+
+  @override
+  String get focusRestart => 'Start again';
+
+  @override
+  String get focusBackToToday => 'Back to Today';
+
+  @override
+  String get focusRateFocus => 'How focused were you?';
+
+  @override
+  String get focusRateFocusLow => '1 · not at all';
+
+  @override
+  String get focusRateFocusHigh => '5 · completely';
+
+  @override
+  String get focusRateFatigue => 'How tired are you?';
+
+  @override
+  String get focusRateFatigueLow => '1 · not at all';
+
+  @override
+  String get focusRateFatigueHigh => '5 · very';
+
+  @override
+  String get focusNoteTitle => 'A short note';
+
+  @override
+  String get focusNoteLabel => 'Note (optional)';
+
+  @override
+  String get focusGainTitle => 'What this session added';
+
+  @override
+  String focusGainBody(String root, int minutes) {
+    return 'You spent $minutes min on regions associated with $root.';
+  }
+
+  @override
+  String get focusGainNone =>
+      'It lasted less than a minute; no time to add to the brain yet.';
+
+  @override
+  String focusGainShare(int percent) {
+    return 'Share: $percent%';
+  }
+
+  @override
+  String get focusGainExplain =>
+      'The bars show how the neuron gain is split across these regions. The split is a product decision based on each region\'s evidence level, not a measurement of your brain.';
+
+  @override
+  String focusRewardPomodoro(int cycles, int streak) {
+    String _temp0 = intl.Intl.pluralLogic(
+      cycles,
+      locale: localeName,
+      other: '$cycles cycles completed',
+      one: '1 cycle completed',
+    );
+    return '$_temp0 · streak: $streak';
+  }
+
+  @override
+  String focusRewardDeep(int longest, int record) {
+    return 'Longest uninterrupted focus: $longest min · your record: $record min';
+  }
+
+  @override
+  String get focusDone => 'Done';
+
+  @override
+  String get settingFocusDnd => 'Do Not Disturb while focusing';
+
+  @override
+  String get settingFocusDndBody =>
+      'Turns on when a session starts and goes back when it ends.';
+
+  @override
+  String get focusDndDenied => 'Do Not Disturb access wasn\'t granted.';
+
+  @override
+  String get settingFocusCalls => 'Don\'t count incoming calls as leaving';
+
+  @override
+  String get settingFocusCallsBody =>
+      'Needs phone state permission. Without it, you\'ll be asked when you come back.';
+
+  @override
+  String get settingFocusCallsOn =>
+      'Permission granted. Use system settings to remove it.';
+
+  @override
+  String get focusPhoneDenied =>
+      'Phone state permission wasn\'t granted; you\'ll be asked after a call.';
 }

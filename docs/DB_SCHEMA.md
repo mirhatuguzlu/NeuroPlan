@@ -360,7 +360,7 @@ Aynı güne birden çok kayıt düşerse en kısıtlayıcı olan kazanır (`none
 | `started_at` | timestamptz not null | |
 | `ended_at` | timestamptz null | null = sürüyor |
 | `focused_seconds` | int not null default 0 | Molalar ve kaçışlar hariç gerçek odak süresi |
-| `segments` | jsonb not null default `'[]'` | `[{"kind":"work"|"break","start":…,"end":…}]`. Pomodoro serisi ve en uzun kesintisiz süre (FOCUS-5) buradan hesaplanır. |
+| `segments` | jsonb not null default `'[]'` | `[{"kind":"work"|"break","start":ISO,"end":ISO|null}]`; açık segmentin `end`'i null (D32). Kesinti ve arama odak segmentini böler; segmentler arası boşluk duraklatmadır. Pomodoro serisi ve en uzun kesintisiz süre (FOCUS-5) buradan hesaplanır. |
 | `outcome` | text: `in_progress` · `completed` · `broken` | `broken`: kaçış kuralı (FOCUS-2) |
 | `focus_rating`, `fatigue_rating` | smallint null: 1–5 | Kullanıcı bildirir |
 | `note` | text null | |
@@ -396,7 +396,7 @@ O sütunları vardır; satır güncellenmez, `updated_at = created_at` olur.
 |---|---|
 | `neuron_gain`, `connection_gain` | Tamamlanan oturumdan türetilir |
 | `fade` | Bölge etkinlik olmadan bir sönme eşiğini aştığında. Parlaklık düşer, nöron silinmez (BRAIN-3). |
-| `penalty` | Bozulan oturumdan türetilir. **Nöron ya da parlaklık düşürmez** (FOCUS-3, UX §10: suçlama yok); yalnız seri ödülünü sıfırlar (FOCUS-5). |
+| `penalty` | Bozulan oturumdan türetilir. Miktar: bozulmadan önceki odak dakikası × 1000, kazançla aynı dağıtım. O kadar nöronu **söndürür, silmez**; sonraki kazançlar yeniden yakar. Seri ödülünü sıfırlar (FOCUS-5). Önceki "düşürmez" kuralının yerine geçti (D31). |
 
 ### 4.4 `brain_snapshots`: önbellek
 | Sütun | Tip | Açıklama |

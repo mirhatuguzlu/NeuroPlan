@@ -1926,6 +1926,504 @@ abstract class L10n {
   /// In tr, this message translates to:
   /// **'Şimdi başlıyor'**
   String get widgetNow;
+
+  /// No description provided for @commonCancel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Vazgeç'**
+  String get commonCancel;
+
+  /// No description provided for @actionFocus.
+  ///
+  /// In tr, this message translates to:
+  /// **'Odaklan'**
+  String get actionFocus;
+
+  /// No description provided for @secFocus.
+  ///
+  /// In tr, this message translates to:
+  /// **'Odak'**
+  String get secFocus;
+
+  /// No description provided for @focusStart.
+  ///
+  /// In tr, this message translates to:
+  /// **'Başla'**
+  String get focusStart;
+
+  /// No description provided for @focusMissingTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu iş artık planda yok'**
+  String get focusMissingTitle;
+
+  /// No description provided for @focusMissingBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Plan değişmiş olabilir. Bugün ekranından yeniden seç.'**
+  String get focusMissingBody;
+
+  /// No description provided for @focusChangeDurations.
+  ///
+  /// In tr, this message translates to:
+  /// **'Süreleri değiştir'**
+  String get focusChangeDurations;
+
+  /// No description provided for @focusRuleHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Odak sırasında uygulamadan çıkarsan ya da bildirim panelini çekersen 10 saniye içinde dönmen gerekir; yoksa oturum bozulur. Ekranı kapatmak ve gelen arama sayılmaz, molada çıkmak serbest.'**
+  String get focusRuleHint;
+
+  /// No description provided for @focusSummaryFree.
+  ///
+  /// In tr, this message translates to:
+  /// **'Süre sınırı yok; bitirdiğinde dur.'**
+  String get focusSummaryFree;
+
+  /// No description provided for @focusSummaryPomodoro.
+  ///
+  /// In tr, this message translates to:
+  /// **'{work} dk odak, {rest} dk mola; {every} döngüde bir {long} dk uzun mola.'**
+  String focusSummaryPomodoro(int work, int rest, int every, int long);
+
+  /// No description provided for @focusSummaryDeep.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hedef {target} dk kesintisiz odak. İstersen, o ana kadarki odak süresine göre önerilen bir mola verebilirsin.'**
+  String focusSummaryDeep(int target);
+
+  /// No description provided for @focusFieldWork.
+  ///
+  /// In tr, this message translates to:
+  /// **'Odak (dk)'**
+  String get focusFieldWork;
+
+  /// No description provided for @focusFieldBreak.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mola (dk)'**
+  String get focusFieldBreak;
+
+  /// No description provided for @focusFieldLongBreak.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uzun mola (dk)'**
+  String get focusFieldLongBreak;
+
+  /// No description provided for @focusFieldLongEvery.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uzun mola kaç döngüde bir'**
+  String get focusFieldLongEvery;
+
+  /// No description provided for @focusFieldTarget.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hedef (dk)'**
+  String get focusFieldTarget;
+
+  /// No description provided for @focusPause.
+  ///
+  /// In tr, this message translates to:
+  /// **'Duraklat'**
+  String get focusPause;
+
+  /// No description provided for @focusResume.
+  ///
+  /// In tr, this message translates to:
+  /// **'Devam'**
+  String get focusResume;
+
+  /// No description provided for @focusFinish.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bitir'**
+  String get focusFinish;
+
+  /// No description provided for @focusEndBreak.
+  ///
+  /// In tr, this message translates to:
+  /// **'Molayı bitir'**
+  String get focusEndBreak;
+
+  /// No description provided for @focusTakeBreak.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mola ver · {minutes} dk önerilir'**
+  String focusTakeBreak(int minutes);
+
+  /// No description provided for @focusEmergency.
+  ///
+  /// In tr, this message translates to:
+  /// **'Acil durum ({left} hakkın var)'**
+  String focusEmergency(int left);
+
+  /// No description provided for @focusEmergencyNone.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugünkü acil durum hakların bitti'**
+  String get focusEmergencyNone;
+
+  /// No description provided for @focusEmergencyTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Acil durum'**
+  String get focusEmergencyTitle;
+
+  /// No description provided for @focusEmergencyBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Oturum cezasız duraklar ve uygulamadan çıkabilirsin. Döndüğünde Devam\'a dokun. Bundan sonra bugün kalan hakkın: {left}.'**
+  String focusEmergencyBody(int left);
+
+  /// No description provided for @focusEmergencyConfirm.
+  ///
+  /// In tr, this message translates to:
+  /// **'Duraklat'**
+  String get focusEmergencyConfirm;
+
+  /// No description provided for @focusPhaseCycle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Odak · {n}. döngü'**
+  String focusPhaseCycle(int n);
+
+  /// No description provided for @focusPhaseDeep.
+  ///
+  /// In tr, this message translates to:
+  /// **'Derin çalışma · hedef {target} dk'**
+  String focusPhaseDeep(int target);
+
+  /// No description provided for @focusPhaseBreak.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mola · uygulamadan çıkabilirsin'**
+  String get focusPhaseBreak;
+
+  /// No description provided for @focusPhaseBreakOver.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mola bitti · hazır olunca devam et'**
+  String get focusPhaseBreakOver;
+
+  /// No description provided for @focusPhasePaused.
+  ///
+  /// In tr, this message translates to:
+  /// **'Duraklatıldı · uygulamada kal'**
+  String get focusPhasePaused;
+
+  /// No description provided for @focusPhaseEmergency.
+  ///
+  /// In tr, this message translates to:
+  /// **'Acil durum · uygulamadan çıkabilirsin'**
+  String get focusPhaseEmergency;
+
+  /// No description provided for @focusTimeLeft.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kalan {time}'**
+  String focusTimeLeft(String time);
+
+  /// No description provided for @focusTimeElapsed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geçen {time}'**
+  String focusTimeElapsed(String time);
+
+  /// No description provided for @focusTotal.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu oturumda {time} odak'**
+  String focusTotal(String time);
+
+  /// No description provided for @focusBackHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Oturumu bitirmek için Bitir\'e dokun.'**
+  String get focusBackHint;
+
+  /// No description provided for @focusOverlaySeconds.
+  ///
+  /// In tr, this message translates to:
+  /// **'{seconds} sn içinde dön'**
+  String focusOverlaySeconds(int seconds);
+
+  /// No description provided for @focusPardonTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aramadaymışsın gibi görünüyor'**
+  String get focusPardonTitle;
+
+  /// No description provided for @focusPardonBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'10 saniyeden uzun dışarıdaydın ama telefon bir arama gösteriyordu. Aramadaydıysan oturum sürer, arama süresi odak sayılmaz.'**
+  String get focusPardonBody;
+
+  /// No description provided for @focusPardonYes.
+  ///
+  /// In tr, this message translates to:
+  /// **'Evet, aramadaydım'**
+  String get focusPardonYes;
+
+  /// No description provided for @focusPardonNo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hayır'**
+  String get focusPardonNo;
+
+  /// No description provided for @focusOngoingChannel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Süren odak oturumu'**
+  String get focusOngoingChannel;
+
+  /// No description provided for @focusAlertChannel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Odak uyarıları'**
+  String get focusAlertChannel;
+
+  /// No description provided for @focusAlertTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Planı bozuyorsun'**
+  String get focusAlertTitle;
+
+  /// No description provided for @focusAlertBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'10 saniye içinde dön, yoksa oturum bozulur. Dönmek için dokun.'**
+  String get focusAlertBody;
+
+  /// No description provided for @focusBrokenTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Odak bozuldu'**
+  String get focusBrokenTitle;
+
+  /// No description provided for @focusBrokenBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'10 saniye içinde dönülmedi. Hazır olduğunda yeniden başlayabilirsin.'**
+  String get focusBrokenBody;
+
+  /// No description provided for @focusBreakTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mola zamanı'**
+  String get focusBreakTitle;
+
+  /// No description provided for @focusBreakBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'{minutes} dk mola. Uygulamadan çıkabilirsin.'**
+  String focusBreakBody(int minutes);
+
+  /// No description provided for @focusBreakOverTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mola bitti'**
+  String get focusBreakOverTitle;
+
+  /// No description provided for @focusBreakOverBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hazır olduğunda uygulamaya dönüp devam et.'**
+  String get focusBreakOverBody;
+
+  /// No description provided for @focusTargetTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hedefe ulaştın'**
+  String get focusTargetTitle;
+
+  /// No description provided for @focusTargetBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'{minutes} dk derin çalışma tamam. İstersen sürdür ya da bitir.'**
+  String focusTargetBody(int minutes);
+
+  /// No description provided for @focusBrokenHeading.
+  ///
+  /// In tr, this message translates to:
+  /// **'Oturum bozuldu'**
+  String get focusBrokenHeading;
+
+  /// No description provided for @focusBrokenWhat.
+  ///
+  /// In tr, this message translates to:
+  /// **'Saat {time}: uygulamadan çıkıldı ve 10 saniye içinde dönülmedi, oturum durdu.'**
+  String focusBrokenWhat(String time);
+
+  /// No description provided for @focusBrokenBrain.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu oturum beyne eklenmedi. {root} ile ilişkilendirilen bölgelerde {minutes} dakikalık kısım söndü; yeniden odaklandıkça yanar.'**
+  String focusBrokenBrain(String root, int minutes);
+
+  /// No description provided for @focusBrokenBrainNone.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu oturum beyne eklenmedi; sönen bir kısım yok.'**
+  String get focusBrokenBrainNone;
+
+  /// No description provided for @focusBrokenAgain.
+  ///
+  /// In tr, this message translates to:
+  /// **'Olabilir. Hazır olduğunda yeniden başlayabilirsin.'**
+  String get focusBrokenAgain;
+
+  /// No description provided for @focusRestart.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yeniden başlat'**
+  String get focusRestart;
+
+  /// No description provided for @focusBackToToday.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugün\'e dön'**
+  String get focusBackToToday;
+
+  /// No description provided for @focusRateFocus.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ne kadar odaklanabildin?'**
+  String get focusRateFocus;
+
+  /// No description provided for @focusRateFocusLow.
+  ///
+  /// In tr, this message translates to:
+  /// **'1 · hiç'**
+  String get focusRateFocusLow;
+
+  /// No description provided for @focusRateFocusHigh.
+  ///
+  /// In tr, this message translates to:
+  /// **'5 · tamamen'**
+  String get focusRateFocusHigh;
+
+  /// No description provided for @focusRateFatigue.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ne kadar yorgunsun?'**
+  String get focusRateFatigue;
+
+  /// No description provided for @focusRateFatigueLow.
+  ///
+  /// In tr, this message translates to:
+  /// **'1 · hiç'**
+  String get focusRateFatigueLow;
+
+  /// No description provided for @focusRateFatigueHigh.
+  ///
+  /// In tr, this message translates to:
+  /// **'5 · çok'**
+  String get focusRateFatigueHigh;
+
+  /// No description provided for @focusNoteTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kısa bir not'**
+  String get focusNoteTitle;
+
+  /// No description provided for @focusNoteLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Not (isteğe bağlı)'**
+  String get focusNoteLabel;
+
+  /// No description provided for @focusGainTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu oturumun karşılığı'**
+  String get focusGainTitle;
+
+  /// No description provided for @focusGainBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'{root} ile ilişkilendirilen bölgelere {minutes} dk ayırdın.'**
+  String focusGainBody(String root, int minutes);
+
+  /// No description provided for @focusGainNone.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir dakikadan kısa sürdü; beyne eklenecek süre birikmedi.'**
+  String get focusGainNone;
+
+  /// No description provided for @focusGainShare.
+  ///
+  /// In tr, this message translates to:
+  /// **'Pay: %{percent}'**
+  String focusGainShare(int percent);
+
+  /// No description provided for @focusGainExplain.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çubuklar, nöron kazancının bu bölgelere nasıl dağıldığını gösterir. Dağılım, bölgelerin kanıt düzeyine göre belirlenen bir ürün kararıdır; beyninin ölçümü değildir.'**
+  String get focusGainExplain;
+
+  /// No description provided for @focusRewardPomodoro.
+  ///
+  /// In tr, this message translates to:
+  /// **'{cycles} döngü tamamladın · seri: {streak} oturum'**
+  String focusRewardPomodoro(int cycles, int streak);
+
+  /// No description provided for @focusRewardDeep.
+  ///
+  /// In tr, this message translates to:
+  /// **'En uzun kesintisiz odak: {longest} dk · rekorun: {record} dk'**
+  String focusRewardDeep(int longest, int record);
+
+  /// No description provided for @focusDone.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bitti'**
+  String get focusDone;
+
+  /// No description provided for @settingFocusDnd.
+  ///
+  /// In tr, this message translates to:
+  /// **'Odakta Rahatsız Etmeyin'**
+  String get settingFocusDnd;
+
+  /// No description provided for @settingFocusDndBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Oturum başlayınca açılır, bitince eski haline döner.'**
+  String get settingFocusDndBody;
+
+  /// No description provided for @focusDndDenied.
+  ///
+  /// In tr, this message translates to:
+  /// **'Rahatsız Etmeyin erişimi verilmedi.'**
+  String get focusDndDenied;
+
+  /// No description provided for @settingFocusCalls.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gelen aramalar kaçış sayılmasın'**
+  String get settingFocusCalls;
+
+  /// No description provided for @settingFocusCallsBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Telefon durumu izni ister. İzin yoksa dönüşte sorulur.'**
+  String get settingFocusCallsBody;
+
+  /// No description provided for @settingFocusCallsOn.
+  ///
+  /// In tr, this message translates to:
+  /// **'İzin verildi. Kaldırmak için sistem ayarlarını kullan.'**
+  String get settingFocusCallsOn;
+
+  /// No description provided for @focusPhoneDenied.
+  ///
+  /// In tr, this message translates to:
+  /// **'Telefon durumu izni verilmedi; aramadan sonra dönüşte sorulur.'**
+  String get focusPhoneDenied;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

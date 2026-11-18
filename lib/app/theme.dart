@@ -22,7 +22,14 @@ class AppTokens extends ThemeExtension<AppTokens> {
     this.enterCurve = Easing.emphasizedDecelerate,
     this.exitCurve = Easing.emphasizedAccelerate,
     this.standardCurve = Easing.standard,
+    this.breathe = const Duration(
+      milliseconds: 4000,
+    ), // 4 × Durations.extralong4
   });
+
+  /// Odak ekranındaki "yanıyor" ışımasının yarım nefesi; yalnız oturum sürerken (anlam
+  /// taşıyan hareket, UX_RULES §5).
+  final Duration breathe;
 
   final double radius;
   final double navRadius;

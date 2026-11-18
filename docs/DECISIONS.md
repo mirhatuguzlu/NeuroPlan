@@ -205,3 +205,54 @@ Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem 
 **Karar:** Uyku penceresi ayrı bir şema alanı değildir. Sıradan, kesin bir aktivitedir: Dinlenme ve Uyku kökünde, her gün, başlangıcı ve bitişi saat olan bir kural. Motor onu dolu blok olarak korur; otomatik yerleştirme oraya hiçbir şey koymaz. Profil ekranı bu izle bulup düzenler (`SleepWindow`). Sihirbazdan astronomik kalkışla kurulan uyku (S1) bu izle bulunmaz; Plan ekranından düzenlenir.
 **Neden:** Motor açısından ayrı bir kavram gerekmiyor; şema ve migration değişmeden kalıyor.
 **Durum:** Geçici. Birden çok uyku kuralı ya da seyahat modu gerekirse profile alan eklenir.
+
+## 2026-11-19 — D31: Bozulan oturumun beyin cezası
+**Karar:** Bozulan oturum `penalty` olayları üretir. Miktar, bozulmadan önce odaklanılan dakika × 1000 binde-birimdir ve kazançla aynı yöntemle (normalleştirilmiş ağırlık, "en büyük kalan") kök kategorinin bölgelerine dağıtılır. Ceza o kadar nöronu **söndürür, silmez**; sonraki tamamlanan oturumlar onları yeniden yakar. Pomodoro serisi de sıfırlanır. Bu aşamada olaylar yazılır; katlama (fold), bağlantılar, sönme ve 3D görünüm beyin aşamasındadır. Kazanç v1: tamamlanan oturumun her odak dakikası 1000 binde-birim `neuron_gain` (`packages/neuroplan_core/lib/src/brain/brain_engine.dart`).
+**Neden:** Aşama 3 talimatı "ilgili bölgede bazı nöronlar söner, tekrar çalışılarak geri kazanılır" diyor; proje sahibi soru formunda "oturum süresi kadar söner"i seçti.
+**Durum:** Kabul. **D20'nin "`penalty` olayı nöron ya da parlaklık düşürmez" maddesinin yerine geçer**; D20'nin öbür maddeleri geçerli.
+
+## 2026-11-19 — D32: Zaman damgalı sayaç ve kurtarma
+**Karar:**
+- Sayaç tick saymaz. Oturum `focus_sessions.segments`'ta `{"kind":"work"|"break","start":ISO,"end":ISO|null}` dizisi olarak tutulur; her değer segmentlerden ve "şimdi"den hesaplanır (`FocusClock`, saf Dart).
+- Faz sınırları (Pomodoro odak sonu, mola sonu) geç fark edilse de tam anında kapatılır. Uygulama saatler sonra açılırsa sayaç doğru fazda bulunur.
+- Kesinti ve arama süresi odak segmentini böler: odak süresine girmez, kesintisiz süreyi sıfırlar. Ekran kapalıyken süre işler.
+- Cihaza özel geçici durum (duraklatma türü, 10 sn kuralının durumu) `sync_state`'te `focus.runtime` anahtarındadır. Açılışta süren oturum ve bu durum okunur; dışarıdayken süre dolduysa oturum son tarih anında bozulur, dolmadıysa kaldığı yerden sürer.
+- Son kullanılan Pomodoro / derin çalışma ayarları cihazda hatırlanır (`pref.focus_settings`). Varsayılanlar: 25/5, 4 döngüde bir 15 dk uzun mola; derin çalışma hedefi 90 dk.
+- Derin çalışmada isteğe bağlı mola önerisi (ürün kuralı, bilimsel iddia değil): odak < 25 dk → 5, < 50 → 8, < 90 → 10, ≥ 90 → 15 dk.
+**Durum:** Kabul. Şema değişmedi.
+
+## 2026-11-19 — D33: Planı bozma algılama
+**Karar:**
+- Kural `EscapeGuard`'dadır (saf Dart, durum JSON'a yazılır). Platform olaylarını `FocusPlatform` arayüzü taşır (`lib/app/focus_platform.dart`); Android uygulaması `MainActivity.kt` + `FocusAlert.kt`. iOS sonra aynı arayüzle eklenir.
+- **Uygulamadan çıkış:** `AppLifecycleState.hidden/paused`. **Bildirim paneli:** pencere odağının gitmesi (`onWindowFocusChanged`); uygulama arka plana geçmez. İkisi ayrı neden olarak kaydedilir (`app_left`, `notification_shade`); panelden başka uygulamaya geçilirse neden `app_left` olur, süre panelin açıldığı andan sayılır.
+- Çıkıştan 750 ms sonra cihaza sorulur (ekran açık mı, arama var mı). Kaçışsa uyarı gider; son tarih yine çıkış anı + 10 sn.
+- **İstisnalar (FOCUS-6 kapanışı):**
+  - Ekran kapanması / kilit: çıkışla arasında ≤ 2 sn varsa `screen_off`, sayaç askıda, odak süresi işler. Kilit açılınca 10 sn başlar.
+  - Gelen arama, telefon durumu izni verildiyse: `phone_call`, askıda; arama bitince 10 sn. Arama süresi odaktan düşülür.
+  - İzin yoksa ses modu (`AudioManager.mode`, izinsiz) aramayı gösteriyorsa son tarihte bozulmaz; dönüşte "Aramadaymışsın, cezayı kaldırayım mı?" diye sorulur.
+  - Molada, mola bitip "Devam" beklenirken ve acil durumda çıkmak serbest. Dışarıdayken son tarihten önce mola başladıysa da serbest.
+  - Alarm uygulaması ayrıca algılanmaz; acil durum hakkı bunu karşılar.
+- 1 sn'den kısa pencere odağı titremeleri kayda geçmez.
+**Neden:** Talimat bu ayrımları ve iOS'a taşınabilir bir arayüzü istiyor. Emülatör davranışına güvenilmez; doğrulama `docs/QA_CHECKLIST.md` ile gerçek cihazda.
+**Durum:** Kabul. Gerçek cihaz testi bekliyor.
+
+## 2026-11-19 — D34: Duraklat, acil durum, mola sonu
+**Karar:**
+- **Duraklat** sayacı durdurur ama çıkma kuralı sürer.
+- **Acil durum** sayacı durdurur ve çıkmayı serbest bırakır; günde 3 kez, cihaz başına (`focus.emergency`). Onay diyaloğuyla açılır, kalan hak görünür.
+- **Mola bitince** bildirim gelir; sonraki odak bloğu kullanıcı "Devam" deyince başlar. Geç dönmek ceza değildir, aradaki süre odak sayılmaz.
+- Oturum bitince iş otomatik "bitti" yapılmaz; Bugün'deki "Bitti" ayrı kalır.
+**Neden:** Proje sahibinin soru formundaki seçimi.
+**Durum:** Kabul.
+
+## 2026-11-19 — D35: Ön plan servisi, uyarı bildirimi, DND, immersive
+**Karar:**
+- Kalıcı bildirim `flutter_local_notifications`'ın ön plan servisiyle gösterilir. Android 14 türü **`specialUse`** (alt tür `focus_timer`): zamanlayıcıya uyan başka tür yok. Play Console'da gerekçe beyanı gerekir. `stopWithTask=false`: uygulama son uygulamalardan süpürülse de süreç 10 sn uyarısını tamamlar. Bildirimde kalan süre (kronometre) ve "Duraklat / Devam / Bitir" var.
+- **Kaçış uyarısı native'dedir** (`FocusAlert.kt`): üstten kayan, titreşimli, 10 sn geri sayan bildirim; dokununca uygulamaya dönülür. Süre dolunca aynı bildirimin yerine "Odak bozuldu" geçer, kalıcı bildirim kapanır, DND geri yüklenir. Flutter motoru ölse de çalışsın diye native'de. Heads-up görünme süresini sistem belirler; bildirim panelde geri saymaya devam eder.
+- **Rahatsız Etmeyin** isteğe bağlı (Profil → Odak). Önceki filtre native `SharedPreferences`'ta tutulur; bitişte, bozulmada ve açılışta (oturum yoksa) geri yüklenir. DND erişimi varsa uyarı kanalı DND'yi aşar (ayrı kanal kimliği).
+- Odak ekranı immersive'dir (sistem çubukları gizli).
+- **Uygulama sabitleme yok.** Android sıradan bir uygulamanın başka uygulamaları engellemesine izin vermiyor; tek resmi yol olan "uygulama sabitleme" (her oturumda sistem onayı ister, kullanıcı bir hareketle çıkabilir) proje sahibi tarafından seçilmedi. Koruma uyarı + 10 sn kuralıdır.
+- Sıradaki iş eşitlemesi artık yalnız zamanlanmış bildirimleri siler (`cancelAllPendingNotifications`); gösterilen odak bildirimlerine dokunmaz. Bildirim eklentisi tek yerden başlatılır (`lib/app/notifications.dart`).
+**Durum:** Kabul. `specialUse` beyanı ilk Play yüklemesinden önce yapılacak.
+
+**D25 kapanışı (2026-11-19):** "Odaklan" butonu geldi: odak gerektiren bugünkü işin açılan eylemlerinde.

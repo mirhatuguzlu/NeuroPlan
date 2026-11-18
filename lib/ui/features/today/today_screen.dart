@@ -655,6 +655,15 @@ class _InstanceTileState extends State<_InstanceTile> {
                       child: Wrap(
                         spacing: Gap.s,
                         children: [
+                          // Odak gerektiren bugünkü iş (D25 kapanışı).
+                          if (view.data.requiresFocus(i.activityId) &&
+                              i.date == view.today)
+                            TextButton.icon(
+                              icon: const Icon(Symbols.timer_rounded),
+                              label: Text(l.actionFocus),
+                              onPressed: () =>
+                                  context.push('/focus/new/${i.id}'),
+                            ),
                           TextButton.icon(
                             icon: const Icon(Symbols.check_circle_rounded),
                             label: Text(l.actionDone),

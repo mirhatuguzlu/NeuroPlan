@@ -76,7 +76,11 @@ Kullanıcı hayatını aşağıdaki öğe türleriyle tanımlar. Her öğe bir k
 - `FOCUS-3` Bozulan oturum silinmez; “bozuldu” olarak kaydedilir, beyne katkı vermez, istatistikte ayrı gösterilir.
 - `FOCUS-4` Pomodoro molası sırasında uygulamadan çıkmak kaçış sayılmaz.
 - `FOCUS-5` Ödül kuralı (SCIENCE.md §4): Pomodoro'da süreklilik (art arda tamamlanan oturum) ve oturum sayısı; derin çalışmada en uzun kesintisiz süre ödüllendirilir.
-- `FOCUS-6` Açık konular: gelen telefon araması, alarm, ekranın kendiliğinden kapanması, sistem diyalogları kaçış sayılır mı? (Öneri: arama ve alarm sayılmaz; ekran kilidi kullanıcı tercihine bağlı.)
+- `FOCUS-6` İstisnalar (D33): ekranın kapanması / kilitlenmesi kaçış sayılmaz, oturum arka planda sürer. Gelen arama telefon durumu izni varsa cezasızdır; izin yoksa dönüşte "cezayı kaldırayım mı?" diye sorulur. Alarm ayrıca algılanmaz, acil durum hakkı kullanılır.
+- `FOCUS-7` Uyarı (D35): kaçışta üstten kayan, titreşimli bildirim 10 sn geriye sayar; dokununca uygulamaya dönülür; süre dolunca yerini "Odak bozuldu" bildirimi alır. Uygulamanın üstünde başka uygulama açılmasını engellemek Android'de mümkün değil; sabitleme kullanılmıyor.
+- `FOCUS-8` Duraklat sayacı durdurur, kural sürer. Acil durum cezasız duraklatır ve çıkmayı serbest bırakır, günde 3 kez (D34).
+- `FOCUS-9` İsteğe bağlı Rahatsız Etmeyin: oturumda açılır, bitince eski haline döner. Odak ekranında sistem çubukları gizlidir.
+- `FOCUS-10` Bitiş adımları, her biri atlanabilir: odak puanı 1–5 → yorgunluk 1–5 → kısa not → beyin kazanımı. Bozulan oturumda ne olduğu sakin dille anlatılır, yeniden başlatma önerilir.
 
 ### 5.6 3D Beyin (`BRAIN`)
 - `BRAIN-1` Uygulama içine gömülü WebView'da yerel Three.js sahnesi; JS köprüsüyle Flutter'a bağlı. Sahne ve kütüphane uygulamaya asset olarak gömülür, CDN kullanılmaz, çevrimdışı çalışır.
@@ -142,14 +146,13 @@ Alt menü (floating) en fazla 5 hedef içerir; öneri: Bugün · Plan · Odak ·
 - **Veri silme ve dışa aktarma** uygulama içinden yapılabilmeli.
 
 ## 9. Teknik riskler ve prototiple doğrulanacaklar
-1. **Bildirim panelini çekmeyi algılama:** Android'de panelin çekilmesi uygulamayı arka plana atmaz; pencere odağını değiştirir. Flutter'ın `AppLifecycleState.inactive` bildiriminin tüm cihaz/sürümlerde güvenilir gelip gelmediği prototiple test edilecek.
-2. **10 saniyelik geri sayım arka planda:** Uygulama arka plandayken sayaç çalışmayabilir. Öneri: çıkış anının zaman damgası kaydedilir, dönüşte geçen süre hesaplanır; uyarı için yerel bildirim zamanlanır. Ön plan servisi gerekip gerekmediği test edilecek.
+1. **Bildirim panelini çekmeyi algılama:** Android'de panelin çekilmesi uygulamayı arka plana atmaz; pencere odağını değiştirir. Flutter'ın `AppLifecycleState.inactive` bildiriminin tüm cihaz/sürümlerde güvenilir gelip gelmediği prototiple test edilecek. Aşama 3: yerel `onWindowFocusChanged` olayı kullanılıyor; gerçek cihazda `docs/QA_CHECKLIST.md` ile doğrulanacak.
+2. **10 saniyelik geri sayım arka planda:** Uygulama arka plandayken sayaç çalışmayabilir. Öneri: çıkış anının zaman damgası kaydedilir, dönüşte geçen süre hesaplanır; uyarı için yerel bildirim zamanlanır. Ön plan servisi gerekip gerekmediği test edilecek. Aşama 3: çıkış anı kaydediliyor, uyarı ve "bozuldu" değişimi native zamanlayıcıyla, ön plan servisi süreci canlı tutuyor (D35).
 3. **WebView + Three.js performansı** düşük uç Android cihazlarda; bellek ve pil tüketimi.
 4. **Eşitleme çakışmaları** (iki cihazda aynı öğe düzenlenirse).
 5. **Canlı sesli oturum altyapısı** (WebRTC sağlayıcısı, maliyet) — açık karar.
 
 ## 10. Açık sorular
-- Kaçış kuralının istisnaları (`FOCUS-6`).
 - Önerilen ek temaların onayı (`THEME-2`).
 - Grup mesajlaşma (`SOCIAL-6`).
 - Ücretli özellik sınırları (`SUB-1`).

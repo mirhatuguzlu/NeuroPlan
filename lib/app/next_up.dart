@@ -11,6 +11,7 @@ import 'package:timezone/timezone.dart' as tz;
 import '../data/repositories/prefs_repository.dart';
 import '../l10n/app_localizations.dart';
 import '../ui/core/format.dart';
+import 'notifications.dart';
 import 'providers.dart';
 
 /// Bildirim tercihleri (cihaza özel, D27).
@@ -27,33 +28,25 @@ final exactAlarmsProvider = StreamProvider<bool>(
       .map((v) => v == '1'),
 );
 
-final nextUpProvider = Provider((ref) => NextUp());
+final nextUpProvider = Provider(
+  (ref) => NextUp(ref.watch(notificationsProvider)),
+);
 
 /// "Sıradaki iş" bildirimleri ve ana ekran widget'ı. Plan değiştikçe önümüzdeki 7 günün
 /// saatli işleri için en çok 50 bildirim yeniden kurulur.
 // shortcut: uygulama 7 gün açılmazsa bildirimler biter; gerekirse WorkManager ile tazele.
 class NextUp {
-  final _plugin = FlutterLocalNotificationsPlugin();
-  var _ready = false;
+  NextUp(this._n);
+
+  final Notifications _n;
   String? _last;
 
   static const _widget = 'NextUpWidgetProvider';
   static const _channel = 'next_up';
 
-  AndroidFlutterLocalNotificationsPlugin? get _android => _plugin
-      .resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin
-      >();
-
-  Future<void> _init() async {
-    if (_ready) return;
-    await _plugin.initialize(
-      settings: const InitializationSettings(
-        android: AndroidInitializationSettings('@mipmap/ic_launcher'),
-      ),
-    );
-    _ready = true;
-  }
+  FlutterLocalNotificationsPlugin get _plugin => _n.plugin;
+  AndroidFlutterLocalNotificationsPlugin? get _android => _n.android;
+  Future<void> _init() => _n.ensure();
 
   /// Android 13+ bildirim izni; ayar açılınca istenir, açılışta değil.
   Future<bool> requestPermission() async {
@@ -169,7 +162,8 @@ class NextUp {
     bool exact,
   ) async {
     await _init();
-    await _plugin.cancelAll();
+    // Yalnız zamanlanmışlar: gösterilen odak bildirimleri (kalıcı, uyarı) silinmesin.
+    await _plugin.cancelAllPendingNotifications();
     if (lead == null) return;
     final canExact =
         exact && (await _android?.canScheduleExactNotifications() ?? false);
@@ -209,20 +203,11 @@ void listenNextUp(WidgetRef ref) {
   void run() {
     final view = ref.read(horizonProvider).value;
     if (view == null) return;
-    final profileLocale = ref.read(profileProvider).value?.locale;
-    final device = WidgetsBinding.instance.platformDispatcher.locale;
-    final locale = profileLocale != null
-        ? Locale(profileLocale)
-        : L10n.supportedLocales.any(
-            (s) => s.languageCode == device.languageCode,
-          )
-        ? Locale(device.languageCode)
-        : const Locale('en');
     ref
         .read(nextUpProvider)
         .sync(
           view,
-          lookupL10n(locale),
+          l10nFor(ref.read(profileProvider).value?.locale),
           lead: ref.read(notifyLeadProvider).value,
           exact: ref.read(exactAlarmsProvider).value ?? false,
         );
@@ -232,4 +217,18 @@ void listenNextUp(WidgetRef ref) {
   ref.listen(notifyLeadProvider, (_, _) => run());
   ref.listen(exactAlarmsProvider, (_, _) => run());
   ref.listen(profileProvider, (_, _) => run());
+}
+
+/// Bildirim metinleri için dil: profil seçimi, yoksa desteklenen cihaz dili, yoksa İngilizce.
+L10n l10nFor(String? profileLocale) {
+  final device = WidgetsBinding.instance.platformDispatcher.locale;
+  return lookupL10n(
+    profileLocale != null
+        ? Locale(profileLocale)
+        : L10n.supportedLocales.any(
+            (s) => s.languageCode == device.languageCode,
+          )
+        ? Locale(device.languageCode)
+        : const Locale('en'),
+  );
 }

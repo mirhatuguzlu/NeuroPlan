@@ -5,18 +5,27 @@ import 'package:flutter_riverpod/misc.dart' show ProviderListenable;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:neuroplan/app/app.dart';
+import 'package:neuroplan/app/focus_platform.dart';
 import 'package:neuroplan/app/next_up.dart';
+import 'package:neuroplan/app/notifications.dart';
 import 'package:neuroplan/app/providers.dart';
 import 'package:neuroplan/data/local/app_database.dart';
+import 'package:neuroplan/ui/features/focus/focus_controller.dart';
 import 'package:drift/drift.dart' as drift show driftRuntimeOptions;
 
 import '../data/test_support.dart';
+import '../support/fake_focus_platform.dart';
 
 /// 18 Kasım 2026 çarşamba 10:00 (İstanbul).
 final testNow = DateTime.utc(2026, 11, 18, 7);
 
 class Harness {
-  Harness(this.tester, this.db, this.container);
+  Harness(this.tester, this.db, this.container, this.focus);
+
+  final FakeFocusPlatform focus;
+
+  /// Odak sayacının saati; testte ileri alınır.
+  static DateTime focusNow = testNow;
 
   final WidgetTester tester;
   final AppDatabase db;
@@ -58,7 +67,10 @@ Future<Harness> pumpApp(
   bool onboarded = true,
   String locale = 'tr',
   Future<void> Function(ProviderContainer c)? seed,
+  FakeFocusPlatform? focus,
 }) async {
+  final platform = focus ?? FakeFocusPlatform();
+  Harness.focusNow = testNow;
   drift.driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
   await tester.binding.setSurfaceSize(const Size(412, 915));
   final db = AppDatabase(NativeDatabase.memory(), systemData: systemData);
@@ -67,6 +79,8 @@ Future<Harness> pumpApp(
       databaseProvider.overrideWithValue(db),
       nowProvider.overrideWith((ref) => Stream.value(testNow)),
       nextUpProvider.overrideWithValue(_NoNextUp()),
+      focusPlatformProvider.overrideWithValue(platform),
+      focusNowProvider.overrideWithValue(() => Harness.focusNow),
     ],
   );
   await tester.runAsync(() async {
@@ -86,7 +100,7 @@ Future<Harness> pumpApp(
       child: const NeuroPlanApp(),
     ),
   );
-  final h = Harness(tester, db, container);
+  final h = Harness(tester, db, container, platform);
   await h.settle();
   addTearDown(() async {
     await tester.pumpWidget(const SizedBox());
@@ -99,6 +113,8 @@ Future<Harness> pumpApp(
 
 /// Testte bildirim ve widget eklentisi yok.
 class _NoNextUp extends NextUp {
+  _NoNextUp() : super(Notifications());
+
   @override
   Future<void> sync(view, l, {required lead, required exact}) async {}
 }

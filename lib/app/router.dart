@@ -7,6 +7,10 @@ import '../ui/core/app_shell.dart';
 import '../ui/features/activity_wizard/activity_wizard_screen.dart';
 import '../ui/features/categories/category_tree_screen.dart';
 import '../ui/features/categories/move_screen.dart';
+import '../ui/features/focus/focus_controller.dart';
+import '../ui/features/focus/focus_result_screens.dart';
+import '../ui/features/focus/focus_screen.dart';
+import '../ui/features/focus/focus_start_screen.dart';
 import '../ui/features/onboarding/onboarding_screen.dart';
 import '../ui/features/plan/plan_screen.dart';
 import '../ui/features/profile/profile_screen.dart';
@@ -23,6 +27,10 @@ NoTransitionPage<void> _tab(GoRouterState s, Widget child) =>
 final routerProvider = Provider<GoRouter>((ref) {
   final refresh = ValueNotifier(0);
   ref.listen(profileProvider, (_, _) => refresh.value++);
+  ref.listen(
+    focusControllerProvider.select((s) => (s.active, s.ended)),
+    (_, _) => refresh.value++,
+  );
   ref.onDispose(refresh.dispose);
 
   return GoRouter(
@@ -37,6 +45,16 @@ final routerProvider = Provider<GoRouter>((ref) {
       final loc = state.matchedLocation;
       if (!done && loc != '/onboarding' && loc != '/add') return '/onboarding';
       if (done && loc == '/onboarding') return '/today';
+      // Süren oturum varken tek ekran odaktır; biten oturumun sonucu gösterilir.
+      final focus = ref.read(focusControllerProvider);
+      if (focus.active) return loc == '/focus' ? null : '/focus';
+      if (focus.ended case (:final id, :final outcome)) {
+        final to = outcome == 'broken'
+            ? '/focus/broken/$id'
+            : '/focus/done/$id';
+        return loc == to ? null : to;
+      }
+      if (loc == '/focus') return '/today';
       return null;
     },
     routes: [
@@ -66,6 +84,36 @@ final routerProvider = Provider<GoRouter>((ref) {
             isCategory: s.pathParameters['kind'] == 'category',
             id: s.pathParameters['id']!,
           ),
+        ),
+      ),
+      GoRoute(
+        path: '/focus',
+        parentNavigatorKey: _rootKey,
+        pageBuilder: (_, s) => sharedAxisPage(s, const FocusScreen()),
+      ),
+      // Kardeş yollar: odak ekranı bunların altında kurulmasın (immersive açmasın).
+      GoRoute(
+        path: '/focus/new/:instance',
+        parentNavigatorKey: _rootKey,
+        pageBuilder: (_, s) => sharedAxisPage(
+          s,
+          FocusStartScreen(instanceId: s.pathParameters['instance']!),
+        ),
+      ),
+      GoRoute(
+        path: '/focus/broken/:id',
+        parentNavigatorKey: _rootKey,
+        pageBuilder: (_, s) => sharedAxisPage(
+          s,
+          FocusBrokenScreen(sessionId: s.pathParameters['id']!),
+        ),
+      ),
+      GoRoute(
+        path: '/focus/done/:id',
+        parentNavigatorKey: _rootKey,
+        pageBuilder: (_, s) => sharedAxisPage(
+          s,
+          FocusFinishScreen(sessionId: s.pathParameters['id']!),
         ),
       ),
       StatefulShellRoute.indexedStack(

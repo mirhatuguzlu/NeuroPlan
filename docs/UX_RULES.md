@@ -65,6 +65,7 @@ Asla: iç içe diyalog, açılışta tanıtım / reklam pop-up'ı, ilk kullanım
   | Fade through | Alt menü sekmeleri arası geçiş (ilişkisiz ekranlar) |
   | Container transform | Bir kart / öğenin kendi detayına açılması |
 - Hareket anlam taşır: süs için sürekli dönen, nabız atan öğe yok. Kullanıcı tetiklemediği hareket yalnız dikkat çekmek için ve tek seferlik.
+  - Tek istisna odak ekranındaki bölge ışımasıdır: "oturum sürüyor" anlamını taşır, yalnız odak sürerken yavaşça nefes alır (`AppTokens.breathe`, 4 × `Durations.extralong4`), duraklatınca söner, azaltılmış harekette durağandır.
 - Sadece `transform` ve `opacity` benzeri ucuz özellikler canlandırılır; ağır alanlar `RepaintBoundary` ile ayrılır.
 - `MediaQuery.disableAnimationsOf` açıksa geçişler kısa solmaya ya da anlık geçişe düşer.
 - Ölçüm: `flutter run --profile` + DevTools Performance; referans cihazda standart geçişlerde 16 ms'yi aşan kare kabul edilmez (referans cihaz Aşama 1'de seçilir).
@@ -160,6 +161,16 @@ Kaçınılacaklar (frontend-design): her etikette TÜMÜ BÜYÜK HARF, başlıkt
 | Bildirim | `notifications` |
 | Tam zamanlı bildirim | `alarm` |
 | Odak gerektirir (etiket) | `timer` (Odak oturumu ile aynı kavram) |
+| Odaklan (oturum başlat) | `timer` (aynı kavram) |
+| Duraklat | `pause` |
+| Devam / molayı bitir | `play_arrow` |
+| Oturumu bitir | `stop` |
+| Acil durum | `emergency` |
+| Mola ver | `coffee` |
+| Rahatsız Etmeyin | `do_not_disturb_on` |
+| Gelen arama | `call` |
+| Yeniden başlat | `restart_alt` |
+| Odak ekranındaki bölge ışıması | `psychology` (Beyin ile aynı kavram) |
 
 ## 9. Erişilebilirlik
 - **Kontrast (WCAG 2.2 AA):** normal metin ≥ 4.5:1; büyük metin, ikon ve arayüz bileşeni sınırları ≥ 3:1. Yüksek Kontrast teması AAA (7:1) hedefler. Her tema açık ve koyu modda ölçülür.

@@ -7,6 +7,7 @@ import '../data/local/app_database.dart';
 import '../data/plan/plan_source.dart';
 import '../data/repositories/activity_repository.dart';
 import '../data/repositories/category_repository.dart';
+import '../data/repositories/focus_repository.dart';
 import '../data/repositories/plan_repository.dart';
 import '../data/repositories/prefs_repository.dart';
 import '../data/repositories/profile_repository.dart';
@@ -44,6 +45,10 @@ final activityRepositoryProvider = Provider(
 final planRepositoryProvider = Provider(
   (ref) =>
       PlanRepository(ref.watch(databaseProvider), ref.watch(writerProvider)),
+);
+final focusRepositoryProvider = Provider(
+  (ref) =>
+      FocusRepository(ref.watch(databaseProvider), ref.watch(writerProvider)),
 );
 final prefsRepositoryProvider = Provider(
   (ref) => PrefsRepository(ref.watch(databaseProvider)),

@@ -58,7 +58,8 @@ pubspec.yaml                  uygulama + workspace kökü
 packages/neuroplan_core/      saf Dart alan katmanı
   lib/src/model/              Activity, ScheduleRule, Recurrence, Timing, FocusSession…
   lib/src/plan/               PlanEngine: tekrar genişletme, kısıt çözme, boşluk, yerleştirme
-  lib/src/brain/              BrainEngine: olay türetme, katlama, sönme
+  lib/src/focus/              FocusClock (zaman damgalı sayaç), EscapeGuard (10 sn kuralı)
+  lib/src/brain/              BrainEngine: olay türetme (Aşama 3: kazanç + ceza), katlama, sönme
   lib/src/sync/               HLC, alan bazlı birleştirme
   lib/src/science/            sistem verisi modelleri (kök kategori, bölge, ağırlık)
   test/                       birim testleri + test vektörleri (JSON)
@@ -180,12 +181,26 @@ focus_sessions (gerçek) ──BrainEngine.derive──▶ brain_events (yalnız
                                                    ▼
                                             brain_snapshots (önbellek) ──▶ WebView
 ```
-- **Gerçek kaynak:** tamamlanan `focus_sessions`, yani **yalnız sayaçlı oturumlar** (D20). Bozulan oturum nöron kazandırmaz (FOCUS-3).
+- **Gerçek kaynak:** tamamlanan `focus_sessions`, yani **yalnız sayaçlı oturumlar** (D20). Bozulan oturum nöron kazandırmaz (FOCUS-3). Bozulan oturum `penalty` üretir: odaklanılan süre kadar nöron söner, silinmez (D31).
 - `derive(oturum, ağırlıklar, engineVersion)` olayları üretir. Her olayın tekilleştirme anahtarı deterministiktir (ör. `gain:<oturum>:<bölge>:v1`). İstemci ile sunucu aynı olayı ürettiğinde tek satır kalır.
 - `fold(olaylar, asOf)` bölge durumunu (nöron, parlaklık, son etkinlik) ve bağlantıları üretir. Sonuç `brain_snapshots`'a yazılır. Olay kümesinin özeti değişirse ya da `engineVersion` artarsa yeniden hesaplanır.
 - Miktarlar tamsayıdır (binde bir birim). Yuvarlama "en büyük kalan" yöntemiyle deterministik yapılır.
 - **v1 formülünün iskeleti** (ayrıntı beyin aşamasında): bir dakikalık odak, her kategoride aynı sabit nöron kazancını verir. Bu kazanç kategorinin bölgelerine ağırlıklarla orantılı dağıtılır (normalleştirme, DB_SCHEMA §9). Aynı oturumda birlikte çalışan bölgeler arasında bağlantı güçlenir. Etkinlik olmadıkça parlaklık eşiklerle düşer; nöron silinmez (BRAIN-3).
 - **Sunucuda doğrulama:** sıralama tablosu için Edge Function aynı `neuroplan_core` kodunu (`dart compile js`) `focus_sessions` üzerinden yeniden çalıştırır. İstemcinin gönderdiği anlık görüntüye güvenilmez. Bu yol prototiple doğrulanacak. Olmazsa hesap TypeScript'e çevrilir ve aynı test vektörleriyle eşitliği korunur.
+
+## 7a. Odak oturumu (Aşama 3, D31–D35)
+```
+ Flutter yaşam döngüsü (hidden / resumed) ┐
+ Android: pencere odağı, ekran, kilit, arama ├─▶ FocusPlatform (arayüz) ─▶ FocusController ─▶ EscapeGuard  (core, saf)
+ bildirim eylemleri (Duraklat / Bitir)     ┘                               │            └─▶ FocusClock   (core, saf)
+                                                                           ├─▶ FocusRepository: segmentler, kesinti, beyin olayları
+                                                                           ├─▶ sync_state: focus.runtime (cihaza özel)
+                                                                           └─▶ FocusPlatform: kalıcı bildirim, 10 sn uyarısı, DND
+```
+- **Saf çekirdek:** `FocusClock` segmentlerden ve "şimdi"den hesaplar; `EscapeGuard` 10 sn kuralının durum makinesidir. İkisi de JSON'a yazılır, Flutter'a bağlı değildir; testleri `packages/neuroplan_core/test/focus/`.
+- **Arayüz:** `FocusPlatform` (`lib/app/focus_platform.dart`) yalnız olay taşır ve sistem çağrısı yapar. Android uygulaması `MainActivity.kt` (kanallar `neuroplan/focus`, `neuroplan/focus_events`) ve `FocusAlert.kt` (geri sayan uyarı, "bozuldu" değişimi, DND). iOS aynı arayüzü uygular.
+- **Denetleyici:** `FocusController` (`lib/ui/features/focus/focus_controller.dart`) uygulama kökünde canlıdır (router dinler). Olayları sırayla işler; açılışta süren oturumu kurtarır. Süren oturum varken router her yolu `/focus`'a, biten oturumu sonuç ekranına yönlendirir.
+- **Süreç ölse de:** son tarihte bildirim değişimi native `Handler`'la yapılır (ön plan servisi süreci canlı tutar); veri tarafı açılışta kurtarmada tamamlanır.
 
 ## 8. WebView köprüsü
 ```

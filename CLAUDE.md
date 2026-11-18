@@ -11,6 +11,7 @@ Ayrıntı her zaman `docs/` altında; bu dosya kısa kalır.
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Katmanlar, offline-first eşitleme, plan/beyin motoru ilkeleri, WebView köprüsü |
 | [docs/DB_SCHEMA.md](docs/DB_SCHEMA.md) | Veri modeli, RLS, senaryo testi |
 | [docs/DECISIONS.md](docs/DECISIONS.md) | Tarihli mimari kararlar (her yeni karar buraya eklenir) |
+| [docs/QA_CHECKLIST.md](docs/QA_CHECKLIST.md) | Gerçek cihaz manuel test listesi (odak algılama vb.) |
 
 ## Değişmez kurallar
 1. **Her ekran tek bir amaç taşır.** Çok adımlı işler adım adım sihirbazla yapılır.

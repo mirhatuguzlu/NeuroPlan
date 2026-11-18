@@ -15,6 +15,7 @@ import '../../core/location.dart';
 import '../../core/prayer_fields.dart';
 import '../../core/states.dart';
 import '../../core/wizard.dart';
+import 'focus_settings.dart';
 import 'notification_settings.dart';
 
 /// Profil (bu aşamada): kurulumda verilen her kararın sonradan değiştirildiği ayarlar.
@@ -206,6 +207,9 @@ class _Settings extends ConsumerWidget {
 
         section(l.secNotifications),
         const NotificationSettings(),
+
+        section(l.secFocus),
+        const FocusSettingsTiles(),
       ],
     );
   }

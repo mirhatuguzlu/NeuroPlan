@@ -1082,4 +1082,304 @@ class L10nTr extends L10n {
 
   @override
   String get widgetNow => 'Şimdi başlıyor';
+
+  @override
+  String get commonCancel => 'Vazgeç';
+
+  @override
+  String get actionFocus => 'Odaklan';
+
+  @override
+  String get secFocus => 'Odak';
+
+  @override
+  String get focusStart => 'Başla';
+
+  @override
+  String get focusMissingTitle => 'Bu iş artık planda yok';
+
+  @override
+  String get focusMissingBody =>
+      'Plan değişmiş olabilir. Bugün ekranından yeniden seç.';
+
+  @override
+  String get focusChangeDurations => 'Süreleri değiştir';
+
+  @override
+  String get focusRuleHint =>
+      'Odak sırasında uygulamadan çıkarsan ya da bildirim panelini çekersen 10 saniye içinde dönmen gerekir; yoksa oturum bozulur. Ekranı kapatmak ve gelen arama sayılmaz, molada çıkmak serbest.';
+
+  @override
+  String get focusSummaryFree => 'Süre sınırı yok; bitirdiğinde dur.';
+
+  @override
+  String focusSummaryPomodoro(int work, int rest, int every, int long) {
+    return '$work dk odak, $rest dk mola; $every döngüde bir $long dk uzun mola.';
+  }
+
+  @override
+  String focusSummaryDeep(int target) {
+    return 'Hedef $target dk kesintisiz odak. İstersen, o ana kadarki odak süresine göre önerilen bir mola verebilirsin.';
+  }
+
+  @override
+  String get focusFieldWork => 'Odak (dk)';
+
+  @override
+  String get focusFieldBreak => 'Mola (dk)';
+
+  @override
+  String get focusFieldLongBreak => 'Uzun mola (dk)';
+
+  @override
+  String get focusFieldLongEvery => 'Uzun mola kaç döngüde bir';
+
+  @override
+  String get focusFieldTarget => 'Hedef (dk)';
+
+  @override
+  String get focusPause => 'Duraklat';
+
+  @override
+  String get focusResume => 'Devam';
+
+  @override
+  String get focusFinish => 'Bitir';
+
+  @override
+  String get focusEndBreak => 'Molayı bitir';
+
+  @override
+  String focusTakeBreak(int minutes) {
+    return 'Mola ver · $minutes dk önerilir';
+  }
+
+  @override
+  String focusEmergency(int left) {
+    return 'Acil durum ($left hakkın var)';
+  }
+
+  @override
+  String get focusEmergencyNone => 'Bugünkü acil durum hakların bitti';
+
+  @override
+  String get focusEmergencyTitle => 'Acil durum';
+
+  @override
+  String focusEmergencyBody(int left) {
+    return 'Oturum cezasız duraklar ve uygulamadan çıkabilirsin. Döndüğünde Devam\'a dokun. Bundan sonra bugün kalan hakkın: $left.';
+  }
+
+  @override
+  String get focusEmergencyConfirm => 'Duraklat';
+
+  @override
+  String focusPhaseCycle(int n) {
+    return 'Odak · $n. döngü';
+  }
+
+  @override
+  String focusPhaseDeep(int target) {
+    return 'Derin çalışma · hedef $target dk';
+  }
+
+  @override
+  String get focusPhaseBreak => 'Mola · uygulamadan çıkabilirsin';
+
+  @override
+  String get focusPhaseBreakOver => 'Mola bitti · hazır olunca devam et';
+
+  @override
+  String get focusPhasePaused => 'Duraklatıldı · uygulamada kal';
+
+  @override
+  String get focusPhaseEmergency => 'Acil durum · uygulamadan çıkabilirsin';
+
+  @override
+  String focusTimeLeft(String time) {
+    return 'Kalan $time';
+  }
+
+  @override
+  String focusTimeElapsed(String time) {
+    return 'Geçen $time';
+  }
+
+  @override
+  String focusTotal(String time) {
+    return 'Bu oturumda $time odak';
+  }
+
+  @override
+  String get focusBackHint => 'Oturumu bitirmek için Bitir\'e dokun.';
+
+  @override
+  String focusOverlaySeconds(int seconds) {
+    return '$seconds sn içinde dön';
+  }
+
+  @override
+  String get focusPardonTitle => 'Aramadaymışsın gibi görünüyor';
+
+  @override
+  String get focusPardonBody =>
+      '10 saniyeden uzun dışarıdaydın ama telefon bir arama gösteriyordu. Aramadaydıysan oturum sürer, arama süresi odak sayılmaz.';
+
+  @override
+  String get focusPardonYes => 'Evet, aramadaydım';
+
+  @override
+  String get focusPardonNo => 'Hayır';
+
+  @override
+  String get focusOngoingChannel => 'Süren odak oturumu';
+
+  @override
+  String get focusAlertChannel => 'Odak uyarıları';
+
+  @override
+  String get focusAlertTitle => 'Planı bozuyorsun';
+
+  @override
+  String get focusAlertBody =>
+      '10 saniye içinde dön, yoksa oturum bozulur. Dönmek için dokun.';
+
+  @override
+  String get focusBrokenTitle => 'Odak bozuldu';
+
+  @override
+  String get focusBrokenBody =>
+      '10 saniye içinde dönülmedi. Hazır olduğunda yeniden başlayabilirsin.';
+
+  @override
+  String get focusBreakTitle => 'Mola zamanı';
+
+  @override
+  String focusBreakBody(int minutes) {
+    return '$minutes dk mola. Uygulamadan çıkabilirsin.';
+  }
+
+  @override
+  String get focusBreakOverTitle => 'Mola bitti';
+
+  @override
+  String get focusBreakOverBody => 'Hazır olduğunda uygulamaya dönüp devam et.';
+
+  @override
+  String get focusTargetTitle => 'Hedefe ulaştın';
+
+  @override
+  String focusTargetBody(int minutes) {
+    return '$minutes dk derin çalışma tamam. İstersen sürdür ya da bitir.';
+  }
+
+  @override
+  String get focusBrokenHeading => 'Oturum bozuldu';
+
+  @override
+  String focusBrokenWhat(String time) {
+    return 'Saat $time: uygulamadan çıkıldı ve 10 saniye içinde dönülmedi, oturum durdu.';
+  }
+
+  @override
+  String focusBrokenBrain(String root, int minutes) {
+    return 'Bu oturum beyne eklenmedi. $root ile ilişkilendirilen bölgelerde $minutes dakikalık kısım söndü; yeniden odaklandıkça yanar.';
+  }
+
+  @override
+  String get focusBrokenBrainNone =>
+      'Bu oturum beyne eklenmedi; sönen bir kısım yok.';
+
+  @override
+  String get focusBrokenAgain =>
+      'Olabilir. Hazır olduğunda yeniden başlayabilirsin.';
+
+  @override
+  String get focusRestart => 'Yeniden başlat';
+
+  @override
+  String get focusBackToToday => 'Bugün\'e dön';
+
+  @override
+  String get focusRateFocus => 'Ne kadar odaklanabildin?';
+
+  @override
+  String get focusRateFocusLow => '1 · hiç';
+
+  @override
+  String get focusRateFocusHigh => '5 · tamamen';
+
+  @override
+  String get focusRateFatigue => 'Ne kadar yorgunsun?';
+
+  @override
+  String get focusRateFatigueLow => '1 · hiç';
+
+  @override
+  String get focusRateFatigueHigh => '5 · çok';
+
+  @override
+  String get focusNoteTitle => 'Kısa bir not';
+
+  @override
+  String get focusNoteLabel => 'Not (isteğe bağlı)';
+
+  @override
+  String get focusGainTitle => 'Bu oturumun karşılığı';
+
+  @override
+  String focusGainBody(String root, int minutes) {
+    return '$root ile ilişkilendirilen bölgelere $minutes dk ayırdın.';
+  }
+
+  @override
+  String get focusGainNone =>
+      'Bir dakikadan kısa sürdü; beyne eklenecek süre birikmedi.';
+
+  @override
+  String focusGainShare(int percent) {
+    return 'Pay: %$percent';
+  }
+
+  @override
+  String get focusGainExplain =>
+      'Çubuklar, nöron kazancının bu bölgelere nasıl dağıldığını gösterir. Dağılım, bölgelerin kanıt düzeyine göre belirlenen bir ürün kararıdır; beyninin ölçümü değildir.';
+
+  @override
+  String focusRewardPomodoro(int cycles, int streak) {
+    return '$cycles döngü tamamladın · seri: $streak oturum';
+  }
+
+  @override
+  String focusRewardDeep(int longest, int record) {
+    return 'En uzun kesintisiz odak: $longest dk · rekorun: $record dk';
+  }
+
+  @override
+  String get focusDone => 'Bitti';
+
+  @override
+  String get settingFocusDnd => 'Odakta Rahatsız Etmeyin';
+
+  @override
+  String get settingFocusDndBody =>
+      'Oturum başlayınca açılır, bitince eski haline döner.';
+
+  @override
+  String get focusDndDenied => 'Rahatsız Etmeyin erişimi verilmedi.';
+
+  @override
+  String get settingFocusCalls => 'Gelen aramalar kaçış sayılmasın';
+
+  @override
+  String get settingFocusCallsBody =>
+      'Telefon durumu izni ister. İzin yoksa dönüşte sorulur.';
+
+  @override
+  String get settingFocusCallsOn =>
+      'İzin verildi. Kaldırmak için sistem ayarlarını kullan.';
+
+  @override
+  String get focusPhoneDenied =>
+      'Telefon durumu izni verilmedi; aramadan sonra dönüşte sorulur.';
 }

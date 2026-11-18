@@ -51,6 +51,20 @@ class PlanData {
     return false;
   }
 
+  /// Varsayılan odak modu: aktivite → kategori zinciri → serbest.
+  String focusMode(String activityId) {
+    final a = activities[activityId];
+    if (a?.focusMode != null) return a!.focusMode!;
+    for (
+      var c = categories[a?.categoryId];
+      c != null;
+      c = categories[c.parentId]
+    ) {
+      if (c.defaultFocusMode != null) return c.defaultFocusMode!;
+    }
+    return 'free';
+  }
+
   Project? projectOf(String activityId) =>
       projects.where((p) => p.activityId == activityId).firstOrNull;
 

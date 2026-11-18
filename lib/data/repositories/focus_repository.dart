@@ -22,6 +22,28 @@ class FocusRepository {
             ]))
           .watch();
 
+  /// Süren oturum (en çok bir tane; uygulama açılınca kurtarılır).
+  Stream<FocusSession?> watchActive() =>
+      (_db.select(_db.focusSessions)
+            ..where(
+              (s) => s.deletedAt.isNull() & s.outcome.equals('in_progress'),
+            )
+            ..orderBy([(s) => OrderingTerm.desc(s.startedAt)])
+            ..limit(1))
+          .watchSingleOrNull();
+
+  Future<FocusSession?> find(String id) => _writer.find(_db.focusSessions, id);
+
+  /// Süren oturumun segmentleri (faz değişimi, duraklatma, kesinti).
+  Future<FocusSession> updateSegments(String id, List<Object?> segments) async {
+    await _requireInProgress(id);
+    return _writer.update(
+      _db.focusSessions,
+      id,
+      FocusSessionsCompanion(segments: Value(segments)),
+    );
+  }
+
   /// Oturumu başlatır. Kategori ve kök, oturum anında kopyalanır (CAT-4): bir aktiviteye
   /// bağlıysa onunkiler, yoksa verilenler.
   Future<FocusSession> start({
@@ -33,6 +55,7 @@ class FocusRepository {
     Map<String, Object?>? settings,
     int? plannedMinutes,
     DateTime? startedAt,
+    List<Object?> segments = const [],
   }) async {
     final activity = activityId == null
         ? null
@@ -49,6 +72,7 @@ class FocusRepository {
         rootCategoryKey: Value(activity?.rootCategoryKey ?? rootCategoryKey),
         settings: Value(settings),
         plannedMinutes: Value(plannedMinutes),
+        segments: Value(segments),
       ),
     );
   }
