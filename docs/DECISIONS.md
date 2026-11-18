@@ -60,3 +60,4 @@ Durumlar: **Kabul** · **Geçici** (değişmesi bekleniyor) · **Açık** (karar
 - Yönlendirme (router)
 - Giriş yöntemleri
 - Canlı sesli oturum altyapısı (WebRTC sağlayıcısı)
+- **Lisans ve repo görünürlüğü** — Repo public ama lisanssız (tüm hakları saklı). İleride ücretli olacağı için private yapmak ya da bilerek lisanssız bırakmak değerlendirilecek. Aşama 1 başında proje sahibine hatırlatılacak.
