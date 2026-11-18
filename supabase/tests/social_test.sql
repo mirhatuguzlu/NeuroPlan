@@ -1,7 +1,7 @@
 -- Sosyal görünürlük ve misafir kısıtı testleri (supabase test db).
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(12);
+select plan(15);
 
 insert into auth.users (id, email, is_anonymous) values
   ('00000000-0000-0000-0000-0000000000a1', 'a@test.local', false),
@@ -18,9 +18,13 @@ values ('0193a5b2-0000-7000-8000-0000000000a0', '00000000-0000-0000-0000-0000000
 insert into public.plan_instances (user_id, activity_id, occurrence_date, start_at, end_at, source)
 values ('00000000-0000-0000-0000-0000000000a1', '0193a5b2-0000-7000-8000-0000000000a0',
         current_date + 1, now() + interval '1 day', now() + interval '1 day 1 hour', 'manual');
+insert into public.leaderboard_entries (user_id, period, period_start, score, engine_version)
+values ('00000000-0000-0000-0000-0000000000a1', 'week', current_date, 1200, 1);
 
 set local role authenticated;
 set local request.jwt.claims to '{"sub": "00000000-0000-0000-0000-0000000000b1", "role": "authenticated"}';
+
+select is((select count(*)::int from public.leaderboard_entries), 1, 'arkadaş sıralamayı görür');
 
 select is((select count(*)::int from public.friend_calendar('00000000-0000-0000-0000-0000000000a1', now(), now() + interval '7 days')),
   0, 'kural yoksa varsayılan gizli');
@@ -59,6 +63,10 @@ set local request.jwt.claims to '{"sub": "00000000-0000-0000-0000-0000000000c1",
 select throws_ok(
   $$select * from public.friend_calendar('00000000-0000-0000-0000-0000000000a1', now(), now() + interval '7 days')$$,
   '42501', null, 'arkadaş olmayan takvimi göremez');
+select is((select count(*)::int from public.leaderboard_entries), 0, 'arkadaş olmayan sıralamayı görmez');
+select throws_ok(
+  $$select public.is_friend('00000000-0000-0000-0000-0000000000a1', '00000000-0000-0000-0000-0000000000b1')$$,
+  '42501', null, 'başkalarının arkadaşlığı sorgulanamaz');
 
 -- Misafir sosyal tablolara yazamaz; normal kullanıcı yazabilir.
 set local request.jwt.claims to '{"sub": "00000000-0000-0000-0000-0000000000d1", "role": "authenticated", "is_anonymous": true}';

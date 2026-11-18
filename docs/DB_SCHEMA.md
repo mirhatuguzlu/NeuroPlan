@@ -462,7 +462,7 @@ Ortak boş zaman fonksiyonu (SOCIAL-5) her zaman `busy` düzeyini kullanır. İs
 | Kullanıcı tabloları | SELECT, INSERT, UPDATE: `using (user_id = (select auth.uid()))` ve aynı `with check`. **DELETE politikası yok:** silme yumuşaktır, kalıcı silme yalnız service role ile yapılır. |
 | Sistem tabloları | `for select to anon, authenticated using (true)`; yazma politikası yok |
 | Sunucunun yazdığı tablolar (`entitlements`, `leaderboard_entries`, sunucu `brain_snapshots`) | Yalnız SELECT politikası |
-| Sosyal tablolar | Yardımcı fonksiyonlar: `is_friend(a, b)`, `is_blocked(a, b)`, `is_member(conversation)` (`security definer`, `set search_path = ''`, `stable`). Yazma politikalarında `(auth.jwt()->>'is_anonymous')::boolean is not true`. |
+| Sosyal tablolar | Yardımcı fonksiyonlar: `is_friend(a, b)`, `is_blocked(a, b)`, `is_member(conversation)` (`security definer`, `set search_path = ''`, `stable`). Yazma politikalarında `(auth.jwt()->>'is_anonymous')::boolean is not true`. **Bu yardımcılar REST'ten çağrılamaz** (`EXECUTE` geri alındı). Politikalarda yalnız çağıranın kendi ilişkisini söyleyenler kullanılır: `is_my_friend(other)`, `is_member`, `is_*_party`. Böylece kimse iki yabancının arkadaşlığını sorgulayamaz. |
 
 - `user_id`, `version`, `created_at`, `updated_at` ve `field_versions` istemciden gelse de tetikleyici bunları ezer.
 - Doğrulama sunucuda da yapılır: CHECK kısıtları ve jsonb doğrulama fonksiyonları (`is_valid_recurrence`, `is_valid_timing`).
