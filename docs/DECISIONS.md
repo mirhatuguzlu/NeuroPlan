@@ -50,6 +50,7 @@ Durumlar: **Kabul** · **Geçici** (değişmesi bekleniyor) · **Açık** (karar
 ## 2026-11-18 — D10: İkon seti ve fontlar
 **Karar (öneri):** Tek ikon seti Material Symbols (Rounded), gömülü. Fontlar UX_RULES.md §7'deki aday listesinden, glif testinden sonra seçilir; hepsi OFL ve gömülü.
 **Durum:** Açık — Aşama 1'de kesinleşir.
+**Güncelleme (2026-11-18):** Aşama 1 talimatı font testini kapsamadı; karar tema aşamasına taşındı. 9 kök kategorinin ikonları UX_RULES §8 kayıt tablosuna eklendi.
 
 ## 2026-11-18 — D11: Aşama 1'e bırakılan kararlar
 **Durum:** Açık.
@@ -61,3 +62,73 @@ Durumlar: **Kabul** · **Geçici** (değişmesi bekleniyor) · **Açık** (karar
 - Giriş yöntemleri
 - Canlı sesli oturum altyapısı (WebRTC sağlayıcısı)
 - **Lisans ve repo görünürlüğü** — Repo public ama lisanssız (tüm hakları saklı). İleride ücretli olacağı için private yapmak ya da bilerek lisanssız bırakmak değerlendirilecek. Aşama 1 başında proje sahibine hatırlatılacak.
+
+**Kapanış (2026-11-18):** Maddeler D12–D21 ile karara bağlandı. WebRTC sağlayıcısı açık kaldı (D21).
+
+## 2026-11-18 — D12: Katmanlar ve alan paketi
+**Karar:** Üç katman: sunum (`lib/ui`), veri (`lib/data`), alan (`packages/neuroplan_core`). Alan katmanı saf Dart paketidir ve pub workspace'te durur. Veri modeli olarak Drift'in ürettiği satır sınıfları kullanılır. `core`'da yalnız şunlar bulunur: jsonb değer tipleri (`Recurrence`, `Timing`), HLC ve alan birleştirme, deterministik kimlikler, sistem verisi okuyucu. Plan motoru ve beyin hesabı ilgili aşamalarda `core`'a eklenecek.
+**Neden:** Flutter import'u o pakette derleme hatası verir, saflığı derleyici korur. Aynı kod `dart compile js` ile Edge Function'da çalıştırılıp sunucuda doğrulama yapılabilir. Ayrıntı: ARCHITECTURE.md §2–4.
+**Durum:** Kabul. Edge Function'da çalıştırma prototiple doğrulanacak.
+
+## 2026-11-18 — D13: Durum yönetimi
+**Karar:** `flutter_riverpod` 3, kod üretimi olmadan. Notifier'lar ekran durumunu tutar; testte depolar `overrides` ile değiştirilir.
+**Neden:** Drift akışlarını doğrudan dinler, bağımlılık enjeksiyonunu da çözer. Alternatif olan resmi `ChangeNotifier` + `provider`'da asenkron durum ve test geçersiz kılma elle yazılır.
+**Durum:** Kabul. Paket ilk ekranla eklenecek.
+
+## 2026-11-18 — D14: Gezinme
+**Karar:** `go_router`. Alt menü `StatefulShellRoute` ile kurulur, davet bağlantısı derin bağlantıyla açılır.
+**Durum:** Kabul. Paket ilk ekranla eklenecek.
+
+## 2026-11-18 — D15: Yerel veritabanı
+**Karar:** Drift 2.35. SQLite, `sqlite3` paketinin derleme kancasıyla uygulamaya gömülür. Zaman damgaları ISO metin olarak tutulur. JSON anahtarları sunucudaki sütun adlarıyla aynıdır (`build.yaml`). Üretilen `*.g.dart` dosyaları repoya girer. Yerel veritabanı tek doğru kaynaktır.
+**Neden:** Tip güvenli SQL, reaktif sorgular, migration ve bellek içi test desteği var.
+**Durum:** Kabul.
+
+## 2026-11-18 — D16: Eşitleme ve çakışma
+**Karar:** Kendi motorumuz kullanılır (ARCHITECTURE §5):
+- Her yazma tek işlemde hem satıra hem outbox'a gider.
+- Sunucu tarafında `sync_push` / `sync_pull` RPC'leri var.
+- Sürüm, kullanıcı başına tek bir sayaçtan gelir. Sayaç satırının kilidi sayesinde sürüm sırası commit sırasıyla aynıdır.
+- Çakışmada alan bazlı son yazan kazanır: her alanın HLC damgası `field_versions` içinde tutulur. Sunucu, kendi zamanından 5 dakikadan ileri damgayı kırpar.
+- Silme yumuşaktır (`deleted_at`).
+- Motorun ürettiği satırlar deterministik UUIDv5 kimlik alır.
+- `user_id` istemciden gelmez, sunucu doldurur.
+
+**Neden:** Ek servis ve ücret yok. Cihaz saatine güvenmeyen alan bazlı birleştirme, iki cihazın farklı alanlardaki düzenlemelerini birlikte korur. PowerSync değerlendirildi; ek servis ve ücret nedeniyle seçilmedi (proje sahibinin kararı).
+**Durum:** Kabul. Daha yapılmayanlar: Supabase `SyncRemote` uygulaması, otomatik tetikleyiciler ve geri çekilme (giriş aşamasında); silinmiş satırların 90 gün sonra temizlenmesi.
+
+## 2026-11-18 — D17: Giriş yöntemleri
+**Karar:** Google ve misafir. Misafir modu Supabase anonim kullanıcısıyla çalışır; hesaba geçişte `linkIdentity` aynı `user_id`'yi korur. **E-posta girişi yok:** Aşama 1 talimatı "e-posta + Google" diyordu, proje sahibi Google + misafiri seçti. Apple girişi iOS aşamasında değerlendirilecek.
+**Durum:** Kabul.
+
+## 2026-11-18 — D18: Lisans ve repo görünürlüğü
+**Karar:** Repo public kalır, lisans AGPL-3.0'dır (`LICENSE`).
+**Neden:** Proje sahibinin kararı. Kodu kullanan bir hizmet de kendi kaynağını açmak zorunda kalır. Telif tek kişideyken uygulamayı mağazalara koymak serbesttir; dışarıdan katkı alınırsa katkıcı sözleşmesi (CLA) gerekebilir.
+**Durum:** Kabul.
+
+## 2026-11-18 — D19: Şema kuralları
+**Karar:** Şema DB_SCHEMA.md'de, onaylandı.
+- Her kullanıcı tablosunda yedi ortak sütun var (id, user_id, created_at, updated_at, deleted_at, version, field_versions).
+- Çok biçimli alanlar jsonb'dir (`recurrence`, `timing`). Doğrulama aynı kurallarla iki yerde yapılır: sunucuda SQL, istemcide `core`.
+- Durum alanları `text` + CHECK ile tutulur; süreler dakikadır.
+- Kullanıcı tablolarındaki yabancı anahtarlar `(user_id, ref)` çiftiyle kurulur.
+- Tekrar için RRULE alt kümesi kullanılır; dönüşümlü desenler için `cycle` eklendi.
+- Sistem verisinin tek kaynağı `assets/seed/system.json`'dur; migration `tool/gen_seed_sql.dart` ile üretilir ve test eşitliği denetler.
+- Sistem tablolarındaki TR/EN adlar veridir, koda sabit metin değildir (CLAUDE.md kural 8).
+
+**Durum:** Kabul.
+
+## 2026-11-18 — D20: Beyin hesabı ilkeleri
+**Karar:**
+- Beyin olay kaynaklıdır: oturumlar → `brain_events` (yalnız eklenir, `dedupe_key` ile tekil) → anlık görüntü.
+- Ağırlığın tavanı kanıt düzeyidir (1,0 / 0,6 / 0,3 / 0,1).
+- Ağırlıklar kategori içinde normalleştirilir: her odak dakikası her kategoride aynı toplam büyümeyi verir.
+- Beyne **yalnız sayaçlı oturumlar** katkı verir. Bunun sonucu olarak Dinlenme ve Uyku pratikte büyümez; proje sahibi bunu kabul etti.
+- `penalty` olayı nöron ya da parlaklık düşürmez.
+
+**Neden:** Hiçbir etkinlik türü (ör. ibadet, meditasyon) kanıtı zayıf diye "daha yavaş büyüten" olarak cezalandırılmaz. Sayaçsız kayıt ise hile ve uyku baskınlığı riski taşıyor.
+**Durum:** Kabul. Formülün ayrıntısı beyin aşamasında yazılacak.
+
+## 2026-11-18 — D21: Canlı sesli oturum altyapısı
+**Karar:** WebRTC sağlayıcısı Aşama 4B'de seçilecek. Şemada yalnız sağlayıcıdan bağımsız `cofocus_sessions.room_id` alanı var; ses kaydedilmez.
+**Durum:** Açık.

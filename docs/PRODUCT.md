@@ -33,10 +33,10 @@ NöroPlan, kişinin kendi hayatını esnek bir şablonla tanımladığı, zorunl
 ## 5. İşlevsel gereksinimler
 
 ### 5.1 Hesap ve giriş (`AUTH`)
-- `AUTH-1` Supabase Auth ile kayıt / giriş. Yöntemler (e-posta + şifre, Google, Apple vb.) Aşama 1'de kararlaştırılır.
+- `AUTH-1` Supabase Auth ile kayıt / giriş. Yöntemler: **Google** ve **misafir** (Supabase anonim kullanıcı); e-posta girişi yok (DECISIONS D17). Apple girişi iOS aşamasında değerlendirilir.
 - `AUTH-2` Kayıtta yaş beyanı; 13 yaş altı kayıt olamaz. 13–17 yaş için ek korumalar (bkz. 8).
 - `AUTH-3` Hesabı ve tüm verileri silme uygulama içinden yapılabilir (Play Store şartı).
-- `AUTH-4` Giriş yapmadan ilk kurulum sihirbazı tamamlanabilir; veriler hesap açılınca bağlanır (açık konu: misafir modu olacak mı?).
+- `AUTH-4` Misafir modu var: uygulama girişsiz tam çalışır, veriler cihazda tutulur. Google'a bağlanınca aynı kullanıcı kalıcı olur ve veri taşınmaz. Sosyal özellikler giriş ister (D17).
 
 ### 5.2 Esnek yaşam şablonu (`PLAN`)
 Kullanıcı hayatını aşağıdaki öğe türleriyle tanımlar. Her öğe bir kategoriye (dolayısıyla bir kök kategoriye) bağlıdır.
@@ -124,7 +124,7 @@ Kullanıcı hayatını aşağıdaki öğe türleriyle tanımlar. Her öğe bir k
 ## 6. İşlevsel olmayan gereksinimler
 | Alan | Gereksinim |
 |---|---|
-| Offline-first | Yerel SQLite tek doğru kaynaktır; değişiklikler kuyruğa alınıp Supabase'e eşitlenir. Çakışma çözümü stratejisi Aşama 1'de (DECISIONS.md). |
+| Offline-first | Yerel SQLite tek doğru kaynaktır; değişiklikler kuyruğa alınıp Supabase'e eşitlenir. Çakışmada alan bazlı son yazan kazanır (DECISIONS D16, ARCHITECTURE §5). |
 | Güvenlik | Supabase RLS her tabloda açık; istemcide yalnız anon/publishable key; `service_role` yalnız Edge Functions'ta. |
 | Gizlilik | En az veri; sosyal paylaşım varsayılan kapalı; analiz verisi cihazda hesaplanır. |
 | Performans | Sayfa geçişleri ve 3D beyin 60 fps hedef; soğuk açılış hedefi Aşama 1'de ölçülüp belirlenir. |
@@ -149,7 +149,6 @@ Alt menü (floating) en fazla 5 hedef içerir; öneri: Bugün · Plan · Odak ·
 5. **Canlı sesli oturum altyapısı** (WebRTC sağlayıcısı, maliyet) — açık karar.
 
 ## 10. Açık sorular
-- Giriş yöntemleri ve misafir modu (`AUTH-1`, `AUTH-4`).
 - Kaçış kuralının istisnaları (`FOCUS-6`).
 - Önerilen ek temaların onayı (`THEME-2`).
 - Grup mesajlaşma (`SOCIAL-6`).

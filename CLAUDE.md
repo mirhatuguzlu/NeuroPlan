@@ -8,6 +8,8 @@ Ayrıntı her zaman `docs/` altında; bu dosya kısa kalır.
 | [docs/PRODUCT.md](docs/PRODUCT.md) | Ürün gereksinimleri (ne yapıyoruz) |
 | [docs/UX_RULES.md](docs/UX_RULES.md) | UX anayasası (nasıl görünür ve davranır) |
 | [docs/SCIENCE.md](docs/SCIENCE.md) | Kök kategoriler, beyin bölgeleri, kaynaklar, kanıt düzeyleri |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Katmanlar, offline-first eşitleme, plan/beyin motoru ilkeleri, WebView köprüsü |
+| [docs/DB_SCHEMA.md](docs/DB_SCHEMA.md) | Veri modeli, RLS, senaryo testi |
 | [docs/DECISIONS.md](docs/DECISIONS.md) | Tarihli mimari kararlar (her yeni karar buraya eklenir) |
 
 ## Değişmez kurallar

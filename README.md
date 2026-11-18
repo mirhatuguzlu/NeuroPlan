@@ -4,7 +4,7 @@
 
 NöroPlan; rutinlerini, işlerini ve projelerini esnek bir şablonla tanımladığın, zorunlu işlerden sonra kalan boş zamanı hesaplayıp projelerini bu boşluklara bölen ve odak oturumlarını bilimsel dayanaklı kategorilere göre 3D bir beyin üzerinde görselleştiren bir mobil uygulamadır.
 
-> **Durum: Aşama 0 — zemin kuruldu.** Proje iskeleti, ürün gereksinimleri, UX kuralları ve bilimsel kaynaklar hazır. Uygulama özellikleri henüz yazılmadı; aşağıdaki özellikler **planlanan** kapsamdır.
+> **Durum: Aşama 1 — mimari ve veritabanı hazır.** Mimari, veri modeli, Supabase şeması (RLS dahil), yerel veritabanı ve eşitleme kuyruğunun iskeleti yazıldı ve testlerle doğrulandı. Kullanıcı arayüzü henüz yok; aşağıdaki özellikler **planlanan** kapsamdır.
 
 [English summary below](#english)
 
@@ -32,15 +32,18 @@ Hedef kitle 13 yaş ve üstü. Ayrıntılar: [docs/PRODUCT.md](docs/PRODUCT.md).
 | Katman | Seçim |
 |---|---|
 | Uygulama | Flutter 3.50 (Dart 3.14) — önce Android, sonra iOS |
-| Arka uç | Supabase: Auth, Postgres, Row Level Security, Edge Functions |
-| Veri | Önce cihazda (yerel SQLite), sonra Supabase'e eşitleme |
-| 3D beyin | Uygulamaya gömülü WebView içinde yerel Three.js sahnesi |
+| Alan katmanı | Saf Dart paketi `packages/neuroplan_core` (Flutter'sız; plan motoru ve beyin hesabı burada yazılacak) |
+| Arka uç | Supabase: Auth (Google + misafir), Postgres, Row Level Security, RPC, Edge Functions |
+| Veri | Önce cihazda (Drift / SQLite); outbox kuyruğuyla Supabase'e eşitleme, çakışmada alan bazlı son yazan kazanır |
+| Arayüz durumu ve gezinme | Riverpod, go_router (planlanan; ilk ekranlarla eklenecek) |
+| 3D beyin | Uygulamaya gömülü WebView içinde yerel Three.js sahnesi (planlanan) |
 
-Alınan her mimari karar tarihiyle kayıtlı: [docs/DECISIONS.md](docs/DECISIONS.md).
+Mimari: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · Veri modeli: [docs/DB_SCHEMA.md](docs/DB_SCHEMA.md) · Tarihli kararlar: [docs/DECISIONS.md](docs/DECISIONS.md).
 
 ## Yol haritası
 - [x] **Aşama 0** — Proje iskeleti, araçlar, ürün / UX / bilim belgeleri, Supabase altyapısı
-- [ ] **Aşama 1** — Mimari ve klasör yapısı, yerel veritabanı, eşitleme stratejisi, tema / font / ikon kararları
+- [x] **Aşama 1** — Mimari, veri modeli ve senaryo testi, Supabase migration'ları + RLS + sistem seed'i, Drift yerel veritabanı, eşitleme kuyruğu iskeleti, depolar ve testler
+- [ ] Tema, font ve ikon kararları (font testi; tema aşamasında)
 - [ ] Sonraki aşamalar [PRODUCT.md](docs/PRODUCT.md)'deki modüllere göre planlanacak
 
 ## Geliştirme ortamı
@@ -57,19 +60,28 @@ flutter run --dart-define-from-file=.env
 Kontroller:
 ```bash
 flutter analyze
-flutter test
+flutter test                                   # uygulama + veri katmanı
+cd packages/neuroplan_core && dart test        # alan katmanı
+dart run tool/gen_seed_sql.dart --check        # seed migration'ı system.json ile aynı mı
+supabase start && supabase test db             # şema + RLS testleri (Docker gerekir)
 ```
 
 - Veritabanı değişiklikleri yalnız migration'larla yapılır: `supabase migration new <ad>` → `supabase/migrations/`.
+- Drift tabloları değişince kodu yeniden üret: `dart run build_runner build` (üretilen `*.g.dart` repoya girer).
+- Sistem verisi (kök kategoriler, beyin bölgeleri, ağırlıklar) yalnız `assets/seed/system.json`'da düzenlenir; migration `dart run tool/gen_seed_sql.dart` ile üretilir.
 - **Windows:** Proje yolunda Türkçe karakter veya boşluk olmasın (ör. `C:\dev\NeuroPlan`); Android Gradle eklentisi ASCII olmayan yolları reddeder.
 
 ## Proje yapısı
 ```
-lib/                 Uygulama kodu (Aşama 1'de katmanlara ayrılacak)
-test/                Testler
-android/, ios/       Platform projeleri
-supabase/            Supabase CLI yapılandırması ve migration'lar
-docs/                Ürün, UX, bilim ve karar belgeleri
+lib/data/                 Yerel veritabanı (Drift), eşitleme kuyruğu, depolar
+lib/ui/                   Ekranlar (planlanan)
+packages/neuroplan_core/  Saf Dart alan katmanı: tekrar/zaman kuralları, HLC, sistem verisi
+assets/seed/system.json   Sistem verisinin tek kaynağı (SCIENCE.md'den)
+tool/                     Yardımcı betikler (seed migration üretici)
+test/                     Uygulama ve veri katmanı testleri
+android/, ios/            Platform projeleri
+supabase/                 migrations (şema, RLS, seed) ve tests (pgTAP)
+docs/                     Ürün, UX, bilim, mimari, veri modeli ve karar belgeleri
 CLAUDE.md            Projenin değişmez kuralları (AI destekli geliştirme için de geçerli)
 ```
 
@@ -86,7 +98,7 @@ CLAUDE.md            Projenin değişmez kuralları (AI destekli geliştirme iç
 - Bir güvenlik açığı bulursan lütfen herkese açık issue açma; depo sahibine özel olarak ulaş.
 
 ## Lisans
-Henüz bir lisans seçilmedi; bu nedenle şimdilik tüm hakları saklıdır.
+[GNU Affero General Public License v3.0](LICENSE) (AGPL-3.0). Bu kodu değiştirip bir ağ hizmeti olarak sunan, değiştirdiği kaynak kodunu da aynı lisansla açmak zorundadır.
 
 ---
 
@@ -94,4 +106,4 @@ Henüz bir lisans seçilmedi; bu nedenle şimdilik tüm hakları saklıdır.
 ## English summary
 **NeuroPlan** is a mobile planning and focus app (Flutter, Android first). You describe your life with a fully flexible template — routines, one-off tasks, deadlines, projects, free time, unplanned days. The app computes the free time left after your fixed commitments and splits your projects into those gaps. Focus sessions (free, Pomodoro or deep work) grow neurons in a 3D neon brain, mapped to nine science-based root categories. The brain is a visualization, not a measurement; every scientific claim is sourced in [docs/SCIENCE.md](docs/SCIENCE.md).
 
-**Status:** Stage 0 — project foundation only (skeleton, product requirements, UX rules, science sources, Supabase setup). No app features yet. Stack: Flutter, Supabase (Auth, Postgres, RLS, Edge Functions), offline-first SQLite sync, embedded Three.js in a WebView. Languages: Turkish and English.
+**Status:** Stage 1 — architecture and database. Architecture, data model, Supabase schema with RLS, local Drift database and the sync-queue skeleton are written and tested; there is no user interface yet. Stack: Flutter, a pure-Dart domain package, Supabase (Google + guest auth, Postgres, RLS), offline-first Drift/SQLite with field-level last-writer-wins sync, embedded Three.js in a WebView (planned). Languages: Turkish and English. License: AGPL-3.0.

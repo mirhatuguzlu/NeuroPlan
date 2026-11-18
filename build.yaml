@@ -1,0 +1,8 @@
+targets:
+  $default:
+    builders:
+      drift_dev:
+        options:
+          # Zaman damgaları ISO metin; JSON anahtarları sunucudaki sütun adlarıyla aynı (eşitleme yamaları).
+          store_date_time_values_as_text: true
+          use_sql_column_name_as_json_key: true

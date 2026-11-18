@@ -123,6 +123,15 @@ Kaçınılacaklar (frontend-design): her etikette TÜMÜ BÜYÜK HARF, başlıkt
 | Kapat | `close` |
 | Arkadaşlar | `group` |
 | Mesajlar | `chat` |
+| Kök: Bedensel Hareket | `directions_run` |
+| Kök: Motor Beceri | `front_hand` |
+| Kök: Müzik ve Ritim | `music_note` |
+| Kök: Öğrenme ve Bellek | `menu_book` |
+| Kök: Planlama ve Problem Çözme | `extension` |
+| Kök: Duygusal ve Sosyal Zeka | `handshake` |
+| Kök: Dikkat ve Tefekkür | `self_improvement` |
+| Kök: Yaratıcılık ve Sanat | `palette` |
+| Kök: Dinlenme ve Uyku | `bedtime` |
 
 ## 9. Erişilebilirlik
 - **Kontrast (WCAG 2.2 AA):** normal metin ≥ 4.5:1; büyük metin, ikon ve arayüz bileşeni sınırları ≥ 3:1. Yüksek Kontrast teması AAA (7:1) hedefler. Her tema açık ve koyu modda ölçülür.

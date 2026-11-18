@@ -1,0 +1,71 @@
+-- ÜRETİLDİ: tool/gen_seed_sql.dart (kaynak: assets/seed/system.json). Elle düzenleme.
+
+insert into public.root_categories (key, sort_order, name_tr, name_en, description_tr, description_en, icon, color) values
+  ('body_movement', 1, 'Bedensel Hareket', 'Physical Movement', 'Bedeni hareket ettiren etkinlikler: spor, yürüyüş gibi.', 'Activities that move your body, like sports or walking.', 'directions_run', '#FF6B4A'),
+  ('motor_skill', 2, 'Motor Beceri', 'Motor Skills', 'El becerisi ve yeni hareketler öğrenmek: el işi, dans gibi.', 'Hand skills and learning new movements, like crafts or dance.', 'front_hand', '#FFB347'),
+  ('music_rhythm', 3, 'Müzik ve Ritim', 'Music and Rhythm', 'Enstrüman çalmak, şarkı söylemek, beste yapmak.', 'Playing an instrument, singing, composing.', 'music_note', '#F7E04B'),
+  ('learning_memory', 4, 'Öğrenme ve Bellek', 'Learning and Memory', 'Ders çalışmak, okumak, ezberlemek, dil öğrenmek.', 'Studying, reading, memorizing, learning a language.', 'menu_book', '#6BD968'),
+  ('planning_problem_solving', 5, 'Planlama ve Problem Çözme', 'Planning and Problem Solving', 'Proje yürütmek, kod yazmak, matematik gibi problem çözme işleri.', 'Running projects, coding, math and other problem solving.', 'extension', '#2EC4B6'),
+  ('emotional_social', 6, 'Duygusal ve Sosyal Zeka', 'Emotional and Social Intelligence', 'Ailen ve arkadaşlarınla vakit geçirmek, konuşmak.', 'Spending time and talking with family and friends.', 'handshake', '#FF7AB6'),
+  ('attention_contemplation', 7, 'Dikkat ve Tefekkür', 'Attention and Contemplation', 'Meditasyon, ibadet, nefes egzersizi gibi dikkat ve tefekkür pratikleri.', 'Attention and contemplative practices such as meditation, prayer or breathing exercises.', 'self_improvement', '#9B8CFF'),
+  ('creativity_art', 8, 'Yaratıcılık ve Sanat', 'Creativity and Art', 'Çizim, yazı, tasarım gibi yaratıcı işler.', 'Creative work such as drawing, writing or design.', 'palette', '#C77DFF'),
+  ('rest_sleep', 9, 'Dinlenme ve Uyku', 'Rest and Sleep', 'Gece uykusu, kısa uyku ve dinlenme.', 'Night sleep, naps and rest.', 'bedtime', '#4EA8DE')
+on conflict (key) do update set sort_order = excluded.sort_order, name_tr = excluded.name_tr, name_en = excluded.name_en, description_tr = excluded.description_tr, description_en = excluded.description_en, icon = excluded.icon, color = excluded.color;
+
+insert into public.brain_regions (key, sort_order, name_tr, name_en, hemisphere, mesh_name) values
+  ('hippocampus', 1, 'Hipokampüs', 'Hippocampus', 'bilateral', 'region_hippocampus'),
+  ('motor_cortex', 2, 'Motor korteks', 'Motor cortex', 'bilateral', 'region_motor_cortex'),
+  ('cerebellum', 3, 'Beyincik', 'Cerebellum', 'bilateral', 'region_cerebellum'),
+  ('hmt_v5', 4, 'Görsel hareket alanı (hMT/V5)', 'Visual motion area (hMT/V5)', 'bilateral', 'region_hmt_v5'),
+  ('intraparietal_sulcus', 5, 'Arka intraparietal sulkus', 'Posterior intraparietal sulcus', 'left', 'region_intraparietal_sulcus'),
+  ('striatum', 6, 'Striatum', 'Striatum', 'bilateral', 'region_striatum'),
+  ('corpus_callosum', 7, 'Korpus kallozum', 'Corpus callosum', 'bilateral', 'region_corpus_callosum'),
+  ('auditory_cortex', 8, 'Birincil işitme alanı', 'Primary auditory cortex', 'right', 'region_auditory_cortex'),
+  ('language_frontal', 9, 'Alt ve orta frontal girus', 'Inferior and middle frontal gyrus', 'left', 'region_language_frontal'),
+  ('superior_temporal_gyrus', 10, 'Üst temporal girus', 'Superior temporal gyrus', 'left', 'region_superior_temporal_gyrus'),
+  ('posterior_parietal', 11, 'Arka parietal korteks', 'Posterior parietal cortex', 'bilateral', 'region_posterior_parietal'),
+  ('dlpfc', 12, 'Dorsolateral prefrontal korteks', 'Dorsolateral prefrontal cortex', 'bilateral', 'region_dlpfc'),
+  ('dacc', 13, 'Dorsal ön singulat korteks', 'Dorsal anterior cingulate cortex', 'bilateral', 'region_dacc'),
+  ('amygdala', 14, 'Amigdala', 'Amygdala', 'bilateral', 'region_amygdala'),
+  ('vmpfc', 15, 'Ventromedial prefrontal korteks', 'Ventromedial prefrontal cortex', 'bilateral', 'region_vmpfc'),
+  ('sts', 16, 'Üst temporal sulkus', 'Superior temporal sulcus', 'bilateral', 'region_sts'),
+  ('posterior_cingulate', 17, 'Arka singulat korteks', 'Posterior cingulate cortex', 'bilateral', 'region_posterior_cingulate'),
+  ('tpj', 18, 'Temporoparietal bileşke', 'Temporoparietal junction', 'bilateral', 'region_tpj'),
+  ('insula', 19, 'İnsula', 'Insula', 'bilateral', 'region_insula'),
+  ('frontopolar', 20, 'Frontopolar korteks', 'Frontopolar cortex', 'bilateral', 'region_frontopolar')
+on conflict (key) do update set sort_order = excluded.sort_order, name_tr = excluded.name_tr, name_en = excluded.name_en, hemisphere = excluded.hemisphere, mesh_name = excluded.mesh_name;
+
+insert into public.category_region_weights (root_category_key, region_key, weight, evidence_level, source_ids, source_urls) values
+  ('body_movement', 'hippocampus', 1.00, 'strong', array['S2'], array['https://doi.org/10.1073/pnas.1015950108']),
+  ('body_movement', 'motor_cortex', 0.10, 'no_source', '{}'::text[], '{}'::text[]),
+  ('body_movement', 'cerebellum', 0.10, 'no_source', '{}'::text[], '{}'::text[]),
+  ('motor_skill', 'hmt_v5', 0.60, 'moderate', array['S3'], array['https://doi.org/10.1038/427311a']),
+  ('motor_skill', 'intraparietal_sulcus', 0.60, 'moderate', array['S3'], array['https://doi.org/10.1038/427311a']),
+  ('motor_skill', 'cerebellum', 0.60, 'moderate', array['S4'], array['https://doi.org/10.1016/S0028-3932(02)00158-6']),
+  ('motor_skill', 'striatum', 0.60, 'moderate', array['S4'], array['https://doi.org/10.1016/S0028-3932(02)00158-6']),
+  ('music_rhythm', 'motor_cortex', 0.60, 'moderate', array['S5'], array['https://doi.org/10.1523/JNEUROSCI.5118-08.2009']),
+  ('music_rhythm', 'corpus_callosum', 0.60, 'moderate', array['S5'], array['https://doi.org/10.1523/JNEUROSCI.5118-08.2009']),
+  ('music_rhythm', 'auditory_cortex', 0.60, 'moderate', array['S5'], array['https://doi.org/10.1523/JNEUROSCI.5118-08.2009']),
+  ('learning_memory', 'hippocampus', 0.60, 'moderate', array['S7', 'S8'], array['https://doi.org/10.1016/j.neuroimage.2012.06.043', 'https://doi.org/10.1523/JNEUROSCI.4628-05.2006']),
+  ('learning_memory', 'language_frontal', 0.60, 'moderate', array['S7'], array['https://doi.org/10.1016/j.neuroimage.2012.06.043']),
+  ('learning_memory', 'superior_temporal_gyrus', 0.60, 'moderate', array['S7'], array['https://doi.org/10.1016/j.neuroimage.2012.06.043']),
+  ('learning_memory', 'posterior_parietal', 0.60, 'moderate', array['S8'], array['https://doi.org/10.1523/JNEUROSCI.4628-05.2006']),
+  ('planning_problem_solving', 'dlpfc', 0.60, 'moderate', array['S9'], array['https://doi.org/10.3758/s13415-011-0083-5']),
+  ('planning_problem_solving', 'dacc', 0.60, 'moderate', array['S9'], array['https://doi.org/10.3758/s13415-011-0083-5']),
+  ('planning_problem_solving', 'posterior_parietal', 0.60, 'moderate', array['S9'], array['https://doi.org/10.3758/s13415-011-0083-5']),
+  ('emotional_social', 'amygdala', 0.60, 'moderate', array['S10', 'S11'], array['https://doi.org/10.1016/j.neuropsychologia.2014.08.013', 'https://doi.org/10.1038/nn.2724']),
+  ('emotional_social', 'vmpfc', 0.60, 'moderate', array['S10'], array['https://doi.org/10.1016/j.neuropsychologia.2014.08.013']),
+  ('emotional_social', 'sts', 0.60, 'moderate', array['S12'], array['https://doi.org/10.1016/S1364-6613(00)01501-1']),
+  ('attention_contemplation', 'hippocampus', 0.30, 'weak', array['S13', 'S14', 'S15'], array['https://doi.org/10.1016/j.pscychresns.2010.08.006', 'https://doi.org/10.1126/sciadv.abk3316', 'https://doi.org/10.1016/j.neubiorev.2014.03.016']),
+  ('attention_contemplation', 'posterior_cingulate', 0.30, 'weak', array['S13', 'S14'], array['https://doi.org/10.1016/j.pscychresns.2010.08.006', 'https://doi.org/10.1126/sciadv.abk3316']),
+  ('attention_contemplation', 'tpj', 0.30, 'weak', array['S13', 'S14'], array['https://doi.org/10.1016/j.pscychresns.2010.08.006', 'https://doi.org/10.1126/sciadv.abk3316']),
+  ('attention_contemplation', 'cerebellum', 0.30, 'weak', array['S13', 'S14'], array['https://doi.org/10.1016/j.pscychresns.2010.08.006', 'https://doi.org/10.1126/sciadv.abk3316']),
+  ('attention_contemplation', 'insula', 0.30, 'weak', array['S15'], array['https://doi.org/10.1016/j.neubiorev.2014.03.016']),
+  ('attention_contemplation', 'frontopolar', 0.30, 'weak', array['S15'], array['https://doi.org/10.1016/j.neubiorev.2014.03.016']),
+  ('creativity_art', 'vmpfc', 0.30, 'weak', array['S16', 'S17'], array['https://doi.org/10.1073/pnas.1713532115', 'https://doi.org/10.1016/j.tics.2015.10.004']),
+  ('creativity_art', 'posterior_cingulate', 0.30, 'weak', array['S16', 'S17'], array['https://doi.org/10.1073/pnas.1713532115', 'https://doi.org/10.1016/j.tics.2015.10.004']),
+  ('creativity_art', 'dacc', 0.30, 'weak', array['S16', 'S17'], array['https://doi.org/10.1073/pnas.1713532115', 'https://doi.org/10.1016/j.tics.2015.10.004']),
+  ('creativity_art', 'dlpfc', 0.30, 'weak', array['S16', 'S17'], array['https://doi.org/10.1073/pnas.1713532115', 'https://doi.org/10.1016/j.tics.2015.10.004']),
+  ('creativity_art', 'posterior_parietal', 0.30, 'weak', array['S16', 'S17'], array['https://doi.org/10.1073/pnas.1713532115', 'https://doi.org/10.1016/j.tics.2015.10.004']),
+  ('rest_sleep', 'hippocampus', 1.00, 'strong', array['S18', 'S19'], array['https://doi.org/10.1152/physrev.00032.2012', 'https://doi.org/10.1016/j.cub.2013.07.025'])
+on conflict (root_category_key, region_key) do update set weight = excluded.weight, evidence_level = excluded.evidence_level, source_ids = excluded.source_ids, source_urls = excluded.source_urls;
