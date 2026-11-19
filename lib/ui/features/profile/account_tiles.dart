@@ -7,6 +7,7 @@ import '../../../app/providers.dart';
 import '../../../data/remote/auth_service.dart';
 import '../../core/format.dart';
 import '../../core/states.dart';
+import '../together/together_providers.dart' show pushProvider;
 import '../together/together_screen.dart' show connectGoogle;
 import '../together/together_widgets.dart';
 
@@ -26,7 +27,10 @@ class AccountTiles extends ConsumerWidget {
     }
     final auth = ref.read(authServiceProvider);
     try {
-      if (auth.user != null) await auth.deleteAccount();
+      if (auth.user != null) {
+        await auth.deleteAccount();
+        await ref.read(pushProvider).forget();
+      }
       final db = ref.read(databaseProvider);
       final tz =
           (await ref.read(profileRepositoryProvider).get())?.timezone ?? 'UTC';

@@ -66,7 +66,7 @@ Zorunlu (Play Console yardım sayfası, 2026):
 
 ### 4.2 Partner / arkadaş planı (DB'de görünürlük)
 - Yeni tablo `calendar_blocks` (öneri): `user_id`, `activity_id`, `start_at`, `end_at`, `window_start`. Cihaz plan değişince önümüzdeki **14 günün** bloklarını tek RPC ile değiştirir (`publish_calendar(window_start, blocks[])`). Başlık, not ve kategori bu tabloda **yoktur**; `activities`'ten (eşitlenmiş) birleştirilir.
-- Tabloyu yalnız sahibi okur. Arkadaş `friend_calendar(friend, from, to)` ile okur; fonksiyon her blok için `visibility_level` uygular (`busy` · `title_time` · `full` · `hidden`). Kural yoksa varsayılan: partnere **`title_time`**, diğer arkadaşlara **`busy`** (D44, Geçici: talimat "başlık ve saat" diyor, gizlilik önceliğiyle partner dışındakilere bir düzey sıkı başlatıldı).
+- Tabloyu yalnız sahibi okur. Arkadaş `friend_calendar(friend, from, to)` ile okur; fonksiyon her blok için `visibility_level` uygular (`busy` · `title_time` · `full` · `hidden`). Kural yoksa varsayılan: partnere **`title_time`**, diğer arkadaşlara **`busy`** (D44, proje sahibi onayladı).
 - Kişi istisnası ("bu partnerime tam göster") `visibility_settings.viewer_id` satırıdır; zaten şemada.
 - Ortak boş zaman: `common_free_time(users[], from, to, min_minutes)` yalnız **herkesin boş olduğu aralıkları** döner (`tstzrange` birleşimi); kimin neyle meşgul olduğunu dönmez. Çağıran kişi listedeki herkesle arkadaş olmalı; aralık ≤ 14 gün.
 - Kullanıcı Birlikte'yi hiç açmadıysa blok yayınlanmaz.
@@ -75,7 +75,7 @@ Zorunlu (Play Console yardım sayfası, 2026):
 - Supabase Realtime **özel kanallar**: projede "Allow public access" kapatılır, `realtime.messages` üzerinde RLS. Kanal adı `cofocus:<oturum_id>`; SELECT (katıl / dinle) ve INSERT (gönder) politikası `is_cofocus_participant(oturum)` ile. Presence kim burada, broadcast olaylar (başladı, mola, plan bozuldu, bitti) içindir.
 - Sayaç senkronu: oturumun `started_at` ve faz planı sunucu saatiyle yazılır (`now()`); istemci kendi saat kaymasını bir RPC'nin döndürdüğü sunucu zamanıyla düzeltir. Sayaç yine yerel `FocusClock` ile hesaplanır.
 - Kota (Free): 200 eşzamanlı bağlantı, saniyede 100 mesaj. İlk sürüm için yeterli; Pro 500 bağlantı.
-- Katılımcı sınırı önerisi: **en çok 4 kişi** (Geçici).
+- Katılımcı sınırı: **en çok 4 kişi** (onaylandı, D44).
 
 ### 4.4 Ses
 - Ses sağlayıcısının token'ı **Edge Function** üretir (`voice_token`): çağıranın oturum katılımcısı olduğunu, engel olmadığını ve yaşını kontrol eder; API anahtarı yalnız Edge Function ortamında (CLAUDE.md kural 7).
@@ -155,7 +155,7 @@ Hesap: 2 kişilik 50 dk'lık sesli oturum = 100 katılımcı-dk. LiveKit Build i
 4. KVKK m. 9 standart sözleşmeleri (Supabase, ses sağlayıcısı) ve 5 iş günü bildirimi.
 5. Kullanım şartları, topluluk kuralları, CSAE standardı ve gizlilik politikasının web'de yayımlanması (barındırma yeri seçilecek; taslaklar [docs/legal/](legal/)).
 6. Ses kapalıyken (lobide, odak dışında) uygulama arka plana geçerse mikrofon servisi yoktur; Android sesi kesebilir. Ses asıl olarak odak sırasında (uygulama sabitliyken) kullanılır.
-7. Mesaj push bildirimi (FCM) yok: bildirim yalnız uygulama çalışırken (ön ya da arka planda canlıyken) gelir. FCM sonraki iş.
+7. Mesaj push bildirimi (FCM, D49) metin içermez; Firebase servis hesabı yalnız Edge Function sırrındadır. Google Firebase da yurt dışı aktarım listesine girer (madde 4).
 
 ## 8. Kaynaklar
 - KVKK: [Kurul kararı 2022/776](https://www.kvkk.gov.tr/Icerik/7572/2022-776) · [Standart sözleşme bildirim modülü duyurusu](https://www.kvkk.gov.tr/Icerik/8043/Standart-Sozlesme-Bildirim-Modulu-Hakkinda-Kamuoyu-Duyurusu) · [Standart sözleşmelerde dikkat edilecekler](https://www.kvkk.gov.tr/Icerik/8170/Yurt-Disina-Kisisel-Veri-Aktariminda-Kullanilacak-Standart-Sozlesmelerde-Dikkat-Edilmesi-Gereken-Hususlara-Iliskin-Kamuoyu-Duyurusu) · [Küçüklerin KVKK hakları, 2020/622 yorumu](https://www.ozgureralp.com/kucuklerin-kvkk-haklari-ayirt-etme-gucu-ve-veli-yetkisi-karar-2020-622/) · [Dülger: GDPR ve KVKK bakımından çocuk verileri](https://www.hukukihaber.net/gdpr-ve-kvkk-bakimindan-cocuklarin-kisisel-verilerinin-korunmasi-ve-konuya-iliskin-kurul-kararinin-degerlendirilmesi)

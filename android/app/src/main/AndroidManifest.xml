@@ -24,6 +24,10 @@
         android:label="@string/app_name"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <!-- Mesaj push bildirimi (D49): FCM bildirimleri Birlikte mesaj kanalına düşer. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="together_messages" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

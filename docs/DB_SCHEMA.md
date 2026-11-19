@@ -486,6 +486,7 @@ Ortak kurallar:
 | `cofocus_participants.status` (`invited` · `joined` · `left` · `declined`), `outcome`, `mode` | Ortak odak; `focus_session_id` yabancı anahtarsız (oturum henüz eşitlenmemiş olabilir). |
 | `leaderboard_entries.active_days` | Süreklilik. |
 | `focus_sessions.server_received_at` | Sunucunun ilk gördüğü an (istemci yazamaz); hile denetimi. |
+| `push_tokens` (`token` PK, `user_id`, `platform`) | Mesaj push bildirimi için cihaz kimliği (D49, `20261120120200_message_push.sql`). Politika yok; `register_push_token` RPC ile yazılır, `message_push_targets` alıcıları seçer. |
 
 İstemci sosyal tablolara **doğrudan yazamaz**; her yazma RPC'dir (D45). RPC listesi ARCHITECTURE §9'da. Kural yoksa görünürlük: partnere `title_time`, diğer arkadaşlara `busy` (D44; önceki varsayılan `hidden`'ın yerine geçer).
 

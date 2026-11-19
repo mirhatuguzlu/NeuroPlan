@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NöroPlan — Hesap silme / Account deletion</title>
+  <meta name="description" content="NöroPlan hesabını ve verilerini silme. Delete your NeuroPlan account and data.">
+  <style>
+    :root { --bg: #fbfbfe; --fg: #1b1b23; --muted: #55556a; --line: #d9d9e6; --accent: #5b57d9; --danger: #b3261e; --card: #ffffff; }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #121218; --fg: #e6e6f0; --muted: #a9a9bd; --line: #33334a; --accent: #b9b6ff; --danger: #f2b8b5; --card: #1b1b24; }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    main { max-width: 680px; margin: 0 auto; padding: 32px 16px 64px; }
+    h1 { font-size: 1.6rem; margin: 0 0 8px; }
+    h2 { font-size: 1.15rem; margin: 32px 0 8px; }
+    p, li { color: var(--fg); }
+    .muted { color: var(--muted); }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-top: 16px; }
+    ol { padding-left: 20px; }
+    button { font: inherit; min-height: 48px; padding: 0 20px; border-radius: 24px; border: 0; cursor: pointer; background: var(--accent); color: var(--bg); }
+    button.danger { background: var(--danger); }
+    button:disabled { opacity: .5; cursor: default; }
+    button:focus-visible, a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+    a { color: var(--accent); }
+    [hidden] { display: none !important; }
+    hr { border: 0; border-top: 1px solid var(--line); margin: 40px 0; }
+  </style>
+</head>
+<body>
+<main>
+  <section lang="tr">
+    <h1>NöroPlan hesabını sil</h1>
+    <p class="muted">Bu sayfa uygulama kurulu olmasa da hesabını ve verilerini silmeni sağlar.</p>
+
+    <h2>Neler silinir?</h2>
+    <ul>
+      <li>Planın, kategorilerin, odak oturumların ve 3D beyin verin.</li>
+      <li>Arkadaşlıkların, partnerliğin, mesajların, tepkilerin, ortak etkinlik ve ortak odak katılımların, sıralama kayıtların.</li>
+      <li>Silme kalıcıdır ve geri alınamaz. Hakkında yapılmış şikâyetler kimliğin olmadan, moderasyon kaydı olarak kalır.</li>
+    </ul>
+
+    <h2>1. Uygulamadan sil (en hızlısı)</h2>
+    <ol>
+      <li>NöroPlan'ı aç → <strong>Profil</strong> sekmesi.</li>
+      <li><strong>Hesap</strong> bölümünde <strong>Hesabı ve verileri sil</strong>.</li>
+      <li>Onayla. Hesabın ve sunucudaki bütün verilerin hemen silinir.</li>
+    </ol>
+
+    <div class="card" id="self-tr" hidden>
+      <h2 style="margin-top:0">2. Bu sayfadan sil</h2>
+      <p>Hesabına bağlı Google hesabıyla giriş yap; kim olduğunu doğruladıktan sonra silme düğmesi açılır.</p>
+      <p><button type="button" data-action="login">Google ile giriş yap</button></p>
+      <p id="who-tr" class="muted" aria-live="polite"></p>
+      <p><button type="button" class="danger" data-action="delete" disabled>Hesabımı ve verilerimi kalıcı olarak sil</button></p>
+      <p id="result-tr" role="status" aria-live="polite"></p>
+    </div>
+
+    <div class="mail-block" hidden>
+    <h2>E-postayla iste</h2>
+    <p>Uygulamaya ulaşamıyorsan hesabına bağlı Google e-posta adresinden <a class="mail" href="#">bize yaz</a> ve “Hesabımı sil” de. İsteğin 30 gün içinde yerine getirilir ve sana bildirilir.</p>
+    </div>
+  </section>
+
+  <hr>
+
+  <section lang="en">
+    <h1>Delete your NeuroPlan account</h1>
+    <p class="muted">This page lets you delete your account and data even without the app installed.</p>
+
+    <h2>What is deleted?</h2>
+    <ul>
+      <li>Your plan, categories, focus sessions and 3D brain data.</li>
+      <li>Your friendships, partnership, messages, reactions, shared plans and co-focus participation, and leaderboard entries.</li>
+      <li>Deletion is permanent. Reports made about you stay for moderation without your identity.</li>
+    </ul>
+
+    <h2>1. Delete in the app (fastest)</h2>
+    <ol>
+      <li>Open NeuroPlan → <strong>Profile</strong> tab.</li>
+      <li>Under <strong>Account</strong>, tap <strong>Delete account and data</strong>.</li>
+      <li>Confirm. Your account and all server data are deleted right away.</li>
+    </ol>
+
+    <div class="card" id="self-en" hidden>
+      <h2 style="margin-top:0">2. Delete on this page</h2>
+      <p>Sign in with the Google account linked to NeuroPlan; the delete button unlocks once we know it is you.</p>
+      <p><button type="button" data-action="login">Sign in with Google</button></p>
+      <p id="who-en" class="muted" aria-live="polite"></p>
+      <p><button type="button" class="danger" data-action="delete" disabled>Permanently delete my account and data</button></p>
+      <p id="result-en" role="status" aria-live="polite"></p>
+    </div>
+
+    <div class="mail-block" hidden>
+    <h2>Request by email</h2>
+    <p>If you cannot reach the app, <a class="mail" href="#">email us</a> from the Google address linked to your account and say “Delete my account”. We complete the request within 30 days and confirm by email.</p>
+    </div>
+  </section>
+</main>
+
+<!-- config.js isteğe bağlıdır (config.example.js'e bak). Yoksa yalnız uygulama içi yol görünür;
+     e-posta yolu adres, sayfadan silme Supabase ayarı verilince açılır. -->
+<script src="config.js" onerror="void 0"></script>
+<script type="module">
+  const cfg = window.NEUROPLAN_CONFIG ?? {};
+  // İşlevsiz bağlantı olmasın: adres yoksa e-posta bölümü hiç görünmez.
+  if (cfg.contactEmail) {
+    for (const a of document.querySelectorAll('a.mail')) {
+      a.href = `mailto:${cfg.contactEmail}?subject=NeuroPlan%20account%20deletion`;
+    }
+    for (const d of document.querySelectorAll('.mail-block')) d.hidden = false;
+  }
+  if (cfg.supabaseUrl && cfg.supabaseKey) {
+    const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/+esm');
+    const sb = createClient(cfg.supabaseUrl, cfg.supabaseKey);
+    const say = (id, text) => { for (const l of ['tr', 'en']) document.getElementById(`${id}-${l}`).textContent = text[l]; };
+    for (const l of ['tr', 'en']) document.getElementById(`self-${l}`).hidden = false;
+    const refresh = async () => {
+      const { data } = await sb.auth.getUser();
+      const user = data?.user;
+      for (const b of document.querySelectorAll('[data-action="delete"]')) b.disabled = !user || user.is_anonymous;
+      say('who', user
+        ? { tr: `Giriş yapıldı: ${user.email ?? ''}`, en: `Signed in: ${user.email ?? ''}` }
+        : { tr: '', en: '' });
+    };
+    for (const b of document.querySelectorAll('[data-action="login"]')) {
+      b.addEventListener('click', () => sb.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: location.href.split('#')[0] },
+      }));
+    }
+    for (const b of document.querySelectorAll('[data-action="delete"]')) {
+      b.addEventListener('click', async () => {
+        const ok = confirm(b.closest('[lang="tr"]')
+          ? 'Hesabın ve bütün verilerin kalıcı olarak silinecek. Emin misin?'
+          : 'Your account and all data will be permanently deleted. Are you sure?');
+        if (!ok) return;
+        b.disabled = true;
+        const { error } = await sb.functions.invoke('delete_account');
+        if (error) {
+          say('result', { tr: 'Silinemedi. Tekrar dene ya da e-postayla iste.', en: 'Could not delete. Try again or request by email.' });
+          b.disabled = false;
+          return;
+        }
+        await sb.auth.signOut();
+        say('result', { tr: 'Hesabın ve verilerin silindi.', en: 'Your account and data were deleted.' });
+        await refresh();
+      });
+    }
+    sb.auth.onAuthStateChange(() => refresh());
+    await refresh();
+  }
+</script>
+</body>
+</html>

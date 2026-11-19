@@ -8,6 +8,8 @@ import 'package:neuroplan_core/neuroplan_core.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' show RealtimeChannel;
 
 import '../../../app/notifications.dart';
+import '../../../app/push.dart';
+import '../../../app/router.dart';
 import '../../../app/providers.dart';
 import '../../../data/local/app_database.dart';
 import '../../../data/remote/social_api.dart';
@@ -109,15 +111,22 @@ class _TogetherLive with WidgetsBindingObserver {
   Timer? _refresh;
   Timer? _publish;
   final _dirty = <String>{};
+  final _dirtyChats = <String>{};
   var _foreground = true;
   var _heldMessages = 0;
 
-  static const _messageChannel = 'together_messages';
+  /// Sunucu push'u açıksa arka planda yerel bildirim gösterilmez (çift bildirim olmasın).
+  var _pushOn = false;
+  VoidCallback? _pushOff;
+  StreamSubscription<Map<String, dynamic>>? _taps;
+
+  static const _messageChannel = Push.channelId;
   static const _messageNoticeId = 950;
 
   void start() {
     WidgetsBinding.instance.addObserver(this);
     _channel = api.watchChanges(_onChange);
+    unawaited(_startPush());
     ref.listen(horizonProvider, (_, _) => _schedulePublish());
     ref.listen(sharedProvider, (_, next) {
       if (next.value case final list?) unawaited(_mirror(list));
@@ -136,7 +145,29 @@ class _TogetherLive with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
     _refresh?.cancel();
     _publish?.cancel();
+    _pushOff?.call();
+    unawaited(_taps?.cancel());
     if (_channel case final ch?) unawaited(api.removeChannel(ch));
+  }
+
+  /// Mesaj push bildirimi (D49): cihaz kimliği sunucuya, bildirime dokununca sohbet açılır.
+  Future<void> _startPush() async {
+    final push = ref.read(pushProvider);
+    final channel = ref.read(togetherTextsProvider).value?.channel;
+    if (!await push.ready()) return;
+    if (channel != null) await push.ensureChannel(channel);
+    _pushOff = await push.start(api.registerPushToken);
+    _pushOn = _pushOff != null;
+    _taps = (await push.taps()).listen((data) {
+      final id = data['conversation_id'];
+      if (data['type'] != 'message' || id is! String) return;
+      final name = Uri.encodeComponent('${data['name'] ?? ''}');
+      ref
+          .read(routerProvider)
+          .push(
+            '/together/chat/$id?name=$name&friend=${data['friend_id'] ?? ''}',
+          );
+    });
   }
 
   @override
@@ -150,6 +181,9 @@ class _TogetherLive with WidgetsBindingObserver {
 
   void _onChange(String table, Json row) {
     _dirty.add(table);
+    if (table == 'messages' && row['conversation_id'] is String) {
+      _dirtyChats.add(row['conversation_id']! as String);
+    }
     if (table == 'messages' &&
         row['user_id'] != api.myId &&
         row['deleted_at'] == null) {
@@ -165,7 +199,11 @@ class _TogetherLive with WidgetsBindingObserver {
     ref.invalidate(badgesProvider);
     if (t.contains('messages')) {
       ref.invalidate(conversationsProvider);
-      ref.invalidate(chatProvider);
+      // Yalnız değişen sohbet yeniden yüklenir (impeccable denetimi P2).
+      for (final id in _dirtyChats) {
+        ref.invalidate(chatProvider(id));
+      }
+      _dirtyChats.clear();
     }
     if (t.contains('friendships')) ref.invalidate(friendsProvider);
     if (t.any((x) => x.startsWith('shared'))) ref.invalidate(sharedProvider);
@@ -177,7 +215,7 @@ class _TogetherLive with WidgetsBindingObserver {
       _heldMessages++;
       return;
     }
-    if (!_foreground) unawaited(_notify(1));
+    if (!_foreground && !_pushOn) unawaited(_notify(1));
   }
 
   Future<void> _notify(int count) async {
@@ -368,3 +406,5 @@ class TogetherTextsHolder {
 }
 
 final togetherTextsProvider = Provider((ref) => TogetherTextsHolder());
+
+final pushProvider = Provider((ref) => Push(ref.watch(notificationsProvider)));

@@ -12,6 +12,8 @@ Ayrıntı her zaman `docs/` altında; bu dosya kısa kalır.
 | [docs/DB_SCHEMA.md](docs/DB_SCHEMA.md) | Veri modeli, RLS, senaryo testi |
 | [docs/DECISIONS.md](docs/DECISIONS.md) | Tarihli mimari kararlar (her yeni karar buraya eklenir) |
 | [docs/QA_CHECKLIST.md](docs/QA_CHECKLIST.md) | Gerçek cihaz manuel test listesi (odak algılama vb.) |
+| [docs/SOCIAL_SAFETY.md](docs/SOCIAL_SAFETY.md) | Sosyal özelliklerde güvenlik, gizlilik, KVKK/GDPR/Play uyumu |
+| [docs/SETUP_BACKEND.md](docs/SETUP_BACKEND.md) | Sunucu kurulumu: Google, Supabase, LiveKit, Firebase, Play beyanları |
 
 ## Değişmez kurallar
 1. **Her ekran tek bir amaç taşır.** Çok adımlı işler adım adım sihirbazla yapılır.

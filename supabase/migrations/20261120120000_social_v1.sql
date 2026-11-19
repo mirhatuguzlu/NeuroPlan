@@ -597,7 +597,7 @@ end
 $$;
 
 -- ───────────────────────── 6. Görünürlük ─────────────────────────
--- Kural yoksa: partner "başlık ve saat", diğer arkadaşlar "meşgul" (D44, Geçici).
+-- Kural yoksa: partner "başlık ve saat", diğer arkadaşlar "meşgul" (D44, onaylandı).
 create or replace function public.visibility_level(p_owner uuid, p_viewer uuid, p_category uuid, p_root text)
 returns text
 language sql

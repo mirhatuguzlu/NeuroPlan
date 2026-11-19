@@ -6,3 +6,10 @@
 .env.keys
 .env.local
 .env.*.local
+
+# Edge Function sırları (yalnız yerelde, supabase secrets set --env-file ile gönderilir)
+functions/.env
+functions/.env.*
+!functions/.env.example
+# Firebase servis hesabı anahtarı asla repoya girmez
+*service-account*.json

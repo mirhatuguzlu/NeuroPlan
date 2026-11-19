@@ -715,6 +715,9 @@ class SocialApi {
       _rpc('delete_message', {'p_message': id});
   Future<void> toggleReaction(String messageId, String emoji) =>
       _rpc('toggle_reaction', {'p_message': messageId, 'p_emoji': emoji});
+  Future<void> registerPushToken(String token) =>
+      _rpc('register_push_token', {'p_token': token, 'p_platform': 'android'});
+
   Future<void> markRead(String conversationId) =>
       _rpc('mark_read', {'p_conversation': conversationId});
   Future<void> setMuted(String conversationId, bool muted) => _rpc(

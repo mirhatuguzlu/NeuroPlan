@@ -335,7 +335,7 @@ Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem 
 - Kural yoksa varsayılan: **partner "başlık ve saat", diğer arkadaşlar "meşgul"** (Geçici). Talimat "varsayılan başlık ve saat" diyor; gizlilik önceliği nedeniyle partner dışındaki arkadaşlara bir düzey daha sıkı başlatıldı. Kullanıcı Gizlilik ekranından değiştirir.
 - Kişi istisnası `visibility_settings.viewer_id` ("bu kişiye tam göster").
 - `common_free_time` gizli işleri de dolu sayar, yalnız boş aralık döner; herkesin takvimini yayınlamış olması gerekir.
-**Durum:** Kabul (arkadaş varsayılanı Geçici, sabah onayına).
+**Durum:** Kabul. Arkadaş varsayılanı ("meşgul") ve ortak odakta en çok 4 kişi proje sahibince 2026-11-19 onaylandı.
 
 ## 2026-11-19 — D45: Sosyal veritabanı ilkeleri
 **Karar:**
@@ -364,3 +364,13 @@ Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem 
 **Karar:** Alt menüye 5. sekme "Birlikte" (`diversity_3`), bekleyen iş varsa rozet. Sekme önce kapıyı gösterir (sunucu yok / misafir / yaş / takma ad / askı), sonra tek amaçlı ekranlara giriş listesi. Beyin karşılaştırma ayrı WebView açmaz: Beyin sekmesinde bölge sayfası gibi bir alt panel; sahne iki beyni yan yana çizer (köprüye `compare` mesajı, JS ikinci beyni aynı kabuk geometrisiyle kurar).
 **Neden:** Proje sahibinin seçimi (5. sekme); tek WebView ilkesi (D40).
 **Durum:** Kabul.
+
+## 2026-11-19 — D49: Mesaj push bildirimi ve web'den hesap silme
+**Karar:**
+- **Push (FCM):** mesaj eklenince veritabanı tetikleyicisi `pg_net` ile `push_message` Edge Function'ını çağırır; adres ve paylaşılan sır Supabase Vault'tadır (yoksa tetikleyici hiçbir şey yapmaz, mesaj yine gider). Fonksiyon FCM HTTP v1'e servis hesabıyla (RS256 JWT, Web Crypto) gönderir. Bildirim mesaj metnini içermez ("X sana mesaj gönderdi"), alıcının dilindedir. Sessize alınmış sohbete, engelli / arkadaş olmayan alıcıya ve **o anda odak oturumunda olan** alıcıya gönderilmez (son 6 saatte başlamış `in_progress` oturum). Geçersiz cihaz kimlikleri silinir.
+- İstemci Firebase'i `.env`'deki dört değerle başlatır; google-services.json ve Gradle eklentisi yoktur, ayar boşsa push kapalıdır ve uygulama derlenir. Push açıkken arka planda yerel mesaj bildirimi gösterilmez (çift bildirim olmasın); odak sonrası özet yerel kalır. Bildirime dokununca sohbet açılır.
+- `firebase_messaging` 17'nin yeni `register()` API'si kurulum kimliği (FID) döndürüyor; sunucu kayıt kimliğine gönderdiği için eski `getToken` kullanılıyor (`shortcut:` notu).
+- **Web'den silme:** `docs/account-deletion/` statik sayfa (GitHub Pages `/docs`'tan yayımlanabilir). Uygulama içi yol her zaman, e-posta yolu adres verilirse, "Google ile giriş yap ve sil" yolu Supabase ayarı verilirse görünür; ayar dosyası `config.js` git-ignored. Gizlilik politikası taslağı `docs/legal/privacy_policy.md`.
+- Sohbet artık yalnız değişen konuşmayı yeniden yükler (impeccable denetimi P2).
+**Neden:** Proje sahibi "yapılmayanları da yap" dedi; Play hesap silme için uygulama dışı bir yol ister.
+**Durum:** Kabul. Kurulum adımları [SETUP_BACKEND.md](SETUP_BACKEND.md); gerçek cihazda doğrulama QA_CHECKLIST C12–C13.

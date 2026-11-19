@@ -251,7 +251,7 @@ Mesaj biçimi: `{"v": 1, "type": "...", "payload": {...}}`. Dart'ta sealed sın�
   - Sıralama ve beyin: `friends_leaderboard`, `global_leaderboard`, `can_view_brain`; zamanlanmış `refresh_global_leaderboard` (pg_cron)
   - Moderasyon (yalnız Studio / moderatör): `resolve_report`, görünüm `moderation_queue`
 - **Realtime:** `messages`, `friendships`, `cofocus_participants`, `shared_activity_*` değişiklikleri (RLS'li Postgres Changes); ortak odak için özel kanal `cofocus:<id>` (presence + broadcast, `realtime.messages` RLS'i).
-- **Edge Functions** (`service_role` yalnız burada): `delete_account`, `voice_token` (LiveKit, D46), `brain_snapshot` (sunucu beyni, D47); sonra `export_data`, Aşama 6'da `verify_purchase`. Sıralama Edge Function değil SQL'dir (oturum satırları yeter, motor gerekmez).
+- **Edge Functions** (`service_role` yalnız burada): `delete_account`, `voice_token` (LiveKit, D46), `brain_snapshot` (sunucu beyni, D47), `push_message` (FCM; JWT değil Vault'taki paylaşılan sırla, `messages` tetikleyicisi `pg_net` ile çağırır, D49); sonra `export_data`, Aşama 6'da `verify_purchase`. Sıralama Edge Function değil SQL'dir (oturum satırları yeter, motor gerekmez).
 
 ## 10. Test stratejisi
 | Katman | Nasıl |

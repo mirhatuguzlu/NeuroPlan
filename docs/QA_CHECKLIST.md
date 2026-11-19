@@ -188,3 +188,20 @@ Hazırlık: en az bir tamamlanmış ve bir bozulmuş odak oturumu olsun (farklı
 ### C11. Erişilebilirlik
 - [ ] TalkBack: Birlikte sekmesi rozet sayısını okur; mesaj balonları "Sen: …" diye okunur; mikrofon düğmesi açık/kapalı durumunu söyler.
 - [ ] Yazı boyutu en büyükte Birlikte ekranları, sohbet ve ortak odak şeridi taşmaz.
+
+### C12. Mesaj push bildirimi (D49)
+Hazırlık: SETUP_BACKEND §5–§7 yapılmış, `.env`'de dört `FIREBASE_*` değeri var.
+- [ ] B'de uygulama tamamen kapalıyken (son uygulamalardan süpür) A mesaj atar → B'ye "A sana mesaj gönderdi" bildirimi gelir; metinde mesaj içeriği **yok**.
+- [ ] Bildirime dokununca uygulama açılır ve doğrudan A ile sohbet açılır.
+- [ ] B odak oturumundayken A mesaj atar → push **gelmez**; oturum bitince (uygulama açıksa) yerel özet gelir.
+- [ ] B sohbeti sessize alınca push gelmez.
+- [ ] B, A'yı engellerse A'nın mesajları push üretmez.
+- [ ] Uygulama arka planda ama canlıyken tek bildirim gelir (çift değil).
+- [ ] Dil İngilizce olan hesaba bildirim İngilizce gelir.
+- [ ] Hesap silindikten sonra o cihaza push gelmez.
+
+### C13. Web'den hesap silme
+- [ ] Silme sayfası telefonda ve bilgisayarda okunur, koyu ve açık temada.
+- [ ] `config.js`'te yalnız `contactEmail` varken: uygulama içi yol + e-posta yolu görünür, "sayfadan sil" görünmez.
+- [ ] Supabase ayarı da varken: "Google ile giriş yap" → Google → sayfaya geri dönülür, e-posta görünür, silme düğmesi açılır; onay → "Hesabın ve verilerin silindi" ve Dashboard → Authentication'da kullanıcı yoktur.
+- [ ] Hiç giriş yapılmadan silme düğmesi kapalıdır.

@@ -30,14 +30,16 @@ NöroPlan; rutinlerini, işlerini ve projelerini esnek bir şablonla tanımladı
   - Plan görünürlüğü kategori kategori: tam, başlık ve saat, yalnız meşgul ya da gizli; partnere ve arkadaşlara ayrı, kişiye özel istisna. Partnerinin planını bugün ve hafta olarak salt okunur görürsün.
   - Ortak odak: arkadaşlarınla aynı anda başla, herkes kendi işine odaklansın; isteğe bağlı sesli sohbet (mikrofon kapalı başlar, kayıt yok). Birlikte tamamlanan oturum beyinde küçük bir ortak bağlantı kazandırır.
   - Ortak etkinlik ve proje: kabul edince ikinizin planına da düşer; değişiklikler onaya gider, ilerleme paylaşılır. Ortak boş zaman bulma yalnız boş saatleri gösterir.
-  - Mesajlaşma: yazılı mesaj ve hazır tepkiler; küfür yıldızlanır, hız sınırı var; odaktayken bildirim susar.
+  - Mesajlaşma: yazılı mesaj ve hazır tepkiler; küfür yıldızlanır, hız sınırı var. Uygulama kapalıyken de push bildirimi gelir (içerik göstermeden); odaktayken bildirim susar.
   - Haftalık sıralama (odak dakikası, süreklilik; yalnız sunucuda doğrulanan oturumlar) ve izin veren arkadaşla iki beyni yan yana karşılaştırma.
   - Her yerde engelle ve şikâyet et; şikâyetler incelenir. 18 yaş altında en sıkı gizlilik varsayılan.
+  - Hesabını uygulama kurulu olmasa da web sayfasından silebilirsin ([docs/account-deletion](docs/account-deletion/index.html)).
+- **Sunucu kurulumu** — Google, Supabase, LiveKit ve Firebase adımları: [docs/SETUP_BACKEND.md](docs/SETUP_BACKEND.md).
 
 ## Planlanan özellikler
 - **Kişisel analiz** — Grafiklerle zaman dağılımı, planlanan ve gerçekleşen, hangi odak modunun sana daha iyi geldiği.
 - **Temalar** — Ciddi, Eğlenceli, Genç, Kodcu ve daha fazlası.
-- **Sosyal ekleri** — Mesaj push bildirimi (FCM), grup sohbeti, web'den hesap silme isteği sayfası.
+- **Sosyal ekleri** — Grup sohbeti; ortak odak daveti ve arkadaşlık isteği için push bildirimi.
 
 Hedef kitle 13 yaş ve üstü. Ayrıntılar: [docs/PRODUCT.md](docs/PRODUCT.md).
 
