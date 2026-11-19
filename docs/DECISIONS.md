@@ -374,3 +374,11 @@ Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem 
 - Sohbet artık yalnız değişen konuşmayı yeniden yükler (impeccable denetimi P2).
 **Neden:** Proje sahibi "yapılmayanları da yap" dedi; Play hesap silme için uygulama dışı bir yol ister.
 **Durum:** Kabul. Kurulum adımları [SETUP_BACKEND.md](SETUP_BACKEND.md); gerçek cihazda doğrulama QA_CHECKLIST C12–C13.
+
+## 2026-11-19 — D50: Bildirim izni kurulumda açıklamalı adımla; Google girişi uygulama içinde
+**Karar:**
+- **Bildirim izni:** İlk kurulumda "ilk rutin"den önce ayrı bir adım ne için bildirim gönderildiğini anlatır (sıradaki iş, odak oturumu, arkadaş mesajı; mesaj içeriği görünmez) ve "Bildirimlere izin ver" düğmesiyle sistem penceresini açar. İzin verilir ve sıradaki iş bildirimi kapalıysa 10 dk önceye açılır. Adım atlanabilir. Açıklamasız (soğuk) istek kaldırıldı: push başlarken artık izin istenmiyor; cihaz kimliği izinsiz de alınır, bildirim izin gelince görünür.
+- Sistem penceresi çıkmazsa (iki kez reddedilmiş ya da Android 12 ve altında kapatılmış) uygulamanın bildirim ayarı açılır. Profil → Bildirimler'de izin kapalıyken "Bildirimler kapalı · Aç" satırı görünür; ayardan dönünce durum yeniden okunur.
+- **Google girişi:** `google_sign_in` 7 Android'de Credential Manager kullanır: hesap seçici sistemin alttan açılan penceresidir, tarayıcıya yönlenmez. Bu, Android istemcisinin (paket adı + SHA-1) Google Cloud'da kayıtlı olmasını ve Supabase'de "Skip nonce checks"in açık olmasını gerektirir. Web'den silme sayfası tarayıcıda çalıştığı için yalnız orada OAuth yönlendirmesi vardır.
+**Neden:** Proje sahibi bildirimlerin uygulama içinde açtırılmasını ve Google girişinin tarayıcıya gitmeden yapılmasını istedi. Açıklamalı istek reddedilme oranını düşürür; Android 13+ izni ilk reddedilişten sonra bir kez daha sorar, sonra yalnız ayar yolu kalır.
+**Durum:** Kabul. Gerçek cihazda doğrulama QA_CHECKLIST C14.

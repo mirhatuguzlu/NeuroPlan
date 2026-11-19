@@ -205,3 +205,11 @@ Hazırlık: SETUP_BACKEND §5–§7 yapılmış, `.env`'de dört `FIREBASE_*` de
 - [ ] `config.js`'te yalnız `contactEmail` varken: uygulama içi yol + e-posta yolu görünür, "sayfadan sil" görünmez.
 - [ ] Supabase ayarı da varken: "Google ile giriş yap" → Google → sayfaya geri dönülür, e-posta görünür, silme düğmesi açılır; onay → "Hesabın ve verilerin silindi" ve Dashboard → Authentication'da kullanıcı yoktur.
 - [ ] Hiç giriş yapılmadan silme düğmesi kapalıdır.
+
+### C14. Bildirim izni ve uygulama içi Google girişi (D50)
+- [ ] Temiz kurulum (Android 13+): ilk kurulumda "Bildirimlere izin verelim mi?" adımı çıkar; uygulama açılırken açıklamasız izin penceresi **çıkmaz**.
+- [ ] "Bildirimlere izin ver" → sistem penceresi → İzin ver: "Bildirimler açık." yazar; Profil'de sıradaki iş bildirimi "10 dk önce" görünür.
+- [ ] İki kez reddet, sonra düğmeye bas: uygulamanın bildirim ayarı açılır. Orada aç, uygulamaya dön: Profil'deki "Bildirimler kapalı" satırı kaybolur.
+- [ ] Adım "Şimdilik geç" ile atlanınca Profil'de "Bildirimler kapalı · Aç" satırı görünür ve çalışır.
+- [ ] Profil → Google ile bağlan: tarayıcı **açılmaz**, alttan sistem hesap seçicisi gelir; hesap seçilince bağlanır. Cihazda Google hesabı yoksa sistemin "hesap ekle" akışı açılır.
+- [ ] Release (Play imzalı) sürümde de hesap seçici çalışır (Play imza SHA-1'i Google Cloud'da kayıtlı olmalı; yoksa "hata" görülür).

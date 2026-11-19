@@ -1885,6 +1885,48 @@ abstract class L10n {
   /// **'Bildirim izni verilmedi. Sistem ayarlarından açabilirsin.'**
   String get notifPermissionDenied;
 
+  /// No description provided for @onbNotifyTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirimlere izin verelim mi?'**
+  String get onbNotifyTitle;
+
+  /// No description provided for @onbNotifyBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sıradaki işi zamanında hatırlatırız, odak oturumunu kilit ekranında gösteririz, arkadaşın yazınca haber veririz. Bildirimde mesajın içeriği görünmez. Ayarı sonra Profil’den değiştirebilirsin.'**
+  String get onbNotifyBody;
+
+  /// No description provided for @notifyAllow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirimlere izin ver'**
+  String get notifyAllow;
+
+  /// No description provided for @notifyGranted.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirimler açık.'**
+  String get notifyGranted;
+
+  /// No description provided for @notifyOffTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirimler kapalı'**
+  String get notifyOffTitle;
+
+  /// No description provided for @notifyOffBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hatırlatmalar ve mesaj bildirimleri gelmez.'**
+  String get notifyOffBody;
+
+  /// No description provided for @notifyTurnOn.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aç'**
+  String get notifyTurnOn;
+
   /// No description provided for @settingHaptics.
   ///
   /// In tr, this message translates to:

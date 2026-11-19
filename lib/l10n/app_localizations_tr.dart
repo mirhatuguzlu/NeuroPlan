@@ -1058,6 +1058,28 @@ class L10nTr extends L10n {
       'Bildirim izni verilmedi. Sistem ayarlarından açabilirsin.';
 
   @override
+  String get onbNotifyTitle => 'Bildirimlere izin verelim mi?';
+
+  @override
+  String get onbNotifyBody =>
+      'Sıradaki işi zamanında hatırlatırız, odak oturumunu kilit ekranında gösteririz, arkadaşın yazınca haber veririz. Bildirimde mesajın içeriği görünmez. Ayarı sonra Profil’den değiştirebilirsin.';
+
+  @override
+  String get notifyAllow => 'Bildirimlere izin ver';
+
+  @override
+  String get notifyGranted => 'Bildirimler açık.';
+
+  @override
+  String get notifyOffTitle => 'Bildirimler kapalı';
+
+  @override
+  String get notifyOffBody => 'Hatırlatmalar ve mesaj bildirimleri gelmez.';
+
+  @override
+  String get notifyTurnOn => 'Aç';
+
+  @override
   String get settingHaptics => 'Dokunsal geri bildirim';
 
   @override

@@ -9,7 +9,10 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.media.AudioManager
+import android.net.Uri
+import android.os.Build
 import android.os.PowerManager
+import android.provider.Settings
 import android.telephony.TelephonyManager
 import androidx.core.content.ContextCompat
 import io.flutter.embedding.android.FlutterActivity
@@ -41,6 +44,18 @@ class MainActivity : FlutterActivity() {
                         permissionResult = result
                         requestPermissions(arrayOf(Manifest.permission.READ_PHONE_STATE), PHONE_REQUEST)
                     }
+                "openNotificationSettings" -> {
+                    startActivity(
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                                .putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+                        } else {
+                            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                .setData(Uri.fromParts("package", packageName, null))
+                        },
+                    )
+                    result.success(null)
+                }
                 "enableDnd" -> result.success(Dnd.enable(this))
                 "restoreDnd" -> {
                     Dnd.restore(this)

@@ -1061,6 +1061,28 @@ class L10nEn extends L10n {
       'Notification permission wasn\'t granted. You can turn it on in system settings.';
 
   @override
+  String get onbNotifyTitle => 'Allow notifications?';
+
+  @override
+  String get onbNotifyBody =>
+      'We\'ll remind you of what\'s next on time, show your focus session on the lock screen and tell you when a friend writes. Notifications never show message text. You can change this later in Profile.';
+
+  @override
+  String get notifyAllow => 'Allow notifications';
+
+  @override
+  String get notifyGranted => 'Notifications are on.';
+
+  @override
+  String get notifyOffTitle => 'Notifications are off';
+
+  @override
+  String get notifyOffBody => 'Reminders and message alerts won\'t arrive.';
+
+  @override
+  String get notifyTurnOn => 'Turn on';
+
+  @override
   String get settingHaptics => 'Haptic feedback';
 
   @override

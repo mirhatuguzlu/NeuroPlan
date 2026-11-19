@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
+import 'package:neuroplan/app/next_up.dart';
+import 'package:neuroplan/app/notifications.dart';
 import 'package:neuroplan/app/providers.dart';
 import 'package:neuroplan/ui/core/app_shell.dart';
 import 'package:neuroplan/data/local/app_database.dart';
@@ -74,7 +76,7 @@ void main() {
     'ilk kurulum: yaş dışındaki adımlar atlanabilir, sonunda boş Bugün ilk adımı gösterir',
     (t) async {
       final h = await pumpApp(t, onboarded: false, seed: _born(2000));
-      expect(find.text('1 / 8'), findsOneWidget);
+      expect(find.text('1 / 9'), findsOneWidget);
       expect(find.text('Hangi dili kullanalım?'), findsOneWidget);
       await h.expectAccessible();
       await h.tap(find.text('Şimdilik geç'));
@@ -82,15 +84,39 @@ void main() {
       expect(find.text('Doğum yılın'), findsOneWidget);
       expect(find.text('Şimdilik geç'), findsNothing);
       await h.tap(find.text('İleri'));
-      for (var i = 0; i < 5; i++) {
+      for (var i = 0; i < 6; i++) {
         await h.tap(find.text('Şimdilik geç'));
       }
-      expect(find.text('8 / 8'), findsOneWidget);
+      expect(find.text('9 / 9'), findsOneWidget);
       expect(find.text('İlk rutinimi ekle'), findsOneWidget);
       await h.tap(find.text('Şimdilik geç'));
       expect(find.text('Planın henüz boş'), findsOneWidget);
       expect(find.text('İlk rutinini ekle'), findsOneWidget);
       expect(h.read(profileProvider).value?.onboardingCompletedAt, isNotNull);
+    },
+  );
+
+  testWidgets(
+    'ilk kurulum: bildirim izni verilince sıradaki iş bildirimi 10 dk önceye açılır',
+    (t) async {
+      final h = await pumpApp(
+        t,
+        onboarded: false,
+        seed: _born(2000),
+        overrides: [
+          notificationsProvider.overrideWithValue(_GrantingNotifications()),
+        ],
+      );
+      await h.tap(find.text('Şimdilik geç'));
+      await h.tap(find.text('İleri'));
+      for (var i = 0; i < 5; i++) {
+        await h.tap(find.text('Şimdilik geç'));
+      }
+      expect(find.text('Bildirimlere izin verelim mi?'), findsOneWidget);
+      await h.tap(find.text('Bildirimlere izin ver'));
+      expect(find.text('Bildirimler açık.'), findsOneWidget);
+      await t.runAsync(() => Future<void>.delayed(Duration.zero));
+      expect(await t.runAsync(() => h.read(notifyLeadProvider.future)), 10);
     },
   );
 
@@ -242,7 +268,7 @@ void main() {
       await g.moveTo(hold);
       for (var last = -1.0; last != scroll.position.pixels;) {
         last = scroll.position.pixels;
-        for (var i = 0; i < 5; i++) {
+        for (var i = 0; i < 6; i++) {
           await t.pump(const Duration(milliseconds: 20));
         }
       }
@@ -372,4 +398,12 @@ Future<void> openCategories(Harness h) async {
   await h.tap(find.text('Beyin').last);
   await h.tap(find.byTooltip('Liste görünümü'));
   await h.tap(find.text('Kategoriler'));
+}
+
+class _GrantingNotifications extends Notifications {
+  @override
+  Future<bool> enabled() async => true;
+
+  @override
+  Future<bool> request() async => true;
 }

@@ -48,12 +48,6 @@ class NextUp {
   AndroidFlutterLocalNotificationsPlugin? get _android => _n.android;
   Future<void> _init() => _n.ensure();
 
-  /// Android 13+ bildirim izni; ayar açılınca istenir, açılışta değil.
-  Future<bool> requestPermission() async {
-    await _init();
-    return await _android?.requestNotificationsPermission() ?? true;
-  }
-
   /// Sistem ayarını açar; dönüşte izin durumunu bildirir.
   Future<bool> requestExact() async {
     await _init();

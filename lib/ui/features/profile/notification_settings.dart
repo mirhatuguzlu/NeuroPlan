@@ -3,6 +3,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../../app/next_up.dart';
+import '../../../app/notifications.dart';
 import '../../../app/providers.dart';
 import '../../../data/repositories/prefs_repository.dart';
 import '../../core/format.dart';
@@ -23,7 +24,7 @@ class NotificationSettings extends ConsumerWidget {
     final prefs = ref.read(prefsRepositoryProvider);
 
     Future<void> setLead(int? v) async {
-      if (v != null && !await ref.read(nextUpProvider).requestPermission()) {
+      if (v != null && !await ref.read(notificationsProvider).request()) {
         if (context.mounted) showSnack(context, l.notifPermissionDenied);
         return;
       }
@@ -32,6 +33,7 @@ class NotificationSettings extends ConsumerWidget {
 
     return Column(
       children: [
+        const _PermissionTile(),
         ExpansionTile(
           leading: const Icon(Symbols.notifications_rounded),
           title: Text(l.settingNotify),
@@ -64,6 +66,56 @@ class NotificationSettings extends ConsumerWidget {
                 }),
         ),
       ],
+    );
+  }
+}
+
+/// Sistem izni kapalıysa görünür; "Aç" izin penceresini ya da uygulamanın bildirim
+/// ayarını açar. Ayardan dönünce durum yeniden okunur.
+class _PermissionTile extends ConsumerStatefulWidget {
+  const _PermissionTile();
+
+  @override
+  ConsumerState<_PermissionTile> createState() => _PermissionTileState();
+}
+
+class _PermissionTileState extends ConsumerState<_PermissionTile> {
+  late final AppLifecycleListener _lifecycle;
+
+  @override
+  void initState() {
+    super.initState();
+    _lifecycle = AppLifecycleListener(
+      onResume: () => ref.invalidate(notificationsEnabledProvider),
+    );
+  }
+
+  @override
+  void dispose() {
+    _lifecycle.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l = context.l10n;
+    if (ref.watch(notificationsEnabledProvider).value != false) {
+      return const SizedBox.shrink();
+    }
+    return ListTile(
+      leading: Icon(
+        Symbols.notifications_off_rounded,
+        color: Theme.of(context).colorScheme.error,
+      ),
+      title: Text(l.notifyOffTitle),
+      subtitle: Text(l.notifyOffBody),
+      trailing: TextButton(
+        onPressed: () => guard(context, () async {
+          await ref.read(notificationsProvider).request();
+          ref.invalidate(notificationsEnabledProvider);
+        }),
+        child: Text(l.notifyTurnOn),
+      ),
     );
   }
 }

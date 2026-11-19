@@ -33,7 +33,7 @@ NöroPlan, kişinin kendi hayatını esnek bir şablonla tanımladığı, zorunl
 ## 5. İşlevsel gereksinimler
 
 ### 5.1 Hesap ve giriş (`AUTH`)
-- `AUTH-1` Supabase Auth ile kayıt / giriş. Yöntemler: **Google** ve **misafir** (Supabase anonim kullanıcı); e-posta girişi yok (DECISIONS D17). Apple girişi iOS aşamasında değerlendirilir.
+- `AUTH-1` Supabase Auth ile kayıt / giriş. Yöntemler: **Google** ve **misafir** (Supabase anonim kullanıcı); e-posta girişi yok (DECISIONS D17). Google girişi uygulama içinde sistemin hesap seçicisiyle yapılır, tarayıcıya yönlenmez (D50). Apple girişi iOS aşamasında değerlendirilir.
 - `AUTH-2` Kayıtta yaş beyanı; 13 yaş altı kayıt olamaz. 13–17 yaş için ek korumalar (bkz. 8).
 - `AUTH-3` Hesabı ve tüm verileri silme uygulama içinden yapılabilir (Play Store şartı).
 - `AUTH-4` Misafir modu var: uygulama girişsiz tam çalışır, veriler cihazda tutulur. Google'a bağlanınca aynı kullanıcı kalıcı olur ve veri taşınmaz. Sosyal özellikler giriş ister (D17).

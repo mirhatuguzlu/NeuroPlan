@@ -66,7 +66,6 @@ class Push {
     if (!await ready()) return null;
     final m = FirebaseMessaging.instance;
     try {
-      await m.requestPermission();
       // shortcut: firebase_messaging 17 register()/onRegistered kurulum kimliği (FID) döndürür;
       // sunucu FCM v1 ile kayıt kimliğine gönderiyor. FID ile gönderim doğrulanınca geçilecek.
       // ignore: deprecated_member_use

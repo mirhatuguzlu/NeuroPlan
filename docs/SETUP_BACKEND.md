@@ -1,7 +1,7 @@
 # SETUP_BACKEND.md — Sunucu kurulumu (proje sahibinin adımları)
 
 Aşama 4B'nin sunucu tarafını canlıya almak için yapılacaklar, sırayla. Kod ve migration'lar repoda hazır; buradaki adımlar hesaplara, panolara ve gizli anahtarlara dokunduğu için proje sahibi yapar.
-Kararlar: DECISIONS D42–D49 · Güvenlik: [SOCIAL_SAFETY.md](SOCIAL_SAFETY.md) · Test: [QA_CHECKLIST.md](QA_CHECKLIST.md) C.
+Kararlar: DECISIONS D42–D50 · Güvenlik: [SOCIAL_SAFETY.md](SOCIAL_SAFETY.md) · Test: [QA_CHECKLIST.md](QA_CHECKLIST.md) C.
 
 **Altın kural:** `service_role` / secret key, LiveKit API secret, Firebase servis hesabı JSON'u ve `PUSH_WEBHOOK_SECRET` **hiçbir zaman** repoya ya da `.env`'e girmez; yalnız Supabase sırlarına (`supabase secrets set`) ve Vault'a girer. Uygulamanın `.env`'inde yalnız istemcide zaten görünen değerler durur.
 
@@ -10,8 +10,8 @@ Aşağıda `<REF>` Supabase proje referansındır (Dashboard → Project Setting
 ---
 
 ## 1. Google girişi (Google Cloud)
-1. [console.cloud.google.com](https://console.cloud.google.com) → üstten projeyi seç ya da **Yeni proje** (Firebase için de aynı proje kullanılabilir, §7).
-2. **Google Auth Platform → Branding** (eski adı "OAuth consent screen"): uygulama adı NöroPlan, destek e-postası, gizlilik politikası adresi (§9). **Audience → External**. Kapsamlar: `openid`, `email`, `profile` (hassas kapsam yok, Google incelemesi gerekmez).
+1. [console.cloud.google.com](https://console.cloud.google.com) → üstten projeyi seç ya da **Yeni proje** (Firebase için de aynı proje kullanılabilir, §5).
+2. **Google Auth Platform → Branding** (eski adı "OAuth consent screen"): uygulama adı NöroPlan, destek e-postası, gizlilik politikası adresi (§8). **Audience → External**. Kapsamlar: `openid`, `email`, `profile` (hassas kapsam yok, Google incelemesi gerekmez).
    - Yayınlamadan önce durum "Testing" kalırsa yalnız eklediğin test kullanıcıları giriş yapabilir; iki test hesabını **Test users**'a ekle ya da **Publish app** de.
 3. **Clients → Create client → Web application**:
    - Ad: `NeuroPlan Supabase`
@@ -25,12 +25,16 @@ Aşağıda `<REF>` Supabase proje referansındır (Dashboard → Project Setting
      ```
    - **SHA-1, yayın:** Play Console → uygulama → **Test et ve yayınla → Kurulum → Uygulama bütünlüğü → Uygulama imzalama** sayfasındaki "Uygulama imzalama anahtarı sertifikası" SHA-1'i (Play App Signing) ve kendi yükleme anahtarının SHA-1'i için ayrı ayrı Android client.
    - Android client'ın kimliğini koda yazmazsın; Google onu paket adı + SHA-1 ile eşleştirir.
+   - Giriş uygulama içinde, telefonun alttan açılan hesap seçicisiyle olur; tarayıcı açılmaz (D50). Bunun için çalışan APK'yı imzalayan anahtarın SHA-1'i burada kayıtlı olmalı: debug kurulumda debug SHA-1, Play'den inen sürümde Play imza SHA-1'i. Eksikse hesap seçilir ama giriş "hata" ile döner.
 5. Uygulamanın `.env` dosyasına (git-ignored):
    ```
    GOOGLE_WEB_CLIENT_ID=<3. adımdaki Web Client ID>.apps.googleusercontent.com
    ```
 
 ## 2. Supabase panosu
+**Project Settings → API Keys** (`.env` dolu değilse)
+- Uygulamanın `.env`'ine: `SUPABASE_URL=https://<REF>.supabase.co` ve `SUPABASE_ANON_KEY=<Publishable key>`. **Secret key'i değil.**
+
 **Authentication → Sign In / Providers**
 - **Google:** Enable. *Client IDs* = 1.3'teki Web Client ID; *Client Secret (for OAuth)* = Web client secret. **Skip nonce checks: açık** (Android Credential Manager girişi nonce göndermiyor; kapalı kalırsa `signInWithIdToken` reddedilir). Kaydet.
 - **User Signups** bölümünde: **Allow anonymous sign-ins: açık** (misafir modu) · **Allow manual linking: açık** (misafir → Google bağlama).
@@ -158,5 +162,5 @@ Sayfa repoda: [docs/account-deletion/index.html](account-deletion/index.html). �
 
 ## 11. Doğrulama
 1. `.env` doldurulduktan sonra iki cihaza kur: `flutter run --dart-define-from-file=.env -d <cihaz>`.
-2. [QA_CHECKLIST.md](QA_CHECKLIST.md) bölüm C'yi sırayla yap (C12: push, C13: web silme).
+2. [QA_CHECKLIST.md](QA_CHECKLIST.md) bölüm C'yi sırayla yap (C12: push, C13: web silme, C14: bildirim izni ve uygulama içi Google girişi).
 3. Sorun çıkarsa: Dashboard → **Logs → Edge Functions** (fonksiyon hataları), **Logs → Postgres** (RPC hataları; hata kodları NP001…NP429 SOCIAL_SAFETY'de), `adb logcat | grep -E "\[sync\]|\[push\]|\[voice\]|\[auth\]"`.

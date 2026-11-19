@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -7,10 +8,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// (sıradaki iş bildirimi ve odak oturumu birlikte kullanır).
 final notificationsProvider = Provider((ref) => Notifications());
 
+/// Sistem bildirim izni açık mı (Profil'deki durum satırı; uygulamaya dönünce yenilenir).
+final notificationsEnabledProvider = FutureProvider.autoDispose(
+  (ref) => ref.watch(notificationsProvider).enabled(),
+);
+
 class Notifications {
   final plugin = FlutterLocalNotificationsPlugin();
   final _responses = StreamController<NotificationResponse>.broadcast();
   Future<void>? _ready;
+
+  static const _method = MethodChannel('neuroplan/focus');
 
   /// Bildirim ve eylem dokunuşları (uygulama açıkken).
   // shortcut: uygulama kapalıyken eylemden açılış (launch details) işlenmez; kurtarma
@@ -30,4 +38,20 @@ class Notifications {
         onDidReceiveNotificationResponse: _responses.add,
       )
       .then((_) {});
+
+  Future<bool> enabled() async {
+    await ensure();
+    return await android?.areNotificationsEnabled() ?? true;
+  }
+
+  /// Android 13+ izin penceresi; daha eski sürümde ya da kullanıcı iki kez reddettiyse
+  /// pencere çıkmaz, o zaman uygulamanın bildirim ayarı açılır.
+  Future<bool> request() async {
+    await ensure();
+    if (await android?.requestNotificationsPermission() ?? true) {
+      if (await enabled()) return true;
+    }
+    await _method.invokeMethod<void>('openNotificationSettings');
+    return false;
+  }
 }

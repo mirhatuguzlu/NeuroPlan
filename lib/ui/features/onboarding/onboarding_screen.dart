@@ -3,10 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../../../app/next_up.dart';
+import '../../../app/notifications.dart';
 import '../../../app/providers.dart';
 import '../../../app/router.dart';
 import '../../../app/theme.dart';
 import '../../../data/local/app_database.dart';
+import '../../../data/repositories/prefs_repository.dart';
 import '../../../data/repositories/sleep_window.dart';
 import '../../core/format.dart';
 import '../../core/location.dart';
@@ -15,8 +18,8 @@ import '../../core/states.dart';
 import '../../core/wizard.dart';
 import '../together/together_screen.dart' show BirthYearField, minAgeOf;
 
-/// İlk kurulum: dil → görünüm → uyku → konum → namaz vakitleri → kök kategoriler →
-/// ilk rutin. Her adım ayrı ekrandır, atlanabilir ve sonucunu hemen kaydeder.
+/// İlk kurulum: dil → yaş → görünüm → uyku → konum → namaz vakitleri → kök kategoriler →
+/// bildirim izni → ilk rutin. Her adım ayrı ekrandır, atlanabilir ve sonucunu hemen kaydeder.
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -35,6 +38,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   var _madhab = 'shafi';
   int? _birthYear;
   var _birthYearSaved = false;
+  bool? _notify;
 
   @override
   void initState() {
@@ -67,6 +71,17 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       bed: _bed,
       wake: _wake,
     );
+  }
+
+  /// İzin verilince sıradaki iş bildirimi de açılır (kapalıysa 10 dk önce).
+  Future<void> _allowNotifications() async {
+    final granted = await ref.read(notificationsProvider).request();
+    if (granted && ref.read(notifyLeadProvider).value == null) {
+      await ref
+          .read(prefsRepositoryProvider)
+          .set(PrefsRepository.notifyLead, '10');
+    }
+    if (mounted) setState(() => _notify = granted);
   }
 
   Future<void> _complete({required bool addFirst}) async {
@@ -263,6 +278,46 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           subtitle: l.onbCategoriesBody,
           optional: true,
           body: const _RootList(),
+        ),
+        WizardStep(
+          id: 'notify',
+          title: l.onbNotifyTitle,
+          subtitle: l.onbNotifyBody,
+          optional: _notify != true,
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              BusyButton(
+                tonal: true,
+                label: l.notifyAllow,
+                onPressed: _notify == true ? null : _allowNotifications,
+              ),
+              if (_notify != null) ...[
+                const SizedBox(height: Gap.l),
+                Semantics(
+                  liveRegion: true,
+                  child: Row(
+                    children: [
+                      Icon(
+                        _notify!
+                            ? Symbols.check_circle_rounded
+                            : Symbols.warning_rounded,
+                        color: _notify!
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context).colorScheme.error,
+                      ),
+                      const SizedBox(width: Gap.s),
+                      Expanded(
+                        child: Text(
+                          _notify! ? l.notifyGranted : l.notifPermissionDenied,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          ),
         ),
         WizardStep(
           id: 'first',
