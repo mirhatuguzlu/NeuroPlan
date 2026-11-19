@@ -1526,4 +1526,996 @@ class L10nTr extends L10n {
   String regionMinutes(int minutes) {
     return '$minutes dk';
   }
+
+  @override
+  String get navTogether => 'Birlikte';
+
+  @override
+  String navBadge(String label, int count) {
+    return '$label, $count bekleyen';
+  }
+
+  @override
+  String get secAccount => 'Hesap';
+
+  @override
+  String get accountGoogle => 'Google hesabı';
+
+  @override
+  String get accountGuest => 'Misafir';
+
+  @override
+  String get accountGuestBody =>
+      'Verilerin bu cihazda ve yedekte. Google ile bağlanınca kalıcı olur, başka cihazda da açılır.';
+
+  @override
+  String get accountDeviceOnly => 'Yalnız bu cihazda';
+
+  @override
+  String get accountDeviceOnlyBody =>
+      'Bu kurulumda sunucu ayarı yok; her şey cihazında çalışır.';
+
+  @override
+  String get accountOffline =>
+      'Şu an sunucuya bağlı değil; bağlantı gelince eşitlenir.';
+
+  @override
+  String get accountDeleteTitle => 'Hesabı ve verileri sil';
+
+  @override
+  String get accountDeleteSubtitle =>
+      'Planın, odak oturumların, beynin ve sosyal verilerin kalıcı olarak silinir.';
+
+  @override
+  String get accountDeleteBody =>
+      'Bu işlem geri alınamaz. Arkadaşlıkların, mesajların ve ortak işlerin de silinir. Hakkında yapılmış şikâyetler kimliğin olmadan moderasyon için kalır.';
+
+  @override
+  String get accountDeleteAction => 'Kalıcı olarak sil';
+
+  @override
+  String get accountDeleteError =>
+      'Silinemedi. İnternet bağlantını kontrol edip tekrar dene.';
+
+  @override
+  String get onbAgeTitle => 'Doğum yılın';
+
+  @override
+  String get onbAgeBody =>
+      'Yalnız yıl tutulur. Yaşına göre seni koruyan ayarlar kurulur; 13 yaşından küçükler uygulamayı kullanamaz.';
+
+  @override
+  String get onbAgeTooYoung =>
+      'NöroPlan 13 yaş ve üstü içindir. Bu yıl seçiliyken devam edilemez.';
+
+  @override
+  String get tgOfflineTitle => 'Birlikte bölümü sunucu ister';
+
+  @override
+  String get tgOfflineBody =>
+      'Bu kurulumda sunucu ayarı yok. Plan, odak ve beyin cihazında tam çalışır.';
+
+  @override
+  String get tgGuestTitle => 'Arkadaşlarınla birlikte çalış';
+
+  @override
+  String get tgGuestBody =>
+      'Birlikte bölümü Google hesabı ister. Bağlanınca verilerin aynı kalır. Kimse seni rastgele bulamaz; arkadaşlık yalnız davetle kurulur.';
+
+  @override
+  String get tgConnectGoogle => 'Google ile bağlan';
+
+  @override
+  String get tgConnected => 'Google hesabın bağlandı.';
+
+  @override
+  String get tgConnectedSwitched =>
+      'Google hesabına geçildi; bu cihazdaki verilerin o hesaba gönderiliyor.';
+
+  @override
+  String get tgConnectError => 'Google ile bağlanılamadı. Tekrar dene.';
+
+  @override
+  String get tgAgeTitle => 'Önce doğum yılın';
+
+  @override
+  String get tgAgeBody =>
+      'Sosyal özellikler 15 yaşında açılır; 18 yaşından küçüklerde en sıkı gizlilik ayarları kullanılır. Yalnız yıl tutulur.';
+
+  @override
+  String get tgBirthYear => 'Doğum yılı';
+
+  @override
+  String get tgTooYoungTitle => 'Birlikte bölümü 15 yaşında açılır';
+
+  @override
+  String get tgTooYoungBody =>
+      'Bu kural seni korumak için. Plan, odak ve beyin her yaşta tam çalışır.';
+
+  @override
+  String get tgSuspendedTitle => 'Sosyal özellikler geçici olarak kapalı';
+
+  @override
+  String tgSuspendedBody(String date) {
+    return 'Bir şikâyet incelendi ve sosyal özelliklerin $date tarihine kadar kapatıldı. Plan, odak ve beyin çalışmaya devam eder.';
+  }
+
+  @override
+  String get tgSetupTitle => 'Arkadaşların seni nasıl görsün?';
+
+  @override
+  String get tgSetupBody =>
+      'Takma adın yalnız arkadaşlarına görünür. Kullanıcı adı isteğe bağlıdır; ayarlardan açmazsan kimse seni onunla bulamaz.';
+
+  @override
+  String get tgDisplayName => 'Takma ad';
+
+  @override
+  String get tgUsernameOptional => 'Kullanıcı adı (isteğe bağlı)';
+
+  @override
+  String get tgUsernameHelp =>
+      '3–20 karakter: küçük harf, rakam, alt çizgi. Tam adı bilen biri istek gönderebilir, ama yalnız sen bulunabilirliği açarsan.';
+
+  @override
+  String get tgNameRequired => 'Bir takma ad yaz.';
+
+  @override
+  String get tgUsernameRule =>
+      'Kullanıcı adı 3–20 karakter olmalı: küçük harf, rakam ya da alt çizgi.';
+
+  @override
+  String get tgTermsBody =>
+      'Devam ederek topluluk kurallarını kabul edersin: taciz, nefret söylemi, cinsel içerik, spam ve çocukları tehlikeye atan her şey yasaktır. Her ekranda şikâyet edebilir ve engelleyebilirsin; şikâyetler incelenir.';
+
+  @override
+  String get tgSetupAction => 'Kabul et ve başla';
+
+  @override
+  String get tgEmptyTitle => 'İlk arkadaşını davet et';
+
+  @override
+  String get tgEmptyBody =>
+      'Arkadaşlık yalnız davetle kurulur: kodunu ya da QR kodunu paylaş, ya da onun kodunu gir.';
+
+  @override
+  String get tgInviteFirst => 'Arkadaş davet et';
+
+  @override
+  String get tgCofocusBack => 'Ortak odak oturumun açık.';
+
+  @override
+  String get tgOpen => 'Aç';
+
+  @override
+  String tgCofocusInvite(String name) {
+    return '$name seni ortak odağa çağırıyor.';
+  }
+
+  @override
+  String get tgJoin => 'Katıl';
+
+  @override
+  String get tgDecline => 'Hayır';
+
+  @override
+  String get tgAccept => 'Kabul et';
+
+  @override
+  String tgPartnerAsked(String name) {
+    return '$name seni partneri olarak seçmek istiyor.';
+  }
+
+  @override
+  String get tgPartnerDone => 'Artık partnersiniz.';
+
+  @override
+  String get tgSecTogether => 'Birlikte çalış';
+
+  @override
+  String get tgSecPeople => 'Kişiler';
+
+  @override
+  String get tgSecPrivacy => 'Gizlilik';
+
+  @override
+  String tgPartnerPlan(String name) {
+    return 'Partnerin $name: planı';
+  }
+
+  @override
+  String get tgChoosePartner => 'Partner seç';
+
+  @override
+  String get tgChoosePartnerBody =>
+      'Ortak çalışma ve plan görme için daha yakın bir bağ; aynı anda bir partner.';
+
+  @override
+  String get tgCofocusNew => 'Ortak odak başlat';
+
+  @override
+  String get tgCofocusNewBody =>
+      'Aynı anda başlayın, herkes kendi işine odaklansın.';
+
+  @override
+  String get tgShared => 'Ortak etkinlikler';
+
+  @override
+  String get tgFreeTime => 'Ortak boş zaman bul';
+
+  @override
+  String get tgMessages => 'Mesajlar';
+
+  @override
+  String get tgFriends => 'Arkadaşlar';
+
+  @override
+  String get tgInvite => 'Davet et';
+
+  @override
+  String get tgLeaderboard => 'Sıralama';
+
+  @override
+  String get tgPrivacy => 'Gizlilik ayarları';
+
+  @override
+  String get tgPrivacyBody => 'Kim neyi görür: plan, profil, beyin.';
+
+  @override
+  String get tgCancel => 'Vazgeç';
+
+  @override
+  String get tgPartner => 'Partner';
+
+  @override
+  String get tgErrRate => 'Biraz yavaşla; kısa bir süre sonra tekrar dene.';
+
+  @override
+  String get tgErrNetwork =>
+      'Sunucuya ulaşılamadı. İnternet bağlantını kontrol et.';
+
+  @override
+  String get tgErrNotFound => 'Bulunamadı ya da artık geçerli değil.';
+
+  @override
+  String get tgErrForbidden => 'Bunu yapmaya iznin yok.';
+
+  @override
+  String get tgErrNotPublished =>
+      'Seçtiğin kişilerden biri takvimini henüz paylaşmadı; Birlikte bölümünü açınca paylaşılır.';
+
+  @override
+  String get tgErrNotEligible => 'Sosyal özellikler bu hesapta açık değil.';
+
+  @override
+  String get tgErrUsernameTaken => 'Bu kullanıcı adı alınmış.';
+
+  @override
+  String get tgErrPartnerTaken =>
+      'Birinizin zaten partneri var; önce o partnerlik bitmeli.';
+
+  @override
+  String get tgErrAlready => 'Bu zaten yapılmış.';
+
+  @override
+  String get tgErrInvalid => 'Girilen bilgi geçerli değil.';
+
+  @override
+  String get tgIncoming => 'Gelen istekler';
+
+  @override
+  String get tgWantsToBeFriends => 'Arkadaş olmak istiyor';
+
+  @override
+  String get tgPartnerPending => 'Partner isteği bekliyor';
+
+  @override
+  String get tgOutgoing => 'Gönderdiğin istekler';
+
+  @override
+  String get tgRequestSent => 'İstek gönderildi';
+
+  @override
+  String get tgWithdraw => 'Geri al';
+
+  @override
+  String get tgBlocked => 'Engellediklerin';
+
+  @override
+  String get tgUnblock => 'Engeli kaldır';
+
+  @override
+  String get tgUnblocked =>
+      'Engel kaldırıldı. Yeniden arkadaş olmak için yeni bir davet gerekir.';
+
+  @override
+  String get tgNotFriendTitle => 'Artık arkadaş değilsiniz';
+
+  @override
+  String get tgNotFriendBody =>
+      'Bu kişiyle ilgili hiçbir şey görüntülenemiyor.';
+
+  @override
+  String get tgSendMessage => 'Mesaj gönder';
+
+  @override
+  String get tgSeePlan => 'Planını gör';
+
+  @override
+  String get tgCompareBrains => 'Beyinleri karşılaştır';
+
+  @override
+  String get tgEndPartner => 'Partnerliği bitir';
+
+  @override
+  String get tgEndPartnerBody =>
+      'Arkadaşlığınız sürer; partnere özel görünürlük biter.';
+
+  @override
+  String get tgAskPartner => 'Partnerim olsun';
+
+  @override
+  String get tgAskPartnerBody => 'Karşı taraf onaylayınca partner olursunuz.';
+
+  @override
+  String get tgAskPartnerBlocked => 'Önce şu anki partnerliğini bitirmelisin.';
+
+  @override
+  String get tgPartnerRequested => 'Partner isteği gönderildi.';
+
+  @override
+  String get tgShowFull => 'Planımı bu kişiye tam göster';
+
+  @override
+  String get tgShowFullBody =>
+      'Başlık, saat, kategori ve notlar. Bu istisna kategori kurallarının önüne geçer.';
+
+  @override
+  String get tgSafety => 'Güvenlik';
+
+  @override
+  String get tgRemoveFriend => 'Arkadaşlıktan çıkar';
+
+  @override
+  String tgRemoveFriendBody(String name) {
+    return '$name artık planını, mesajlarını ve beynini göremez. Yeniden arkadaş olmak için yeni bir davet gerekir.';
+  }
+
+  @override
+  String get tgBlock => 'Engelle';
+
+  @override
+  String tgBlockTitle(String name) {
+    return '$name engellensin mi?';
+  }
+
+  @override
+  String get tgBlockBody =>
+      'Arkadaşlık ve partnerlik biter, sohbet ikiniz için de kapanır. Seni bulamaz, davet gönderemez ve engellendiğini görmez.';
+
+  @override
+  String get tgBlocked1 => 'Engellendi.';
+
+  @override
+  String get tgReport => 'Şikâyet et';
+
+  @override
+  String get tgInviteTitle => 'Davet kodun';
+
+  @override
+  String get tgInviteBody =>
+      'Kod 7 gün geçerli ve tek kullanımlık. Yalnız güvendiğin kişiyle paylaş.';
+
+  @override
+  String get tgKindFriend => 'Arkadaş daveti';
+
+  @override
+  String get tgKindPartner => 'Partner daveti';
+
+  @override
+  String get tgCreateCode => 'Kod oluştur';
+
+  @override
+  String tgQrLabel(String code) {
+    return 'Davet kodunun QR görüntüsü: $code';
+  }
+
+  @override
+  String tgExpires(String date) {
+    return '$date tarihine kadar geçerli';
+  }
+
+  @override
+  String get tgCopy => 'Kopyala';
+
+  @override
+  String get tgCopied => 'Kopyalandı.';
+
+  @override
+  String get tgRevoke => 'İptal et';
+
+  @override
+  String get tgHaveCode => 'Kodun mu var?';
+
+  @override
+  String get tgCode => 'Davet kodu';
+
+  @override
+  String get tgScan => 'QR kodu tara';
+
+  @override
+  String get tgUseCode => 'Kodu kullan';
+
+  @override
+  String get tgCodeRule => 'Davet kodu 10 karakterdir.';
+
+  @override
+  String tgRedeemed(String name) {
+    return '$name ile artık arkadaşsınız.';
+  }
+
+  @override
+  String tgRedeemedPartner(String name) {
+    return '$name ile artık partnersiniz.';
+  }
+
+  @override
+  String get tgByUsername => 'Tam kullanıcı adıyla';
+
+  @override
+  String get tgByUsernameBody =>
+      'Yalnız bulunabilirliği açık hesaplara istek gider. Arama ya da öneri yoktur.';
+
+  @override
+  String get tgUsername => 'Kullanıcı adı';
+
+  @override
+  String get tgSendRequest => 'İstek gönder';
+
+  @override
+  String get tgCameraTitle => 'Kamera açılamadı';
+
+  @override
+  String get tgCameraBody =>
+      'Kamera izni verilmedi ya da kamera yok. Kodu elle de yazabilirsin.';
+
+  @override
+  String get tgScanHint => 'Arkadaşının ekranındaki QR kodu çerçeveye getir.';
+
+  @override
+  String tgPlanOf(String name) {
+    return '$name: plan';
+  }
+
+  @override
+  String get tgWeek => 'Hafta';
+
+  @override
+  String get tgPlanEmptyTitle => 'Paylaşılan bir şey yok';
+
+  @override
+  String tgPlanEmptyBody(String name) {
+    return '$name bu günlerde bir şey paylaşmıyor ya da planı boş. Neyin görüneceğine $name karar verir.';
+  }
+
+  @override
+  String get tgBusy => 'Meşgul';
+
+  @override
+  String get tgPlanReadOnly => 'Salt okunur. Görünürlüğü planın sahibi seçer.';
+
+  @override
+  String get tgLevelFull => 'Tam (başlık, saat, not)';
+
+  @override
+  String get tgLevelTitleTime => 'Başlık ve saat';
+
+  @override
+  String get tgLevelBusy => 'Sadece \"meşgul\"';
+
+  @override
+  String get tgLevelHidden => 'Gizli';
+
+  @override
+  String get tgLevelDefault => 'Varsayılan';
+
+  @override
+  String get tgLevelFullBody => 'Başlık, saat, kategori ve notlar görünür.';
+
+  @override
+  String get tgLevelTitleTimeBody =>
+      'Başlık ve saat görünür; not ve kategori görünmez.';
+
+  @override
+  String get tgLevelBusyBody => 'Yalnız o saatte meşgul olduğun görünür.';
+
+  @override
+  String get tgLevelHiddenBody => 'Hiç görünmez.';
+
+  @override
+  String get tgLevelDefaultBody =>
+      'Partnere başlık ve saat, diğer arkadaşlara \"meşgul\".';
+
+  @override
+  String get tgSecProfile => 'Profil';
+
+  @override
+  String get tgDiscoverable => 'Kullanıcı adımla bulunabilirim';
+
+  @override
+  String tgDiscoverableBody(String username) {
+    return 'Tam olarak @$username yazan biri istek gönderebilir.';
+  }
+
+  @override
+  String get tgDiscoverableNoUsername => 'Önce bir kullanıcı adı gerekir.';
+
+  @override
+  String get tgGlobalBoard => 'Genel sıralamaya katıl';
+
+  @override
+  String get tgGlobalBoardBody =>
+      'Takma adınla, haftalık odak dakikası ve süreklilikle.';
+
+  @override
+  String get tgGlobalBoardMinor =>
+      '18 yaşından küçüklerde genel sıralama kapalıdır.';
+
+  @override
+  String get tgShareBrain => 'Arkadaşlarım beynimi görebilsin';
+
+  @override
+  String get tgShareBrainBody =>
+      'Karşılaştırma için; sunucu beyni oturum kayıtlarından hesaplar.';
+
+  @override
+  String get tgSecPlanVisibility => 'Plan görünürlüğü';
+
+  @override
+  String get tgPlanVisibilityBody =>
+      'Her kategori için seç. Alt kategori kuralı yoksa üst kategoriye bakılır. Kurallar veritabanında uygulanır.';
+
+  @override
+  String get tgAllCategories => 'Bütün kategoriler';
+
+  @override
+  String get tgVisibilityFootnote =>
+      'Ortak boş zaman aramasında yalnız boş aralıklar paylaşılır; gizli işlerin de \"dolu\" sayılır ama içerikleri hiç gönderilmez.';
+
+  @override
+  String get tgNoMessagesTitle => 'Henüz mesaj yok';
+
+  @override
+  String get tgNoMessagesBody => 'Bir arkadaşının sayfasından sohbet başlat.';
+
+  @override
+  String get tgNoMessagesYet => 'Henüz mesaj yok';
+
+  @override
+  String get tgMessageDeleted => 'Mesaj silindi';
+
+  @override
+  String get tgYou => 'Sen';
+
+  @override
+  String get tgMuted => 'Bildirimler kapalı';
+
+  @override
+  String tgReactWith(String emoji) {
+    return '$emoji ile tepki ver';
+  }
+
+  @override
+  String get tgReportMessage => 'Mesajı şikâyet et';
+
+  @override
+  String get tgMore => 'Diğer';
+
+  @override
+  String get tgMute => 'Bildirimleri kapat';
+
+  @override
+  String get tgUnmute => 'Bildirimleri aç';
+
+  @override
+  String tgChatEmptyTitle(String name) {
+    return '$name ile sohbet';
+  }
+
+  @override
+  String get tgChatEmptyBody =>
+      'Mesajlar yalnız ikinize görünür. Uygunsuz kelimeler yıldızlanır.';
+
+  @override
+  String get tgMessageHint => 'Tepki, kopyala ya da şikâyet için basılı tut';
+
+  @override
+  String get tgWriteMessage => 'Mesaj yaz';
+
+  @override
+  String get tgSend => 'Gönder';
+
+  @override
+  String get tgReasonHarassment => 'Taciz ya da zorbalık';
+
+  @override
+  String get tgReasonInappropriate => 'Uygunsuz içerik';
+
+  @override
+  String get tgReasonSpam => 'Spam';
+
+  @override
+  String get tgReasonChildSafety => 'Çocuk güvenliği';
+
+  @override
+  String get tgReasonOther => 'Başka bir şey';
+
+  @override
+  String get tgReportBody =>
+      'Ne oldu? Şikâyetin incelenir; şikâyet ettiğin kişiye adın söylenmez. Mesaj şikâyetinde mesajın bir kopyası saklanır.';
+
+  @override
+  String get tgReportDetails => 'Açıklama (isteğe bağlı)';
+
+  @override
+  String get tgReportSend => 'Şikâyeti gönder';
+
+  @override
+  String get tgReportThanks =>
+      'Şikâyetin alındı. İstersen bu kişiyi engelleyebilirsin.';
+
+  @override
+  String get tgReportUrgent =>
+      'Biri seni ya da başkasını hemen tehlikeye atıyorsa 112\'yi ara.';
+
+  @override
+  String get tgGlobal => 'Genel';
+
+  @override
+  String get tgMetricFocus => 'Odak dakikası';
+
+  @override
+  String get tgMetricStreak => 'Süreklilik';
+
+  @override
+  String get tgBoardNote =>
+      'Haftalık, pazartesi sıfırlanır. Yalnız sunucuda doğrulanan oturumlar sayılır: çakışan ya da gerçek süreden uzun oturum girmez.';
+
+  @override
+  String get tgGlobalNotJoined => 'Genel sıralamaya katılmadın.';
+
+  @override
+  String get tgBoardEmpty => 'Bu hafta henüz tamamlanan oturum yok.';
+
+  @override
+  String tgDays(int n) {
+    return '$n gün';
+  }
+
+  @override
+  String get tgSharedNew => 'Ortak etkinlik öner';
+
+  @override
+  String get tgSharedEmptyTitle => 'Henüz ortak etkinlik yok';
+
+  @override
+  String get tgSharedEmptyBody =>
+      'Bir etkinlik ya da proje öner; arkadaşın kabul edince ikinizin planına da düşer.';
+
+  @override
+  String tgProgress(String done, String total) {
+    return '$done / $total';
+  }
+
+  @override
+  String tgWith(String names) {
+    return 'Birlikte: $names';
+  }
+
+  @override
+  String get tgStatusConfirmed => 'Onaylandı';
+
+  @override
+  String get tgStatusCancelled => 'İptal edildi';
+
+  @override
+  String get tgStatusProposed => 'Yanıt bekleniyor';
+
+  @override
+  String tgChangeProposed(String text) {
+    return 'Değişiklik önerildi: $text';
+  }
+
+  @override
+  String tgChangeWaiting(String text) {
+    return 'Onay bekleyen değişiklik: $text';
+  }
+
+  @override
+  String get tgSharedAccepted => 'Planına eklendi.';
+
+  @override
+  String get tgSharedCancel => 'İptal et';
+
+  @override
+  String get tgSharedCancelBody => 'Etkinlik herkesin planından kalkar.';
+
+  @override
+  String get tgSharedLeave => 'Ayrıl';
+
+  @override
+  String get tgSharedLeaveBody =>
+      'Etkinlik senin planından kalkar; diğerleri için sürer.';
+
+  @override
+  String get tgSuggestChange => 'Değişiklik öner';
+
+  @override
+  String tgPatchTitle(String title) {
+    return 'ad \"$title\"';
+  }
+
+  @override
+  String get tgSharedKindTitle => 'Ne planlıyorsunuz?';
+
+  @override
+  String get tgKindActivity => 'Etkinlik';
+
+  @override
+  String get tgKindActivityBody => 'Belli bir gün ve saatte birlikte.';
+
+  @override
+  String get tgKindProject => 'Proje';
+
+  @override
+  String get tgKindProjectBody =>
+      'Toplam süre ve son tarih; ilerleme paylaşılır.';
+
+  @override
+  String get tgSharedNameTitle => 'Adı ne olsun?';
+
+  @override
+  String get tgSharedName => 'Ad';
+
+  @override
+  String get tgSharedNotes => 'Not (isteğe bağlı)';
+
+  @override
+  String get tgSharedWithTitle => 'Kiminle?';
+
+  @override
+  String get tgSharedWhenTitle => 'Ne zaman?';
+
+  @override
+  String get tgSharedDeadlineTitle => 'Son tarih ve toplam süre';
+
+  @override
+  String tgSharedTotal(String duration) {
+    return 'Toplam: $duration';
+  }
+
+  @override
+  String get tgFrom => 'Başlangıç';
+
+  @override
+  String get tgTo => 'Bitiş';
+
+  @override
+  String get tgEndAfterStart => 'Bitiş başlangıçtan sonra olmalı.';
+
+  @override
+  String get tgSharedRootTitle => 'Hangi kök kategori?';
+
+  @override
+  String get tgSharedRootBody =>
+      'Odak oturumların beyinde bu kategoriye göre büyür.';
+
+  @override
+  String get tgNoCategory => 'Kategori yok';
+
+  @override
+  String get tgSharedConfirmTitle => 'Gönderilsin mi?';
+
+  @override
+  String get tgSharedConfirmBody =>
+      'Kabul eden herkesin planına sabit iş olarak düşer. Sonraki değişiklikler karşı tarafın onayına gider.';
+
+  @override
+  String get tgSharedSend => 'Gönder';
+
+  @override
+  String get tgSharedSent => 'Öneri gönderildi.';
+
+  @override
+  String get tgChangeBody =>
+      'Değişiklik diğer katılımcıların onayına gider; hepsi onaylayınca uygulanır.';
+
+  @override
+  String get tgSendChange => 'Onaya gönder';
+
+  @override
+  String get tgChangeSent => 'Değişiklik onaya gönderildi.';
+
+  @override
+  String get tgFreeTimeBody =>
+      'Seçtiğin arkadaşlarla önümüzdeki 7 günde herkesin boş olduğu saatleri bulur. Kimin ne yaptığı gösterilmez.';
+
+  @override
+  String get tgFreeTimeLength => 'En az ne kadar?';
+
+  @override
+  String get tgFreeTimeFind => 'Boş zaman bul';
+
+  @override
+  String get tgFreeTimeNone =>
+      'Herkesin boş olduğu bir aralık bulunamadı. Süreyi kısaltmayı dene.';
+
+  @override
+  String get tgPlanHere => 'Burada planla';
+
+  @override
+  String tgCompareTitle(String name) {
+    return 'Sen ve $name';
+  }
+
+  @override
+  String get tgCompareNote =>
+      'Beyin bir metafordur, ölçüm değildir. Arkadaşının beyni sunucuda oturum kayıtlarından hesaplanır.';
+
+  @override
+  String get tgLeftYou => 'Solda sen';
+
+  @override
+  String tgRightFriend(String name) {
+    return 'Sağda $name';
+  }
+
+  @override
+  String tgNeurons(int n) {
+    return '$n nöron';
+  }
+
+  @override
+  String get tgCofocus => 'Ortak odak';
+
+  @override
+  String get tgCofocusIntro =>
+      'Aynı anda başlarsınız; herkes kendi işini ve modunu seçer. Biri planı bozarsa diğerleri sakin bir notla görür. Birlikte tamamlanan oturum küçük bir ortak bağlantı kazandırır.';
+
+  @override
+  String get tgCofocusWho => 'Kimler';
+
+  @override
+  String get tgVoice => 'Sesli sohbet';
+
+  @override
+  String get tgVoiceBody =>
+      'İsteğe bağlı. Mikrofon kapalı başlar, kayıt yapılmaz.';
+
+  @override
+  String get tgCofocusInviteAction => 'Davet et';
+
+  @override
+  String get tgCofocusEnded => 'Bu ortak oturum bitti.';
+
+  @override
+  String get tgCofocusLive => 'Oturum başladı. İşini seçip katıl.';
+
+  @override
+  String get tgCofocusHostHint =>
+      'Herkes işini seçince başlat; sayaçlar aynı anda başlar.';
+
+  @override
+  String get tgCofocusGuestHint =>
+      'Başlatan başlatınca sayacın kendiliğinden başlar.';
+
+  @override
+  String get tgCofocusMine => 'Senin işin';
+
+  @override
+  String get tgCofocusNoTasks =>
+      'Bugün planında bekleyen iş yok. Önce bir iş ekle.';
+
+  @override
+  String get tgCofocusStart => 'Herkesi başlat';
+
+  @override
+  String get tgCofocusJoinNow => 'Şimdi katıl';
+
+  @override
+  String get tgCofocusLeave => 'Ayrıl';
+
+  @override
+  String get tgPhaseDone => 'Tamamladı';
+
+  @override
+  String get tgPhaseBroken => 'Oturumdan çıktı';
+
+  @override
+  String get tgPhaseLeft => 'Ayrıldı';
+
+  @override
+  String get tgPhaseInvited => 'Davet edildi';
+
+  @override
+  String get tgPhaseFocus => 'Odakta';
+
+  @override
+  String get tgPhaseBreak => 'Molada';
+
+  @override
+  String get tgPhasePaused => 'Duraklattı';
+
+  @override
+  String get tgPhaseAway => 'Bağlı değil';
+
+  @override
+  String get tgPhaseLobby => 'Lobide';
+
+  @override
+  String get tgSpeaking => 'konuşuyor';
+
+  @override
+  String tgMutePerson(String name) {
+    return '$name sesini kapat';
+  }
+
+  @override
+  String tgUnmutePerson(String name) {
+    return '$name sesini aç';
+  }
+
+  @override
+  String get tgVoiceNoRecording =>
+      'Ses kaydedilmez. Birini sessize almak yalnız senin duymanı etkiler.';
+
+  @override
+  String get tgVoiceConnect => 'Sese bağlan';
+
+  @override
+  String get tgVoiceErrPermission =>
+      'Mikrofon izni gerekli. Ayarlardan izin verebilirsin.';
+
+  @override
+  String get tgVoiceErrUnavailable => 'Sesli sohbet şu an kullanılamıyor.';
+
+  @override
+  String get tgMicOn => 'Mikrofonu aç';
+
+  @override
+  String get tgMicOff => 'Mikrofonu kapat';
+
+  @override
+  String tgNoticeBroken(String name) {
+    return '$name oturumdan çıktı. Sen devam edebilirsin.';
+  }
+
+  @override
+  String tgNoticeCompleted(String name) {
+    return '$name oturumunu tamamladı.';
+  }
+
+  @override
+  String tgNoticeLeft(String name) {
+    return '$name ayrıldı.';
+  }
+
+  @override
+  String get tgNoticeMessagesTitle => 'NöroPlan';
+
+  @override
+  String get tgNoticeMessagesChannel => 'Mesajlar';
+
+  @override
+  String tgNoticeMessagesBody(int count) {
+    return '$count yeni mesaj';
+  }
+
+  @override
+  String tgPickMax(int n) {
+    return 'En çok $n kişi seçebilirsin.';
+  }
+
+  @override
+  String get tgCofocusChooseFirst => 'Başlamak için önce işini seç.';
 }

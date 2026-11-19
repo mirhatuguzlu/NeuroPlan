@@ -5,7 +5,7 @@ export const BRIDGE_VERSION = 1;
 export const SCENE_VERSION = 1;
 
 /** Flutter → JS mesaj türleri (docs/ARCHITECTURE.md §8). */
-export const INBOUND = new Set(['init', 'state', 'highlight', 'event', 'quality', 'visibility', 'reset']);
+export const INBOUND = new Set(['init', 'state', 'highlight', 'event', 'quality', 'visibility', 'reset', 'compare']);
 
 /** `{"v":1,"type":...,"payload":...}` çözer; bilinmeyen sürüm/tür `{error}` döner. */
 export function parseMessage(text) {

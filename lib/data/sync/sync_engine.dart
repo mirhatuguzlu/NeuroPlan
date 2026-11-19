@@ -32,8 +32,7 @@ abstract interface class SyncRemote {
 }
 
 /// Outbox'ı gönderir, sonra imleçten sonraki değişiklikleri çekip alan bazlı birleştirir.
-/// shortcut: yalnız elle `syncOnce()`; zamanlayıcı, yaşam döngüsü tetikleri ve üstel
-/// bekleme, Supabase oturumu geldiğinde (giriş aşaması) eklenecek.
+/// Ne zaman çalışacağına `SyncScheduler` karar verir.
 class SyncEngine {
   SyncEngine(this._db, this._remote, this._clock);
 
@@ -43,6 +42,47 @@ class SyncEngine {
 
   static const batchSize = 200;
   static const _cursorKey = 'cursor';
+  static const _userKey = 'user_id';
+
+  /// Eşitlemenin hangi sunucu kullanıcısına yapıldığını kaydeder (ARCHITECTURE §5.4).
+  /// Kullanıcı değiştiyse (misafir → var olan Google hesabı) yerel satırların hepsi yeni
+  /// kullanıcıya gönderilmek üzere outbox'a yeniden yazılır ve imleç sıfırlanır.
+  Future<void> adoptUser(String userId) => _db.transaction(() async {
+    final saved = await (_db.select(
+      _db.syncState,
+    )..where((s) => s.key.equals(_userKey))).getSingleOrNull();
+    if (saved?.value == userId) return;
+    if (saved != null) {
+      final at = DateTime.now().toUtc();
+      for (final t in _db.syncedTables) {
+        for (final row in await _db.select(t.info).get()) {
+          final json = row.toJson(serializer: syncSerializer)
+            ..remove('updated_at')
+            ..remove('field_versions');
+          final id = json.remove('id') as String;
+          await _db
+              .into(_db.syncOutbox)
+              .insert(
+                SyncOutboxCompanion.insert(
+                  targetTable: t.info.actualTableName,
+                  targetId: id,
+                  patch: jsonEncode(json),
+                  hlc: (await _clock.send()).toString(),
+                  createdAt: at,
+                ),
+              );
+        }
+      }
+      await (_db.delete(
+        _db.syncState,
+      )..where((s) => s.key.equals(_cursorKey))).go();
+    }
+    await _db
+        .into(_db.syncState)
+        .insertOnConflictUpdate(
+          SyncStateCompanion.insert(key: _userKey, value: userId),
+        );
+  });
 
   /// Yeniden denemenin işe yaramayacağı Postgres hata sınıfları: veri (22), kısıt (23),
   /// yetki/sözdizimi (42). Tekil anahtar yarışı (23505) bir sonraki denemede güncellemeye döner.

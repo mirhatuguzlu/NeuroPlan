@@ -76,6 +76,8 @@ class BrainRepository {
       longestRunSeconds: clock.longestRun(end).inSeconds,
       completedCycles: clock.completedCycles(end),
       recoveredEscapes: escapes,
+      cofocusPeersCompleted:
+          int.tryParse(await _prefs.get(cofocusPeersKey(s.id)) ?? '') ?? 0,
     );
   }
 
@@ -96,6 +98,18 @@ class BrainRepository {
             )
             ..orderBy([(s) => OrderingTerm(expression: s.endedAt)]))
           .get();
+
+  /// Ortak odakta oturumu birlikte tamamlayan öteki katılımcı sayısı (sunucudan, Aşama 4B).
+  static String cofocusPeersKey(String sessionId) => 'cofocus.peers.$sessionId';
+
+  /// Ortak tamamlanan oturumun bağlantı bonusu: sayıyı kaydeder ve olayları yeniden türetir.
+  Future<List<BrainEventDraft>> recordCofocusPeers(
+    String sessionId,
+    int peers,
+  ) async {
+    await _prefs.set(cofocusPeersKey(sessionId), '$peers');
+    return deriveFor(sessionId);
+  }
 
   /// Biten oturumdan olayları türetir ve yazar; aynı olay ikinci kez yazılmaz.
   /// Eklenen olayları döndürür (animasyon için).

@@ -127,7 +127,7 @@ supabase/
 | Sistem tabloları | Uygulamayla gelir (seed); değişiklik uygulama sürümü + migration ile yapılır. |
 | `brain_snapshots` | Her taraf kendi hesaplar (önbellek). |
 | `entitlements`, `leaderboard_entries` | Yalnız sunucu yazar, istemci okur. |
-| Sosyal tablolar | Çevrimiçi çalışır (davet, mesaj, ortak oturum ağ ister); yerelde yalnız okuma önbelleği tutulur, outbox'a girmez. |
+| Sosyal tablolar | Çevrimiçi çalışır (davet, mesaj, ortak oturum ağ ister), outbox'a girmez. Ortak etkinlik kabul edilince planına deterministik kimlikli yerel bir kopya olarak düşer (`sharedMirrorActivityId`); takvim 14 gün ileriye yayınlanır (D44). |
 
 ## 6. Plan motoru (`PlanEngine`)
 ```
@@ -241,8 +241,17 @@ Mesaj biçimi: `{"v": 1, "type": "...", "payload": {...}}`. Dart'ta sealed sın�
 
 ## 9. Sunucu
 - Her tabloda RLS açıktır (DB_SCHEMA §6).
-- **RPC'ler** (`security invoker`, RLS geçerli): `sync_push`, `sync_pull`. Sosyal RPC'ler (`security definer`, kontrolleri kendi içinde yapar): `redeem_invite`, `friend_calendar`, `common_free_time`, `block_user`.
-- **Edge Functions** (`service_role` yalnız burada): `delete_account`, `export_data`, `leaderboard`; Aşama 6'da `verify_purchase`.
+- **RPC'ler** (`security invoker`, RLS geçerli): `sync_push`, `sync_pull`. Sosyal RPC'ler (`security definer`, kontrolleri kendi içinde yapar; Aşama 4B, D45):
+  - Profil ve kapı: `social_status`, `save_social_profile`, `together_badges`
+  - Arkadaşlık: `create_invite`, `revoke_invite`, `redeem_invite`, `request_friend`, `respond_friend_request`, `remove_friend`, `friend_overview`; partner: `request_partner`, `respond_partner`, `end_partner`; güvenlik: `block_user`, `unblock_user`, `report_content`
+  - Görünürlük ve takvim: `set_visibility`, `publish_calendar`, `friend_calendar`, `common_free_time`
+  - Mesaj: `open_direct`, `send_message`, `delete_message`, `toggle_reaction`, `mark_read`, `set_conversation_muted`, `conversations_overview` (okuma: `messages` tablosu, RLS)
+  - Ortak etkinlik: `propose_shared_activity`, `respond_shared_activity`, `leave_shared_activity`, `propose_shared_change`, `respond_shared_change`, `report_shared_progress`, `shared_overview`
+  - Ortak odak: `create_cofocus`, `respond_cofocus`, `start_cofocus`, `set_cofocus_focus`, `finish_cofocus`, `cofocus_state`, `server_now`, `voice_room`
+  - Sıralama ve beyin: `friends_leaderboard`, `global_leaderboard`, `can_view_brain`; zamanlanmış `refresh_global_leaderboard` (pg_cron)
+  - Moderasyon (yalnız Studio / moderatör): `resolve_report`, görünüm `moderation_queue`
+- **Realtime:** `messages`, `friendships`, `cofocus_participants`, `shared_activity_*` değişiklikleri (RLS'li Postgres Changes); ortak odak için özel kanal `cofocus:<id>` (presence + broadcast, `realtime.messages` RLS'i).
+- **Edge Functions** (`service_role` yalnız burada): `delete_account`, `voice_token` (LiveKit, D46), `brain_snapshot` (sunucu beyni, D47); sonra `export_data`, Aşama 6'da `verify_purchase`. Sıralama Edge Function değil SQL'dir (oturum satırları yeter, motor gerekmez).
 
 ## 10. Test stratejisi
 | Katman | Nasıl |
@@ -253,7 +262,7 @@ Mesaj biçimi: `{"v": 1, "type": "...", "payload": {...}}`. Dart'ta sealed sın�
 | ui | Widget testleri + UX_RULES §9 erişilebilirlik eşleyicileri. |
 
 ## 11. Riskler
-1. Dart kodunun `dart compile js` ile Edge Function'da (Deno) çalışması prototiple doğrulanmalı.
+1. ~~Dart kodunun `dart compile js` ile Edge Function'da (Deno) çalışması~~ Aşama 4B'de doğrulandı (`brain_snapshot`, D47).
 2. Namaz vakti `adhan_dart` paketine bağlı (D23). Paket bırakılırsa NOAA güneş hesabı ve namaz vakti formülleri `core`'a taşınır.
 3. Kullanıcı başına sayaç satırı yazmaları sıraya sokar. Bu tek kullanıcı ölçeğinde sorun değildir ama toplu sunucu işleri kullanıcı başına küçük işlemlerle yapılmalıdır.
 4. Saat dilimi değiştiren (seyahat eden) kullanıcı: duvar saatleri profilin saat dilimine göre yorumlanır. Seyahat modu ileride değerlendirilir.

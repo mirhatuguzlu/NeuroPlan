@@ -180,14 +180,23 @@ class FocusController extends Notifier<FocusState> {
   // ---------------------------------------------------------------- eylemler
 
   /// Bugün ekranındaki işten oturum başlatır.
+  /// [startAt]: ortak odakta sunucunun başlangıç anı (cihaz saatine çevrilmiş); sayaçlar
+  /// senkron başlar. En çok 2 dk geriye alınır, ileri tarih yok sayılır.
   Future<void> start({
     required PlannedInstance instance,
     required FocusSettings settings,
+    DateTime? startAt,
   }) => _run(() async {
     if (_session != null) return;
     // Uyarı bildirimi için izin, gerektiği anda istenir (D27 ile aynı ilke).
     await _safe(() => _platform.requestNotificationPermission());
-    final now = _now();
+    final real = _now();
+    final now =
+        startAt != null &&
+            !startAt.isAfter(real) &&
+            real.difference(startAt) < const Duration(minutes: 2)
+        ? startAt.toUtc()
+        : real;
     // focus_sessions → plan_instances yabancı anahtarı: oluşum satırı şimdi yazılır (D22).
     await ref
         .read(planRepositoryProvider)

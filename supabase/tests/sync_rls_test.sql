@@ -10,8 +10,8 @@ insert into auth.users (id, email) values
 -- Sistem tabloları: herkes okur, kimse yazamaz.
 set local role anon;
 select is((select count(*)::int from public.root_categories), 9, 'anon kök kategorileri okur');
-select is((select count(*)::int from public.brain_regions), 20, 'bölgeler seed edildi');
-select is((select count(*)::int from public.category_region_weights), 32, 'ağırlıklar seed edildi');
+select is((select count(*)::int from public.brain_regions), 18, 'bölgeler seed edildi');
+select is((select count(*)::int from public.category_region_weights), 41, 'ağırlıklar seed edildi');
 reset role;
 
 set local role authenticated;

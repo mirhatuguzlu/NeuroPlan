@@ -8,6 +8,7 @@ import '../../app/providers.dart';
 import '../../app/theme.dart';
 import '../../app/transitions.dart';
 import '../features/brain/brain_controller.dart';
+import '../features/together/together_providers.dart';
 import 'format.dart';
 
 /// Alt menü sekmeleri + havada duran çubuk + ayrık "Ekle" butonu (UX_RULES §6, D28).
@@ -32,11 +33,20 @@ class AppShell extends ConsumerWidget {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => ref.read(brainControllerProvider),
     );
+    // Birlikte: canlı değişiklikler, takvim yayını, mesaj bildirimi (sosyal açıksa).
+    ref.watch(togetherLiveProvider);
+    ref.read(togetherTextsProvider).value = TogetherTexts(
+      title: l.tgNoticeMessagesTitle,
+      channel: l.tgNoticeMessagesChannel,
+      body: l.tgNoticeMessagesBody,
+    );
+    final badge = ref.watch(badgesProvider).value?.total ?? 0;
     final destinations = [
-      (Symbols.today_rounded, l.navToday),
-      (Symbols.calendar_month_rounded, l.navPlan),
-      (Symbols.psychology_rounded, l.navBrain),
-      (Symbols.person_rounded, l.navProfile),
+      (Symbols.today_rounded, l.navToday, 0),
+      (Symbols.calendar_month_rounded, l.navPlan, 0),
+      (Symbols.psychology_rounded, l.navBrain, 0),
+      (Symbols.diversity_3_rounded, l.navTogether, badge),
+      (Symbols.person_rounded, l.navProfile, 0),
     ];
     return Scaffold(
       extendBody: true,
@@ -84,7 +94,7 @@ class _Bar extends StatelessWidget {
     required this.onSelect,
   });
 
-  final List<(IconData, String)> destinations;
+  final List<(IconData, String, int)> destinations;
   final int selected;
   final ValueChanged<int> onSelect;
 
@@ -104,11 +114,12 @@ class _Bar extends StatelessWidget {
         height: AppShell.barHeight,
         child: Row(
           children: [
-            for (final (i, (icon, label)) in destinations.indexed)
+            for (final (i, (icon, label, badge)) in destinations.indexed)
               Expanded(
                 child: _Destination(
                   icon: icon,
                   label: label,
+                  badge: badge,
                   selected: i == selected,
                   onTap: () => onSelect(i),
                 ),
@@ -126,10 +137,14 @@ class _Destination extends StatelessWidget {
     required this.label,
     required this.selected,
     required this.onTap,
+    this.badge = 0,
   });
 
   final IconData icon;
   final String label;
+
+  /// Bekleyen iş sayısı (yalnız Birlikte); 0 = rozet yok.
+  final int badge;
   final bool selected;
   final VoidCallback onTap;
 
@@ -141,7 +156,7 @@ class _Destination extends StatelessWidget {
     return Semantics(
       button: true,
       selected: selected,
-      label: label,
+      label: badge > 0 ? context.l10n.navBadge(label, badge) : label,
       excludeSemantics: true,
       child: InkWell(
         onTap: onTap,
@@ -160,22 +175,34 @@ class _Destination extends StatelessWidget {
                     ? scheme.secondaryContainer
                     : Colors.transparent,
               ),
-              child: Icon(
-                icon,
-                fill: selected ? 1 : 0,
-                color: selected
-                    ? scheme.onSecondaryContainer
-                    : scheme.onSurfaceVariant,
+              child: Badge(
+                isLabelVisible: badge > 0,
+                smallSize: 8,
+                child: Icon(
+                  icon,
+                  fill: selected ? 1 : 0,
+                  color: selected
+                      ? scheme.onSecondaryContainer
+                      : scheme.onSurfaceVariant,
+                ),
               ),
             ),
             const SizedBox(height: Gap.xs),
-            Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: theme.textTheme.labelMedium?.copyWith(
-                color: selected ? scheme.onSurface : scheme.onSurfaceVariant,
-                fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+            // Beş sekmede dar telefonda (360dp ≈ 49dp/sekme) etiket kesilmesin, küçülsün (UX §6).
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: Gap.xs),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    color: selected
+                        ? scheme.onSurface
+                        : scheme.onSurfaceVariant,
+                    fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                  ),
+                ),
               ),
             ),
           ],

@@ -47,18 +47,45 @@ Future<String> addDaily(
   return a.id;
 }
 
+Future<void> Function(ProviderContainer) _born(int year) =>
+    (c) => c
+        .read(profileRepositoryProvider)
+        .update(ProfilesCompanion(birthYear: Value(year)));
+
 void main() {
+  testWidgets('ilk kurulum: 13 yaş altı devam edemez (AUTH-2)', (t) async {
+    final h = await pumpApp(
+      t,
+      onboarded: false,
+      seed: _born(DateTime.now().year - 10),
+    );
+    await h.tap(find.text('Şimdilik geç'));
+    expect(find.textContaining('13 yaş ve üstü'), findsOneWidget);
+    final next = t.widget<FilledButton>(
+      find.ancestor(
+        of: find.text('İleri'),
+        matching: find.byType(FilledButton),
+      ),
+    );
+    expect(next.onPressed, isNull);
+  });
+
   testWidgets(
-    'ilk kurulum: 7 adım atlanabilir, sonunda boş Bugün ilk adımı gösterir',
+    'ilk kurulum: yaş dışındaki adımlar atlanabilir, sonunda boş Bugün ilk adımı gösterir',
     (t) async {
-      final h = await pumpApp(t, onboarded: false);
-      expect(find.text('1 / 7'), findsOneWidget);
+      final h = await pumpApp(t, onboarded: false, seed: _born(2000));
+      expect(find.text('1 / 8'), findsOneWidget);
       expect(find.text('Hangi dili kullanalım?'), findsOneWidget);
       await h.expectAccessible();
-      for (var i = 0; i < 6; i++) {
+      await h.tap(find.text('Şimdilik geç'));
+      // AUTH-2: yaş adımı atlanamaz.
+      expect(find.text('Doğum yılın'), findsOneWidget);
+      expect(find.text('Şimdilik geç'), findsNothing);
+      await h.tap(find.text('İleri'));
+      for (var i = 0; i < 5; i++) {
         await h.tap(find.text('Şimdilik geç'));
       }
-      expect(find.text('7 / 7'), findsOneWidget);
+      expect(find.text('8 / 8'), findsOneWidget);
       expect(find.text('İlk rutinimi ekle'), findsOneWidget);
       await h.tap(find.text('Şimdilik geç'));
       expect(find.text('Planın henüz boş'), findsOneWidget);
@@ -70,8 +97,9 @@ void main() {
   testWidgets(
     'ilk kurulum: uyku penceresi kesin bir aktivite olarak kaydedilir',
     (t) async {
-      final h = await pumpApp(t, onboarded: false);
+      final h = await pumpApp(t, onboarded: false, seed: _born(2000));
       await h.tap(find.text('Şimdilik geç'));
+      await h.tap(find.text('İleri'));
       await h.tap(find.text('Şimdilik geç'));
       expect(find.text('Genelde ne zaman uyursun?'), findsOneWidget);
       await h.tap(find.text('İleri'));

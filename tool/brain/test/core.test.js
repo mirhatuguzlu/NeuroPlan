@@ -35,3 +35,10 @@ test('güçlü bağ daha çok şerit', () => {
   assert.equal(strandCount(600), 3);
   assert.equal(strandCount(1000), 5);
 });
+
+test('karşılaştırma mesajı (Aşama 4B) tanınır', () => {
+  assert.deepEqual(parseMessage(encodeMessage('compare', { regions: [], links: [] })), {
+    type: 'compare',
+    payload: { regions: [], links: [] },
+  });
+});

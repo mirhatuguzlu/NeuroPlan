@@ -447,7 +447,7 @@ Yerelde istemci hesaplar, eşitlenmez. Sunucuda Edge Function hesaplar (sıralam
 
 Yalnız sunucu yazar (satın almayı doğrulayan Edge Function); istemci okur. Satır yoksa plan `free` kabul edilir.
 
-## 5. Sosyal tablolar (Aşama 4B'de kullanılacak)
+## 5. Sosyal tablolar (Aşama 4B, D42–D48)
 Ortak kurallar:
 - Sosyal tablolar çevrimiçi çalışır ve outbox'a girmez.
 - Misafir (anonim) kullanıcı sosyal tablolara yazamaz (RLS: `is_anonymous` false olmalı).
@@ -471,7 +471,27 @@ Ortak kurallar:
 | `reports` | `reported_user_id` null (hesap silinirse null olur, kayıt moderasyon için kalır); `target_type`: `user` · `message` · `shared_activity` · `cofocus_session`; `target_id` null; `reason`: `spam` · `harassment` · `inappropriate` · `child_safety` · `other`; `details` null; `status`: `open` · `reviewing` · `resolved` | Şikâyet eden ekler ve kendi kaydını okur. `status`'ü yalnız moderatör (service role) değiştirir. |
 | `leaderboard_entries` | `period`: `week` · `month`; `period_start` date; `score` int; `engine_version`; `computed_at` | `UNIQUE(user_id, period, period_start)`. Yalnız sunucu yazar (`focus_sessions`'tan yeniden hesap, ARCHITECTURE §7). Yalnız kabul edilmiş arkadaşlar okur (SOCIAL-7). |
 
-**Görünürlük veritabanında uygulanır:** Arkadaş, başkasının plan tablolarını doğrudan okuyamaz; o tablolarda RLS yalnız sahibe izin verir. Paylaşılan görünüm `friend_calendar(friend_id, from, to)` fonksiyonundan gelir (`security definer`). Fonksiyon görünürlük düzeyini satır satır uygular:
+**Aşama 4B eklemeleri** (`20261120120000_social_v1.sql`, `20261120120100_brain_input.sql`):
+| Tablo / sütun | Ne için |
+|---|---|
+| `social_profiles` (`user_id` PK, `display_name`, `username` tekil null, `discoverable`, `global_leaderboard`, `share_brain`, `suspended_until`) | Takma ad ve sosyal tercihler. Yalnız kendisi ve arkadaşları okur; yazma `save_social_profile` RPC'siyle. 15–17 yaşta genel sıralama açılamaz. |
+| `partner_slots` (`user_id` PK, `friendship_id`) | Kişi başına tek partner: tetikleyici her partnerlik için iki satır yazar, birincil anahtar ikincisini reddeder. |
+| `calendar_blocks`, `calendar_publications` | Cihazın yayınladığı 14 günlük saatli bloklar (yalnız zaman + aktivite kimliği, D44). |
+| `social_rate_events` | Hız sınırı sayacı (son 24 saat). |
+| `profanity_terms` (`term`, `mode`: `word` · `prefix`) | Küfür filtresi, sistem verisi. |
+| `shared_activity_changes` (`patch`, `approvals` uuid[], `status`) | Ortak etkinlik değişikliği; herkes onaylayınca uygulanır. |
+| `moderators`, `moderation_actions`, görünüm `moderation_queue` | Şikâyet inceleme (Supabase Studio). |
+| `reports.snapshot` | Şikâyet edilen mesajın kopyası. |
+| `shared_activities.kind` (`activity` · `project`), `total_minutes`; `shared_activity_participants.progress_minutes` | Ortak proje ve ilerleme. Düzenleyen de `accepted` katılımcı satırı alır. |
+| `cofocus_participants.status` (`invited` · `joined` · `left` · `declined`), `outcome`, `mode` | Ortak odak; `focus_session_id` yabancı anahtarsız (oturum henüz eşitlenmemiş olabilir). |
+| `leaderboard_entries.active_days` | Süreklilik. |
+| `focus_sessions.server_received_at` | Sunucunun ilk gördüğü an (istemci yazamaz); hile denetimi. |
+
+İstemci sosyal tablolara **doğrudan yazamaz**; her yazma RPC'dir (D45). RPC listesi ARCHITECTURE §9'da. Kural yoksa görünürlük: partnere `title_time`, diğer arkadaşlara `busy` (D44; önceki varsayılan `hidden`'ın yerine geçer).
+
+**Hesap silinince sosyal veri:** SOCIAL_SAFETY §4.8 tablosu. Kısaca: arkadaşlık, partnerlik, davet, engel, görünürlük, takvim, mesaj, tepki, sıralama ve katılımlar cascade ile silinir; hakkındaki şikâyet `reported_user_id = null` ve mesaj kopyasıyla kalır.
+
+**Görünürlük veritabanında uygulanır:** Arkadaş, başkasının plan tablolarını doğrudan okuyamaz; o tablolarda RLS yalnız sahibe izin verir. Paylaşılan görünüm `friend_calendar(friend_id, from, to)` fonksiyonundan gelir (`security definer`); kaynak `calendar_blocks`tır (D44). Fonksiyon görünürlük düzeyini satır satır uygular:
 - `busy`: yalnız başlangıç ve bitiş
 - `title_time`: + başlık
 - `full`: + kategori ve not
@@ -737,4 +757,4 @@ schedule_rules:
 **Uygulama notları (Aşama 1):**
 - Kullanıcı tablolarında yabancı anahtarlar `(user_id, <ref>_id)` çiftiyle kurulur. Bu yüzden bir satır yalnız aynı kullanıcının satırına bağlanabilir.
 - `sync_push` değişiklikleri sırayla uygular. Hatalı bir değişiklik reddedilir ama aynı paketteki diğer değişiklikler uygulanır.
-- Sosyal tablolarda bu aşamada okuma politikaları ve kendi satırına yazılan tablolar (`invites`, `blocks`, `visibility_settings`, `reports`, `shared_activities`, `cofocus_sessions`) var. Başkasını ilgilendiren yazmalar Aşama 4B'de RPC olarak gelecek: davet kullanma, arkadaşlık, partner sınırı, mesajlaşma, katılımcı ekleme.
+- Sosyal tablolarda bu aşamada okuma politikaları ve kendi satırına yazılan tablolar vardı. **Aşama 4B:** doğrudan yazma politikaları kaldırıldı; bütün sosyal yazmalar RPC (D45).

@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/misc.dart' show ProviderListenable;
+import 'package:flutter_riverpod/misc.dart' show Override, ProviderListenable;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:neuroplan/app/app.dart';
@@ -72,6 +72,7 @@ Future<Harness> pumpApp(
   String locale = 'tr',
   Future<void> Function(ProviderContainer c)? seed,
   FakeFocusPlatform? focus,
+  List<Override> overrides = const [],
 }) async {
   final platform = focus ?? FakeFocusPlatform();
   Harness.focusNow = testNow;
@@ -87,6 +88,7 @@ Future<Harness> pumpApp(
       focusPlatformProvider.overrideWithValue(platform),
       focusNowProvider.overrideWithValue(() => Harness.focusNow),
       brainSceneProvider.overrideWithValue(brain),
+      ...overrides,
     ],
   );
   await tester.runAsync(() async {

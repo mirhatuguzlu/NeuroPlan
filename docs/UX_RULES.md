@@ -72,7 +72,7 @@ Asla: iç içe diyalog, açılışta tanıtım / reklam pop-up'ı, ilk kullanım
 
 ## 6. Floating alt menü
 - Ekran kenarlarından ayrık, havada duran yuvarlatılmış bir çubuk: yanlardan ve alttan 16dp boşluk + sistem güvenli alanı.
-- 3–5 hedef. Aşama 2: Bugün · Plan · Beyin · Profil; sağda ayrık, yuvarlak "Ekle" butonu (sekme değil, eylem; D28). Her hedefte ikon **ve** etiket her zaman görünür.
+- 3–5 hedef. Aşama 4B: Bugün · Plan · Beyin · Birlikte · Profil (D48); sağda ayrık, yuvarlak "Ekle" butonu (sekme değil, eylem; D28). Her hedefte ikon **ve** etiket her zaman görünür. Bekleyen iş rozeti (nokta) yalnız Birlikte'de; ekran okuyucu sayıyı okur.
 - Her hedef en az 48×48dp; seçili hedef belirgin gösterge + `Semantics(selected: true)`.
 - `Scaffold(extendBody: true)` ile içerik menünün altına uzanır; listelerin son öğesi menünün arkasında kalmasın diye alt dolgu eklenir.
 - Klavye açıkken gizlenir. Odak oturumu ve sihirbazlarda görünmez (tek amaç kuralı).
@@ -171,6 +171,32 @@ Kaçınılacaklar (frontend-design): her etikette TÜMÜ BÜYÜK HARF, başlıkt
 | Gelen arama | `call` |
 | Yeniden başlat | `restart_alt` |
 | Odak ekranındaki bölge ışıması | `psychology` (Beyin ile aynı kavram) |
+| Birlikte (sekme) | `diversity_3` |
+| Arkadaş davet et / arkadaş ekle | `person_add` |
+| Arkadaşlıktan çıkar | `person_remove` |
+| QR kodu tara | `qr_code_scanner` |
+| Partner | `favorite` |
+| Partnerliği bitir | `heart_broken` |
+| Sıralama | `leaderboard` |
+| Gizlilik / kilitli bölüm | `lock` |
+| Görünürlük istisnası | `visibility` |
+| Ortak etkinlik | `event_upcoming` |
+| Ortak boş zaman | `hourglass_empty` (Boş zaman dilimi ile aynı kavram) |
+| Ortak odak | `timer` (Odak oturumu ile aynı kavram) |
+| Beyin karşılaştır | `compare_arrows` |
+| Şikâyet et | `report` |
+| Engelle / askı | `block` |
+| Kopyala | `content_copy` |
+| Mesaj gönder (eylem) | `send` |
+| Mikrofon açık / kapalı | `mic` · `mic_off` |
+| Kişinin sesi açık / kapalı | `volume_up` · `volume_off` |
+| Sohbet bildirimi kapalı | `notifications_off` |
+| Sunucu yok | `cloud_off` |
+| Kamera yok | `no_photography` |
+| Hesap | `account_circle` |
+| Hesabı sil | `delete_forever` |
+| Bütün kategoriler | `select_all` |
+| Kaydet (satır içi alan) | `check` |
 
 ## 9. Erişilebilirlik
 - **Kontrast (WCAG 2.2 AA):** normal metin ≥ 4.5:1; büyük metin, ikon ve arayüz bileşeni sınırları ≥ 3:1. Yüksek Kontrast teması AAA (7:1) hedefler. Her tema açık ve koyu modda ölçülür.

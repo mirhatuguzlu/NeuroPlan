@@ -8,8 +8,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:neuroplan_core/neuroplan_core.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'app/app.dart';
+import 'app/env.dart';
 import 'app/providers.dart';
 import 'data/local/app_database.dart';
 
@@ -19,6 +21,12 @@ Future<void> main() async {
     jsonDecode(await rootBundle.loadString('assets/seed/system.json'))
         as Map<String, Object?>,
   );
+  if (Env.backendConfigured) {
+    await Supabase.initialize(
+      url: Env.supabaseUrl,
+      publishableKey: Env.supabaseAnonKey,
+    );
+  }
   final db = AppDatabase(driftDatabase(name: 'neuroplan'), systemData: system);
   final container = ProviderContainer(
     overrides: [databaseProvider.overrideWithValue(db)],
@@ -33,6 +41,10 @@ Future<void> main() async {
   await container.read(profileRepositoryProvider).ensure(timezone: tz);
   // Motor sürümü değiştiyse beyin olayları oturumlardan yeniden türetilir (D39).
   unawaited(container.read(brainRepositoryProvider).rebuildIfNeeded());
+  // İlk bağlantıda misafir oturumu açılır; her oturum değişiminde eşitleme koşar (ARCHITECTURE §5.4).
+  final sync = container.read(syncSchedulerProvider)?..start();
+  container.listen(authUserProvider, (_, _) => sync?.syncNow());
+  unawaited(container.read(authServiceProvider).ensureGuest());
   LicenseRegistry.addLicense(_assetLicenses);
   runApp(
     UncontrolledProviderScope(

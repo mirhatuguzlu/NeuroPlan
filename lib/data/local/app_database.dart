@@ -109,6 +109,17 @@ class AppDatabase extends _$AppDatabase {
     SyncedTable(brainEvents, BrainEvent.fromJson, appendOnly: true),
   ];
 
+  /// Hesap silinince (DB_SCHEMA §6.3): kullanıcı verisinin hepsi gider, sistem tabloları kalır.
+  Future<void> wipeUserData() => transaction(() async {
+    await customStatement('PRAGMA defer_foreign_keys = ON');
+    for (final t in syncedTables.reversed) {
+      await delete(t.info).go();
+    }
+    await delete(brainSnapshots).go();
+    await delete(syncOutbox).go();
+    await delete(syncState).go();
+  });
+
   Future<void> _seedSystemData() async {
     await batch(
       (b) => b.insertAll(rootCategories, [

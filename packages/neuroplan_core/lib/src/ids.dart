@@ -16,3 +16,10 @@ String ruleInstanceId(String ruleId, String occurrenceDate) =>
 /// "Dönem başına N kez" oluşumunun kimliği: dönemin ilk günü + sıra (DB_SCHEMA §3.8).
 String perPeriodInstanceId(String ruleId, String periodStart, int index) =>
     _uuid.v5(neuroplanNamespace, 'period:$ruleId:$periodStart:$index');
+
+/// Ortak etkinliğin kişinin kendi planındaki kopyası (Aşama 4B): her cihazda aynı kimlik.
+String sharedMirrorActivityId(String sharedActivityId) =>
+    _uuid.v5(neuroplanNamespace, 'shared:$sharedActivityId');
+
+String sharedMirrorRuleId(String sharedActivityId) =>
+    _uuid.v5(neuroplanNamespace, 'shared-rule:$sharedActivityId');

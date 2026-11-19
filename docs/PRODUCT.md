@@ -112,14 +112,16 @@ Kullanıcı hayatını aşağıdaki öğe türleriyle tanımlar. Her öğe bir k
 - `I18N-3` Tarih, saat, sayı biçimleri yerel ayara göre.
 
 ### 5.10 Sosyal (`SOCIAL`) — v1
-- `SOCIAL-1` Arkadaş ve partner **yalnızca davetle** eklenir (davet bağlantısı / kodu). Herkese açık arama, öneri, keşfet yok.
-- `SOCIAL-2` Görünürlük kategori bazında: gizli / arkadaşlar / partner. Varsayılan gizli.
-- `SOCIAL-3` Canlı ortak odak oturumu; isteğe bağlı sesli. Ses kaydedilmez.
-- `SOCIAL-4` Ortak aktivite planlama.
-- `SOCIAL-5` Ortak boş zaman bulma: yalnızca “boş / dolu” bilgisi paylaşılır, iş içerikleri paylaşılmaz.
-- `SOCIAL-6` Mesajlaşma (birebir; grup mesajı açık konu).
-- `SOCIAL-7` Beyin karşılaştırma ve sıralama tablosu yalnızca arkadaşlar arasında.
-- `SOCIAL-8` Güvenlik: engelle, şikâyet et, daveti geri al, arkadaşlıktan çıkar her sosyal ekrandan erişilebilir.
+Aşama 4B'de uygulandı; güvenlik ve uyum: [SOCIAL_SAFETY.md](SOCIAL_SAFETY.md), kararlar D42–D48.
+- `SOCIAL-0` Sosyal özellikler Google hesabı ve **15 yaş** ister (D43). 15–17 yaş sıkı modda: genel sıralama yok, süreklilik metriği yok, kullanıcı adıyla bulunabilirlik kapalı başlar.
+- `SOCIAL-1` Arkadaş ve partner **yalnızca davetle** eklenir: davet kodu, QR kodu ya da tam kullanıcı adı (yalnız bulunabilirliği açık hesaba). Herkese açık arama, öneri, keşfet, rastgele eşleşme yok. Partner karşılıklı onayla kurulur; kişi başına bir partner (veritabanı kısıtı).
+- `SOCIAL-2` Plan görünürlüğü kategori bazında: tam / başlık ve saat / meşgul / gizli; kitle partner ve arkadaşlar ayrı; kişi bazında istisna ("bu kişiye tam göster"). Kural yoksa partner "başlık ve saat", diğer arkadaşlar "meşgul" (D44). Kurallar veritabanında uygulanır.
+- `SOCIAL-3` Canlı ortak odak oturumu (en çok 4 kişi, sayaçlar sunucu anıyla); isteğe bağlı sesli sohbet, mikrofon kapalı başlar. Ses kaydedilmez. Birlikte tamamlanan oturum küçük bir ortak bağlantı kazandırır.
+- `SOCIAL-4` Ortak etkinlik ve proje: kabul edilince herkesin planına düşer, ilerleme paylaşılır, değişiklikler onaya gider.
+- `SOCIAL-5` Ortak boş zaman bulma: yalnızca boş aralıklar döner, iş içerikleri paylaşılmaz.
+- `SOCIAL-6` Mesajlaşma: birebir, yazılı + hazır tepkiler; fotoğraf/dosya yok; küfür yıldızlanır; hız sınırı; odak sırasında bildirim susar. Grup mesajı açık konu.
+- `SOCIAL-7` Beyin karşılaştırma (arkadaş izin verdiyse, sunucuda hesaplanan beyin) ve sıralama (arkadaşlar; isteğe bağlı genel tablo yalnız yetişkinler). Haftalık, odak dakikası + süreklilik, yalnız doğrulanan oturumlar.
+- `SOCIAL-8` Güvenlik: engelle, şikâyet et, daveti geri al, arkadaşlıktan çıkar her sosyal ekrandan erişilebilir; şikâyetler Supabase'de incelenir.
 
 ### 5.11 Abonelik (`SUB`) — ileride
 - `SUB-1` Google Play Billing (iOS'ta App Store). Hangi özelliklerin ücretli olacağı açık konu.

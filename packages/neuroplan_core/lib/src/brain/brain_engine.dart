@@ -58,6 +58,7 @@ final class BrainSession {
     this.longestRunSeconds = 0,
     this.completedCycles = 0,
     this.recoveredEscapes = 0,
+    this.cofocusPeersCompleted = 0,
   });
 
   final String id;
@@ -76,6 +77,9 @@ final class BrainSession {
 
   /// 10 sn içinde geri dönülen, sayılan kaçışlar (arama, ekran kapanması sayılmaz).
   final int recoveredEscapes;
+
+  /// Aynı ortak odak oturumunu tamamlayan öteki katılımcı sayısı (sunucudan öğrenilir).
+  final int cofocusPeersCompleted;
 
   bool get completed => outcome == 'completed';
 }
@@ -150,6 +154,17 @@ List<BrainEventDraft> deriveBrainEvents(
     ).entries) {
       final (a, b) = _split(key);
       if (value > 0) events.add(link(a, b, value, 'deep:${s.id}'));
+    }
+  }
+
+  // Ortak odak: arkadaşıyla birlikte tamamlanan oturum küçük bir ortak bağlantı kazandırır.
+  if (s.cofocusPeersCompleted > 0) {
+    for (final MapEntry(:key, :value) in distribute(
+      config.cofocusLink,
+      _pairs(w, w),
+    ).entries) {
+      final (a, b) = _split(key);
+      if (value > 0) events.add(link(a, b, value, 'cofocus:${s.id}'));
     }
   }
 

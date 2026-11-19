@@ -20,6 +20,12 @@ import '../ui/features/profile/about_screen.dart';
 import '../ui/features/profile/profile_screen.dart';
 import '../ui/features/project/project_screen.dart';
 import '../ui/features/today/today_screen.dart';
+import '../ui/features/together/cofocus_screens.dart';
+import '../ui/features/together/friends_screens.dart';
+import '../ui/features/together/messages_screens.dart';
+import '../ui/features/together/plan_privacy_screens.dart';
+import '../ui/features/together/shared_screens.dart';
+import '../ui/features/together/together_screen.dart';
 import 'providers.dart';
 import 'transitions.dart';
 
@@ -113,6 +119,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         parentNavigatorKey: _rootKey,
         pageBuilder: (_, s) => sharedAxisPage(s, const AboutScreen()),
       ),
+      ..._togetherRoutes,
       GoRoute(
         path: '/focus',
         parentNavigatorKey: _rootKey,
@@ -173,6 +180,14 @@ final routerProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(
+                path: '/together',
+                pageBuilder: (_, s) => _tab(s, const TogetherScreen()),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
                 path: '/profile',
                 pageBuilder: (_, s) => _tab(s, const ProfileScreen()),
               ),
@@ -183,3 +198,65 @@ final routerProvider = Provider<GoRouter>((ref) {
     ],
   );
 });
+
+GoRoute _page(String path, Widget Function(GoRouterState s) build) => GoRoute(
+  path: path,
+  parentNavigatorKey: _rootKey,
+  pageBuilder: (_, s) => sharedAxisPage(s, build(s)),
+);
+
+/// Birlikte'nin tek amaçlı ekranları (Aşama 4B).
+final _togetherRoutes = [
+  _page('/together/friends', (_) => const FriendsScreen()),
+  _page(
+    '/together/friend/:id',
+    (s) => FriendScreen(userId: s.pathParameters['id']!),
+  ),
+  _page(
+    '/together/friend/:id/plan',
+    (s) => FriendPlanScreen(userId: s.pathParameters['id']!),
+  ),
+  _page('/together/invite', (_) => const InviteScreen()),
+  _page('/together/scan', (_) => const ScanScreen()),
+  _page('/together/privacy', (_) => const PrivacyScreen()),
+  _page('/together/messages', (_) => const ConversationsScreen()),
+  _page(
+    '/together/chat/:id',
+    (s) => ChatScreen(
+      conversationId: s.pathParameters['id']!,
+      name: s.uri.queryParameters['name'] ?? '',
+      friendId: s.uri.queryParameters['friend'] ?? '',
+    ),
+  ),
+  _page(
+    '/together/report',
+    (s) => ReportScreen(
+      targetType: s.uri.queryParameters['type'] ?? 'user',
+      targetId: s.uri.queryParameters['target'],
+      userId: s.uri.queryParameters['user'],
+    ),
+  ),
+  _page('/together/leaderboard', (_) => const LeaderboardScreen()),
+  _page('/together/shared', (_) => const SharedListScreen()),
+  _page(
+    '/together/shared/new',
+    (s) => SharedNewScreen(
+      start: DateTime.tryParse(s.uri.queryParameters['start'] ?? ''),
+      end: DateTime.tryParse(s.uri.queryParameters['end'] ?? ''),
+      with_: [
+        for (final id in (s.uri.queryParameters['with'] ?? '').split(','))
+          if (id.isNotEmpty) id,
+      ],
+    ),
+  ),
+  _page(
+    '/together/shared/:id/change',
+    (s) => SharedChangeScreen(id: s.pathParameters['id']!),
+  ),
+  _page('/together/free-time', (_) => const FreeTimeScreen()),
+  _page('/together/cofocus/new', (_) => const CofocusNewScreen()),
+  _page(
+    '/together/cofocus/:id',
+    (s) => CofocusLobbyScreen(id: s.pathParameters['id']!),
+  ),
+];

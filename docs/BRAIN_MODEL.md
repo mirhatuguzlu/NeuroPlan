@@ -44,6 +44,7 @@ Bütün sabitler `brain_config.dart`'tadır (`BrainConfig`). Oranlar binde birdi
 | `deepLinkPerMinute` | 20 | Derin çalışma bağ kalınlaşması |
 | `consecutiveDayLink` / `maxConsecutiveDays` | 100 / 7 | Art arda gün bağı |
 | `crossCategoryLink` | 300 | Aynı gün farklı kategori bağı |
+| `cofocusLink` | 200 | Arkadaşla birlikte tamamlanan ortak odak bağı (Aşama 4B) |
 | `halfLifeDays` / `brightnessFloorPermille` | 14 / 250 | Sönme |
 
 ### 2.1 Türetme: `deriveBrainEvents(oturum, geçmiş, ağırlıklar)`
@@ -62,6 +63,7 @@ Bütün sabitler `brain_config.dart`'tadır (`BrainConfig`). Oranlar binde birdi
   - Derin çalışma: `en_uzun_kesintisiz_dakika × 20`, kategorinin bölge çiftlerine ağırlık çarpımıyla dağıtılır. Tek bölgeli kategoride bölge içi bağdır.
   - Art arda gün: aynı kök kategori dün de tamamlandıysa, kategorinin her bölgesine bölge içi `100 × min(seri, 7)`. Seri dünden geriye kesintisiz gün sayısıdır. Anahtar gün + kategori başına tekildir; günün ikinci oturumu yeni bağ eklemez.
   - Aynı gün farklı kategori: bugün başka bir kök kategoride daha önce tamamlanan oturum varsa, iki kategorinin bölgeleri arasına toplam 300 (ağırlık çarpımıyla; aynı bölge kendisiyle eşleşmez). Gün × kategori çifti başına bir kez.
+- **Ortak odak** (Aşama 4B, D47): oturum ortak odakta tamamlandıysa ve aynı ortak oturumu en az bir arkadaş da tamamladıysa `cofocusLink = 200` bağlantı, kategorinin bölge çiftlerine (derin çalışma gibi) dağıtılır. Sayı sunucudan öğrenilir: istemcide `sync_state` `cofocus.peers.<oturum>`, sunucuda `cofocus_participants`. Anahtar `cofocus:<oturum>:<a>:<b>:v2`. Kural yalnız yeni veriyi etkilediği için motor sürümü değişmedi.
 - **Ceza** (`penalty`, D31): bozulan oturum kazanç getirmez; `odak_dakikası × 1000` kazançla aynı dağıtımla.
 - **Tekilleştirme anahtarları:** `gain:<oturum>:<bölge>:v2`, `penalty:…`, `deep:<oturum>:<a>:<b>:v2`, `streak:<gün>:<kök>:<a>:<a>:v2`, `cross:<gün>:<kök1>:<kök2>:<a>:<b>:v2`.
 
@@ -73,7 +75,10 @@ Bütün sabitler `brain_config.dart`'tadır (`BrainConfig`). Oranlar binde birdi
 - Anlık görüntü `brain_snapshots`'a yazılır; olay özeti (`eventsHash`, FNV-1a) aynıysa yeniden yazılmaz.
 
 ### 2.3 Test vektörü
-`packages/neuroplan_core/test/vectors/brain_v2.json`: altı oturum, beklenen olaylar ve durum. Sunucu hesabı (ARCHITECTURE §7) bununla eşitliği kanıtlar. Güncellemek: `UPDATE_VECTORS=1 dart test test/brain_fold_test.dart`.
+`packages/neuroplan_core/test/vectors/brain_v2.json`: altı oturum, beklenen olaylar ve durum. Sunucu hesabı (ARCHITECTURE §7) bununla eşitliği kanıtlar. Aşama 4B: `brain_snapshot` Edge Function aynı Dart kodunu `dart compile js` ile çalıştırır (`packages/neuroplan_core/tool/server_brain_js.dart` → `supabase/functions/brain_snapshot/server_brain.js`); `test/server_brain_test.dart` istemci türetmesiyle eşitliği denetler. Çekirdek değişince JS yeniden derlenir:
+  ```bash
+  cd packages/neuroplan_core && dart compile js -O2 --no-source-maps -o ../../supabase/functions/brain_snapshot/server_brain.js tool/server_brain_js.dart
+  ``` Güncellemek: `UPDATE_VECTORS=1 dart test test/brain_fold_test.dart`.
 
 ## 3. Çizim planı (`render_plan.dart`, Dart'ta)
 - Bir nöron bir noktadır. Toplam nokta kademe üst sınırını aşarsa noktalar bölgelere toplamla orantılı dağıtılır ve fazlası **ışıma** olarak yansır: `ışıma = parlaklık × (1 + 0,25 × log2(toplam / üst_sınır))`, en çok 1000.

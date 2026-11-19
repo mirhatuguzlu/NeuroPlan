@@ -30,6 +30,10 @@ abstract interface class FocusPlatform {
   Future<void> restoreDnd();
 
   Future<void> showOngoing(OngoingNotice notice);
+
+  /// Ortak odakta mikrofon açıkken kalıcı bildirimin servisine `microphone` türü eklenir
+  /// (Android 14: mikrofon türlü servis uygulama öndeyken başlatılır).
+  Future<void> setMicrophoneInUse(bool inUse);
   Future<void> stopOngoing();
 
   /// 10 sn geri sayan uyarı; [deadline]'da kendiliğinden "bozuldu"ya döner (D35).
@@ -139,6 +143,16 @@ class AndroidFocusPlatform implements FocusPlatform {
   static const _phaseId = 902;
   static const _ongoingChannel = 'focus_ongoing';
 
+  var _microphone = false;
+  OngoingNotice? _lastOngoing;
+
+  @override
+  Future<void> setMicrophoneInUse(bool inUse) async {
+    if (_microphone == inUse) return;
+    _microphone = inUse;
+    if (_lastOngoing case final n?) await showOngoing(n);
+  }
+
   @override
   late final Stream<FocusSignal> signals = _events
       .receiveBroadcastStream()
@@ -209,6 +223,7 @@ class AndroidFocusPlatform implements FocusPlatform {
 
   @override
   Future<void> showOngoing(OngoingNotice n) async {
+    _lastOngoing = n;
     await _n.ensure();
     final at = n.countdownTo ?? n.countUpFrom;
     await _n.android?.startForegroundService(
@@ -218,6 +233,8 @@ class AndroidFocusPlatform implements FocusPlatform {
       startType: AndroidServiceStartType.startNotSticky,
       foregroundServiceTypes: {
         AndroidServiceForegroundType.foregroundServiceTypeSpecialUse,
+        if (_microphone)
+          AndroidServiceForegroundType.foregroundServiceTypeMicrophone,
       },
       notificationDetails: AndroidNotificationDetails(
         _ongoingChannel,
@@ -260,6 +277,7 @@ class AndroidFocusPlatform implements FocusPlatform {
 
   @override
   Future<void> stopOngoing() async {
+    _lastOngoing = null;
     await _n.ensure();
     await _n.android?.stopForegroundService();
   }
@@ -355,6 +373,8 @@ class _NoFocusPlatform implements FocusPlatform {
   Future<void> showOngoing(OngoingNotice notice) async {}
   @override
   Future<void> stopOngoing() async {}
+  @override
+  Future<void> setMicrophoneInUse(bool inUse) async {}
   @override
   Future<void> escapeAlert(DateTime deadline, AlertTexts texts) async {}
   @override

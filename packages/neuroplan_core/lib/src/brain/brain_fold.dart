@@ -50,6 +50,33 @@ final class BrainState {
 
   bool get isEmpty => regions.values.every((r) => r.total == 0);
 
+  /// [toJson]'un tersi: sunucuda hesaplanan beyin (brain_snapshot) bu biçimde gelir.
+  factory BrainState.fromJson(Map<String, Object?> j, DateTime asOf) =>
+      BrainState(
+        asOf,
+        {
+          for (final MapEntry(:key, :value)
+              in (j['regions']! as Map).cast<String, Map>().entries)
+            key: RegionState(key)
+              ..lit = (value['lit'] as num).toInt()
+              ..dimmed = (value['dimmed'] as num).toInt()
+              ..brightness = (value['brightness'] as num).toInt()
+              ..lastActive = switch (value['last_active']) {
+                final String s => DateTime.parse(s),
+                _ => null,
+              }
+              ..byRoot.addAll({
+                for (final MapEntry(:key, :value)
+                    in ((value['by_root'] as Map?) ?? const {}).entries)
+                  key as String: (value as num).toInt(),
+              }),
+        },
+        {
+          for (final c in (j['connections']! as List).cast<Map>())
+            '${c['a']}|${c['b']}': (c['strength'] as num).toInt(),
+        },
+      );
+
   /// `brain_snapshots.state` biçimi (DB_SCHEMA §4.4).
   Map<String, Object?> toJson() => {
     'regions': {for (final r in regions.values) r.key: r.toJson()},

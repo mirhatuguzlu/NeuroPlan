@@ -2640,6 +2640,1740 @@ abstract class L10n {
   /// In tr, this message translates to:
   /// **'{minutes} dk'**
   String regionMinutes(int minutes);
+
+  /// No description provided for @navTogether.
+  ///
+  /// In tr, this message translates to:
+  /// **'Birlikte'**
+  String get navTogether;
+
+  /// No description provided for @navBadge.
+  ///
+  /// In tr, this message translates to:
+  /// **'{label}, {count} bekleyen'**
+  String navBadge(String label, int count);
+
+  /// No description provided for @secAccount.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hesap'**
+  String get secAccount;
+
+  /// No description provided for @accountGoogle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Google hesabı'**
+  String get accountGoogle;
+
+  /// No description provided for @accountGuest.
+  ///
+  /// In tr, this message translates to:
+  /// **'Misafir'**
+  String get accountGuest;
+
+  /// No description provided for @accountGuestBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Verilerin bu cihazda ve yedekte. Google ile bağlanınca kalıcı olur, başka cihazda da açılır.'**
+  String get accountGuestBody;
+
+  /// No description provided for @accountDeviceOnly.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yalnız bu cihazda'**
+  String get accountDeviceOnly;
+
+  /// No description provided for @accountDeviceOnlyBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu kurulumda sunucu ayarı yok; her şey cihazında çalışır.'**
+  String get accountDeviceOnlyBody;
+
+  /// No description provided for @accountOffline.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şu an sunucuya bağlı değil; bağlantı gelince eşitlenir.'**
+  String get accountOffline;
+
+  /// No description provided for @accountDeleteTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hesabı ve verileri sil'**
+  String get accountDeleteTitle;
+
+  /// No description provided for @accountDeleteSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Planın, odak oturumların, beynin ve sosyal verilerin kalıcı olarak silinir.'**
+  String get accountDeleteSubtitle;
+
+  /// No description provided for @accountDeleteBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu işlem geri alınamaz. Arkadaşlıkların, mesajların ve ortak işlerin de silinir. Hakkında yapılmış şikâyetler kimliğin olmadan moderasyon için kalır.'**
+  String get accountDeleteBody;
+
+  /// No description provided for @accountDeleteAction.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kalıcı olarak sil'**
+  String get accountDeleteAction;
+
+  /// No description provided for @accountDeleteError.
+  ///
+  /// In tr, this message translates to:
+  /// **'Silinemedi. İnternet bağlantını kontrol edip tekrar dene.'**
+  String get accountDeleteError;
+
+  /// No description provided for @onbAgeTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Doğum yılın'**
+  String get onbAgeTitle;
+
+  /// No description provided for @onbAgeBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yalnız yıl tutulur. Yaşına göre seni koruyan ayarlar kurulur; 13 yaşından küçükler uygulamayı kullanamaz.'**
+  String get onbAgeBody;
+
+  /// No description provided for @onbAgeTooYoung.
+  ///
+  /// In tr, this message translates to:
+  /// **'NöroPlan 13 yaş ve üstü içindir. Bu yıl seçiliyken devam edilemez.'**
+  String get onbAgeTooYoung;
+
+  /// No description provided for @tgOfflineTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Birlikte bölümü sunucu ister'**
+  String get tgOfflineTitle;
+
+  /// No description provided for @tgOfflineBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu kurulumda sunucu ayarı yok. Plan, odak ve beyin cihazında tam çalışır.'**
+  String get tgOfflineBody;
+
+  /// No description provided for @tgGuestTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Arkadaşlarınla birlikte çalış'**
+  String get tgGuestTitle;
+
+  /// No description provided for @tgGuestBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Birlikte bölümü Google hesabı ister. Bağlanınca verilerin aynı kalır. Kimse seni rastgele bulamaz; arkadaşlık yalnız davetle kurulur.'**
+  String get tgGuestBody;
+
+  /// No description provided for @tgConnectGoogle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Google ile bağlan'**
+  String get tgConnectGoogle;
+
+  /// No description provided for @tgConnected.
+  ///
+  /// In tr, this message translates to:
+  /// **'Google hesabın bağlandı.'**
+  String get tgConnected;
+
+  /// No description provided for @tgConnectedSwitched.
+  ///
+  /// In tr, this message translates to:
+  /// **'Google hesabına geçildi; bu cihazdaki verilerin o hesaba gönderiliyor.'**
+  String get tgConnectedSwitched;
+
+  /// No description provided for @tgConnectError.
+  ///
+  /// In tr, this message translates to:
+  /// **'Google ile bağlanılamadı. Tekrar dene.'**
+  String get tgConnectError;
+
+  /// No description provided for @tgAgeTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Önce doğum yılın'**
+  String get tgAgeTitle;
+
+  /// No description provided for @tgAgeBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sosyal özellikler 15 yaşında açılır; 18 yaşından küçüklerde en sıkı gizlilik ayarları kullanılır. Yalnız yıl tutulur.'**
+  String get tgAgeBody;
+
+  /// No description provided for @tgBirthYear.
+  ///
+  /// In tr, this message translates to:
+  /// **'Doğum yılı'**
+  String get tgBirthYear;
+
+  /// No description provided for @tgTooYoungTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Birlikte bölümü 15 yaşında açılır'**
+  String get tgTooYoungTitle;
+
+  /// No description provided for @tgTooYoungBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu kural seni korumak için. Plan, odak ve beyin her yaşta tam çalışır.'**
+  String get tgTooYoungBody;
+
+  /// No description provided for @tgSuspendedTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sosyal özellikler geçici olarak kapalı'**
+  String get tgSuspendedTitle;
+
+  /// No description provided for @tgSuspendedBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir şikâyet incelendi ve sosyal özelliklerin {date} tarihine kadar kapatıldı. Plan, odak ve beyin çalışmaya devam eder.'**
+  String tgSuspendedBody(String date);
+
+  /// No description provided for @tgSetupTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Arkadaşların seni nasıl görsün?'**
+  String get tgSetupTitle;
+
+  /// No description provided for @tgSetupBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Takma adın yalnız arkadaşlarına görünür. Kullanıcı adı isteğe bağlıdır; ayarlardan açmazsan kimse seni onunla bulamaz.'**
+  String get tgSetupBody;
+
+  /// No description provided for @tgDisplayName.
+  ///
+  /// In tr, this message translates to:
+  /// **'Takma ad'**
+  String get tgDisplayName;
+
+  /// No description provided for @tgUsernameOptional.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kullanıcı adı (isteğe bağlı)'**
+  String get tgUsernameOptional;
+
+  /// No description provided for @tgUsernameHelp.
+  ///
+  /// In tr, this message translates to:
+  /// **'3–20 karakter: küçük harf, rakam, alt çizgi. Tam adı bilen biri istek gönderebilir, ama yalnız sen bulunabilirliği açarsan.'**
+  String get tgUsernameHelp;
+
+  /// No description provided for @tgNameRequired.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir takma ad yaz.'**
+  String get tgNameRequired;
+
+  /// No description provided for @tgUsernameRule.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kullanıcı adı 3–20 karakter olmalı: küçük harf, rakam ya da alt çizgi.'**
+  String get tgUsernameRule;
+
+  /// No description provided for @tgTermsBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Devam ederek topluluk kurallarını kabul edersin: taciz, nefret söylemi, cinsel içerik, spam ve çocukları tehlikeye atan her şey yasaktır. Her ekranda şikâyet edebilir ve engelleyebilirsin; şikâyetler incelenir.'**
+  String get tgTermsBody;
+
+  /// No description provided for @tgSetupAction.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kabul et ve başla'**
+  String get tgSetupAction;
+
+  /// No description provided for @tgEmptyTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'İlk arkadaşını davet et'**
+  String get tgEmptyTitle;
+
+  /// No description provided for @tgEmptyBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Arkadaşlık yalnız davetle kurulur: kodunu ya da QR kodunu paylaş, ya da onun kodunu gir.'**
+  String get tgEmptyBody;
+
+  /// No description provided for @tgInviteFirst.
+  ///
+  /// In tr, this message translates to:
+  /// **'Arkadaş davet et'**
+  String get tgInviteFirst;
+
+  /// No description provided for @tgCofocusBack.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ortak odak oturumun açık.'**
+  String get tgCofocusBack;
+
+  /// No description provided for @tgOpen.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aç'**
+  String get tgOpen;
+
+  /// No description provided for @tgCofocusInvite.
+  ///
+  /// In tr, this message translates to:
+  /// **'{name} seni ortak odağa çağırıyor.'**
+  String tgCofocusInvite(String name);
+
+  /// No description provided for @tgJoin.
+  ///
+  /// In tr, this message translates to:
+  /// **'Katıl'**
+  String get tgJoin;
+
+  /// No description provided for @tgDecline.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hayır'**
+  String get tgDecline;
+
+  /// No description provided for @tgAccept.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kabul et'**
+  String get tgAccept;
+
+  /// No description provided for @tgPartnerAsked.
+  ///
+  /// In tr, this message translates to:
+  /// **'{name} seni partneri olarak seçmek istiyor.'**
+  String tgPartnerAsked(String name);
+
+  /// No description provided for @tgPartnerDone.
+  ///
+  /// In tr, this message translates to:
+  /// **'Artık partnersiniz.'**
+  String get tgPartnerDone;
+
+  /// No description provided for @tgSecTogether.
+  ///
+  /// In tr, this message translates to:
+  /// **'Birlikte çalış'**
+  String get tgSecTogether;
+
+  /// No description provided for @tgSecPeople.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kişiler'**
+  String get tgSecPeople;
+
+  /// No description provided for @tgSecPrivacy.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gizlilik'**
+  String get tgSecPrivacy;
+
+  /// No description provided for @tgPartnerPlan.
+  ///
+  /// In tr, this message translates to:
+  /// **'Partnerin {name}: planı'**
+  String tgPartnerPlan(String name);
+
+  /// No description provided for @tgChoosePartner.
+  ///
+  /// In tr, this message translates to:
+  /// **'Partner seç'**
+  String get tgChoosePartner;
+
+  /// No description provided for @tgChoosePartnerBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ortak çalışma ve plan görme için daha yakın bir bağ; aynı anda bir partner.'**
+  String get tgChoosePartnerBody;
+
+  /// No description provided for @tgCofocusNew.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ortak odak başlat'**
+  String get tgCofocusNew;
+
+  /// No description provided for @tgCofocusNewBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aynı anda başlayın, herkes kendi işine odaklansın.'**
+  String get tgCofocusNewBody;
+
+  /// No description provided for @tgShared.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ortak etkinlikler'**
+  String get tgShared;
+
+  /// No description provided for @tgFreeTime.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ortak boş zaman bul'**
+  String get tgFreeTime;
+
+  /// No description provided for @tgMessages.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mesajlar'**
+  String get tgMessages;
+
+  /// No description provided for @tgFriends.
+  ///
+  /// In tr, this message translates to:
+  /// **'Arkadaşlar'**
+  String get tgFriends;
+
+  /// No description provided for @tgInvite.
+  ///
+  /// In tr, this message translates to:
+  /// **'Davet et'**
+  String get tgInvite;
+
+  /// No description provided for @tgLeaderboard.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sıralama'**
+  String get tgLeaderboard;
+
+  /// No description provided for @tgPrivacy.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gizlilik ayarları'**
+  String get tgPrivacy;
+
+  /// No description provided for @tgPrivacyBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kim neyi görür: plan, profil, beyin.'**
+  String get tgPrivacyBody;
+
+  /// No description provided for @tgCancel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Vazgeç'**
+  String get tgCancel;
+
+  /// No description provided for @tgPartner.
+  ///
+  /// In tr, this message translates to:
+  /// **'Partner'**
+  String get tgPartner;
+
+  /// No description provided for @tgErrRate.
+  ///
+  /// In tr, this message translates to:
+  /// **'Biraz yavaşla; kısa bir süre sonra tekrar dene.'**
+  String get tgErrRate;
+
+  /// No description provided for @tgErrNetwork.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sunucuya ulaşılamadı. İnternet bağlantını kontrol et.'**
+  String get tgErrNetwork;
+
+  /// No description provided for @tgErrNotFound.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bulunamadı ya da artık geçerli değil.'**
+  String get tgErrNotFound;
+
+  /// No description provided for @tgErrForbidden.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bunu yapmaya iznin yok.'**
+  String get tgErrForbidden;
+
+  /// No description provided for @tgErrNotPublished.
+  ///
+  /// In tr, this message translates to:
+  /// **'Seçtiğin kişilerden biri takvimini henüz paylaşmadı; Birlikte bölümünü açınca paylaşılır.'**
+  String get tgErrNotPublished;
+
+  /// No description provided for @tgErrNotEligible.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sosyal özellikler bu hesapta açık değil.'**
+  String get tgErrNotEligible;
+
+  /// No description provided for @tgErrUsernameTaken.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu kullanıcı adı alınmış.'**
+  String get tgErrUsernameTaken;
+
+  /// No description provided for @tgErrPartnerTaken.
+  ///
+  /// In tr, this message translates to:
+  /// **'Birinizin zaten partneri var; önce o partnerlik bitmeli.'**
+  String get tgErrPartnerTaken;
+
+  /// No description provided for @tgErrAlready.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu zaten yapılmış.'**
+  String get tgErrAlready;
+
+  /// No description provided for @tgErrInvalid.
+  ///
+  /// In tr, this message translates to:
+  /// **'Girilen bilgi geçerli değil.'**
+  String get tgErrInvalid;
+
+  /// No description provided for @tgIncoming.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gelen istekler'**
+  String get tgIncoming;
+
+  /// No description provided for @tgWantsToBeFriends.
+  ///
+  /// In tr, this message translates to:
+  /// **'Arkadaş olmak istiyor'**
+  String get tgWantsToBeFriends;
+
+  /// No description provided for @tgPartnerPending.
+  ///
+  /// In tr, this message translates to:
+  /// **'Partner isteği bekliyor'**
+  String get tgPartnerPending;
+
+  /// No description provided for @tgOutgoing.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gönderdiğin istekler'**
+  String get tgOutgoing;
+
+  /// No description provided for @tgRequestSent.
+  ///
+  /// In tr, this message translates to:
+  /// **'İstek gönderildi'**
+  String get tgRequestSent;
+
+  /// No description provided for @tgWithdraw.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geri al'**
+  String get tgWithdraw;
+
+  /// No description provided for @tgBlocked.
+  ///
+  /// In tr, this message translates to:
+  /// **'Engellediklerin'**
+  String get tgBlocked;
+
+  /// No description provided for @tgUnblock.
+  ///
+  /// In tr, this message translates to:
+  /// **'Engeli kaldır'**
+  String get tgUnblock;
+
+  /// No description provided for @tgUnblocked.
+  ///
+  /// In tr, this message translates to:
+  /// **'Engel kaldırıldı. Yeniden arkadaş olmak için yeni bir davet gerekir.'**
+  String get tgUnblocked;
+
+  /// No description provided for @tgNotFriendTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Artık arkadaş değilsiniz'**
+  String get tgNotFriendTitle;
+
+  /// No description provided for @tgNotFriendBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu kişiyle ilgili hiçbir şey görüntülenemiyor.'**
+  String get tgNotFriendBody;
+
+  /// No description provided for @tgSendMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mesaj gönder'**
+  String get tgSendMessage;
+
+  /// No description provided for @tgSeePlan.
+  ///
+  /// In tr, this message translates to:
+  /// **'Planını gör'**
+  String get tgSeePlan;
+
+  /// No description provided for @tgCompareBrains.
+  ///
+  /// In tr, this message translates to:
+  /// **'Beyinleri karşılaştır'**
+  String get tgCompareBrains;
+
+  /// No description provided for @tgEndPartner.
+  ///
+  /// In tr, this message translates to:
+  /// **'Partnerliği bitir'**
+  String get tgEndPartner;
+
+  /// No description provided for @tgEndPartnerBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Arkadaşlığınız sürer; partnere özel görünürlük biter.'**
+  String get tgEndPartnerBody;
+
+  /// No description provided for @tgAskPartner.
+  ///
+  /// In tr, this message translates to:
+  /// **'Partnerim olsun'**
+  String get tgAskPartner;
+
+  /// No description provided for @tgAskPartnerBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Karşı taraf onaylayınca partner olursunuz.'**
+  String get tgAskPartnerBody;
+
+  /// No description provided for @tgAskPartnerBlocked.
+  ///
+  /// In tr, this message translates to:
+  /// **'Önce şu anki partnerliğini bitirmelisin.'**
+  String get tgAskPartnerBlocked;
+
+  /// No description provided for @tgPartnerRequested.
+  ///
+  /// In tr, this message translates to:
+  /// **'Partner isteği gönderildi.'**
+  String get tgPartnerRequested;
+
+  /// No description provided for @tgShowFull.
+  ///
+  /// In tr, this message translates to:
+  /// **'Planımı bu kişiye tam göster'**
+  String get tgShowFull;
+
+  /// No description provided for @tgShowFullBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Başlık, saat, kategori ve notlar. Bu istisna kategori kurallarının önüne geçer.'**
+  String get tgShowFullBody;
+
+  /// No description provided for @tgSafety.
+  ///
+  /// In tr, this message translates to:
+  /// **'Güvenlik'**
+  String get tgSafety;
+
+  /// No description provided for @tgRemoveFriend.
+  ///
+  /// In tr, this message translates to:
+  /// **'Arkadaşlıktan çıkar'**
+  String get tgRemoveFriend;
+
+  /// No description provided for @tgRemoveFriendBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'{name} artık planını, mesajlarını ve beynini göremez. Yeniden arkadaş olmak için yeni bir davet gerekir.'**
+  String tgRemoveFriendBody(String name);
+
+  /// No description provided for @tgBlock.
+  ///
+  /// In tr, this message translates to:
+  /// **'Engelle'**
+  String get tgBlock;
+
+  /// No description provided for @tgBlockTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'{name} engellensin mi?'**
+  String tgBlockTitle(String name);
+
+  /// No description provided for @tgBlockBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Arkadaşlık ve partnerlik biter, sohbet ikiniz için de kapanır. Seni bulamaz, davet gönderemez ve engellendiğini görmez.'**
+  String get tgBlockBody;
+
+  /// No description provided for @tgBlocked1.
+  ///
+  /// In tr, this message translates to:
+  /// **'Engellendi.'**
+  String get tgBlocked1;
+
+  /// No description provided for @tgReport.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şikâyet et'**
+  String get tgReport;
+
+  /// No description provided for @tgInviteTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Davet kodun'**
+  String get tgInviteTitle;
+
+  /// No description provided for @tgInviteBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kod 7 gün geçerli ve tek kullanımlık. Yalnız güvendiğin kişiyle paylaş.'**
+  String get tgInviteBody;
+
+  /// No description provided for @tgKindFriend.
+  ///
+  /// In tr, this message translates to:
+  /// **'Arkadaş daveti'**
+  String get tgKindFriend;
+
+  /// No description provided for @tgKindPartner.
+  ///
+  /// In tr, this message translates to:
+  /// **'Partner daveti'**
+  String get tgKindPartner;
+
+  /// No description provided for @tgCreateCode.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kod oluştur'**
+  String get tgCreateCode;
+
+  /// No description provided for @tgQrLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Davet kodunun QR görüntüsü: {code}'**
+  String tgQrLabel(String code);
+
+  /// No description provided for @tgExpires.
+  ///
+  /// In tr, this message translates to:
+  /// **'{date} tarihine kadar geçerli'**
+  String tgExpires(String date);
+
+  /// No description provided for @tgCopy.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kopyala'**
+  String get tgCopy;
+
+  /// No description provided for @tgCopied.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kopyalandı.'**
+  String get tgCopied;
+
+  /// No description provided for @tgRevoke.
+  ///
+  /// In tr, this message translates to:
+  /// **'İptal et'**
+  String get tgRevoke;
+
+  /// No description provided for @tgHaveCode.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kodun mu var?'**
+  String get tgHaveCode;
+
+  /// No description provided for @tgCode.
+  ///
+  /// In tr, this message translates to:
+  /// **'Davet kodu'**
+  String get tgCode;
+
+  /// No description provided for @tgScan.
+  ///
+  /// In tr, this message translates to:
+  /// **'QR kodu tara'**
+  String get tgScan;
+
+  /// No description provided for @tgUseCode.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kodu kullan'**
+  String get tgUseCode;
+
+  /// No description provided for @tgCodeRule.
+  ///
+  /// In tr, this message translates to:
+  /// **'Davet kodu 10 karakterdir.'**
+  String get tgCodeRule;
+
+  /// No description provided for @tgRedeemed.
+  ///
+  /// In tr, this message translates to:
+  /// **'{name} ile artık arkadaşsınız.'**
+  String tgRedeemed(String name);
+
+  /// No description provided for @tgRedeemedPartner.
+  ///
+  /// In tr, this message translates to:
+  /// **'{name} ile artık partnersiniz.'**
+  String tgRedeemedPartner(String name);
+
+  /// No description provided for @tgByUsername.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tam kullanıcı adıyla'**
+  String get tgByUsername;
+
+  /// No description provided for @tgByUsernameBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yalnız bulunabilirliği açık hesaplara istek gider. Arama ya da öneri yoktur.'**
+  String get tgByUsernameBody;
+
+  /// No description provided for @tgUsername.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kullanıcı adı'**
+  String get tgUsername;
+
+  /// No description provided for @tgSendRequest.
+  ///
+  /// In tr, this message translates to:
+  /// **'İstek gönder'**
+  String get tgSendRequest;
+
+  /// No description provided for @tgCameraTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kamera açılamadı'**
+  String get tgCameraTitle;
+
+  /// No description provided for @tgCameraBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kamera izni verilmedi ya da kamera yok. Kodu elle de yazabilirsin.'**
+  String get tgCameraBody;
+
+  /// No description provided for @tgScanHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Arkadaşının ekranındaki QR kodu çerçeveye getir.'**
+  String get tgScanHint;
+
+  /// No description provided for @tgPlanOf.
+  ///
+  /// In tr, this message translates to:
+  /// **'{name}: plan'**
+  String tgPlanOf(String name);
+
+  /// No description provided for @tgWeek.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hafta'**
+  String get tgWeek;
+
+  /// No description provided for @tgPlanEmptyTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Paylaşılan bir şey yok'**
+  String get tgPlanEmptyTitle;
+
+  /// No description provided for @tgPlanEmptyBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'{name} bu günlerde bir şey paylaşmıyor ya da planı boş. Neyin görüneceğine {name} karar verir.'**
+  String tgPlanEmptyBody(String name);
+
+  /// No description provided for @tgBusy.
+  ///
+  /// In tr, this message translates to:
+  /// **'Meşgul'**
+  String get tgBusy;
+
+  /// No description provided for @tgPlanReadOnly.
+  ///
+  /// In tr, this message translates to:
+  /// **'Salt okunur. Görünürlüğü planın sahibi seçer.'**
+  String get tgPlanReadOnly;
+
+  /// No description provided for @tgLevelFull.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tam (başlık, saat, not)'**
+  String get tgLevelFull;
+
+  /// No description provided for @tgLevelTitleTime.
+  ///
+  /// In tr, this message translates to:
+  /// **'Başlık ve saat'**
+  String get tgLevelTitleTime;
+
+  /// No description provided for @tgLevelBusy.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sadece \"meşgul\"'**
+  String get tgLevelBusy;
+
+  /// No description provided for @tgLevelHidden.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gizli'**
+  String get tgLevelHidden;
+
+  /// No description provided for @tgLevelDefault.
+  ///
+  /// In tr, this message translates to:
+  /// **'Varsayılan'**
+  String get tgLevelDefault;
+
+  /// No description provided for @tgLevelFullBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Başlık, saat, kategori ve notlar görünür.'**
+  String get tgLevelFullBody;
+
+  /// No description provided for @tgLevelTitleTimeBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Başlık ve saat görünür; not ve kategori görünmez.'**
+  String get tgLevelTitleTimeBody;
+
+  /// No description provided for @tgLevelBusyBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yalnız o saatte meşgul olduğun görünür.'**
+  String get tgLevelBusyBody;
+
+  /// No description provided for @tgLevelHiddenBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hiç görünmez.'**
+  String get tgLevelHiddenBody;
+
+  /// No description provided for @tgLevelDefaultBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Partnere başlık ve saat, diğer arkadaşlara \"meşgul\".'**
+  String get tgLevelDefaultBody;
+
+  /// No description provided for @tgSecProfile.
+  ///
+  /// In tr, this message translates to:
+  /// **'Profil'**
+  String get tgSecProfile;
+
+  /// No description provided for @tgDiscoverable.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kullanıcı adımla bulunabilirim'**
+  String get tgDiscoverable;
+
+  /// No description provided for @tgDiscoverableBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tam olarak @{username} yazan biri istek gönderebilir.'**
+  String tgDiscoverableBody(String username);
+
+  /// No description provided for @tgDiscoverableNoUsername.
+  ///
+  /// In tr, this message translates to:
+  /// **'Önce bir kullanıcı adı gerekir.'**
+  String get tgDiscoverableNoUsername;
+
+  /// No description provided for @tgGlobalBoard.
+  ///
+  /// In tr, this message translates to:
+  /// **'Genel sıralamaya katıl'**
+  String get tgGlobalBoard;
+
+  /// No description provided for @tgGlobalBoardBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Takma adınla, haftalık odak dakikası ve süreklilikle.'**
+  String get tgGlobalBoardBody;
+
+  /// No description provided for @tgGlobalBoardMinor.
+  ///
+  /// In tr, this message translates to:
+  /// **'18 yaşından küçüklerde genel sıralama kapalıdır.'**
+  String get tgGlobalBoardMinor;
+
+  /// No description provided for @tgShareBrain.
+  ///
+  /// In tr, this message translates to:
+  /// **'Arkadaşlarım beynimi görebilsin'**
+  String get tgShareBrain;
+
+  /// No description provided for @tgShareBrainBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Karşılaştırma için; sunucu beyni oturum kayıtlarından hesaplar.'**
+  String get tgShareBrainBody;
+
+  /// No description provided for @tgSecPlanVisibility.
+  ///
+  /// In tr, this message translates to:
+  /// **'Plan görünürlüğü'**
+  String get tgSecPlanVisibility;
+
+  /// No description provided for @tgPlanVisibilityBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Her kategori için seç. Alt kategori kuralı yoksa üst kategoriye bakılır. Kurallar veritabanında uygulanır.'**
+  String get tgPlanVisibilityBody;
+
+  /// No description provided for @tgAllCategories.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bütün kategoriler'**
+  String get tgAllCategories;
+
+  /// No description provided for @tgVisibilityFootnote.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ortak boş zaman aramasında yalnız boş aralıklar paylaşılır; gizli işlerin de \"dolu\" sayılır ama içerikleri hiç gönderilmez.'**
+  String get tgVisibilityFootnote;
+
+  /// No description provided for @tgNoMessagesTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Henüz mesaj yok'**
+  String get tgNoMessagesTitle;
+
+  /// No description provided for @tgNoMessagesBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir arkadaşının sayfasından sohbet başlat.'**
+  String get tgNoMessagesBody;
+
+  /// No description provided for @tgNoMessagesYet.
+  ///
+  /// In tr, this message translates to:
+  /// **'Henüz mesaj yok'**
+  String get tgNoMessagesYet;
+
+  /// No description provided for @tgMessageDeleted.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mesaj silindi'**
+  String get tgMessageDeleted;
+
+  /// No description provided for @tgYou.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sen'**
+  String get tgYou;
+
+  /// No description provided for @tgMuted.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirimler kapalı'**
+  String get tgMuted;
+
+  /// No description provided for @tgReactWith.
+  ///
+  /// In tr, this message translates to:
+  /// **'{emoji} ile tepki ver'**
+  String tgReactWith(String emoji);
+
+  /// No description provided for @tgReportMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mesajı şikâyet et'**
+  String get tgReportMessage;
+
+  /// No description provided for @tgMore.
+  ///
+  /// In tr, this message translates to:
+  /// **'Diğer'**
+  String get tgMore;
+
+  /// No description provided for @tgMute.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirimleri kapat'**
+  String get tgMute;
+
+  /// No description provided for @tgUnmute.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirimleri aç'**
+  String get tgUnmute;
+
+  /// No description provided for @tgChatEmptyTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'{name} ile sohbet'**
+  String tgChatEmptyTitle(String name);
+
+  /// No description provided for @tgChatEmptyBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mesajlar yalnız ikinize görünür. Uygunsuz kelimeler yıldızlanır.'**
+  String get tgChatEmptyBody;
+
+  /// No description provided for @tgMessageHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tepki, kopyala ya da şikâyet için basılı tut'**
+  String get tgMessageHint;
+
+  /// No description provided for @tgWriteMessage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mesaj yaz'**
+  String get tgWriteMessage;
+
+  /// No description provided for @tgSend.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gönder'**
+  String get tgSend;
+
+  /// No description provided for @tgReasonHarassment.
+  ///
+  /// In tr, this message translates to:
+  /// **'Taciz ya da zorbalık'**
+  String get tgReasonHarassment;
+
+  /// No description provided for @tgReasonInappropriate.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uygunsuz içerik'**
+  String get tgReasonInappropriate;
+
+  /// No description provided for @tgReasonSpam.
+  ///
+  /// In tr, this message translates to:
+  /// **'Spam'**
+  String get tgReasonSpam;
+
+  /// No description provided for @tgReasonChildSafety.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çocuk güvenliği'**
+  String get tgReasonChildSafety;
+
+  /// No description provided for @tgReasonOther.
+  ///
+  /// In tr, this message translates to:
+  /// **'Başka bir şey'**
+  String get tgReasonOther;
+
+  /// No description provided for @tgReportBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ne oldu? Şikâyetin incelenir; şikâyet ettiğin kişiye adın söylenmez. Mesaj şikâyetinde mesajın bir kopyası saklanır.'**
+  String get tgReportBody;
+
+  /// No description provided for @tgReportDetails.
+  ///
+  /// In tr, this message translates to:
+  /// **'Açıklama (isteğe bağlı)'**
+  String get tgReportDetails;
+
+  /// No description provided for @tgReportSend.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şikâyeti gönder'**
+  String get tgReportSend;
+
+  /// No description provided for @tgReportThanks.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şikâyetin alındı. İstersen bu kişiyi engelleyebilirsin.'**
+  String get tgReportThanks;
+
+  /// No description provided for @tgReportUrgent.
+  ///
+  /// In tr, this message translates to:
+  /// **'Biri seni ya da başkasını hemen tehlikeye atıyorsa 112\'yi ara.'**
+  String get tgReportUrgent;
+
+  /// No description provided for @tgGlobal.
+  ///
+  /// In tr, this message translates to:
+  /// **'Genel'**
+  String get tgGlobal;
+
+  /// No description provided for @tgMetricFocus.
+  ///
+  /// In tr, this message translates to:
+  /// **'Odak dakikası'**
+  String get tgMetricFocus;
+
+  /// No description provided for @tgMetricStreak.
+  ///
+  /// In tr, this message translates to:
+  /// **'Süreklilik'**
+  String get tgMetricStreak;
+
+  /// No description provided for @tgBoardNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haftalık, pazartesi sıfırlanır. Yalnız sunucuda doğrulanan oturumlar sayılır: çakışan ya da gerçek süreden uzun oturum girmez.'**
+  String get tgBoardNote;
+
+  /// No description provided for @tgGlobalNotJoined.
+  ///
+  /// In tr, this message translates to:
+  /// **'Genel sıralamaya katılmadın.'**
+  String get tgGlobalNotJoined;
+
+  /// No description provided for @tgBoardEmpty.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu hafta henüz tamamlanan oturum yok.'**
+  String get tgBoardEmpty;
+
+  /// No description provided for @tgDays.
+  ///
+  /// In tr, this message translates to:
+  /// **'{n} gün'**
+  String tgDays(int n);
+
+  /// No description provided for @tgSharedNew.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ortak etkinlik öner'**
+  String get tgSharedNew;
+
+  /// No description provided for @tgSharedEmptyTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Henüz ortak etkinlik yok'**
+  String get tgSharedEmptyTitle;
+
+  /// No description provided for @tgSharedEmptyBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir etkinlik ya da proje öner; arkadaşın kabul edince ikinizin planına da düşer.'**
+  String get tgSharedEmptyBody;
+
+  /// No description provided for @tgProgress.
+  ///
+  /// In tr, this message translates to:
+  /// **'{done} / {total}'**
+  String tgProgress(String done, String total);
+
+  /// No description provided for @tgWith.
+  ///
+  /// In tr, this message translates to:
+  /// **'Birlikte: {names}'**
+  String tgWith(String names);
+
+  /// No description provided for @tgStatusConfirmed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Onaylandı'**
+  String get tgStatusConfirmed;
+
+  /// No description provided for @tgStatusCancelled.
+  ///
+  /// In tr, this message translates to:
+  /// **'İptal edildi'**
+  String get tgStatusCancelled;
+
+  /// No description provided for @tgStatusProposed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yanıt bekleniyor'**
+  String get tgStatusProposed;
+
+  /// No description provided for @tgChangeProposed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Değişiklik önerildi: {text}'**
+  String tgChangeProposed(String text);
+
+  /// No description provided for @tgChangeWaiting.
+  ///
+  /// In tr, this message translates to:
+  /// **'Onay bekleyen değişiklik: {text}'**
+  String tgChangeWaiting(String text);
+
+  /// No description provided for @tgSharedAccepted.
+  ///
+  /// In tr, this message translates to:
+  /// **'Planına eklendi.'**
+  String get tgSharedAccepted;
+
+  /// No description provided for @tgSharedCancel.
+  ///
+  /// In tr, this message translates to:
+  /// **'İptal et'**
+  String get tgSharedCancel;
+
+  /// No description provided for @tgSharedCancelBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Etkinlik herkesin planından kalkar.'**
+  String get tgSharedCancelBody;
+
+  /// No description provided for @tgSharedLeave.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ayrıl'**
+  String get tgSharedLeave;
+
+  /// No description provided for @tgSharedLeaveBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Etkinlik senin planından kalkar; diğerleri için sürer.'**
+  String get tgSharedLeaveBody;
+
+  /// No description provided for @tgSuggestChange.
+  ///
+  /// In tr, this message translates to:
+  /// **'Değişiklik öner'**
+  String get tgSuggestChange;
+
+  /// No description provided for @tgPatchTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'ad \"{title}\"'**
+  String tgPatchTitle(String title);
+
+  /// No description provided for @tgSharedKindTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ne planlıyorsunuz?'**
+  String get tgSharedKindTitle;
+
+  /// No description provided for @tgKindActivity.
+  ///
+  /// In tr, this message translates to:
+  /// **'Etkinlik'**
+  String get tgKindActivity;
+
+  /// No description provided for @tgKindActivityBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Belli bir gün ve saatte birlikte.'**
+  String get tgKindActivityBody;
+
+  /// No description provided for @tgKindProject.
+  ///
+  /// In tr, this message translates to:
+  /// **'Proje'**
+  String get tgKindProject;
+
+  /// No description provided for @tgKindProjectBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Toplam süre ve son tarih; ilerleme paylaşılır.'**
+  String get tgKindProjectBody;
+
+  /// No description provided for @tgSharedNameTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Adı ne olsun?'**
+  String get tgSharedNameTitle;
+
+  /// No description provided for @tgSharedName.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ad'**
+  String get tgSharedName;
+
+  /// No description provided for @tgSharedNotes.
+  ///
+  /// In tr, this message translates to:
+  /// **'Not (isteğe bağlı)'**
+  String get tgSharedNotes;
+
+  /// No description provided for @tgSharedWithTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kiminle?'**
+  String get tgSharedWithTitle;
+
+  /// No description provided for @tgSharedWhenTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ne zaman?'**
+  String get tgSharedWhenTitle;
+
+  /// No description provided for @tgSharedDeadlineTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son tarih ve toplam süre'**
+  String get tgSharedDeadlineTitle;
+
+  /// No description provided for @tgSharedTotal.
+  ///
+  /// In tr, this message translates to:
+  /// **'Toplam: {duration}'**
+  String tgSharedTotal(String duration);
+
+  /// No description provided for @tgFrom.
+  ///
+  /// In tr, this message translates to:
+  /// **'Başlangıç'**
+  String get tgFrom;
+
+  /// No description provided for @tgTo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bitiş'**
+  String get tgTo;
+
+  /// No description provided for @tgEndAfterStart.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bitiş başlangıçtan sonra olmalı.'**
+  String get tgEndAfterStart;
+
+  /// No description provided for @tgSharedRootTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hangi kök kategori?'**
+  String get tgSharedRootTitle;
+
+  /// No description provided for @tgSharedRootBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Odak oturumların beyinde bu kategoriye göre büyür.'**
+  String get tgSharedRootBody;
+
+  /// No description provided for @tgNoCategory.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kategori yok'**
+  String get tgNoCategory;
+
+  /// No description provided for @tgSharedConfirmTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gönderilsin mi?'**
+  String get tgSharedConfirmTitle;
+
+  /// No description provided for @tgSharedConfirmBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kabul eden herkesin planına sabit iş olarak düşer. Sonraki değişiklikler karşı tarafın onayına gider.'**
+  String get tgSharedConfirmBody;
+
+  /// No description provided for @tgSharedSend.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gönder'**
+  String get tgSharedSend;
+
+  /// No description provided for @tgSharedSent.
+  ///
+  /// In tr, this message translates to:
+  /// **'Öneri gönderildi.'**
+  String get tgSharedSent;
+
+  /// No description provided for @tgChangeBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Değişiklik diğer katılımcıların onayına gider; hepsi onaylayınca uygulanır.'**
+  String get tgChangeBody;
+
+  /// No description provided for @tgSendChange.
+  ///
+  /// In tr, this message translates to:
+  /// **'Onaya gönder'**
+  String get tgSendChange;
+
+  /// No description provided for @tgChangeSent.
+  ///
+  /// In tr, this message translates to:
+  /// **'Değişiklik onaya gönderildi.'**
+  String get tgChangeSent;
+
+  /// No description provided for @tgFreeTimeBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Seçtiğin arkadaşlarla önümüzdeki 7 günde herkesin boş olduğu saatleri bulur. Kimin ne yaptığı gösterilmez.'**
+  String get tgFreeTimeBody;
+
+  /// No description provided for @tgFreeTimeLength.
+  ///
+  /// In tr, this message translates to:
+  /// **'En az ne kadar?'**
+  String get tgFreeTimeLength;
+
+  /// No description provided for @tgFreeTimeFind.
+  ///
+  /// In tr, this message translates to:
+  /// **'Boş zaman bul'**
+  String get tgFreeTimeFind;
+
+  /// No description provided for @tgFreeTimeNone.
+  ///
+  /// In tr, this message translates to:
+  /// **'Herkesin boş olduğu bir aralık bulunamadı. Süreyi kısaltmayı dene.'**
+  String get tgFreeTimeNone;
+
+  /// No description provided for @tgPlanHere.
+  ///
+  /// In tr, this message translates to:
+  /// **'Burada planla'**
+  String get tgPlanHere;
+
+  /// No description provided for @tgCompareTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sen ve {name}'**
+  String tgCompareTitle(String name);
+
+  /// No description provided for @tgCompareNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'Beyin bir metafordur, ölçüm değildir. Arkadaşının beyni sunucuda oturum kayıtlarından hesaplanır.'**
+  String get tgCompareNote;
+
+  /// No description provided for @tgLeftYou.
+  ///
+  /// In tr, this message translates to:
+  /// **'Solda sen'**
+  String get tgLeftYou;
+
+  /// No description provided for @tgRightFriend.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sağda {name}'**
+  String tgRightFriend(String name);
+
+  /// No description provided for @tgNeurons.
+  ///
+  /// In tr, this message translates to:
+  /// **'{n} nöron'**
+  String tgNeurons(int n);
+
+  /// No description provided for @tgCofocus.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ortak odak'**
+  String get tgCofocus;
+
+  /// No description provided for @tgCofocusIntro.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aynı anda başlarsınız; herkes kendi işini ve modunu seçer. Biri planı bozarsa diğerleri sakin bir notla görür. Birlikte tamamlanan oturum küçük bir ortak bağlantı kazandırır.'**
+  String get tgCofocusIntro;
+
+  /// No description provided for @tgCofocusWho.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kimler'**
+  String get tgCofocusWho;
+
+  /// No description provided for @tgVoice.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sesli sohbet'**
+  String get tgVoice;
+
+  /// No description provided for @tgVoiceBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'İsteğe bağlı. Mikrofon kapalı başlar, kayıt yapılmaz.'**
+  String get tgVoiceBody;
+
+  /// No description provided for @tgCofocusInviteAction.
+  ///
+  /// In tr, this message translates to:
+  /// **'Davet et'**
+  String get tgCofocusInviteAction;
+
+  /// No description provided for @tgCofocusEnded.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu ortak oturum bitti.'**
+  String get tgCofocusEnded;
+
+  /// No description provided for @tgCofocusLive.
+  ///
+  /// In tr, this message translates to:
+  /// **'Oturum başladı. İşini seçip katıl.'**
+  String get tgCofocusLive;
+
+  /// No description provided for @tgCofocusHostHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Herkes işini seçince başlat; sayaçlar aynı anda başlar.'**
+  String get tgCofocusHostHint;
+
+  /// No description provided for @tgCofocusGuestHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Başlatan başlatınca sayacın kendiliğinden başlar.'**
+  String get tgCofocusGuestHint;
+
+  /// No description provided for @tgCofocusMine.
+  ///
+  /// In tr, this message translates to:
+  /// **'Senin işin'**
+  String get tgCofocusMine;
+
+  /// No description provided for @tgCofocusNoTasks.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugün planında bekleyen iş yok. Önce bir iş ekle.'**
+  String get tgCofocusNoTasks;
+
+  /// No description provided for @tgCofocusStart.
+  ///
+  /// In tr, this message translates to:
+  /// **'Herkesi başlat'**
+  String get tgCofocusStart;
+
+  /// No description provided for @tgCofocusJoinNow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şimdi katıl'**
+  String get tgCofocusJoinNow;
+
+  /// No description provided for @tgCofocusLeave.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ayrıl'**
+  String get tgCofocusLeave;
+
+  /// No description provided for @tgPhaseDone.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tamamladı'**
+  String get tgPhaseDone;
+
+  /// No description provided for @tgPhaseBroken.
+  ///
+  /// In tr, this message translates to:
+  /// **'Oturumdan çıktı'**
+  String get tgPhaseBroken;
+
+  /// No description provided for @tgPhaseLeft.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ayrıldı'**
+  String get tgPhaseLeft;
+
+  /// No description provided for @tgPhaseInvited.
+  ///
+  /// In tr, this message translates to:
+  /// **'Davet edildi'**
+  String get tgPhaseInvited;
+
+  /// No description provided for @tgPhaseFocus.
+  ///
+  /// In tr, this message translates to:
+  /// **'Odakta'**
+  String get tgPhaseFocus;
+
+  /// No description provided for @tgPhaseBreak.
+  ///
+  /// In tr, this message translates to:
+  /// **'Molada'**
+  String get tgPhaseBreak;
+
+  /// No description provided for @tgPhasePaused.
+  ///
+  /// In tr, this message translates to:
+  /// **'Duraklattı'**
+  String get tgPhasePaused;
+
+  /// No description provided for @tgPhaseAway.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağlı değil'**
+  String get tgPhaseAway;
+
+  /// No description provided for @tgPhaseLobby.
+  ///
+  /// In tr, this message translates to:
+  /// **'Lobide'**
+  String get tgPhaseLobby;
+
+  /// No description provided for @tgSpeaking.
+  ///
+  /// In tr, this message translates to:
+  /// **'konuşuyor'**
+  String get tgSpeaking;
+
+  /// No description provided for @tgMutePerson.
+  ///
+  /// In tr, this message translates to:
+  /// **'{name} sesini kapat'**
+  String tgMutePerson(String name);
+
+  /// No description provided for @tgUnmutePerson.
+  ///
+  /// In tr, this message translates to:
+  /// **'{name} sesini aç'**
+  String tgUnmutePerson(String name);
+
+  /// No description provided for @tgVoiceNoRecording.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ses kaydedilmez. Birini sessize almak yalnız senin duymanı etkiler.'**
+  String get tgVoiceNoRecording;
+
+  /// No description provided for @tgVoiceConnect.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sese bağlan'**
+  String get tgVoiceConnect;
+
+  /// No description provided for @tgVoiceErrPermission.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mikrofon izni gerekli. Ayarlardan izin verebilirsin.'**
+  String get tgVoiceErrPermission;
+
+  /// No description provided for @tgVoiceErrUnavailable.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sesli sohbet şu an kullanılamıyor.'**
+  String get tgVoiceErrUnavailable;
+
+  /// No description provided for @tgMicOn.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mikrofonu aç'**
+  String get tgMicOn;
+
+  /// No description provided for @tgMicOff.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mikrofonu kapat'**
+  String get tgMicOff;
+
+  /// No description provided for @tgNoticeBroken.
+  ///
+  /// In tr, this message translates to:
+  /// **'{name} oturumdan çıktı. Sen devam edebilirsin.'**
+  String tgNoticeBroken(String name);
+
+  /// No description provided for @tgNoticeCompleted.
+  ///
+  /// In tr, this message translates to:
+  /// **'{name} oturumunu tamamladı.'**
+  String tgNoticeCompleted(String name);
+
+  /// No description provided for @tgNoticeLeft.
+  ///
+  /// In tr, this message translates to:
+  /// **'{name} ayrıldı.'**
+  String tgNoticeLeft(String name);
+
+  /// No description provided for @tgNoticeMessagesTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'NöroPlan'**
+  String get tgNoticeMessagesTitle;
+
+  /// No description provided for @tgNoticeMessagesChannel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Mesajlar'**
+  String get tgNoticeMessagesChannel;
+
+  /// No description provided for @tgNoticeMessagesBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} yeni mesaj'**
+  String tgNoticeMessagesBody(int count);
+
+  /// No description provided for @tgPickMax.
+  ///
+  /// In tr, this message translates to:
+  /// **'En çok {n} kişi seçebilirsin.'**
+  String tgPickMax(int n);
+
+  /// No description provided for @tgCofocusChooseFirst.
+  ///
+  /// In tr, this message translates to:
+  /// **'Başlamak için önce işini seç.'**
+  String get tgCofocusChooseFirst;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

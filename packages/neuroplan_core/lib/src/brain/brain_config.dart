@@ -18,6 +18,7 @@ final class BrainConfig {
     this.consecutiveDayLink = 100,
     this.maxConsecutiveDays = 7,
     this.crossCategoryLink = 300,
+    this.cofocusLink = 200,
     this.halfLifeDays = 14,
     this.brightnessFloorPermille = 250,
   });
@@ -51,6 +52,10 @@ final class BrainConfig {
 
   /// Aynı gün iki farklı kök kategori: iki kategorinin bölgeleri arasına toplam bağlantı.
   final int crossCategoryLink;
+
+  /// Ortak odak (Aşama 4B): oturumu en az bir arkadaşıyla birlikte tamamlayana kategorinin
+  /// bölge çiftleri arasında toplam bağlantı. Yalnız yeni veriyi etkiler; sürüm değişmedi.
+  final int cofocusLink;
 
   /// Sönme: beslenmeyen bölgenin parlaklığı bu kadar günde yarıya iner, tabanın altına inmez.
   final int halfLifeDays;

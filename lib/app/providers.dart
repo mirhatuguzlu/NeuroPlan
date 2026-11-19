@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:neuroplan_core/neuroplan_core.dart';
+import 'package:supabase_flutter/supabase_flutter.dart'
+    show Supabase, SupabaseClient, User;
 
 import '../data/local/app_database.dart';
 import '../data/plan/plan_source.dart';
@@ -14,18 +16,55 @@ import '../data/repositories/prefs_repository.dart';
 import '../data/repositories/profile_repository.dart';
 import '../data/sync/hlc_clock.dart';
 import '../data/sync/local_writer.dart';
+import '../data/sync/sync_engine.dart';
+import '../data/sync/sync_scheduler.dart';
+import '../data/remote/auth_service.dart';
+import '../data/remote/supabase_sync_remote.dart';
+import 'env.dart';
 
 /// main() gerçek veritabanıyla, testler bellek içi veritabanıyla geçersiz kılar.
 final databaseProvider = Provider<AppDatabase>(
   (ref) => throw UnimplementedError('databaseProvider override edilmeli'),
 );
 
-final writerProvider = Provider(
-  (ref) => LocalWriter(
-    ref.watch(databaseProvider),
-    HlcClock(ref.watch(databaseProvider)),
-  ),
+/// Tek saat: HLC son damgayı bellekte tutar, yazıcı ve eşitleme aynı örneği kullanır.
+final hlcClockProvider = Provider(
+  (ref) => HlcClock(ref.watch(databaseProvider)),
 );
+
+final writerProvider = Provider(
+  (ref) =>
+      LocalWriter(ref.watch(databaseProvider), ref.watch(hlcClockProvider)),
+);
+
+/// null: `.env` yok ya da test; uygulama yalnız cihazda çalışır.
+final supabaseProvider = Provider<SupabaseClient?>(
+  (ref) => Env.backendConfigured ? Supabase.instance.client : null,
+);
+
+final authServiceProvider = Provider(
+  (ref) => AuthService(ref.watch(supabaseProvider)),
+);
+
+/// Oturumdaki kullanıcı; misafir de bir kullanıcıdır (`isAnonymous`).
+final authUserProvider = StreamProvider<User?>((ref) async* {
+  final auth = ref.watch(authServiceProvider);
+  yield auth.user;
+  yield* auth.changes;
+});
+
+final syncSchedulerProvider = Provider<SyncScheduler?>((ref) {
+  final client = ref.watch(supabaseProvider);
+  if (client == null) return null;
+  final db = ref.watch(databaseProvider);
+  final scheduler = SyncScheduler(
+    db,
+    SyncEngine(db, SupabaseSyncRemote(client), ref.watch(hlcClockProvider)),
+    userId: () => client.auth.currentUser?.id,
+  );
+  ref.onDispose(scheduler.dispose);
+  return scheduler;
+});
 
 final profileRepositoryProvider = Provider(
   (ref) =>

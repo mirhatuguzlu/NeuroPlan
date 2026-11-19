@@ -14,6 +14,7 @@ import 'brain_controller.dart';
 import 'brain_list_screen.dart';
 import 'brain_scene.dart';
 import 'bridge.dart';
+import '../together/brain_compare.dart';
 import 'region_info.dart';
 
 String _hex(Color c) =>
@@ -113,6 +114,11 @@ class _BrainScreenState extends ConsumerState<BrainScreen> {
     final stageData = stageTheme(Theme.of(context));
     final stage = stageData.colorScheme;
     final selected = st.selected;
+    final comparing = st.comparing;
+    // Alt panel: bölge sayfası ya da arkadaşla karşılaştırma (aynı sahne, D41 / Aşama 4B).
+    final panel = selected != null || comparing != null;
+    void closePanel() =>
+        comparing != null ? ctl.stopCompare() : ctl.select(null);
     final region = selected == null
         ? null
         : ref.watch(brainRegionsProvider).value?[selected];
@@ -120,9 +126,9 @@ class _BrainScreenState extends ConsumerState<BrainScreen> {
     final curve = AppTokens.of(context).standardCurve;
 
     return PopScope(
-      canPop: selected == null,
+      canPop: !panel,
       onPopInvokedWithResult: (didPop, _) {
-        if (!didPop) ctl.select(null);
+        if (!didPop) closePanel();
       },
       child: Theme(
         data: stageData,
@@ -132,7 +138,7 @@ class _BrainScreenState extends ConsumerState<BrainScreen> {
             body: LayoutBuilder(
               builder: (context, box) {
                 final top = MediaQuery.viewPaddingOf(context).top;
-                final stageHeight = selected == null
+                final stageHeight = !panel
                     ? box.maxHeight
                     : box.maxHeight * 0.42;
                 return Stack(
@@ -178,17 +184,19 @@ class _BrainScreenState extends ConsumerState<BrainScreen> {
                       top: top + Gap.xs,
                       child: Row(
                         children: [
-                          if (selected != null)
+                          if (panel)
                             IconButton(
                               tooltip: l.commonBack,
                               icon: const Icon(Symbols.arrow_back_rounded),
-                              onPressed: () => ctl.select(null),
+                              onPressed: closePanel,
                             )
                           else
                             const SizedBox(width: Gap.s),
                           Expanded(
                             child: Text(
-                              region?.name(context) ?? l.navBrain,
+                              comparing != null
+                                  ? l.tgCompareTitle(comparing.name)
+                                  : region?.name(context) ?? l.navBrain,
                               style: Theme.of(context).textTheme.titleLarge
                                   ?.copyWith(color: stage.onSurface),
                               maxLines: 1,
@@ -209,7 +217,7 @@ class _BrainScreenState extends ConsumerState<BrainScreen> {
                         ],
                       ),
                     ),
-                    if (selected == null && st.error == null)
+                    if (!panel && st.error == null)
                       Positioned(
                         left: Gap.l,
                         right: Gap.l,
@@ -230,8 +238,8 @@ class _BrainScreenState extends ConsumerState<BrainScreen> {
                       curve: curve,
                       left: 0,
                       right: 0,
-                      top: selected == null ? box.maxHeight : stageHeight,
-                      bottom: selected == null ? -box.maxHeight : 0,
+                      top: !panel ? box.maxHeight : stageHeight,
+                      bottom: !panel ? -box.maxHeight : 0,
                       child: Material(
                         color: stage.surfaceContainer,
                         shape: RoundedRectangleBorder(
@@ -239,7 +247,19 @@ class _BrainScreenState extends ConsumerState<BrainScreen> {
                             top: Radius.circular(AppTokens.of(context).radius),
                           ),
                         ),
-                        child: selected == null
+                        child: comparing != null
+                            ? CompareInfo(
+                                key: ValueKey(comparing.id),
+                                userId: comparing.id,
+                                name: comparing.name,
+                                padding: EdgeInsets.fromLTRB(
+                                  Gap.l,
+                                  Gap.l,
+                                  Gap.l,
+                                  AppShell.bottomInset(context),
+                                ),
+                              )
+                            : selected == null
                             ? const SizedBox.shrink()
                             : RegionInfo(
                                 key: ValueKey(selected),

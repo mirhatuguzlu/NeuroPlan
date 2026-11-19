@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart' hide isNotNull, isNull;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:neuroplan/data/local/app_database.dart';
+import 'package:neuroplan/data/sync/sync_scheduler.dart';
 
 import 'test_support.dart';
 
@@ -116,5 +117,32 @@ void main() {
     final entry = (await a.outbox()).single;
     expect(entry.dead, isTrue);
     expect(entry.lastError, startsWith('23514'));
+  });
+
+  test('misafirden var olan hesaba geçince yerel satırlar yeni kullanıcıya yeniden gönderilir', () async {
+    await createOnA();
+    expect(await a.outbox(), isEmpty);
+    await a.sync.adoptUser(
+      'kullanici-1',
+    ); // ilk bağlanış: aynı kullanıcı, yeniden gönderim yok
+    expect(await a.outbox(), isEmpty);
+    await a.sync.adoptUser('kullanici-1');
+    expect(await a.outbox(), isEmpty);
+    await a.sync.adoptUser('kullanici-2');
+    final out = await a.outbox();
+    expect(out.map((o) => o.targetId), contains(id));
+    expect(out.firstWhere((o) => o.targetId == id).patch, contains('Koşu'));
+  });
+
+  test('eşitleme hatasında üstel bekleme 5 sn ile 15 dk arasında', () {
+    var d = Duration.zero;
+    final seen = <Duration>[];
+    for (var i = 0; i < 12; i++) {
+      d = SyncScheduler.nextBackoff(d);
+      seen.add(d);
+    }
+    expect(seen.first, const Duration(seconds: 5));
+    expect(seen[1], const Duration(seconds: 10));
+    expect(seen.last, const Duration(minutes: 15));
   });
 }

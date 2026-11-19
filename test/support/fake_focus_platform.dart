@@ -41,6 +41,9 @@ class FakeFocusPlatform implements FocusPlatform {
   Future<void> showOngoing(OngoingNotice notice) async => ongoing = notice;
   @override
   Future<void> stopOngoing() async => ongoing = null;
+  var microphone = false;
+  @override
+  Future<void> setMicrophoneInUse(bool inUse) async => microphone = inUse;
   @override
   Future<void> escapeAlert(DateTime deadline, AlertTexts texts) async =>
       alertDeadline = deadline;

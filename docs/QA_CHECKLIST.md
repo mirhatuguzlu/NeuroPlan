@@ -107,3 +107,84 @@ Hazırlık: en az bir tamamlanmış ve bir bozulmuş odak oturumu olsun (farklı
 
 ### B5. Göç (Aşama 3'ten güncelleyenler)
 - [ ] Aşama 3 kurulumunun üstüne kurulunca uygulama açılır; eski oturumlar beyinde görünür (olaylar v2 kurallarıyla yeniden türetilir).
+
+## C. Birlikte: sosyal, gerçek zaman ve ses (Aşama 4B)
+**İki gerçek cihaz** ve iki ayrı Google hesabı gerekir (A ve B; mümkünse biri Android 14+). Hazırlık:
+- Uzak Supabase'e `20261120120000_social_v1.sql` ve `20261120120100_brain_input.sql` uygulanmış, Edge Functions (`delete_account`, `voice_token`, `brain_snapshot`) yayınlanmış, Realtime ayarlarında **"Allow public access" kapalı** olmalı.
+- Supabase Auth: Google sağlayıcısı açık, anonim giriş açık, manuel bağlama açık. `.env`'de `GOOGLE_WEB_CLIENT_ID`.
+- Ses için Edge Function sırları: `LIVEKIT_URL`, `LIVEKIT_API_KEY`, `LIVEKIT_API_SECRET`.
+- Her iki hesapta doğum yılı 18+; bir de 15–17 ve 13–14 yaş için üçüncü hesap (C1).
+
+### C1. Kapı ve yaş
+- [ ] Yeni kurulumda ikinci adım "Doğum yılın": atlanamaz; 13 yaşından küçük yıl seçilince "İleri" kapalı ve neden yazılı.
+- [ ] Misafir: Birlikte → "Google ile bağlan"; bağlanınca planın ve beynin aynı kalır (yeni kullanıcı yok, `linkIdentity`).
+- [ ] Aynı Google hesabı başka cihazda zaten varsa: o hesaba geçilir, bu cihazdaki işler o hesapta da görünür (D42).
+- [ ] 13–14 yaş hesabı: Birlikte "15 yaşında açılır" der, başka bir şey açılmaz.
+- [ ] 15–17 yaş hesabı: Gizlilik'te "Genel sıralamaya katıl" kapalı ve nedeni yazılı; Sıralama'da "Genel" seçilemez, süreklilik sekmesi yok.
+- [ ] Takma ad ekranında topluluk kuralları metni var; "Kabul et ve başla" olmadan devam edilemez.
+
+### C2. Arkadaşlık ve partner
+- [ ] A kod oluşturur → QR ve 10 karakterlik kod görünür; B "QR kodu tara" ile okur → ikisi de arkadaş listesinde birbirini görür.
+- [ ] Aynı kodu üçüncü kişi kullanmaya çalışınca "Bulunamadı ya da artık geçerli değil" (tek kullanımlık).
+- [ ] A kendi kodunu kullanamaz.
+- [ ] B kullanıcı adı belirleyip "bulunabilir" açar; A tam kullanıcı adıyla istek gönderir, B kabul eder. Bulunabilirlik kapalıyken istek "bulunamadı" der.
+- [ ] Partner daveti kodu: kullanınca doğrudan partner olunur. A'nın partneri varken C partner isteği gönderemez ("önce o partnerlik bitmeli").
+- [ ] Partnerliği bitir → ikisi de arkadaş kalır.
+- [ ] Arkadaşlıktan çıkar → karşı tarafın listesinden de kalkar; sohbete yazılamaz.
+- [ ] Engelle → onay sorulur; engellenen artık A'nın planını, beynini, sohbet geçmişini göremez, A'nın kodunu kullanamaz ("geçersiz kod"), A'yı kullanıcı adıyla bulamaz.
+
+### C3. Plan görünürlüğü
+- [ ] A'nın planında bir iş var (Birlikte'yi açtıktan ~20 sn sonra yayınlanır). B, A'nın planını "Bugün" ve "Hafta" olarak salt okunur görür.
+- [ ] Partner değilken B yalnız "Meşgul" görür; partner olunca başlık ve saati görür.
+- [ ] A Gizlilik → Partner → o kök kategoriyi "Gizli" yapar → B'nin ekranında iş kaybolur (yenileyince).
+- [ ] A arkadaş sayfasında "Planımı bu kişiye tam göster" → B not ve kategoriyi de görür.
+- [ ] Ortak boş zaman: A ve B seçilince yalnız boş aralıklar listelenir; A'nın gizli işi olan saat boş görünmez. "Burada planla" ortak etkinlik sihirbazını o saatle açar.
+
+### C4. Ortak etkinlik ve proje
+- [ ] A etkinlik önerir → B'de Birlikte rozeti; B kabul eder → iş ikisinin de Bugün/Plan ekranında sabit iş olarak görünür.
+- [ ] A saati değiştirmeyi önerir → B onaylayana kadar değişmez; onaylayınca ikisinin planı güncellenir.
+- [ ] Ortak proje: B o projede odak oturumu tamamlar → A ilerlemeyi görür.
+- [ ] A iptal eder → iş ikisinin planından da kalkar.
+
+### C5. Mesajlaşma
+- [ ] A ve B arasında mesaj karşı tarafta 1–2 sn içinde görünür (Realtime); okunmamış rozeti sekmede ve listede.
+- [ ] "siktir git" → karşı tarafta "****** git"; "Sıkıldım" değişmez.
+- [ ] Dakikada 20'den fazla mesaj → "Biraz yavaşla" (gönderilmez).
+- [ ] Basılı tut → tepki ver (iki tarafta görünür), kopyala, kendi mesajını sil ("Mesaj silindi"), karşı tarafın mesajını şikâyet et.
+- [ ] B odak oturumundayken A mesaj atar → B'ye bildirim **gelmez**; oturum bitince "N yeni mesaj" özet bildirimi gelir.
+- [ ] Sohbeti sessize al → arka planda bildirim gelmez.
+
+### C6. Ortak odak (gerçek zaman)
+- [ ] A iki arkadaşı davet eder (en çok 3); B'nin Birlikte ekranında davet kartı, "Katıl" → lobi. Lobide kimin bağlı olduğu canlı görünür.
+- [ ] A ve B kendi işlerini ve farklı modları seçer; A "Herkesi başlat" → iki cihazda da odak ekranı **aynı anda** açılır, sayaçlar en çok 1–2 sn farkla aynıdır (iki cihazın saatini bilerek 1 dk farklı ayarlayıp da dene).
+- [ ] Odak ekranının üstünde diğer katılımcı ve evresi (odakta / molada) görünür.
+- [ ] B uygulamadan çıkıp 10 sn dönmez → B'nin oturumu bozulur; A'nın ekranında satır içi "B oturumdan çıktı. Sen devam edebilirsin." (pop-up yok); A'nın oturumu sürer.
+- [ ] İkisi de tamamlarsa beyinde ortak bağlantı bonusu oluşur (Beyin → yeni bağ; birlikte tamamlanınca bir kez).
+- [ ] Ağ kopup gelince (uçak modu 30 sn) kanal yeniden bağlanır, katılımcılar yeniden görünür.
+
+### C7. Sesli sohbet
+- [ ] Ses açık oturumda "Sese bağlan" → bağlanır, mikrofon **kapalı** başlar.
+- [ ] Mikrofon düğmesi tek dokunuşla açılır/kapanır; ilk açılışta Android mikrofon izni ister; reddedilirse anlaşılır hata.
+- [ ] Konuşan kişinin baş harfi vurgulanır ("konuşuyor").
+- [ ] Bir kişiyi sessize al → yalnız bu cihazda duyulmaz; o kişi kendini duymaya devam eder.
+- [ ] **Android 14+:** odakta mikrofon açıkken ekranı kapat / uygulama sabitliyken 2 dk konuş → ses kesilmez; `adb logcat | grep -i "foreground"` hata yok; kalıcı bildirim durum çubuğunda mikrofon göstergesiyle.
+- [ ] Mikrofon açıkken uygulamadan çıkınca 10 sn kuralı aynen işler; bozulunca mikrofon kapanır.
+- [ ] Oturum bitince ya da "Ayrıl" ile ses bağlantısı kapanır, mikrofon göstergesi kaybolur.
+- [ ] LiveKit panosunda (Cloud) oturum için kayıt/egress **yok**.
+
+### C8. Sıralama ve beyin karşılaştırma
+- [ ] Arkadaş sıralamasında iki hesap da görünür; odak dakikası tamamlanan oturumlarla artar (yenileyince).
+- [ ] Yalnız yetişkin ve "katıl" seçen hesap genel tabloda takma adıyla görünür.
+- [ ] B "Arkadaşlarım beynimi görebilsin"i açınca A, B'nin sayfasından "Beyinleri karşılaştır" → Beyin sekmesinde iki beyin yan yana (solda A), altta bölge çubukları. Kapalıyken "izin yok" hatası.
+- [ ] Geri tuşu karşılaştırmayı kapatır, sahne tek beyne döner.
+
+### C9. Şikâyet ve moderasyon
+- [ ] B, A'nın mesajını şikâyet eder → Supabase Studio'da `select * from moderation_queue;` kaydı ve mesaj kopyasını gösterir; A mesajı silse de kopya kalır.
+- [ ] `select resolve_report('<id>', 'suspend_7d');` → A'nın Birlikte ekranı askı tarihini gösterir; plan/odak/beyin çalışır.
+
+### C10. Hesap silme
+- [ ] A Profil → Hesap → "Hesabı ve verileri sil" → onay → ilk kuruluma döner. B'nin listesinden A kalkar, sohbet ve ortak etkinlikler silinir; A hakkındaki şikâyet kimliksiz kalır.
+
+### C11. Erişilebilirlik
+- [ ] TalkBack: Birlikte sekmesi rozet sayısını okur; mesaj balonları "Sen: …" diye okunur; mikrofon düğmesi açık/kapalı durumunu söyler.
+- [ ] Yazı boyutu en büyükte Birlikte ekranları, sohbet ve ortak odak şeridi taşmaz.

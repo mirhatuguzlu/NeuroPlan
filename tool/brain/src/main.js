@@ -212,9 +212,7 @@ function regionColor(r, plan) {
   return hexToRgb(hex ?? state.theme.glow);
 }
 
-function rebuildNeurons() {
-  if (!neurons) return;
-  const plan = state.plan.regions;
+function neuronGeometry(plan, seed) {
   const total = plan.reduce((s, r) => s + r.points + r.dimPoints, 0);
   const pos = new Float32Array(total * 3);
   const col = new Float32Array(total * 3);
@@ -226,7 +224,7 @@ function rebuildNeurons() {
     const r = regions.get(p.key);
     if (!r?.pool) continue;
     const n = p.points + p.dimPoints;
-    const xyz = layoutPoints(r.pool, n, state.seed, p.key);
+    const xyz = layoutPoints(r.pool, n, seed, p.key);
     const [cr, cg, cb] = regionColor(r, p);
     const glow = 0.35 + 0.65 * (p.glow / 1000);
     for (let i = 0; i < n; i++, k++) {
@@ -243,8 +241,14 @@ function rebuildNeurons() {
   g.setAttribute('color', new THREE.BufferAttribute(col.subarray(0, 3 * k), 3));
   g.setAttribute('aSize', new THREE.BufferAttribute(size.subarray(0, k), 1));
   g.setAttribute('aRegion', new THREE.BufferAttribute(reg.subarray(0, k), 1));
+  return g;
+}
+
+function rebuildNeurons() {
+  if (!neurons) return;
+  const plan = state.plan.regions;
   neurons.geometry.dispose();
-  neurons.geometry = g;
+  neurons.geometry = neuronGeometry(plan, state.seed);
 
   // Bölge kabuğunun parlaklığı: büyüdükçe ve parladıkça kenarı daha görünür.
   for (const r of regions.values()) {
@@ -256,24 +260,22 @@ function rebuildNeurons() {
   applyHighlight();
 }
 
-function rebuildLinks() {
-  if (!links) return;
-  linkSegments.length = 0;
+function linkGeometry(planLinks, seed, segments) {
   const signal = hexToRgb(state.theme.signal);
-  for (const l of state.plan.links) {
+  for (const l of planLinks) {
     const a = regions.get(l.a);
     const b = regions.get(l.b);
     if (!a?.pool || !b?.pool) continue;
-    const rnd = mulberry32(([...`${state.seed}:${l.a}:${l.b}`].reduce((h, c) => Math.imul(h ^ c.charCodeAt(0), 16777619), 2166136261)) >>> 0);
+    const rnd = mulberry32(([...`${seed}:${l.a}:${l.b}`].reduce((h, c) => Math.imul(h ^ c.charCodeAt(0), 16777619), 2166136261)) >>> 0);
     for (let s = 0; s < strandCount(l.strength); s++) {
       const i = Math.floor(rnd() * (a.pool.length / 3)) * 3;
       const j = Math.floor(rnd() * (b.pool.length / 3)) * 3;
-      linkSegments.push([a.pool[i], a.pool[i + 1], a.pool[i + 2], b.pool[j], b.pool[j + 1], b.pool[j + 2], l.strength / 1000, l.a, l.b]);
+      segments.push([a.pool[i], a.pool[i + 1], a.pool[i + 2], b.pool[j], b.pool[j + 1], b.pool[j + 2], l.strength / 1000, l.a, l.b]);
     }
   }
-  const pos = new Float32Array(linkSegments.length * 6);
-  const col = new Float32Array(linkSegments.length * 6);
-  linkSegments.forEach((s, i) => {
+  const pos = new Float32Array(segments.length * 6);
+  const col = new Float32Array(segments.length * 6);
+  segments.forEach((s, i) => {
     pos.set(s.slice(0, 6), 6 * i);
     const a = 0.08 + 0.42 * s[6];
     col.set([signal[0] * a, signal[1] * a, signal[2] * a, signal[0] * a, signal[1] * a, signal[2] * a], 6 * i);
@@ -281,8 +283,77 @@ function rebuildLinks() {
   const g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  return g;
+}
+
+function rebuildLinks() {
+  if (!links) return;
+  linkSegments.length = 0;
   links.geometry.dispose();
-  links.geometry = g;
+  links.geometry = linkGeometry(state.plan.links, state.seed, linkSegments);
+}
+
+// ---------------------------------------------------------------- karşılaştırma (Aşama 4B)
+// İkinci beyin aynı sahnede, aynı kabuk geometrisiyle yan yana çizilir (tek WebView, D40).
+const COMPARE_HOME = new THREE.Vector3(0, 0.9, 5.6);
+const TWIN_OFFSET = 1.15;
+let twin = null; // { group, shells: Map key → { material, inner }, neurons, links }
+
+function setCompare(p) {
+  if (!p) {
+    if (twin) {
+      scene.remove(twin.group);
+      twin.neurons.geometry.dispose();
+      twin.links.geometry.dispose();
+      for (const s of twin.shells.values()) s.material.dispose();
+      twin = null;
+    }
+    root.position.x = 0;
+    resetCamera();
+    return;
+  }
+  if (!twin && links) {
+    const group = new THREE.Group();
+    const shells = new Map();
+    for (const r of regions.values()) {
+      if (!r.mesh) continue;
+      const material = r.material.clone();
+      const mesh = new THREE.Mesh(r.mesh.geometry, material);
+      mesh.renderOrder = r.mesh.renderOrder;
+      group.add(mesh);
+      shells.set(r.key, { material, inner: r.inner });
+    }
+    if (boundaries) {
+      const b = new THREE.LineSegments(boundaries.geometry, boundaries.material);
+      b.renderOrder = 3;
+      group.add(b);
+    }
+    const pts = new THREE.Points(new THREE.BufferGeometry(), pointMaterial);
+    pts.renderOrder = 4;
+    group.add(pts);
+    const ln = new THREE.LineSegments(new THREE.BufferGeometry(), links.material);
+    ln.renderOrder = 5;
+    group.add(ln);
+    scene.add(group);
+    twin = { group, shells, neurons: pts, links: ln };
+  }
+  if (!twin) return;
+  const plan = { regions: p.regions ?? [], links: p.links ?? [] };
+  const seed = `${state.seed}:compare`;
+  twin.neurons.geometry.dispose();
+  twin.neurons.geometry = neuronGeometry(plan.regions, seed);
+  twin.links.geometry.dispose();
+  twin.links.geometry = linkGeometry(plan.links, seed, []);
+  for (const [key, s] of twin.shells) {
+    const q = plan.regions.find((x) => x.key === key);
+    s.material.uniforms.uColor.value.setRGB(...regionColor(null, q));
+    s.material.uniforms.uIntensity.value = (s.inner ? 0.9 : 1) * (0.55 + 0.6 * (q ? q.glow / 1000 : 0));
+  }
+  root.position.x = -TWIN_OFFSET;
+  twin.group.position.x = TWIN_OFFSET;
+  state.highlight = null;
+  applyHighlight();
+  resetCamera();
 }
 
 // ---------------------------------------------------------------- vurgu ve kamera
@@ -313,7 +384,7 @@ function applyHighlight() {
 }
 
 function resetCamera() {
-  camTarget.pos.copy(HOME);
+  camTarget.pos.copy(twin ? COMPARE_HOME : HOME);
   camTarget.look.set(0, 0, 0);
   camTarget.until = performance.now() + 700;
 }
@@ -506,6 +577,7 @@ function bindTaps(el) {
     }
     lastTap = now;
     const ndc = new THREE.Vector2((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1);
+    if (twin) return;
     pending = setTimeout(() => {
       ray.setFromCamera(ndc, camera);
       const meshes = [...regions.values()].filter((r) => r.mesh.visible).map((r) => r.mesh);
@@ -561,6 +633,9 @@ function receive(text) {
       break;
     case 'reset':
       resetCamera();
+      break;
+    case 'compare':
+      setCompare(p.regions ? p : null);
       break;
   }
 }

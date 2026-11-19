@@ -13,6 +13,7 @@ import '../../core/location.dart';
 import '../../core/prayer_fields.dart';
 import '../../core/states.dart';
 import '../../core/wizard.dart';
+import '../together/together_screen.dart' show BirthYearField, minAgeOf;
 
 /// İlk kurulum: dil → görünüm → uyku → konum → namaz vakitleri → kök kategoriler →
 /// ilk rutin. Her adım ayrı ekrandır, atlanabilir ve sonucunu hemen kaydeder.
@@ -32,11 +33,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   var _locating = false;
   String? _method;
   var _madhab = 'shafi';
+  int? _birthYear;
+  var _birthYearSaved = false;
 
   @override
   void initState() {
     super.initState();
     final p = ref.read(profileProvider).value;
+    _birthYear = p?.birthYear;
+    _birthYearSaved = p?.birthYear != null;
     _locale = p?.locale;
     _mode = p?.themeMode ?? 'system';
     _method = p?.prayerMethod;
@@ -95,6 +100,46 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               setState(() => _locale = v);
               _update(ProfilesCompanion(locale: Value(v)));
             },
+          ),
+        ),
+        // AUTH-2: 13 yaş altı devam edemez; yalnız doğum yılı tutulur, en düşük olası yaş
+        // kullanılır. Kaydedilen yıl sonradan küçültülemez (sunucu da reddeder).
+        WizardStep(
+          id: 'age',
+          title: l.onbAgeTitle,
+          subtitle: l.onbAgeBody,
+          canNext: _birthYear != null && minAgeOf(_birthYear!) >= 13,
+          onNext: _birthYearSaved
+              ? null
+              : () async {
+                  await _update(
+                    ProfilesCompanion(birthYear: Value(_birthYear)),
+                  );
+                  _birthYearSaved = true;
+                },
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (_birthYearSaved)
+                Text('', style: Theme.of(context).textTheme.headlineSmall)
+              else
+                BirthYearField(
+                  value: _birthYear,
+                  onChanged: (v) => setState(() => _birthYear = v),
+                ),
+              if (_birthYear != null && minAgeOf(_birthYear!) < 13) ...[
+                const SizedBox(height: Gap.l),
+                Semantics(
+                  liveRegion: true,
+                  child: Text(
+                    l.onbAgeTooYoung,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+                  ),
+                ),
+              ],
+            ],
           ),
         ),
         WizardStep(

@@ -314,3 +314,53 @@ Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem 
 **Durum:** Kabul (sahne renkleri Geçici).
 
 **D25 güncellemesi (2026-11-19):** Beyin sekmesi artık 3D sahnedir; kategori listesi metin alternatifinin altına taşındı (D41).
+
+## 2026-11-19 — D42: Aşama 4B kapsamı, giriş ve eşitleme
+**Karar:** Sosyal özelliklerden önce giriş ve eşitlemenin sunucu tarafı yazıldı.
+- `supabase_flutter` (Supabase yalnız `.env` doluysa başlar; yoksa uygulama yalnız cihazda çalışır), `google_sign_in` 7 (Credential Manager). İlk açılışta misafir (anonim) oturum açılır; Google bağlanınca `linkIdentityWithIdToken` aynı kullanıcıyı kalıcı yapar. Google hesabı başka kullanıcıya bağlıysa o hesaba geçilir ve `SyncEngine.adoptUser` yerel satırların hepsini yeni kullanıcıya göndermek üzere outbox'a yeniden yazar, imleci sıfırlar.
+- `SupabaseSyncRemote` + `SyncScheduler`: yazmadan 2 sn sonra, açılışta, ön plana dönüşte, 5 dk'da bir; hatada 5 sn → 15 dk üstel bekleme (D16'daki açık iş kapandı).
+- İlk kurulumda **doğum yılı adımı** (AUTH-2 eksikti): atlanamaz, en düşük olası yaş 13'ün altındaysa devam edilemez. Sunucuda doğum yılı yalnız geriye alınabilir (tetikleyici); yaş küçültülemez.
+- Hesap silme: `delete_account` Edge Function + Profil → Hesap → "Hesabı ve verileri sil" (AUTH-3); yerel veritabanı da silinir.
+**Neden:** Proje sahibinin soru formu seçimi ("önce giriş + eşitleme"). Sıralama, sunucu beyni ve partner planı sunucudaki veriyi okur.
+**Durum:** Kabul. `shortcut:` eski misafir kullanıcı hesap değiştirince sunucuda kalır; zamanlanmış temizlik sonra.
+
+## 2026-11-19 — D43: Sosyal yaş politikası
+**Karar:** Sosyal özellikler 15 yaş ve üstüne açıktır (en düşük olası yaş; yalnız doğum yılı tutulur). 13–14 yaşta Birlikte sekmesi "15 yaşında açılır" der. 15–17 sıkı moddadır: genel sıralama açılamaz, süreklilik (seri) metriği gösterilmez, kullanıcı adıyla bulunabilirlik kapalı başlar. Veli onayı alınmaz. Kurallar sunucuda (`social_tier`, `require_social`) uygulanır.
+**Neden:** 5651 ek m.4 (15 yaş, 1 Kasım 2026), DSA m.28 kılavuzu, KVKK/GDPR riskleri (docs/SOCIAL_SAFETY.md). Proje sahibinin seçimi.
+**Durum:** Kabul. Yayın öncesi hukuk kontrolü gerekir (SOCIAL_SAFETY §7).
+
+## 2026-11-19 — D44: Plan görünürlüğü ve yayınlanan takvim
+**Karar:**
+- Plan motoru cihazda çalıştığı için (D22) cihaz önümüzdeki **14 günün** saatli oluşumlarını `publish_calendar` ile `calendar_blocks` tablosuna yayınlar: yalnız zaman ve aktivite kimliği. Başlık, not ve kategori `activities`'ten görünürlük kuralıyla birleştirilir; tabloyu yalnız sahibi okur. `friend_calendar` artık bu tablodan okur.
+- Kural yoksa varsayılan: **partner "başlık ve saat", diğer arkadaşlar "meşgul"** (Geçici). Talimat "varsayılan başlık ve saat" diyor; gizlilik önceliği nedeniyle partner dışındaki arkadaşlara bir düzey daha sıkı başlatıldı. Kullanıcı Gizlilik ekranından değiştirir.
+- Kişi istisnası `visibility_settings.viewer_id` ("bu kişiye tam göster").
+- `common_free_time` gizli işleri de dolu sayar, yalnız boş aralık döner; herkesin takvimini yayınlamış olması gerekir.
+**Durum:** Kabul (arkadaş varsayılanı Geçici, sabah onayına).
+
+## 2026-11-19 — D45: Sosyal veritabanı ilkeleri
+**Karar:**
+- İstemci sosyal tablolara doğrudan yazamaz (eski yazma politikaları kaldırıldı); her yazma `security definer` RPC'dir ve yaşı, misafirliği, arkadaşlığı, engeli, hız sınırını denetler. Hata kodları: NP001/NP404/NP409/NP412/NP429.
+- **Tek partner** `partner_slots` tablosunun birincil anahtarıyla garanti edilir (her partnerlik iki satır; yarışta da ikinci partner reddedilir).
+- Engel her şeyi keser; engellenen kişi eski mesajları da göremez (`conversation_open`), davet "geçersiz kod" döner (bilgi sızmaz).
+- Hız sınırı: mesaj 20/dk–300/sa, davet 5/dk–30/sa, kod kullanma 5/dk–20/sa, şikâyet 10/dk–50/sa (`social_rate_events`).
+- Küfür filtresi sunucuda (`mask_profanity`, `profanity_terms`): eşleşen kelime yıldızlanır, mesaj gider (proje sahibinin seçimi). Kısa kökler yalnız tam kelimede eşleşir.
+- Şikâyet mesajın kopyasını saklar; moderasyon Supabase Studio'da `moderation_queue` + `resolve_report` (moderatör tablosu) ile yapılır.
+**Durum:** Kabul. Testler: `supabase/tests/social_test.sql`, `social_safety_test.sql`.
+
+## 2026-11-19 — D46: Ses altyapısı (D21 kapanışı)
+**Karar:** LiveKit Cloud (`livekit_client` 2.14). Token `voice_token` Edge Function'ında üretilir; yalnız katılmış katılımcı, ses açık oturum ve sosyal uygun kullanıcı alır. Token'da kayıt/egress yetkisi yoktur. Mikrofon varsayılan kapalı; açılınca odak ön plan servisine `microphone` türü eklenir (Android 14, uygulama öndeyken). Kişiyi sessize almak yalnız dinleyenin cihazında aboneliği kapatır.
+**Neden:** Proje sahibinin seçimi; açık kaynak sunucu, aynı SDK ile kendi sunucuya geçilebilir. Karşılaştırma SOCIAL_SAFETY §6.
+**Durum:** Kabul. LiveKit projesi ve Edge Function sırları (`LIVEKIT_URL`, `LIVEKIT_API_KEY`, `LIVEKIT_API_SECRET`) proje sahibinde; KVKK m.9 standart sözleşmesi gerekir.
+
+## 2026-11-19 — D47: Ortak odak, sıralama, sunucu beyni
+**Karar:**
+- Ortak odak en çok 4 kişi. Başlatan başlatınca sunucu anı herkesin başlangıcıdır (`FocusController.start(startAt:)`, cihaz saat farkı gidiş-dönüşle düzeltilir). Herkes kendi işini ve modunu seçer. Realtime özel kanal `cofocus:<id>` (RLS'li presence + broadcast); biri bozarsa diğerlerinin odak ekranında satır içi sakin not.
+- Ortak tamamlanan oturum bonusu: `cofocusLink = 200` bağlantı, kategorinin bölge çiftlerine (BRAIN_MODEL §2.1). Motor sürümü değişmedi: kural yalnız yeni veriyi etkiler.
+- Sıralama: arkadaş tablosu canlı SQL (`friends_leaderboard`), genel tablo `pg_cron` ile 30 dk'da bir tazelenir; yalnız katılmayı seçen yetişkinler. Metrikler odak dakikası ve süreklilik (aktif gün). Hafta pazartesi sıfırlanır. Doğrulama: tamamlanmış, gerçek süreden uzun değil, gelecekte bitmeyen, sunucuya 7 günden geç gelmeyen, kişinin başka oturumuyla çakışmayan; günde 16 saati aşan gün sayılmaz. Plana uyum sunucuda doğrulanamadığı için alınmadı.
+- Sunucu beyni: `brain_snapshot` Edge Function, `neuroplan_core`'un `dart compile js` çıktısını (Deno'da çalıştığı doğrulandı) `brain_input` SQL'inin verisiyle çalıştırır. ARCHITECTURE §11 risk 1 kapandı.
+**Durum:** Kabul.
+
+## 2026-11-19 — D48: Birlikte sekmesi ve beyin karşılaştırma
+**Karar:** Alt menüye 5. sekme "Birlikte" (`diversity_3`), bekleyen iş varsa rozet. Sekme önce kapıyı gösterir (sunucu yok / misafir / yaş / takma ad / askı), sonra tek amaçlı ekranlara giriş listesi. Beyin karşılaştırma ayrı WebView açmaz: Beyin sekmesinde bölge sayfası gibi bir alt panel; sahne iki beyni yan yana çizer (köprüye `compare` mesajı, JS ikinci beyni aynı kabuk geometrisiyle kurar).
+**Neden:** Proje sahibinin seçimi (5. sekme); tek WebView ilkesi (D40).
+**Durum:** Kabul.

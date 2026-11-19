@@ -1538,4 +1538,1021 @@ class L10nEn extends L10n {
   String regionMinutes(int minutes) {
     return '$minutes min';
   }
+
+  @override
+  String get navTogether => 'Together';
+
+  @override
+  String navBadge(String label, int count) {
+    return '$label, $count pending';
+  }
+
+  @override
+  String get secAccount => 'Account';
+
+  @override
+  String get accountGoogle => 'Google account';
+
+  @override
+  String get accountGuest => 'Guest';
+
+  @override
+  String get accountGuestBody =>
+      'Your data is on this device and backed up. Connect Google to keep it and use it on other devices.';
+
+  @override
+  String get accountDeviceOnly => 'This device only';
+
+  @override
+  String get accountDeviceOnlyBody =>
+      'This build has no server settings; everything runs on your device.';
+
+  @override
+  String get accountOffline =>
+      'Not connected right now; it syncs when you are back online.';
+
+  @override
+  String get accountDeleteTitle => 'Delete account and data';
+
+  @override
+  String get accountDeleteSubtitle =>
+      'Your plan, focus sessions, brain and social data are permanently deleted.';
+
+  @override
+  String get accountDeleteBody =>
+      'This cannot be undone. Your friendships, messages and shared plans are deleted too. Reports about you stay for moderation without your identity.';
+
+  @override
+  String get accountDeleteAction => 'Delete permanently';
+
+  @override
+  String get accountDeleteError =>
+      'Could not delete. Check your connection and try again.';
+
+  @override
+  String get onbAgeTitle => 'Your birth year';
+
+  @override
+  String get onbAgeBody =>
+      'Only the year is kept. It sets protections for your age; children under 13 cannot use the app.';
+
+  @override
+  String get onbAgeTooYoung =>
+      'NeuroPlan is for ages 13 and up. You cannot continue with this year.';
+
+  @override
+  String get tgOfflineTitle => 'Together needs a server';
+
+  @override
+  String get tgOfflineBody =>
+      'This build has no server settings. Plan, focus and brain work fully on your device.';
+
+  @override
+  String get tgGuestTitle => 'Work together with friends';
+
+  @override
+  String get tgGuestBody =>
+      'Together needs a Google account. Your data stays the same when you connect. Nobody can find you at random; friendships only start with an invite.';
+
+  @override
+  String get tgConnectGoogle => 'Connect with Google';
+
+  @override
+  String get tgConnected => 'Your Google account is connected.';
+
+  @override
+  String get tgConnectedSwitched =>
+      'Switched to your Google account; this device\'s data is being sent to it.';
+
+  @override
+  String get tgConnectError => 'Could not connect with Google. Try again.';
+
+  @override
+  String get tgAgeTitle => 'First, your birth year';
+
+  @override
+  String get tgAgeBody =>
+      'Social features open at 15; under 18 the strictest privacy settings apply. Only the year is kept.';
+
+  @override
+  String get tgBirthYear => 'Birth year';
+
+  @override
+  String get tgTooYoungTitle => 'Together opens at 15';
+
+  @override
+  String get tgTooYoungBody =>
+      'This rule is there to protect you. Plan, focus and brain work fully at any age.';
+
+  @override
+  String get tgSuspendedTitle => 'Social features are paused';
+
+  @override
+  String tgSuspendedBody(String date) {
+    return 'A report was reviewed and your social features are off until $date. Plan, focus and brain keep working.';
+  }
+
+  @override
+  String get tgSetupTitle => 'How should friends see you?';
+
+  @override
+  String get tgSetupBody =>
+      'Your nickname is only shown to friends. A username is optional; unless you turn it on, nobody can find you by it.';
+
+  @override
+  String get tgDisplayName => 'Nickname';
+
+  @override
+  String get tgUsernameOptional => 'Username (optional)';
+
+  @override
+  String get tgUsernameHelp =>
+      '3–20 characters: lowercase letters, digits, underscore. Someone who knows it exactly can send a request, but only if you turn discoverability on.';
+
+  @override
+  String get tgNameRequired => 'Enter a nickname.';
+
+  @override
+  String get tgUsernameRule =>
+      'Username must be 3–20 characters: lowercase letters, digits or underscore.';
+
+  @override
+  String get tgTermsBody =>
+      'By continuing you accept the community rules: harassment, hate speech, sexual content, spam and anything that endangers children are forbidden. You can report and block from every screen; reports are reviewed.';
+
+  @override
+  String get tgSetupAction => 'Accept and start';
+
+  @override
+  String get tgEmptyTitle => 'Invite your first friend';
+
+  @override
+  String get tgEmptyBody =>
+      'Friendships only start with an invite: share your code or QR code, or enter theirs.';
+
+  @override
+  String get tgInviteFirst => 'Invite a friend';
+
+  @override
+  String get tgCofocusBack => 'Your co-focus session is open.';
+
+  @override
+  String get tgOpen => 'Open';
+
+  @override
+  String tgCofocusInvite(String name) {
+    return '$name invites you to focus together.';
+  }
+
+  @override
+  String get tgJoin => 'Join';
+
+  @override
+  String get tgDecline => 'Decline';
+
+  @override
+  String get tgAccept => 'Accept';
+
+  @override
+  String tgPartnerAsked(String name) {
+    return '$name wants to be your partner.';
+  }
+
+  @override
+  String get tgPartnerDone => 'You are partners now.';
+
+  @override
+  String get tgSecTogether => 'Work together';
+
+  @override
+  String get tgSecPeople => 'People';
+
+  @override
+  String get tgSecPrivacy => 'Privacy';
+
+  @override
+  String tgPartnerPlan(String name) {
+    return 'Your partner $name: plan';
+  }
+
+  @override
+  String get tgChoosePartner => 'Choose a partner';
+
+  @override
+  String get tgChoosePartnerBody =>
+      'A closer bond for working together and seeing plans; one partner at a time.';
+
+  @override
+  String get tgCofocusNew => 'Start co-focus';
+
+  @override
+  String get tgCofocusNewBody =>
+      'Start at the same time, everyone on their own task.';
+
+  @override
+  String get tgShared => 'Shared plans';
+
+  @override
+  String get tgFreeTime => 'Find common free time';
+
+  @override
+  String get tgMessages => 'Messages';
+
+  @override
+  String get tgFriends => 'Friends';
+
+  @override
+  String get tgInvite => 'Invite';
+
+  @override
+  String get tgLeaderboard => 'Leaderboard';
+
+  @override
+  String get tgPrivacy => 'Privacy settings';
+
+  @override
+  String get tgPrivacyBody => 'Who sees what: plan, profile, brain.';
+
+  @override
+  String get tgCancel => 'Cancel';
+
+  @override
+  String get tgPartner => 'Partner';
+
+  @override
+  String get tgErrRate => 'Slow down a little; try again shortly.';
+
+  @override
+  String get tgErrNetwork =>
+      'Could not reach the server. Check your connection.';
+
+  @override
+  String get tgErrNotFound => 'Not found or no longer valid.';
+
+  @override
+  String get tgErrForbidden => 'You are not allowed to do this.';
+
+  @override
+  String get tgErrNotPublished =>
+      'Someone you picked has not shared their calendar yet; it is shared when they open Together.';
+
+  @override
+  String get tgErrNotEligible =>
+      'Social features are not available for this account.';
+
+  @override
+  String get tgErrUsernameTaken => 'This username is taken.';
+
+  @override
+  String get tgErrPartnerTaken =>
+      'One of you already has a partner; that partnership has to end first.';
+
+  @override
+  String get tgErrAlready => 'This is already done.';
+
+  @override
+  String get tgErrInvalid => 'The input is not valid.';
+
+  @override
+  String get tgIncoming => 'Requests';
+
+  @override
+  String get tgWantsToBeFriends => 'Wants to be friends';
+
+  @override
+  String get tgPartnerPending => 'Partner request pending';
+
+  @override
+  String get tgOutgoing => 'Sent requests';
+
+  @override
+  String get tgRequestSent => 'Request sent';
+
+  @override
+  String get tgWithdraw => 'Withdraw';
+
+  @override
+  String get tgBlocked => 'Blocked';
+
+  @override
+  String get tgUnblock => 'Unblock';
+
+  @override
+  String get tgUnblocked =>
+      'Unblocked. A new invite is needed to be friends again.';
+
+  @override
+  String get tgNotFriendTitle => 'You are no longer friends';
+
+  @override
+  String get tgNotFriendBody => 'Nothing about this person can be shown.';
+
+  @override
+  String get tgSendMessage => 'Send a message';
+
+  @override
+  String get tgSeePlan => 'See their plan';
+
+  @override
+  String get tgCompareBrains => 'Compare brains';
+
+  @override
+  String get tgEndPartner => 'End partnership';
+
+  @override
+  String get tgEndPartnerBody =>
+      'You stay friends; partner-only visibility ends.';
+
+  @override
+  String get tgAskPartner => 'Ask to be partners';
+
+  @override
+  String get tgAskPartnerBody => 'You become partners once they accept.';
+
+  @override
+  String get tgAskPartnerBlocked => 'End your current partnership first.';
+
+  @override
+  String get tgPartnerRequested => 'Partner request sent.';
+
+  @override
+  String get tgShowFull => 'Show my full plan to this person';
+
+  @override
+  String get tgShowFullBody =>
+      'Title, time, category and notes. This exception overrides your category rules for this person.';
+
+  @override
+  String get tgSafety => 'Safety';
+
+  @override
+  String get tgRemoveFriend => 'Remove friend';
+
+  @override
+  String tgRemoveFriendBody(String name) {
+    return '$name will no longer see your plan, messages or brain. A new invite is needed to be friends again.';
+  }
+
+  @override
+  String get tgBlock => 'Block';
+
+  @override
+  String tgBlockTitle(String name) {
+    return 'Block $name?';
+  }
+
+  @override
+  String get tgBlockBody =>
+      'Friendship and partnership end and the chat closes for both of you. They cannot find you or invite you, and they are not told they were blocked.';
+
+  @override
+  String get tgBlocked1 => 'Blocked.';
+
+  @override
+  String get tgReport => 'Report';
+
+  @override
+  String get tgInviteTitle => 'Your invite code';
+
+  @override
+  String get tgInviteBody =>
+      'The code is valid for 7 days and works once. Share it only with someone you trust.';
+
+  @override
+  String get tgKindFriend => 'Friend invite';
+
+  @override
+  String get tgKindPartner => 'Partner invite';
+
+  @override
+  String get tgCreateCode => 'Create a code';
+
+  @override
+  String tgQrLabel(String code) {
+    return 'QR image of your invite code: $code';
+  }
+
+  @override
+  String tgExpires(String date) {
+    return 'Valid until $date';
+  }
+
+  @override
+  String get tgCopy => 'Copy';
+
+  @override
+  String get tgCopied => 'Copied.';
+
+  @override
+  String get tgRevoke => 'Revoke';
+
+  @override
+  String get tgHaveCode => 'Have a code?';
+
+  @override
+  String get tgCode => 'Invite code';
+
+  @override
+  String get tgScan => 'Scan QR code';
+
+  @override
+  String get tgUseCode => 'Use code';
+
+  @override
+  String get tgCodeRule => 'An invite code has 10 characters.';
+
+  @override
+  String tgRedeemed(String name) {
+    return 'You and $name are friends now.';
+  }
+
+  @override
+  String tgRedeemedPartner(String name) {
+    return 'You and $name are partners now.';
+  }
+
+  @override
+  String get tgByUsername => 'By exact username';
+
+  @override
+  String get tgByUsernameBody =>
+      'Requests only reach accounts that turned discoverability on. There is no search or suggestions.';
+
+  @override
+  String get tgUsername => 'Username';
+
+  @override
+  String get tgSendRequest => 'Send request';
+
+  @override
+  String get tgCameraTitle => 'Camera unavailable';
+
+  @override
+  String get tgCameraBody =>
+      'Camera permission was not given or there is no camera. You can also type the code.';
+
+  @override
+  String get tgScanHint =>
+      'Point the camera at the QR code on your friend\'s screen.';
+
+  @override
+  String tgPlanOf(String name) {
+    return '$name: plan';
+  }
+
+  @override
+  String get tgWeek => 'Week';
+
+  @override
+  String get tgPlanEmptyTitle => 'Nothing shared';
+
+  @override
+  String tgPlanEmptyBody(String name) {
+    return '$name shares nothing for these days or the plan is empty. $name decides what is visible.';
+  }
+
+  @override
+  String get tgBusy => 'Busy';
+
+  @override
+  String get tgPlanReadOnly => 'Read-only. The owner chooses what is visible.';
+
+  @override
+  String get tgLevelFull => 'Full (title, time, notes)';
+
+  @override
+  String get tgLevelTitleTime => 'Title and time';
+
+  @override
+  String get tgLevelBusy => 'Only \"busy\"';
+
+  @override
+  String get tgLevelHidden => 'Hidden';
+
+  @override
+  String get tgLevelDefault => 'Default';
+
+  @override
+  String get tgLevelFullBody => 'Title, time, category and notes are visible.';
+
+  @override
+  String get tgLevelTitleTimeBody =>
+      'Title and time are visible; notes and category are not.';
+
+  @override
+  String get tgLevelBusyBody =>
+      'Only that you are busy at that time is visible.';
+
+  @override
+  String get tgLevelHiddenBody => 'Not visible at all.';
+
+  @override
+  String get tgLevelDefaultBody =>
+      'Partner sees title and time, other friends see \"busy\".';
+
+  @override
+  String get tgSecProfile => 'Profile';
+
+  @override
+  String get tgDiscoverable => 'Findable by my username';
+
+  @override
+  String tgDiscoverableBody(String username) {
+    return 'Someone who types exactly @$username can send a request.';
+  }
+
+  @override
+  String get tgDiscoverableNoUsername => 'You need a username first.';
+
+  @override
+  String get tgGlobalBoard => 'Join the global leaderboard';
+
+  @override
+  String get tgGlobalBoardBody =>
+      'With your nickname, weekly focus minutes and consistency.';
+
+  @override
+  String get tgGlobalBoardMinor => 'The global leaderboard is off under 18.';
+
+  @override
+  String get tgShareBrain => 'Friends can see my brain';
+
+  @override
+  String get tgShareBrainBody =>
+      'For comparison; the server computes the brain from your session records.';
+
+  @override
+  String get tgSecPlanVisibility => 'Plan visibility';
+
+  @override
+  String get tgPlanVisibilityBody =>
+      'Choose for each category. A subcategory without a rule follows its parent. Rules are enforced in the database.';
+
+  @override
+  String get tgAllCategories => 'All categories';
+
+  @override
+  String get tgVisibilityFootnote =>
+      'Common free time only shares free slots; hidden items count as taken but their content is never sent.';
+
+  @override
+  String get tgNoMessagesTitle => 'No messages yet';
+
+  @override
+  String get tgNoMessagesBody => 'Start a chat from a friend\'s page.';
+
+  @override
+  String get tgNoMessagesYet => 'No messages yet';
+
+  @override
+  String get tgMessageDeleted => 'Message deleted';
+
+  @override
+  String get tgYou => 'You';
+
+  @override
+  String get tgMuted => 'Notifications off';
+
+  @override
+  String tgReactWith(String emoji) {
+    return 'React with $emoji';
+  }
+
+  @override
+  String get tgReportMessage => 'Report message';
+
+  @override
+  String get tgMore => 'More';
+
+  @override
+  String get tgMute => 'Mute notifications';
+
+  @override
+  String get tgUnmute => 'Unmute notifications';
+
+  @override
+  String tgChatEmptyTitle(String name) {
+    return 'Chat with $name';
+  }
+
+  @override
+  String get tgChatEmptyBody =>
+      'Messages are only visible to the two of you. Inappropriate words are starred out.';
+
+  @override
+  String get tgMessageHint => 'Long-press to react, copy or report';
+
+  @override
+  String get tgWriteMessage => 'Write a message';
+
+  @override
+  String get tgSend => 'Send';
+
+  @override
+  String get tgReasonHarassment => 'Harassment or bullying';
+
+  @override
+  String get tgReasonInappropriate => 'Inappropriate content';
+
+  @override
+  String get tgReasonSpam => 'Spam';
+
+  @override
+  String get tgReasonChildSafety => 'Child safety';
+
+  @override
+  String get tgReasonOther => 'Something else';
+
+  @override
+  String get tgReportBody =>
+      'What happened? Your report is reviewed; the person is not told who reported. For a message, a copy of it is kept.';
+
+  @override
+  String get tgReportDetails => 'Details (optional)';
+
+  @override
+  String get tgReportSend => 'Send report';
+
+  @override
+  String get tgReportThanks =>
+      'Report received. You can also block this person.';
+
+  @override
+  String get tgReportUrgent =>
+      'If someone is putting you or others in immediate danger, call your local emergency number.';
+
+  @override
+  String get tgGlobal => 'Global';
+
+  @override
+  String get tgMetricFocus => 'Focus minutes';
+
+  @override
+  String get tgMetricStreak => 'Consistency';
+
+  @override
+  String get tgBoardNote =>
+      'Weekly, resets on Monday. Only server-verified sessions count: overlapping or impossible sessions are left out.';
+
+  @override
+  String get tgGlobalNotJoined => 'You have not joined the global leaderboard.';
+
+  @override
+  String get tgBoardEmpty => 'No completed sessions this week yet.';
+
+  @override
+  String tgDays(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n days',
+      one: '1 day',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tgSharedNew => 'Propose a shared plan';
+
+  @override
+  String get tgSharedEmptyTitle => 'No shared plans yet';
+
+  @override
+  String get tgSharedEmptyBody =>
+      'Propose an activity or project; once your friend accepts, it lands in both of your plans.';
+
+  @override
+  String tgProgress(String done, String total) {
+    return '$done / $total';
+  }
+
+  @override
+  String tgWith(String names) {
+    return 'With: $names';
+  }
+
+  @override
+  String get tgStatusConfirmed => 'Confirmed';
+
+  @override
+  String get tgStatusCancelled => 'Cancelled';
+
+  @override
+  String get tgStatusProposed => 'Waiting for an answer';
+
+  @override
+  String tgChangeProposed(String text) {
+    return 'Change proposed: $text';
+  }
+
+  @override
+  String tgChangeWaiting(String text) {
+    return 'Change waiting for approval: $text';
+  }
+
+  @override
+  String get tgSharedAccepted => 'Added to your plan.';
+
+  @override
+  String get tgSharedCancel => 'Cancel plan';
+
+  @override
+  String get tgSharedCancelBody => 'It is removed from everyone\'s plan.';
+
+  @override
+  String get tgSharedLeave => 'Leave';
+
+  @override
+  String get tgSharedLeaveBody =>
+      'It is removed from your plan; it continues for the others.';
+
+  @override
+  String get tgSuggestChange => 'Suggest a change';
+
+  @override
+  String tgPatchTitle(String title) {
+    return 'name \"$title\"';
+  }
+
+  @override
+  String get tgSharedKindTitle => 'What are you planning?';
+
+  @override
+  String get tgKindActivity => 'Activity';
+
+  @override
+  String get tgKindActivityBody => 'Together at a set day and time.';
+
+  @override
+  String get tgKindProject => 'Project';
+
+  @override
+  String get tgKindProjectBody =>
+      'Total time and a deadline; progress is shared.';
+
+  @override
+  String get tgSharedNameTitle => 'What should it be called?';
+
+  @override
+  String get tgSharedName => 'Name';
+
+  @override
+  String get tgSharedNotes => 'Note (optional)';
+
+  @override
+  String get tgSharedWithTitle => 'With whom?';
+
+  @override
+  String get tgSharedWhenTitle => 'When?';
+
+  @override
+  String get tgSharedDeadlineTitle => 'Deadline and total time';
+
+  @override
+  String tgSharedTotal(String duration) {
+    return 'Total: $duration';
+  }
+
+  @override
+  String get tgFrom => 'Start';
+
+  @override
+  String get tgTo => 'End';
+
+  @override
+  String get tgEndAfterStart => 'The end must be after the start.';
+
+  @override
+  String get tgSharedRootTitle => 'Which root category?';
+
+  @override
+  String get tgSharedRootBody =>
+      'Your focus sessions grow the brain by this category.';
+
+  @override
+  String get tgNoCategory => 'No category';
+
+  @override
+  String get tgSharedConfirmTitle => 'Send it?';
+
+  @override
+  String get tgSharedConfirmBody =>
+      'It lands as a fixed item in the plan of everyone who accepts. Later changes need the others\' approval.';
+
+  @override
+  String get tgSharedSend => 'Send';
+
+  @override
+  String get tgSharedSent => 'Proposal sent.';
+
+  @override
+  String get tgChangeBody =>
+      'The change goes to the other participants; it applies once everyone approves.';
+
+  @override
+  String get tgSendChange => 'Send for approval';
+
+  @override
+  String get tgChangeSent => 'Change sent for approval.';
+
+  @override
+  String get tgFreeTimeBody =>
+      'Finds times in the next 7 days when everyone you pick is free. Nobody\'s activities are shown.';
+
+  @override
+  String get tgFreeTimeLength => 'At least how long?';
+
+  @override
+  String get tgFreeTimeFind => 'Find free time';
+
+  @override
+  String get tgFreeTimeNone =>
+      'No slot where everyone is free. Try a shorter length.';
+
+  @override
+  String get tgPlanHere => 'Plan here';
+
+  @override
+  String tgCompareTitle(String name) {
+    return 'You and $name';
+  }
+
+  @override
+  String get tgCompareNote =>
+      'The brain is a metaphor, not a measurement. Your friend\'s brain is computed on the server from session records.';
+
+  @override
+  String get tgLeftYou => 'You on the left';
+
+  @override
+  String tgRightFriend(String name) {
+    return '$name on the right';
+  }
+
+  @override
+  String tgNeurons(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n neurons',
+      one: '1 neuron',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tgCofocus => 'Co-focus';
+
+  @override
+  String get tgCofocusIntro =>
+      'You start at the same moment; everyone picks their own task and mode. If someone breaks the plan, the others see a calm note. A session completed together earns a small shared connection.';
+
+  @override
+  String get tgCofocusWho => 'Who';
+
+  @override
+  String get tgVoice => 'Voice chat';
+
+  @override
+  String get tgVoiceBody =>
+      'Optional. The microphone starts off and nothing is recorded.';
+
+  @override
+  String get tgCofocusInviteAction => 'Invite';
+
+  @override
+  String get tgCofocusEnded => 'This co-focus session has ended.';
+
+  @override
+  String get tgCofocusLive =>
+      'The session has started. Pick your task and join.';
+
+  @override
+  String get tgCofocusHostHint =>
+      'Start when everyone has picked a task; timers start together.';
+
+  @override
+  String get tgCofocusGuestHint => 'Your timer starts when the host starts.';
+
+  @override
+  String get tgCofocusMine => 'Your task';
+
+  @override
+  String get tgCofocusNoTasks =>
+      'You have no pending task today. Add one first.';
+
+  @override
+  String get tgCofocusStart => 'Start for everyone';
+
+  @override
+  String get tgCofocusJoinNow => 'Join now';
+
+  @override
+  String get tgCofocusLeave => 'Leave';
+
+  @override
+  String get tgPhaseDone => 'Finished';
+
+  @override
+  String get tgPhaseBroken => 'Left their session';
+
+  @override
+  String get tgPhaseLeft => 'Left';
+
+  @override
+  String get tgPhaseInvited => 'Invited';
+
+  @override
+  String get tgPhaseFocus => 'Focusing';
+
+  @override
+  String get tgPhaseBreak => 'On a break';
+
+  @override
+  String get tgPhasePaused => 'Paused';
+
+  @override
+  String get tgPhaseAway => 'Not connected';
+
+  @override
+  String get tgPhaseLobby => 'In the lobby';
+
+  @override
+  String get tgSpeaking => 'speaking';
+
+  @override
+  String tgMutePerson(String name) {
+    return 'Mute $name';
+  }
+
+  @override
+  String tgUnmutePerson(String name) {
+    return 'Unmute $name';
+  }
+
+  @override
+  String get tgVoiceNoRecording =>
+      'Nothing is recorded. Muting someone only affects what you hear.';
+
+  @override
+  String get tgVoiceConnect => 'Join voice';
+
+  @override
+  String get tgVoiceErrPermission =>
+      'Microphone permission is needed. You can allow it in settings.';
+
+  @override
+  String get tgVoiceErrUnavailable => 'Voice chat is not available right now.';
+
+  @override
+  String get tgMicOn => 'Turn microphone on';
+
+  @override
+  String get tgMicOff => 'Turn microphone off';
+
+  @override
+  String tgNoticeBroken(String name) {
+    return '$name left their session. You can keep going.';
+  }
+
+  @override
+  String tgNoticeCompleted(String name) {
+    return '$name finished their session.';
+  }
+
+  @override
+  String tgNoticeLeft(String name) {
+    return '$name left.';
+  }
+
+  @override
+  String get tgNoticeMessagesTitle => 'NeuroPlan';
+
+  @override
+  String get tgNoticeMessagesChannel => 'Messages';
+
+  @override
+  String tgNoticeMessagesBody(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count new messages',
+      one: '1 new message',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String tgPickMax(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: 'You can pick up to $n people.',
+      one: 'You can pick 1 person.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get tgCofocusChooseFirst => 'Pick your task first to start.';
 }

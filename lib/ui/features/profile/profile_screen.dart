@@ -15,6 +15,7 @@ import '../../core/format.dart';
 import '../../core/location.dart';
 import '../../core/prayer_fields.dart';
 import '../../core/states.dart';
+import 'account_tiles.dart';
 import '../../core/wizard.dart';
 import 'focus_settings.dart';
 import 'notification_settings.dart';
@@ -211,6 +212,9 @@ class _Settings extends ConsumerWidget {
 
         section(l.secFocus),
         const FocusSettingsTiles(),
+
+        section(l.secAccount),
+        const AccountTiles(),
 
         section(l.secAbout),
         ListTile(

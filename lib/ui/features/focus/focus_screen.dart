@@ -9,6 +9,7 @@ import 'package:neuroplan_core/neuroplan_core.dart';
 import '../../../app/providers.dart';
 import '../../../app/theme.dart';
 import '../../../data/local/app_database.dart';
+import '../together/cofocus_screens.dart';
 import '../../core/format.dart';
 import '../../core/states.dart';
 import 'focus_controller.dart';
@@ -171,6 +172,7 @@ class _FocusScreenState extends ConsumerState<FocusScreen> {
             SafeArea(
               child: Column(
                 children: [
+                  const CofocusStrip(),
                   Expanded(
                     child: Center(
                       child: SingleChildScrollView(

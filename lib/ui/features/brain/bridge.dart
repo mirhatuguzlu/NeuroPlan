@@ -149,6 +149,22 @@ final class SceneVisibility extends ToScene {
   Map<String, Object?> get payload => {'visible': visible};
 }
 
+/// Arkadaşın beyni sağda, kendininki solda (Aşama 4B); null = karşılaştırma kapalı.
+final class SceneCompare extends ToScene {
+  const SceneCompare(this.plan);
+  final RenderPlan? plan;
+
+  @override
+  String get type => 'compare';
+  @override
+  Map<String, Object?> get payload => plan == null
+      ? const {}
+      : {
+          'regions': [for (final r in plan!.regions) r.toJson()],
+          'links': [for (final l in plan!.links) l.toJson()],
+        };
+}
+
 final class SceneReset extends ToScene {
   const SceneReset();
 

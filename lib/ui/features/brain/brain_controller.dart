@@ -27,6 +27,7 @@ class BrainViewState {
     this.error,
     this.asOf,
     this.selected,
+    this.comparing,
     this.tier = QualityTier.mid,
     this.fps,
   });
@@ -42,6 +43,9 @@ class BrainViewState {
 
   /// Bölge sayfası açık olan bölge.
   final String? selected;
+
+  /// Arkadaşla karşılaştırma açık (Aşama 4B): sahnede iki beyin yan yana.
+  final ({String id, String name})? comparing;
   final QualityTier tier;
   final double? fps;
 
@@ -50,6 +54,7 @@ class BrainViewState {
     String? Function()? error,
     DateTime? Function()? asOf,
     String? Function()? selected,
+    ({String id, String name})? Function()? comparing,
     QualityTier? tier,
     double? fps,
   }) => BrainViewState(
@@ -57,6 +62,7 @@ class BrainViewState {
     error: error != null ? error() : this.error,
     asOf: asOf != null ? asOf() : this.asOf,
     selected: selected != null ? selected() : this.selected,
+    comparing: comparing != null ? comparing() : this.comparing,
     tier: tier ?? this.tier,
     fps: fps ?? this.fps,
   );
@@ -143,6 +149,25 @@ class BrainController extends Notifier<BrainViewState> {
   }
 
   void resetView() => _scene.send(const SceneReset());
+
+  /// Karşılaştırmayı açar; arkadaşın beyni gelince [compare] sahneye verir.
+  void startCompare(String id, String name) {
+    state = state.copyWith(
+      selected: () => null,
+      comparing: () => (id: id, name: name),
+    );
+    _scene.send(const SceneHighlight(null));
+  }
+
+  void stopCompare() {
+    state = state.copyWith(comparing: () => null);
+    compare(null);
+  }
+
+  /// Arkadaş beynini yanına koyar (sunucuda hesaplanmış durum); null kapatır.
+  void compare(BrainState? friend) => _scene.send(
+    SceneCompare(friend == null ? null : renderPlan(friend, state.tier)),
+  );
 
   void _onMessage(FromScene m) {
     switch (m) {
