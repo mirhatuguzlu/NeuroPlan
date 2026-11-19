@@ -1972,7 +1972,7 @@ abstract class L10n {
   /// No description provided for @focusRuleHint.
   ///
   /// In tr, this message translates to:
-  /// **'Odak sırasında uygulamadan çıkarsan ya da bildirim panelini çekersen 10 saniye içinde dönmen gerekir; yoksa oturum bozulur. Ekranı kapatmak ve gelen arama sayılmaz, molada çıkmak serbest.'**
+  /// **'Başlayınca Android uygulamayı sabitlemek için onay ister; sabitliyken başka uygulamaya geçilemez. Sabitlemeden çıkıp uygulamadan ayrılırsan ya da bildirim panelini çekersen 10 saniye içinde dönmen gerekir; yoksa oturum bozulur. Ekranı kapatmak ve gelen arama sayılmaz, molada çıkmak serbest.'**
   String get focusRuleHint;
 
   /// No description provided for @focusSummaryFree.

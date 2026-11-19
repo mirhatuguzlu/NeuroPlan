@@ -81,6 +81,16 @@ void main() {
       expect(g.absence!.reason, AwayReason.screenOff);
     });
 
+    test('kilit ekranı (sabitlemeden PIN ile çıkış) askıya alır', () {
+      final g = EscapeGuard()
+        ..left(t0)
+        ..deviceChecked(interactive: true, locked: true);
+      expect(g.absence!.reason, AwayReason.screenOff);
+      expect(g.check(s(60)), isNull);
+      g.unlocked(s(60));
+      expect(g.absence!.deadline, s(70));
+    });
+
     test('önce çıkıp sonra ekranı kapatmak kaçıştır', () {
       final g = EscapeGuard()
         ..left(t0)

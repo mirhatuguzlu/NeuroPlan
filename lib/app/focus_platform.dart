@@ -36,6 +36,11 @@ abstract interface class FocusPlatform {
   Future<void> escapeAlert(DateTime deadline, AlertTexts texts);
   Future<void> clearEscapeAlert();
 
+  /// Uygulama sabitleme (D36): sistem onay ister; sabitliyken ana ekran, son uygulamalar
+  /// ve bildirim paneli kapalıdır. Kullanıcı bir hareketle çıkabilir.
+  Future<void> pin();
+  Future<void> unpin();
+
   /// Faz değişimi (mola zamanı, mola bitti, hedefe ulaştın).
   Future<void> phaseAlert(
     String title,
@@ -292,6 +297,12 @@ class AndroidFocusPlatform implements FocusPlatform {
   Future<void> clearEscapeAlert() => _method.invokeMethod('clearEscapeAlert');
 
   @override
+  Future<void> pin() => _method.invokeMethod('pin');
+
+  @override
+  Future<void> unpin() => _method.invokeMethod('unpin');
+
+  @override
   Future<void> phaseAlert(
     String title,
     String body, {
@@ -348,6 +359,10 @@ class _NoFocusPlatform implements FocusPlatform {
   Future<void> escapeAlert(DateTime deadline, AlertTexts texts) async {}
   @override
   Future<void> clearEscapeAlert() async {}
+  @override
+  Future<void> pin() async {}
+  @override
+  Future<void> unpin() async {}
   @override
   Future<void> phaseAlert(
     String title,

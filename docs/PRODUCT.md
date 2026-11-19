@@ -77,7 +77,7 @@ Kullanıcı hayatını aşağıdaki öğe türleriyle tanımlar. Her öğe bir k
 - `FOCUS-4` Pomodoro molası sırasında uygulamadan çıkmak kaçış sayılmaz.
 - `FOCUS-5` Ödül kuralı (SCIENCE.md §4): Pomodoro'da süreklilik (art arda tamamlanan oturum) ve oturum sayısı; derin çalışmada en uzun kesintisiz süre ödüllendirilir.
 - `FOCUS-6` İstisnalar (D33): ekranın kapanması / kilitlenmesi kaçış sayılmaz, oturum arka planda sürer. Gelen arama telefon durumu izni varsa cezasızdır; izin yoksa dönüşte "cezayı kaldırayım mı?" diye sorulur. Alarm ayrıca algılanmaz, acil durum hakkı kullanılır.
-- `FOCUS-7` Uyarı (D35): kaçışta üstten kayan, titreşimli bildirim 10 sn geriye sayar; dokununca uygulamaya dönülür; süre dolunca yerini "Odak bozuldu" bildirimi alır. Uygulamanın üstünde başka uygulama açılmasını engellemek Android'de mümkün değil; sabitleme kullanılmıyor.
+- `FOCUS-7` Uyarı (D35): kaçışta üstten kayan, titreşimli bildirim 10 sn geriye sayar; dokununca uygulamaya dönülür; süre dolunca yerini "Odak bozuldu" bildirimi alır. Odak bloğunda uygulama sabitlenir (D36): Android onay ister, sabitliyken başka uygulama açılamaz; molada ve acil durumda sabitleme kalkar.
 - `FOCUS-8` Duraklat sayacı durdurur, kural sürer. Acil durum cezasız duraklatır ve çıkmayı serbest bırakır, günde 3 kez (D34).
 - `FOCUS-9` İsteğe bağlı Rahatsız Etmeyin: oturumda açılır, bitince eski haline döner. Odak ekranında sistem çubukları gizlidir.
 - `FOCUS-10` Bitiş adımları, her biri atlanabilir: odak puanı 1–5 → yorgunluk 1–5 → kısa not → beyin kazanımı. Bozulan oturumda ne olduğu sakin dille anlatılır, yeniden başlatma önerilir.

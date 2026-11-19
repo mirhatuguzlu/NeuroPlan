@@ -1110,7 +1110,7 @@ class L10nEn extends L10n {
 
   @override
   String get focusRuleHint =>
-      'If you leave the app or pull down the notification shade during focus, come back within 10 seconds or the session breaks. Turning off the screen and incoming calls don\'t count, and leaving during a break is fine.';
+      'When you start, Android asks to pin the app; while pinned you can\'t switch to other apps. If you unpin and leave the app or pull down the notification shade, come back within 10 seconds or the session breaks. Turning off the screen and incoming calls don\'t count, and leaving during a break is fine.';
 
   @override
   String get focusSummaryFree => 'No time limit; stop when you\'re done.';

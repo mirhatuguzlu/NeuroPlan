@@ -1,6 +1,7 @@
 package com.mirhatuguzlu.neuroplan
 
 import android.Manifest
+import android.app.ActivityManager
 import android.app.KeyguardManager
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -61,6 +62,21 @@ class MainActivity : FlutterActivity() {
                     FocusAlert.cancel(this)
                     result.success(null)
                 }
+                // Uygulama sabitleme (D36): sistem onay ister; kullanıcı bir hareketle çıkabilir.
+                "pin" -> {
+                    try {
+                        if (!isPinned()) startLockTask()
+                    } catch (_: Exception) {
+                    }
+                    result.success(null)
+                }
+                "unpin" -> {
+                    try {
+                        if (isPinned()) stopLockTask()
+                    } catch (_: Exception) {
+                    }
+                    result.success(null)
+                }
                 else -> result.notImplemented()
             }
         }
@@ -105,6 +121,10 @@ class MainActivity : FlutterActivity() {
             register()
         }
     }
+
+    private fun isPinned() =
+        getSystemService(ActivityManager::class.java).lockTaskModeState !=
+            ActivityManager.LOCK_TASK_MODE_NONE
 
     private fun hasPhonePermission() =
         ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) ==

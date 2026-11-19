@@ -72,6 +72,13 @@ class FocusController extends Notifier<FocusState> {
   Timer? _deadline;
   Timer? _debounce;
   DateTime? _alerted;
+  var _pinned = false;
+
+  /// Sabitleme onay penceresi pencere odağını alır; bu süre içindeki odak kaybı kaçış
+  /// değildir. Pencere odağı dönünce ya da süre dolunca biter.
+  // shortcut: onay penceresi hiç açılmazsa (zaten sabitli) 30 sn boyunca panel çekme
+  // sayılmaz; sabitliyken panel zaten kapalı olduğu için kabul edildi.
+  DateTime? _promptUntil;
   Future<void> _queue = Future.value();
 
   FocusPlatform get _platform => ref.read(focusPlatformProvider);
@@ -154,6 +161,7 @@ class FocusController extends Notifier<FocusState> {
     }
     await _comeBack(_now());
     if (_session == null) return;
+    await _syncArm(_now()); // sabitleme süreç ölünce gitmiş olabilir
     if (await _prefs.get(PrefsRepository.focusDnd) == '1') {
       await _safe(_platform.enableDnd);
     }
@@ -207,6 +215,7 @@ class FocusController extends Notifier<FocusState> {
     _title = await _titleOf(instance.activityId);
     await _saveRuntime();
     await _saveSettings(settings);
+    _syncPin(want: true);
     if (await _prefs.get(PrefsRepository.focusDnd) == '1') {
       await _safe(_platform.enableDnd);
     }
@@ -329,8 +338,10 @@ class FocusController extends Notifier<FocusState> {
     if (_session == null) return;
     switch (signal) {
       case FocusSignal.windowFocusLost:
-        _left(shade: true);
+        final prompt = _promptUntil;
+        if (prompt == null || !_now().isBefore(prompt)) _left(shade: true);
       case FocusSignal.windowFocusGained:
+        _promptUntil = null;
         _returned();
       case FocusSignal.screenOff:
         _guardEvent(() => _guard.screenOff(_now()));
@@ -381,6 +392,7 @@ class FocusController extends Notifier<FocusState> {
           final d = await _platform.deviceState();
           _guard.deviceChecked(
             interactive: d.interactive,
+            locked: d.locked,
             inCall: d.inCall,
             audioCall: d.audioCall,
           );
@@ -484,7 +496,21 @@ class FocusController extends Notifier<FocusState> {
       final r = _guard.disarm(now);
       if (r != null) await _record(r);
     }
+    _syncPin(want: want);
     _syncAlert();
+  }
+
+  /// Uygulama kural işlerken sabitlenir; molada ve acil durumda çıkmak serbest olsun diye
+  /// sabitleme kalkar (D36).
+  void _syncPin({required bool want}) {
+    if (want == _pinned) return;
+    _pinned = want;
+    if (want) {
+      _promptUntil = _now().add(const Duration(seconds: 30));
+      _safe(_platform.pin);
+    } else {
+      _safe(_platform.unpin);
+    }
   }
 
   // ---------------------------------------------------------------- faz
@@ -577,6 +603,7 @@ class FocusController extends Notifier<FocusState> {
     _debounce?.cancel();
     _alerted = null;
     await _safe(_platform.stopOngoing);
+    _syncPin(want: false);
     await _safe(_platform.restoreDnd);
     // Bozulmada native uyarı "Odak bozuldu"ya dönüştü; o bildirim kalır.
     if (outcome != 'broken') await _safe(_platform.clearEscapeAlert);

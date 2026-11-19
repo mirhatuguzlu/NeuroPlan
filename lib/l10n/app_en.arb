@@ -325,7 +325,7 @@
   "focusMissingTitle": "This item is no longer in your plan",
   "focusMissingBody": "Your plan may have changed. Pick it again from Today.",
   "focusChangeDurations": "Change durations",
-  "focusRuleHint": "If you leave the app or pull down the notification shade during focus, come back within 10 seconds or the session breaks. Turning off the screen and incoming calls don't count, and leaving during a break is fine.",
+  "focusRuleHint": "When you start, Android asks to pin the app; while pinned you can't switch to other apps. If you unpin and leave the app or pull down the notification shade, come back within 10 seconds or the session breaks. Turning off the screen and incoming calls don't count, and leaving during a break is fine.",
   "focusSummaryFree": "No time limit; stop when you're done.",
   "focusSummaryPomodoro": "{work} min focus, {rest} min break; a {long} min long break every {every} cycles.",
   "focusSummaryDeep": "Target: {target} min of uninterrupted focus. You can take a break, suggested from how long you've focused so far.",

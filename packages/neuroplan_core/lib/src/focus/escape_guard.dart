@@ -173,10 +173,12 @@ final class EscapeGuard {
           );
   }
 
-  /// Çıkıştan kısa süre sonra yapılan cihaz sorgusu: ekran açık mı, arama var mı
-  /// ([inCall] null = telefon izni yok), ses modu arama gösteriyor mu.
+  /// Çıkıştan kısa süre sonra yapılan cihaz sorgusu: ekran açık mı, kilit ekranı mı
+  /// (ör. sabitlemeden PIN ile çıkış), arama var mı ([inCall] null = telefon izni yok),
+  /// ses modu arama gösteriyor mu. Kilit ekranı ekran kapanması gibi askıya alır.
   void deviceChecked({
     required bool interactive,
+    bool locked = false,
     bool? inCall,
     bool audioCall = false,
   }) {
@@ -184,7 +186,7 @@ final class EscapeGuard {
     if (a == null) return;
     if (inCall == true) {
       callStarted(a.leftAt);
-    } else if (!interactive) {
+    } else if (!interactive || locked) {
       screenOff(a.leftAt);
     }
     if (inCall == null && audioCall && absence != null) {

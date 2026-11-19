@@ -271,6 +271,68 @@ void main() {
     expect(r.platform.alertDeadline, isNotNull);
   });
 
+  group('uygulama sabitleme (D36)', () {
+    test(
+      'odakta sabitli; molada ve acil durumda kalkar; bitince kalkar',
+      () async {
+        await r.start(const FocusSettings(FocusMode.deep));
+        expect(r.platform.pinned, isTrue);
+        await r.c.pause();
+        expect(
+          r.platform.pinned,
+          isTrue,
+          reason: 'normal duraklatma kuralı korur',
+        );
+        await r.c.resume();
+        await r.c.takeBreak();
+        expect(r.platform.pinned, isFalse, reason: 'molada çıkmak serbest');
+        await r.c.resume();
+        expect(r.platform.pinned, isTrue);
+        await r.c.emergency();
+        expect(
+          r.platform.pinned,
+          isFalse,
+          reason: 'acil durumda çıkmak serbest',
+        );
+        await r.c.resume();
+        await r.c.finish();
+        expect(r.platform.pinned, isFalse);
+      },
+    );
+
+    test('sabitleme onayı pencere odağını alır; kaçış sayılmaz', () async {
+      await r.start(const FocusSettings(FocusMode.free));
+      r.platform.signalsCtl.add(FocusSignal.windowFocusLost);
+      await r.settle(900);
+      expect(r.s.absence, isNull);
+      expect(r.platform.alertDeadline, isNull);
+      r.platform.signalsCtl.add(FocusSignal.windowFocusGained);
+      await r.settle();
+      // Onaydan sonra panel çekmek (sabitleme kaldırıldıysa) yine kaçıştır.
+      r.platform.signalsCtl.add(FocusSignal.windowFocusLost);
+      await r.settle(900);
+      expect(r.s.absence?.reason, AwayReason.notificationShade);
+    });
+
+    test('sabitlemeden PIN ile çıkış (kilit ekranı) kaçış değil', () async {
+      await r.start(const FocusSettings(FocusMode.free));
+      r.platform.signalsCtl.add(FocusSignal.windowFocusGained); // onay kapandı
+      r.platform.device = const DeviceState(locked: true);
+      await r.leave();
+      expect(r.platform.alertDeadline, isNull);
+      r.now = t0.add(const Duration(minutes: 2));
+      r.platform.signalsCtl.add(FocusSignal.unlocked);
+      await r.back();
+      expect(r.s.active, isTrue);
+    });
+
+    test('açılışta oturum sürüyorsa yeniden sabitlenir', () async {
+      await r.start(const FocusSettings(FocusMode.free));
+      await r.reopen(t0.add(const Duration(seconds: 5)));
+      expect(r.platform.pinned, isTrue);
+    });
+  });
+
   group('uygulama yeniden açılınca kurtarma', () {
     test('süren oturum kaldığı yerden devam eder', () async {
       await r.start(const FocusSettings(FocusMode.free));

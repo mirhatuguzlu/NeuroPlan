@@ -256,3 +256,13 @@ Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem 
 **Durum:** Kabul. `specialUse` beyanı ilk Play yüklemesinden önce yapılacak.
 
 **D25 kapanışı (2026-11-19):** "Odaklan" butonu geldi: odak gerektiren bugünkü işin açılan eylemlerinde.
+
+## 2026-11-19 — D36: Odakta uygulama sabitleme
+**Karar:** Odak bloğu başlayınca uygulama Android'in **uygulama sabitleme** özelliğiyle sabitlenir (`startLockTask`). Sabitliyken ana ekran, son uygulamalar ve bildirim paneli kapalıdır; üstte başka uygulama açılamaz.
+- Android her sabitlemede kullanıcıdan onay ister; kullanıcı bir hareketle (geri + son uygulamalar basılı tutma ya da yukarı kaydırıp tutma) çıkabilir. Çıkıp uygulamadan ayrılırsa 10 sn kuralı işler.
+- Sabitleme kuralla birlikte açılır: odakta ve normal duraklatmada açık; molada, mola sonunda ve acil durumda kalkar (çıkmak serbest olsun diye); odak yeniden başlayınca yeniden istenir. Oturum bitince ya da bozulunca kalkar. Uygulama yeniden açıldığında oturum sürüyorsa yeniden istenir.
+- Onay penceresi pencere odağını aldığı için, sabitleme istendikten sonraki 30 sn içinde pencere odağı geri gelene kadar odak kaybı kaçış sayılmaz.
+- Sabitlemeden PIN ile çıkışta kilit ekranı açılır; kilit ekranı ekran kapanması gibi askıya alınır, kilit açılınca 10 sn başlar.
+- Sabitleme ayarı kapalıysa ya da kullanıcı onaylamazsa oturum yine sürer; koruma uyarı + 10 sn kuralıdır.
+**Neden:** Proje sahibi önce "yalnız uyarı"yı seçti, sonra "uygulama sabitlensin" dedi. "Her oturumda" biçimi uygulandı (ayar anahtarı yok).
+**Durum:** Kabul. **D35'teki "Uygulama sabitleme yok" maddesinin yerine geçer.** Gerçek cihaz testi bekliyor (Xiaomi / HyperOS sabitleme davranışı dahil).

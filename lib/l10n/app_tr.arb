@@ -369,7 +369,7 @@
   "focusMissingTitle": "Bu iş artık planda yok",
   "focusMissingBody": "Plan değişmiş olabilir. Bugün ekranından yeniden seç.",
   "focusChangeDurations": "Süreleri değiştir",
-  "focusRuleHint": "Odak sırasında uygulamadan çıkarsan ya da bildirim panelini çekersen 10 saniye içinde dönmen gerekir; yoksa oturum bozulur. Ekranı kapatmak ve gelen arama sayılmaz, molada çıkmak serbest.",
+  "focusRuleHint": "Başlayınca Android uygulamayı sabitlemek için onay ister; sabitliyken başka uygulamaya geçilemez. Sabitlemeden çıkıp uygulamadan ayrılırsan ya da bildirim panelini çekersen 10 saniye içinde dönmen gerekir; yoksa oturum bozulur. Ekranı kapatmak ve gelen arama sayılmaz, molada çıkmak serbest.",
   "focusSummaryFree": "Süre sınırı yok; bitirdiğinde dur.",
   "focusSummaryPomodoro": "{work} dk odak, {rest} dk mola; {every} döngüde bir {long} dk uzun mola.",
   "@focusSummaryPomodoro": {"placeholders": {"work": {"type": "int"}, "rest": {"type": "int"}, "every": {"type": "int"}, "long": {"type": "int"}}},

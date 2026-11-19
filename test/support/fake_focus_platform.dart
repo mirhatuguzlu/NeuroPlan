@@ -14,6 +14,7 @@ class FakeFocusPlatform implements FocusPlatform {
   DateTime? alertDeadline;
   OngoingNotice? ongoing;
   bool dndOn = false;
+  bool pinned = false;
   final phaseAlerts = <String>[];
 
   @override
@@ -45,6 +46,10 @@ class FakeFocusPlatform implements FocusPlatform {
       alertDeadline = deadline;
   @override
   Future<void> clearEscapeAlert() async => alertDeadline = null;
+  @override
+  Future<void> pin() async => pinned = true;
+  @override
+  Future<void> unpin() async => pinned = false;
   @override
   Future<void> phaseAlert(
     String title,

@@ -14,7 +14,19 @@ Hazırlık: `flutter run --dart-define-from-file=.env` (ya da `flutter build apk
 - [ ] Android 14+: uygulama çökmeden açılır (ön plan servis türü `specialUse`). `adb logcat | grep -i foreground` hata göstermez.
 - [ ] Geri tuşu / geri hareketi oturumu kapatmaz, "Bitir'e dokun" uyarısı çıkar.
 
+### A1b. Uygulama sabitleme (D36)
+- [ ] "Başla" → Android "Uygulama sabitlensin mi?" onayını gösterir; onay penceresi açıkken 10 sn uyarısı **gelmez**.
+- [ ] Onaylayınca: ana ekran, son uygulamalar ve bildirim paneli açılmaz; başka uygulamaya geçilemez.
+- [ ] Onaylamazsan (ya da Ayarlar'da "Uygulama sabitleme" kapalıysa) oturum yine başlar; uygulamadan çıkınca 10 sn uyarısı gelir. Sabitleme kapalıyken onay penceresinin hiç çıkıp çıkmadığı not edilir.
+- [ ] Sabitlemeden çık (gezinme hareketine göre: geri + son uygulamalar basılı tut ya da yukarı kaydırıp tut) → uygulama önde kalır, oturum sürer. Sonra uygulamadan çıkarsan 10 sn kuralı işler.
+- [ ] "Sabitlemeyi kaldırmadan önce PIN iste" açıksa: sabitlemeden çıkınca kilit ekranı gelir; PIN'i 10 sn'den uzun sürede girsen de oturum bozulmaz (kilit açılınca 10 sn başlar, uygulama öne gelir).
+- [ ] Pomodoro molası ve acil durum başlayınca sabitleme kalkar (çıkmak serbest); "Devam" ile odak başlayınca onay yeniden istenir.
+- [ ] Oturum bitince ve bozulunca sabitleme kalkar.
+- [ ] Sabitliyken gelen arama: arama ekranı açılabiliyor mu, aramadan sonra uygulamaya dönülüyor mu (not et).
+- [ ] Xiaomi / HyperOS'ta sabitleme davranışı (onay penceresi, çıkış hareketi) not edilir.
+
 ### A2. Planı bozma: 10 sn kuralı
+Not: Bu bölüm sabitleme onaylanmadan ya da sabitlemeden çıkıldıktan sonra denenir.
 - [ ] **Ana ekrana çıkma:** Ana ekran tuşu/hareketi → hemen (≤ 1 sn) üstten kayan, titreşimli "Planı bozuyorsun" bildirimi; içinde 10 sn geri sayar.
 - [ ] **Başka uygulama açma:** Son uygulamalardan başka uygulamaya geç → aynı uyarı.
 - [ ] Uyarıya dokun → uygulamaya dönülür, oturum sürer; uyarı kalkar.

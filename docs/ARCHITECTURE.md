@@ -201,6 +201,7 @@ focus_sessions (gerçek) ──BrainEngine.derive──▶ brain_events (yalnız
 - **Arayüz:** `FocusPlatform` (`lib/app/focus_platform.dart`) yalnız olay taşır ve sistem çağrısı yapar. Android uygulaması `MainActivity.kt` (kanallar `neuroplan/focus`, `neuroplan/focus_events`) ve `FocusAlert.kt` (geri sayan uyarı, "bozuldu" değişimi, DND). iOS aynı arayüzü uygular.
 - **Denetleyici:** `FocusController` (`lib/ui/features/focus/focus_controller.dart`) uygulama kökünde canlıdır (router dinler). Olayları sırayla işler; açılışta süren oturumu kurtarır. Süren oturum varken router her yolu `/focus`'a, biten oturumu sonuç ekranına yönlendirir.
 - **Süreç ölse de:** son tarihte bildirim değişimi native `Handler`'la yapılır (ön plan servisi süreci canlı tutar); veri tarafı açılışta kurtarmada tamamlanır.
+- **Sabitleme (D36):** kural silahlıyken `FocusPlatform.pin`, değilken `unpin`. Onay penceresinin aldığı pencere odağı 30 sn boyunca kaçış sayılmaz.
 
 ## 8. WebView köprüsü
 ```

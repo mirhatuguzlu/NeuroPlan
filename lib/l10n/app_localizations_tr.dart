@@ -1107,7 +1107,7 @@ class L10nTr extends L10n {
 
   @override
   String get focusRuleHint =>
-      'Odak sırasında uygulamadan çıkarsan ya da bildirim panelini çekersen 10 saniye içinde dönmen gerekir; yoksa oturum bozulur. Ekranı kapatmak ve gelen arama sayılmaz, molada çıkmak serbest.';
+      'Başlayınca Android uygulamayı sabitlemek için onay ister; sabitliyken başka uygulamaya geçilemez. Sabitlemeden çıkıp uygulamadan ayrılırsan ya da bildirim panelini çekersen 10 saniye içinde dönmen gerekir; yoksa oturum bozulur. Ekranı kapatmak ve gelen arama sayılmaz, molada çıkmak serbest.';
 
   @override
   String get focusSummaryFree => 'Süre sınırı yok; bitirdiğinde dur.';
