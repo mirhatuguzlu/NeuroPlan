@@ -586,6 +586,21 @@ class $BrainRegionsTable extends BrainRegions
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _isInnerMeta = const VerificationMeta(
+    'isInner',
+  );
+  @override
+  late final GeneratedColumn<bool> isInner = GeneratedColumn<bool>(
+    'is_inner',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_inner" IN (0, 1))',
+    ),
+    defaultValue: const Constant(false),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     key,
@@ -594,6 +609,7 @@ class $BrainRegionsTable extends BrainRegions
     nameEn,
     hemisphere,
     meshName,
+    isInner,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -655,6 +671,12 @@ class $BrainRegionsTable extends BrainRegions
     } else if (isInserting) {
       context.missing(_meshNameMeta);
     }
+    if (data.containsKey('is_inner')) {
+      context.handle(
+        _isInnerMeta,
+        isInner.isAcceptableOrUnknown(data['is_inner']!, _isInnerMeta),
+      );
+    }
     return context;
   }
 
@@ -688,6 +710,10 @@ class $BrainRegionsTable extends BrainRegions
         DriftSqlType.string,
         data['${effectivePrefix}mesh_name'],
       )!,
+      isInner: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_inner'],
+      )!,
     );
   }
 
@@ -704,6 +730,7 @@ class BrainRegion extends DataClass implements Insertable<BrainRegion> {
   final String nameEn;
   final String hemisphere;
   final String meshName;
+  final bool isInner;
   const BrainRegion({
     required this.key,
     required this.sortOrder,
@@ -711,6 +738,7 @@ class BrainRegion extends DataClass implements Insertable<BrainRegion> {
     required this.nameEn,
     required this.hemisphere,
     required this.meshName,
+    required this.isInner,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -721,6 +749,7 @@ class BrainRegion extends DataClass implements Insertable<BrainRegion> {
     map['name_en'] = Variable<String>(nameEn);
     map['hemisphere'] = Variable<String>(hemisphere);
     map['mesh_name'] = Variable<String>(meshName);
+    map['is_inner'] = Variable<bool>(isInner);
     return map;
   }
 
@@ -732,6 +761,7 @@ class BrainRegion extends DataClass implements Insertable<BrainRegion> {
       nameEn: Value(nameEn),
       hemisphere: Value(hemisphere),
       meshName: Value(meshName),
+      isInner: Value(isInner),
     );
   }
 
@@ -747,6 +777,7 @@ class BrainRegion extends DataClass implements Insertable<BrainRegion> {
       nameEn: serializer.fromJson<String>(json['name_en']),
       hemisphere: serializer.fromJson<String>(json['hemisphere']),
       meshName: serializer.fromJson<String>(json['mesh_name']),
+      isInner: serializer.fromJson<bool>(json['is_inner']),
     );
   }
   @override
@@ -759,6 +790,7 @@ class BrainRegion extends DataClass implements Insertable<BrainRegion> {
       'name_en': serializer.toJson<String>(nameEn),
       'hemisphere': serializer.toJson<String>(hemisphere),
       'mesh_name': serializer.toJson<String>(meshName),
+      'is_inner': serializer.toJson<bool>(isInner),
     };
   }
 
@@ -769,6 +801,7 @@ class BrainRegion extends DataClass implements Insertable<BrainRegion> {
     String? nameEn,
     String? hemisphere,
     String? meshName,
+    bool? isInner,
   }) => BrainRegion(
     key: key ?? this.key,
     sortOrder: sortOrder ?? this.sortOrder,
@@ -776,6 +809,7 @@ class BrainRegion extends DataClass implements Insertable<BrainRegion> {
     nameEn: nameEn ?? this.nameEn,
     hemisphere: hemisphere ?? this.hemisphere,
     meshName: meshName ?? this.meshName,
+    isInner: isInner ?? this.isInner,
   );
   BrainRegion copyWithCompanion(BrainRegionsCompanion data) {
     return BrainRegion(
@@ -787,6 +821,7 @@ class BrainRegion extends DataClass implements Insertable<BrainRegion> {
           ? data.hemisphere.value
           : this.hemisphere,
       meshName: data.meshName.present ? data.meshName.value : this.meshName,
+      isInner: data.isInner.present ? data.isInner.value : this.isInner,
     );
   }
 
@@ -798,14 +833,22 @@ class BrainRegion extends DataClass implements Insertable<BrainRegion> {
           ..write('nameTr: $nameTr, ')
           ..write('nameEn: $nameEn, ')
           ..write('hemisphere: $hemisphere, ')
-          ..write('meshName: $meshName')
+          ..write('meshName: $meshName, ')
+          ..write('isInner: $isInner')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(key, sortOrder, nameTr, nameEn, hemisphere, meshName);
+  int get hashCode => Object.hash(
+    key,
+    sortOrder,
+    nameTr,
+    nameEn,
+    hemisphere,
+    meshName,
+    isInner,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -815,7 +858,8 @@ class BrainRegion extends DataClass implements Insertable<BrainRegion> {
           other.nameTr == this.nameTr &&
           other.nameEn == this.nameEn &&
           other.hemisphere == this.hemisphere &&
-          other.meshName == this.meshName);
+          other.meshName == this.meshName &&
+          other.isInner == this.isInner);
 }
 
 class BrainRegionsCompanion extends UpdateCompanion<BrainRegion> {
@@ -825,6 +869,7 @@ class BrainRegionsCompanion extends UpdateCompanion<BrainRegion> {
   final Value<String> nameEn;
   final Value<String> hemisphere;
   final Value<String> meshName;
+  final Value<bool> isInner;
   final Value<int> rowid;
   const BrainRegionsCompanion({
     this.key = const Value.absent(),
@@ -833,6 +878,7 @@ class BrainRegionsCompanion extends UpdateCompanion<BrainRegion> {
     this.nameEn = const Value.absent(),
     this.hemisphere = const Value.absent(),
     this.meshName = const Value.absent(),
+    this.isInner = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   BrainRegionsCompanion.insert({
@@ -842,6 +888,7 @@ class BrainRegionsCompanion extends UpdateCompanion<BrainRegion> {
     required String nameEn,
     required String hemisphere,
     required String meshName,
+    this.isInner = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : key = Value(key),
        sortOrder = Value(sortOrder),
@@ -856,6 +903,7 @@ class BrainRegionsCompanion extends UpdateCompanion<BrainRegion> {
     Expression<String>? nameEn,
     Expression<String>? hemisphere,
     Expression<String>? meshName,
+    Expression<bool>? isInner,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -865,6 +913,7 @@ class BrainRegionsCompanion extends UpdateCompanion<BrainRegion> {
       if (nameEn != null) 'name_en': nameEn,
       if (hemisphere != null) 'hemisphere': hemisphere,
       if (meshName != null) 'mesh_name': meshName,
+      if (isInner != null) 'is_inner': isInner,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -876,6 +925,7 @@ class BrainRegionsCompanion extends UpdateCompanion<BrainRegion> {
     Value<String>? nameEn,
     Value<String>? hemisphere,
     Value<String>? meshName,
+    Value<bool>? isInner,
     Value<int>? rowid,
   }) {
     return BrainRegionsCompanion(
@@ -885,6 +935,7 @@ class BrainRegionsCompanion extends UpdateCompanion<BrainRegion> {
       nameEn: nameEn ?? this.nameEn,
       hemisphere: hemisphere ?? this.hemisphere,
       meshName: meshName ?? this.meshName,
+      isInner: isInner ?? this.isInner,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -910,6 +961,9 @@ class BrainRegionsCompanion extends UpdateCompanion<BrainRegion> {
     if (meshName.present) {
       map['mesh_name'] = Variable<String>(meshName.value);
     }
+    if (isInner.present) {
+      map['is_inner'] = Variable<bool>(isInner.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -925,6 +979,7 @@ class BrainRegionsCompanion extends UpdateCompanion<BrainRegion> {
           ..write('nameEn: $nameEn, ')
           ..write('hemisphere: $hemisphere, ')
           ..write('meshName: $meshName, ')
+          ..write('isInner: $isInner, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -1007,6 +1062,30 @@ class $CategoryRegionWeightsTable extends CategoryRegionWeights
       ).withConverter<List<String>>(
         $CategoryRegionWeightsTable.$convertersourceUrls,
       );
+  static const VerificationMeta _detailTrMeta = const VerificationMeta(
+    'detailTr',
+  );
+  @override
+  late final GeneratedColumn<String> detailTr = GeneratedColumn<String>(
+    'detail_tr',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
+  static const VerificationMeta _detailEnMeta = const VerificationMeta(
+    'detailEn',
+  );
+  @override
+  late final GeneratedColumn<String> detailEn = GeneratedColumn<String>(
+    'detail_en',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(''),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     rootCategoryKey,
@@ -1015,6 +1094,8 @@ class $CategoryRegionWeightsTable extends CategoryRegionWeights
     evidenceLevel,
     sourceIds,
     sourceUrls,
+    detailTr,
+    detailEn,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -1066,6 +1147,18 @@ class $CategoryRegionWeightsTable extends CategoryRegionWeights
     } else if (isInserting) {
       context.missing(_evidenceLevelMeta);
     }
+    if (data.containsKey('detail_tr')) {
+      context.handle(
+        _detailTrMeta,
+        detailTr.isAcceptableOrUnknown(data['detail_tr']!, _detailTrMeta),
+      );
+    }
+    if (data.containsKey('detail_en')) {
+      context.handle(
+        _detailEnMeta,
+        detailEn.isAcceptableOrUnknown(data['detail_en']!, _detailEnMeta),
+      );
+    }
     return context;
   }
 
@@ -1103,6 +1196,14 @@ class $CategoryRegionWeightsTable extends CategoryRegionWeights
           data['${effectivePrefix}source_urls'],
         )!,
       ),
+      detailTr: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}detail_tr'],
+      )!,
+      detailEn: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}detail_en'],
+      )!,
     );
   }
 
@@ -1125,6 +1226,8 @@ class CategoryRegionWeight extends DataClass
   final String evidenceLevel;
   final List<String> sourceIds;
   final List<String> sourceUrls;
+  final String detailTr;
+  final String detailEn;
   const CategoryRegionWeight({
     required this.rootCategoryKey,
     required this.regionKey,
@@ -1132,6 +1235,8 @@ class CategoryRegionWeight extends DataClass
     required this.evidenceLevel,
     required this.sourceIds,
     required this.sourceUrls,
+    required this.detailTr,
+    required this.detailEn,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1150,6 +1255,8 @@ class CategoryRegionWeight extends DataClass
         $CategoryRegionWeightsTable.$convertersourceUrls.toSql(sourceUrls),
       );
     }
+    map['detail_tr'] = Variable<String>(detailTr);
+    map['detail_en'] = Variable<String>(detailEn);
     return map;
   }
 
@@ -1161,6 +1268,8 @@ class CategoryRegionWeight extends DataClass
       evidenceLevel: Value(evidenceLevel),
       sourceIds: Value(sourceIds),
       sourceUrls: Value(sourceUrls),
+      detailTr: Value(detailTr),
+      detailEn: Value(detailEn),
     );
   }
 
@@ -1180,6 +1289,8 @@ class CategoryRegionWeight extends DataClass
       sourceUrls: $CategoryRegionWeightsTable.$convertersourceUrls.fromJson(
         serializer.fromJson<Object?>(json['source_urls']),
       ),
+      detailTr: serializer.fromJson<String>(json['detail_tr']),
+      detailEn: serializer.fromJson<String>(json['detail_en']),
     );
   }
   @override
@@ -1196,6 +1307,8 @@ class CategoryRegionWeight extends DataClass
       'source_urls': serializer.toJson<Object?>(
         $CategoryRegionWeightsTable.$convertersourceUrls.toJson(sourceUrls),
       ),
+      'detail_tr': serializer.toJson<String>(detailTr),
+      'detail_en': serializer.toJson<String>(detailEn),
     };
   }
 
@@ -1206,6 +1319,8 @@ class CategoryRegionWeight extends DataClass
     String? evidenceLevel,
     List<String>? sourceIds,
     List<String>? sourceUrls,
+    String? detailTr,
+    String? detailEn,
   }) => CategoryRegionWeight(
     rootCategoryKey: rootCategoryKey ?? this.rootCategoryKey,
     regionKey: regionKey ?? this.regionKey,
@@ -1213,6 +1328,8 @@ class CategoryRegionWeight extends DataClass
     evidenceLevel: evidenceLevel ?? this.evidenceLevel,
     sourceIds: sourceIds ?? this.sourceIds,
     sourceUrls: sourceUrls ?? this.sourceUrls,
+    detailTr: detailTr ?? this.detailTr,
+    detailEn: detailEn ?? this.detailEn,
   );
   CategoryRegionWeight copyWithCompanion(CategoryRegionWeightsCompanion data) {
     return CategoryRegionWeight(
@@ -1228,6 +1345,8 @@ class CategoryRegionWeight extends DataClass
       sourceUrls: data.sourceUrls.present
           ? data.sourceUrls.value
           : this.sourceUrls,
+      detailTr: data.detailTr.present ? data.detailTr.value : this.detailTr,
+      detailEn: data.detailEn.present ? data.detailEn.value : this.detailEn,
     );
   }
 
@@ -1239,7 +1358,9 @@ class CategoryRegionWeight extends DataClass
           ..write('weight: $weight, ')
           ..write('evidenceLevel: $evidenceLevel, ')
           ..write('sourceIds: $sourceIds, ')
-          ..write('sourceUrls: $sourceUrls')
+          ..write('sourceUrls: $sourceUrls, ')
+          ..write('detailTr: $detailTr, ')
+          ..write('detailEn: $detailEn')
           ..write(')'))
         .toString();
   }
@@ -1252,6 +1373,8 @@ class CategoryRegionWeight extends DataClass
     evidenceLevel,
     sourceIds,
     sourceUrls,
+    detailTr,
+    detailEn,
   );
   @override
   bool operator ==(Object other) =>
@@ -1262,7 +1385,9 @@ class CategoryRegionWeight extends DataClass
           other.weight == this.weight &&
           other.evidenceLevel == this.evidenceLevel &&
           other.sourceIds == this.sourceIds &&
-          other.sourceUrls == this.sourceUrls);
+          other.sourceUrls == this.sourceUrls &&
+          other.detailTr == this.detailTr &&
+          other.detailEn == this.detailEn);
 }
 
 class CategoryRegionWeightsCompanion
@@ -1273,6 +1398,8 @@ class CategoryRegionWeightsCompanion
   final Value<String> evidenceLevel;
   final Value<List<String>> sourceIds;
   final Value<List<String>> sourceUrls;
+  final Value<String> detailTr;
+  final Value<String> detailEn;
   final Value<int> rowid;
   const CategoryRegionWeightsCompanion({
     this.rootCategoryKey = const Value.absent(),
@@ -1281,6 +1408,8 @@ class CategoryRegionWeightsCompanion
     this.evidenceLevel = const Value.absent(),
     this.sourceIds = const Value.absent(),
     this.sourceUrls = const Value.absent(),
+    this.detailTr = const Value.absent(),
+    this.detailEn = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   CategoryRegionWeightsCompanion.insert({
@@ -1290,6 +1419,8 @@ class CategoryRegionWeightsCompanion
     required String evidenceLevel,
     required List<String> sourceIds,
     required List<String> sourceUrls,
+    this.detailTr = const Value.absent(),
+    this.detailEn = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : rootCategoryKey = Value(rootCategoryKey),
        regionKey = Value(regionKey),
@@ -1304,6 +1435,8 @@ class CategoryRegionWeightsCompanion
     Expression<String>? evidenceLevel,
     Expression<String>? sourceIds,
     Expression<String>? sourceUrls,
+    Expression<String>? detailTr,
+    Expression<String>? detailEn,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -1313,6 +1446,8 @@ class CategoryRegionWeightsCompanion
       if (evidenceLevel != null) 'evidence_level': evidenceLevel,
       if (sourceIds != null) 'source_ids': sourceIds,
       if (sourceUrls != null) 'source_urls': sourceUrls,
+      if (detailTr != null) 'detail_tr': detailTr,
+      if (detailEn != null) 'detail_en': detailEn,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -1324,6 +1459,8 @@ class CategoryRegionWeightsCompanion
     Value<String>? evidenceLevel,
     Value<List<String>>? sourceIds,
     Value<List<String>>? sourceUrls,
+    Value<String>? detailTr,
+    Value<String>? detailEn,
     Value<int>? rowid,
   }) {
     return CategoryRegionWeightsCompanion(
@@ -1333,6 +1470,8 @@ class CategoryRegionWeightsCompanion
       evidenceLevel: evidenceLevel ?? this.evidenceLevel,
       sourceIds: sourceIds ?? this.sourceIds,
       sourceUrls: sourceUrls ?? this.sourceUrls,
+      detailTr: detailTr ?? this.detailTr,
+      detailEn: detailEn ?? this.detailEn,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -1364,6 +1503,12 @@ class CategoryRegionWeightsCompanion
         ),
       );
     }
+    if (detailTr.present) {
+      map['detail_tr'] = Variable<String>(detailTr.value);
+    }
+    if (detailEn.present) {
+      map['detail_en'] = Variable<String>(detailEn.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -1379,6 +1524,8 @@ class CategoryRegionWeightsCompanion
           ..write('evidenceLevel: $evidenceLevel, ')
           ..write('sourceIds: $sourceIds, ')
           ..write('sourceUrls: $sourceUrls, ')
+          ..write('detailTr: $detailTr, ')
+          ..write('detailEn: $detailEn, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -13664,6 +13811,7 @@ typedef $$BrainRegionsTableCreateCompanionBuilder =
       required String nameEn,
       required String hemisphere,
       required String meshName,
+      Value<bool> isInner,
       Value<int> rowid,
     });
 typedef $$BrainRegionsTableUpdateCompanionBuilder =
@@ -13674,6 +13822,7 @@ typedef $$BrainRegionsTableUpdateCompanionBuilder =
       Value<String> nameEn,
       Value<String> hemisphere,
       Value<String> meshName,
+      Value<bool> isInner,
       Value<int> rowid,
     });
 
@@ -13779,6 +13928,11 @@ class $$BrainRegionsTableFilterComposer
 
   ColumnFilters<String> get meshName => $composableBuilder(
     column: $table.meshName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isInner => $composableBuilder(
+    column: $table.isInner,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -13897,6 +14051,11 @@ class $$BrainRegionsTableOrderingComposer
     column: $table.meshName,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<bool> get isInner => $composableBuilder(
+    column: $table.isInner,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$BrainRegionsTableAnnotationComposer
@@ -13927,6 +14086,9 @@ class $$BrainRegionsTableAnnotationComposer
 
   GeneratedColumn<String> get meshName =>
       $composableBuilder(column: $table.meshName, builder: (column) => column);
+
+  GeneratedColumn<bool> get isInner =>
+      $composableBuilder(column: $table.isInner, builder: (column) => column);
 
   Expression<T> categoryRegionWeightsRefs<T extends Object>(
     Expression<T> Function($$CategoryRegionWeightsTableAnnotationComposer a) f,
@@ -14043,6 +14205,7 @@ class $$BrainRegionsTableTableManager
                 Value<String> nameEn = const Value.absent(),
                 Value<String> hemisphere = const Value.absent(),
                 Value<String> meshName = const Value.absent(),
+                Value<bool> isInner = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => BrainRegionsCompanion(
                 key: key,
@@ -14051,6 +14214,7 @@ class $$BrainRegionsTableTableManager
                 nameEn: nameEn,
                 hemisphere: hemisphere,
                 meshName: meshName,
+                isInner: isInner,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -14061,6 +14225,7 @@ class $$BrainRegionsTableTableManager
                 required String nameEn,
                 required String hemisphere,
                 required String meshName,
+                Value<bool> isInner = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => BrainRegionsCompanion.insert(
                 key: key,
@@ -14069,6 +14234,7 @@ class $$BrainRegionsTableTableManager
                 nameEn: nameEn,
                 hemisphere: hemisphere,
                 meshName: meshName,
+                isInner: isInner,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0
@@ -14189,6 +14355,8 @@ typedef $$CategoryRegionWeightsTableCreateCompanionBuilder =
       required String evidenceLevel,
       required List<String> sourceIds,
       required List<String> sourceUrls,
+      Value<String> detailTr,
+      Value<String> detailEn,
       Value<int> rowid,
     });
 typedef $$CategoryRegionWeightsTableUpdateCompanionBuilder =
@@ -14199,6 +14367,8 @@ typedef $$CategoryRegionWeightsTableUpdateCompanionBuilder =
       Value<String> evidenceLevel,
       Value<List<String>> sourceIds,
       Value<List<String>> sourceUrls,
+      Value<String> detailTr,
+      Value<String> detailEn,
       Value<int> rowid,
     });
 
@@ -14283,6 +14453,16 @@ class $$CategoryRegionWeightsTableFilterComposer
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
+  ColumnFilters<String> get detailTr => $composableBuilder(
+    column: $table.detailTr,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get detailEn => $composableBuilder(
+    column: $table.detailEn,
+    builder: (column) => ColumnFilters(column),
+  );
+
   $$RootCategoriesTableFilterComposer get rootCategoryKey {
     final $$RootCategoriesTableFilterComposer composer = $composerBuilder(
       composer: this,
@@ -14359,6 +14539,16 @@ class $$CategoryRegionWeightsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get detailTr => $composableBuilder(
+    column: $table.detailTr,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get detailEn => $composableBuilder(
+    column: $table.detailEn,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $$RootCategoriesTableOrderingComposer get rootCategoryKey {
     final $$RootCategoriesTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -14431,6 +14621,12 @@ class $$CategoryRegionWeightsTableAnnotationComposer
         column: $table.sourceUrls,
         builder: (column) => column,
       );
+
+  GeneratedColumn<String> get detailTr =>
+      $composableBuilder(column: $table.detailTr, builder: (column) => column);
+
+  GeneratedColumn<String> get detailEn =>
+      $composableBuilder(column: $table.detailEn, builder: (column) => column);
 
   $$RootCategoriesTableAnnotationComposer get rootCategoryKey {
     final $$RootCategoriesTableAnnotationComposer composer = $composerBuilder(
@@ -14524,6 +14720,8 @@ class $$CategoryRegionWeightsTableTableManager
                 Value<String> evidenceLevel = const Value.absent(),
                 Value<List<String>> sourceIds = const Value.absent(),
                 Value<List<String>> sourceUrls = const Value.absent(),
+                Value<String> detailTr = const Value.absent(),
+                Value<String> detailEn = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => CategoryRegionWeightsCompanion(
                 rootCategoryKey: rootCategoryKey,
@@ -14532,6 +14730,8 @@ class $$CategoryRegionWeightsTableTableManager
                 evidenceLevel: evidenceLevel,
                 sourceIds: sourceIds,
                 sourceUrls: sourceUrls,
+                detailTr: detailTr,
+                detailEn: detailEn,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -14542,6 +14742,8 @@ class $$CategoryRegionWeightsTableTableManager
                 required String evidenceLevel,
                 required List<String> sourceIds,
                 required List<String> sourceUrls,
+                Value<String> detailTr = const Value.absent(),
+                Value<String> detailEn = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => CategoryRegionWeightsCompanion.insert(
                 rootCategoryKey: rootCategoryKey,
@@ -14550,6 +14752,8 @@ class $$CategoryRegionWeightsTableTableManager
                 evidenceLevel: evidenceLevel,
                 sourceIds: sourceIds,
                 sourceUrls: sourceUrls,
+                detailTr: detailTr,
+                detailEn: detailEn,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

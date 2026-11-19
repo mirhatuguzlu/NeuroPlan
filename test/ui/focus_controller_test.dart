@@ -389,8 +389,13 @@ void main() {
     await r.c.finish();
     expect(r.s.ended?.outcome, 'completed');
     final events = await r.db.select(r.db.brainEvents).get();
-    expect(events.map((e) => e.type).toSet(), {'neuron_gain'});
-    expect(events.fold(0, (a, e) => a + e.amount), 40 * 1000);
+    // Derin çalışma: kazanç + en uzun kesintisiz süreye göre bağlantı (D39).
+    expect(events.map((e) => e.type).toSet(), {
+      'neuron_gain',
+      'connection_gain',
+    });
+    final gain = events.where((e) => e.type == 'neuron_gain');
+    expect(gain.fold(0, (a, e) => a + e.amount), 40 * 1000);
     expect(
       jsonDecode((await r.prefs.get(PrefsRepository.focusRuntime)) ?? 'null'),
       isNull,

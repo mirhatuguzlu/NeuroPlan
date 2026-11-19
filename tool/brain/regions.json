@@ -1,0 +1,24 @@
+{
+  "_source": "BodyParts3D 4.0 (DBCLS), CC BY 4.0. Element dosya kimlikleri partof/isa_element_parts.txt'ten; ad listesi docs/BRAIN_MODEL.md §1.",
+  "regions": {
+    "prefrontal_left":  ["FJ1833", "FJ1787", "FJ1744", "FJ1793?L"],
+    "prefrontal_right": ["FJ1834", "FJ1788", "FJ1745", "FJ1794?R"],
+    "frontal_left":     ["FJ1800"],
+    "frontal_right":    ["FJ1801"],
+    "parietal_left":    ["FJ1797", "FJ1835", "FJ1841", "FJ1732"],
+    "parietal_right":   ["FJ1798", "FJ1836", "FJ1842", "FJ1733"],
+    "temporal_left":    ["FJ1837", "FJ1839", "FJ1789", "FJ1746", "FJ1783", "FJ1785"],
+    "temporal_right":   ["FJ1838", "FJ1840", "FJ1790", "FJ1747", "FJ1784", "FJ1786"],
+    "occipital_left":   ["FJ1791"],
+    "occipital_right":  ["FJ1792"],
+    "cerebellum":       ["FJ1781", "FJ1830"],
+    "brainstem":        ["FJ1769", "FJ1831", "FJ1775", "FJ1822", "FJ1770", "FJ1817", "FJ1762", "FJ1810", "FJ1779", "FJ1826"],
+    "corpus_callosum":  ["FJ1742"],
+    "cingulate":        ["FJ1739", "FJ1740"],
+    "insula":           ["FJ1748", "FJ1749"],
+    "striatum":         ["FJ1754", "FJ1802", "FJ1776", "FJ1823"],
+    "hippocampus":      ["FJ1759", "FJ1807"],
+    "amygdala":         ["FJ1753", "FJ1829"]
+  },
+  "_note": "FJ1793/FJ1794 'orbital gyrus' dosyalarının hangisinin sol olduğu adda yok; ?L / ?R ekiyle build betiği x işaretine göre doğrular."
+}

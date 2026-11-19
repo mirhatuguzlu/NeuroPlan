@@ -7,6 +7,7 @@ import 'package:material_ui/material_ui.dart';
 import '../../app/providers.dart';
 import '../../app/theme.dart';
 import '../../app/transitions.dart';
+import '../features/brain/brain_controller.dart';
 import 'format.dart';
 
 /// Alt menü sekmeleri + havada duran çubuk + ayrık "Ekle" butonu (UX_RULES §6, D28).
@@ -27,6 +28,10 @@ class AppShell extends ConsumerWidget {
     final l = context.l10n;
     final haptics = ref.watch(profileProvider).value?.hapticsEnabled ?? true;
     final keyboard = MediaQuery.viewInsetsOf(context).bottom > 0;
+    // Ön ısıtma: beyin sahnesi ilk kareden sonra arka planda yüklenir (BRAIN-5).
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => ref.read(brainControllerProvider),
+    );
     final destinations = [
       (Symbols.today_rounded, l.navToday),
       (Symbols.calendar_month_rounded, l.navPlan),

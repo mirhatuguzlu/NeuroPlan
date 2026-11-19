@@ -1,0 +1,917 @@
+{
+  "about": "Beyin v2 test vektörü: bu oturumlardan türetilen olaylar ve as_of anındaki durum. İstemci (Dart) ve sunucu hesabı aynı çıktıyı vermeli.",
+  "as_of": "2026-11-30T00:00:00.000Z",
+  "weights": {
+    "planning_problem_solving": {
+      "prefrontal_left": 0.6,
+      "prefrontal_right": 0.6,
+      "cingulate": 0.6,
+      "parietal_left": 0.6,
+      "parietal_right": 0.6
+    },
+    "rest_sleep": {
+      "hippocampus": 1.0
+    },
+    "emotional_social": {
+      "amygdala": 0.6,
+      "prefrontal_left": 0.6,
+      "prefrontal_right": 0.6,
+      "temporal_left": 0.6,
+      "temporal_right": 0.6
+    }
+  },
+  "sessions": [
+    {
+      "id": "s1",
+      "root": "planning_problem_solving",
+      "mode": "pomodoro",
+      "outcome": "completed",
+      "focused_seconds": 3000,
+      "ended_at": "2026-11-17T09:00:00.000Z",
+      "day": "2026-11-17",
+      "completed_cycles": 2
+    },
+    {
+      "id": "s2",
+      "root": "planning_problem_solving",
+      "mode": "deep",
+      "outcome": "completed",
+      "focused_seconds": 5400,
+      "ended_at": "2026-11-18T09:00:00.000Z",
+      "day": "2026-11-18",
+      "longest_run_seconds": 4200,
+      "recovered_escapes": 1
+    },
+    {
+      "id": "s3",
+      "root": "emotional_social",
+      "mode": "free",
+      "outcome": "completed",
+      "focused_seconds": 1200,
+      "ended_at": "2026-11-18T19:00:00.000Z",
+      "day": "2026-11-18"
+    },
+    {
+      "id": "s4",
+      "root": "planning_problem_solving",
+      "mode": "pomodoro",
+      "outcome": "broken",
+      "focused_seconds": 900,
+      "ended_at": "2026-11-19T09:00:00.000Z",
+      "day": "2026-11-19"
+    },
+    {
+      "id": "s5",
+      "root": "planning_problem_solving",
+      "mode": "pomodoro",
+      "outcome": "completed",
+      "focused_seconds": 1500,
+      "ended_at": "2026-11-20T09:00:00.000Z",
+      "day": "2026-11-20",
+      "completed_cycles": 1
+    },
+    {
+      "id": "s6",
+      "root": "rest_sleep",
+      "mode": "free",
+      "outcome": "completed",
+      "focused_seconds": 1800,
+      "ended_at": "2026-11-20T22:00:00.000Z",
+      "day": "2026-11-20"
+    }
+  ],
+  "expected": {
+    "events": [
+      {
+        "type": "neuron_gain",
+        "region_key": "cingulate",
+        "amount": 11000,
+        "occurred_at": "2026-11-17T09:00:00.000Z",
+        "session_id": "s1",
+        "dedupe_key": "gain:s1:cingulate:v2"
+      },
+      {
+        "type": "neuron_gain",
+        "region_key": "parietal_left",
+        "amount": 11000,
+        "occurred_at": "2026-11-17T09:00:00.000Z",
+        "session_id": "s1",
+        "dedupe_key": "gain:s1:parietal_left:v2"
+      },
+      {
+        "type": "neuron_gain",
+        "region_key": "parietal_right",
+        "amount": 11000,
+        "occurred_at": "2026-11-17T09:00:00.000Z",
+        "session_id": "s1",
+        "dedupe_key": "gain:s1:parietal_right:v2"
+      },
+      {
+        "type": "neuron_gain",
+        "region_key": "prefrontal_left",
+        "amount": 11000,
+        "occurred_at": "2026-11-17T09:00:00.000Z",
+        "session_id": "s1",
+        "dedupe_key": "gain:s1:prefrontal_left:v2"
+      },
+      {
+        "type": "neuron_gain",
+        "region_key": "prefrontal_right",
+        "amount": 11000,
+        "occurred_at": "2026-11-17T09:00:00.000Z",
+        "session_id": "s1",
+        "dedupe_key": "gain:s1:prefrontal_right:v2"
+      },
+      {
+        "type": "neuron_gain",
+        "region_key": "cingulate",
+        "amount": 16200,
+        "occurred_at": "2026-11-18T09:00:00.000Z",
+        "session_id": "s2",
+        "dedupe_key": "gain:s2:cingulate:v2"
+      },
+      {
+        "type": "neuron_gain",
+        "region_key": "parietal_left",
+        "amount": 16200,
+        "occurred_at": "2026-11-18T09:00:00.000Z",
+        "session_id": "s2",
+        "dedupe_key": "gain:s2:parietal_left:v2"
+      },
+      {
+        "type": "neuron_gain",
+        "region_key": "parietal_right",
+        "amount": 16200,
+        "occurred_at": "2026-11-18T09:00:00.000Z",
+        "session_id": "s2",
+        "dedupe_key": "gain:s2:parietal_right:v2"
+      },
+      {
+        "type": "neuron_gain",
+        "region_key": "prefrontal_left",
+        "amount": 16200,
+        "occurred_at": "2026-11-18T09:00:00.000Z",
+        "session_id": "s2",
+        "dedupe_key": "gain:s2:prefrontal_left:v2"
+      },
+      {
+        "type": "neuron_gain",
+        "region_key": "prefrontal_right",
+        "amount": 16200,
+        "occurred_at": "2026-11-18T09:00:00.000Z",
+        "session_id": "s2",
+        "dedupe_key": "gain:s2:prefrontal_right:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "cingulate",
+        "region_b_key": "parietal_left",
+        "amount": 140,
+        "occurred_at": "2026-11-18T09:00:00.000Z",
+        "session_id": "s2",
+        "dedupe_key": "deep:s2:cingulate:parietal_left:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "cingulate",
+        "region_b_key": "parietal_right",
+        "amount": 140,
+        "occurred_at": "2026-11-18T09:00:00.000Z",
+        "session_id": "s2",
+        "dedupe_key": "deep:s2:cingulate:parietal_right:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "cingulate",
+        "region_b_key": "prefrontal_left",
+        "amount": 140,
+        "occurred_at": "2026-11-18T09:00:00.000Z",
+        "session_id": "s2",
+        "dedupe_key": "deep:s2:cingulate:prefrontal_left:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "cingulate",
+        "region_b_key": "prefrontal_right",
+        "amount": 140,
+        "occurred_at": "2026-11-18T09:00:00.000Z",
+        "session_id": "s2",
+        "dedupe_key": "deep:s2:cingulate:prefrontal_right:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "parietal_left",
+        "region_b_key": "parietal_right",
+        "amount": 140,
+        "occurred_at": "2026-11-18T09:00:00.000Z",
+        "session_id": "s2",
+        "dedupe_key": "deep:s2:parietal_left:parietal_right:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "parietal_left",
+        "region_b_key": "prefrontal_left",
+        "amount": 140,
+        "occurred_at": "2026-11-18T09:00:00.000Z",
+        "session_id": "s2",
+        "dedupe_key": "deep:s2:parietal_left:prefrontal_left:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "parietal_left",
+        "region_b_key": "prefrontal_right",
+        "amount": 140,
+        "occurred_at": "2026-11-18T09:00:00.000Z",
+        "session_id": "s2",
+        "dedupe_key": "deep:s2:parietal_left:prefrontal_right:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "parietal_right",
+        "region_b_key": "prefrontal_left",
+        "amount": 140,
+        "occurred_at": "2026-11-18T09:00:00.000Z",
+        "session_id": "s2",
+        "dedupe_key": "deep:s2:parietal_right:prefrontal_left:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "parietal_right",
+        "region_b_key": "prefrontal_right",
+        "amount": 140,
+        "occurred_at": "2026-11-18T09:00:00.000Z",
+        "session_id": "s2",
+        "dedupe_key": "deep:s2:parietal_right:prefrontal_right:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "prefrontal_left",
+        "region_b_key": "prefrontal_right",
+        "amount": 140,
+        "occurred_at": "2026-11-18T09:00:00.000Z",
+        "session_id": "s2",
+        "dedupe_key": "deep:s2:prefrontal_left:prefrontal_right:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "cingulate",
+        "region_b_key": "cingulate",
+        "amount": 100,
+        "occurred_at": "2026-11-18T09:00:00.000Z",
+        "session_id": "s2",
+        "dedupe_key": "streak:2026-11-18:planning_problem_solving:cingulate:cingulate:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "parietal_left",
+        "region_b_key": "parietal_left",
+        "amount": 100,
+        "occurred_at": "2026-11-18T09:00:00.000Z",
+        "session_id": "s2",
+        "dedupe_key": "streak:2026-11-18:planning_problem_solving:parietal_left:parietal_left:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "parietal_right",
+        "region_b_key": "parietal_right",
+        "amount": 100,
+        "occurred_at": "2026-11-18T09:00:00.000Z",
+        "session_id": "s2",
+        "dedupe_key": "streak:2026-11-18:planning_problem_solving:parietal_right:parietal_right:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "prefrontal_left",
+        "region_b_key": "prefrontal_left",
+        "amount": 100,
+        "occurred_at": "2026-11-18T09:00:00.000Z",
+        "session_id": "s2",
+        "dedupe_key": "streak:2026-11-18:planning_problem_solving:prefrontal_left:prefrontal_left:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "prefrontal_right",
+        "region_b_key": "prefrontal_right",
+        "amount": 100,
+        "occurred_at": "2026-11-18T09:00:00.000Z",
+        "session_id": "s2",
+        "dedupe_key": "streak:2026-11-18:planning_problem_solving:prefrontal_right:prefrontal_right:v2"
+      },
+      {
+        "type": "neuron_gain",
+        "region_key": "amygdala",
+        "amount": 4000,
+        "occurred_at": "2026-11-18T19:00:00.000Z",
+        "session_id": "s3",
+        "dedupe_key": "gain:s3:amygdala:v2"
+      },
+      {
+        "type": "neuron_gain",
+        "region_key": "prefrontal_left",
+        "amount": 4000,
+        "occurred_at": "2026-11-18T19:00:00.000Z",
+        "session_id": "s3",
+        "dedupe_key": "gain:s3:prefrontal_left:v2"
+      },
+      {
+        "type": "neuron_gain",
+        "region_key": "prefrontal_right",
+        "amount": 4000,
+        "occurred_at": "2026-11-18T19:00:00.000Z",
+        "session_id": "s3",
+        "dedupe_key": "gain:s3:prefrontal_right:v2"
+      },
+      {
+        "type": "neuron_gain",
+        "region_key": "temporal_left",
+        "amount": 4000,
+        "occurred_at": "2026-11-18T19:00:00.000Z",
+        "session_id": "s3",
+        "dedupe_key": "gain:s3:temporal_left:v2"
+      },
+      {
+        "type": "neuron_gain",
+        "region_key": "temporal_right",
+        "amount": 4000,
+        "occurred_at": "2026-11-18T19:00:00.000Z",
+        "session_id": "s3",
+        "dedupe_key": "gain:s3:temporal_right:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "amygdala",
+        "region_b_key": "cingulate",
+        "amount": 13,
+        "occurred_at": "2026-11-18T19:00:00.000Z",
+        "session_id": "s3",
+        "dedupe_key": "cross:2026-11-18:emotional_social:planning_problem_solving:amygdala:cingulate:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "amygdala",
+        "region_b_key": "parietal_left",
+        "amount": 13,
+        "occurred_at": "2026-11-18T19:00:00.000Z",
+        "session_id": "s3",
+        "dedupe_key": "cross:2026-11-18:emotional_social:planning_problem_solving:amygdala:parietal_left:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "amygdala",
+        "region_b_key": "parietal_right",
+        "amount": 13,
+        "occurred_at": "2026-11-18T19:00:00.000Z",
+        "session_id": "s3",
+        "dedupe_key": "cross:2026-11-18:emotional_social:planning_problem_solving:amygdala:parietal_right:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "amygdala",
+        "region_b_key": "prefrontal_left",
+        "amount": 13,
+        "occurred_at": "2026-11-18T19:00:00.000Z",
+        "session_id": "s3",
+        "dedupe_key": "cross:2026-11-18:emotional_social:planning_problem_solving:amygdala:prefrontal_left:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "amygdala",
+        "region_b_key": "prefrontal_right",
+        "amount": 13,
+        "occurred_at": "2026-11-18T19:00:00.000Z",
+        "session_id": "s3",
+        "dedupe_key": "cross:2026-11-18:emotional_social:planning_problem_solving:amygdala:prefrontal_right:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "cingulate",
+        "region_b_key": "prefrontal_left",
+        "amount": 13,
+        "occurred_at": "2026-11-18T19:00:00.000Z",
+        "session_id": "s3",
+        "dedupe_key": "cross:2026-11-18:emotional_social:planning_problem_solving:cingulate:prefrontal_left:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "cingulate",
+        "region_b_key": "prefrontal_right",
+        "amount": 13,
+        "occurred_at": "2026-11-18T19:00:00.000Z",
+        "session_id": "s3",
+        "dedupe_key": "cross:2026-11-18:emotional_social:planning_problem_solving:cingulate:prefrontal_right:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "cingulate",
+        "region_b_key": "temporal_left",
+        "amount": 13,
+        "occurred_at": "2026-11-18T19:00:00.000Z",
+        "session_id": "s3",
+        "dedupe_key": "cross:2026-11-18:emotional_social:planning_problem_solving:cingulate:temporal_left:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "cingulate",
+        "region_b_key": "temporal_right",
+        "amount": 13,
+        "occurred_at": "2026-11-18T19:00:00.000Z",
+        "session_id": "s3",
+        "dedupe_key": "cross:2026-11-18:emotional_social:planning_problem_solving:cingulate:temporal_right:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "parietal_left",
+        "region_b_key": "prefrontal_left",
+        "amount": 13,
+        "occurred_at": "2026-11-18T19:00:00.000Z",
+        "session_id": "s3",
+        "dedupe_key": "cross:2026-11-18:emotional_social:planning_problem_solving:parietal_left:prefrontal_left:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "parietal_left",
+        "region_b_key": "prefrontal_right",
+        "amount": 13,
+        "occurred_at": "2026-11-18T19:00:00.000Z",
+        "session_id": "s3",
+        "dedupe_key": "cross:2026-11-18:emotional_social:planning_problem_solving:parietal_left:prefrontal_right:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "parietal_left",
+        "region_b_key": "temporal_left",
+        "amount": 13,
+        "occurred_at": "2026-11-18T19:00:00.000Z",
+        "session_id": "s3",
+        "dedupe_key": "cross:2026-11-18:emotional_social:planning_problem_solving:parietal_left:temporal_left:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "parietal_left",
+        "region_b_key": "temporal_right",
+        "amount": 13,
+        "occurred_at": "2026-11-18T19:00:00.000Z",
+        "session_id": "s3",
+        "dedupe_key": "cross:2026-11-18:emotional_social:planning_problem_solving:parietal_left:temporal_right:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "parietal_right",
+        "region_b_key": "prefrontal_left",
+        "amount": 13,
+        "occurred_at": "2026-11-18T19:00:00.000Z",
+        "session_id": "s3",
+        "dedupe_key": "cross:2026-11-18:emotional_social:planning_problem_solving:parietal_right:prefrontal_left:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "parietal_right",
+        "region_b_key": "prefrontal_right",
+        "amount": 13,
+        "occurred_at": "2026-11-18T19:00:00.000Z",
+        "session_id": "s3",
+        "dedupe_key": "cross:2026-11-18:emotional_social:planning_problem_solving:parietal_right:prefrontal_right:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "parietal_right",
+        "region_b_key": "temporal_left",
+        "amount": 13,
+        "occurred_at": "2026-11-18T19:00:00.000Z",
+        "session_id": "s3",
+        "dedupe_key": "cross:2026-11-18:emotional_social:planning_problem_solving:parietal_right:temporal_left:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "parietal_right",
+        "region_b_key": "temporal_right",
+        "amount": 13,
+        "occurred_at": "2026-11-18T19:00:00.000Z",
+        "session_id": "s3",
+        "dedupe_key": "cross:2026-11-18:emotional_social:planning_problem_solving:parietal_right:temporal_right:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "prefrontal_left",
+        "region_b_key": "prefrontal_right",
+        "amount": 27,
+        "occurred_at": "2026-11-18T19:00:00.000Z",
+        "session_id": "s3",
+        "dedupe_key": "cross:2026-11-18:emotional_social:planning_problem_solving:prefrontal_left:prefrontal_right:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "prefrontal_left",
+        "region_b_key": "temporal_left",
+        "amount": 13,
+        "occurred_at": "2026-11-18T19:00:00.000Z",
+        "session_id": "s3",
+        "dedupe_key": "cross:2026-11-18:emotional_social:planning_problem_solving:prefrontal_left:temporal_left:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "prefrontal_left",
+        "region_b_key": "temporal_right",
+        "amount": 13,
+        "occurred_at": "2026-11-18T19:00:00.000Z",
+        "session_id": "s3",
+        "dedupe_key": "cross:2026-11-18:emotional_social:planning_problem_solving:prefrontal_left:temporal_right:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "prefrontal_right",
+        "region_b_key": "temporal_left",
+        "amount": 13,
+        "occurred_at": "2026-11-18T19:00:00.000Z",
+        "session_id": "s3",
+        "dedupe_key": "cross:2026-11-18:emotional_social:planning_problem_solving:prefrontal_right:temporal_left:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "prefrontal_right",
+        "region_b_key": "temporal_right",
+        "amount": 13,
+        "occurred_at": "2026-11-18T19:00:00.000Z",
+        "session_id": "s3",
+        "dedupe_key": "cross:2026-11-18:emotional_social:planning_problem_solving:prefrontal_right:temporal_right:v2"
+      },
+      {
+        "type": "penalty",
+        "region_key": "cingulate",
+        "amount": 3000,
+        "occurred_at": "2026-11-19T09:00:00.000Z",
+        "session_id": "s4",
+        "dedupe_key": "penalty:s4:cingulate:v2"
+      },
+      {
+        "type": "penalty",
+        "region_key": "parietal_left",
+        "amount": 3000,
+        "occurred_at": "2026-11-19T09:00:00.000Z",
+        "session_id": "s4",
+        "dedupe_key": "penalty:s4:parietal_left:v2"
+      },
+      {
+        "type": "penalty",
+        "region_key": "parietal_right",
+        "amount": 3000,
+        "occurred_at": "2026-11-19T09:00:00.000Z",
+        "session_id": "s4",
+        "dedupe_key": "penalty:s4:parietal_right:v2"
+      },
+      {
+        "type": "penalty",
+        "region_key": "prefrontal_left",
+        "amount": 3000,
+        "occurred_at": "2026-11-19T09:00:00.000Z",
+        "session_id": "s4",
+        "dedupe_key": "penalty:s4:prefrontal_left:v2"
+      },
+      {
+        "type": "penalty",
+        "region_key": "prefrontal_right",
+        "amount": 3000,
+        "occurred_at": "2026-11-19T09:00:00.000Z",
+        "session_id": "s4",
+        "dedupe_key": "penalty:s4:prefrontal_right:v2"
+      },
+      {
+        "type": "neuron_gain",
+        "region_key": "cingulate",
+        "amount": 5250,
+        "occurred_at": "2026-11-20T09:00:00.000Z",
+        "session_id": "s5",
+        "dedupe_key": "gain:s5:cingulate:v2"
+      },
+      {
+        "type": "neuron_gain",
+        "region_key": "parietal_left",
+        "amount": 5250,
+        "occurred_at": "2026-11-20T09:00:00.000Z",
+        "session_id": "s5",
+        "dedupe_key": "gain:s5:parietal_left:v2"
+      },
+      {
+        "type": "neuron_gain",
+        "region_key": "parietal_right",
+        "amount": 5250,
+        "occurred_at": "2026-11-20T09:00:00.000Z",
+        "session_id": "s5",
+        "dedupe_key": "gain:s5:parietal_right:v2"
+      },
+      {
+        "type": "neuron_gain",
+        "region_key": "prefrontal_left",
+        "amount": 5250,
+        "occurred_at": "2026-11-20T09:00:00.000Z",
+        "session_id": "s5",
+        "dedupe_key": "gain:s5:prefrontal_left:v2"
+      },
+      {
+        "type": "neuron_gain",
+        "region_key": "prefrontal_right",
+        "amount": 5250,
+        "occurred_at": "2026-11-20T09:00:00.000Z",
+        "session_id": "s5",
+        "dedupe_key": "gain:s5:prefrontal_right:v2"
+      },
+      {
+        "type": "neuron_gain",
+        "region_key": "hippocampus",
+        "amount": 30000,
+        "occurred_at": "2026-11-20T22:00:00.000Z",
+        "session_id": "s6",
+        "dedupe_key": "gain:s6:hippocampus:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "cingulate",
+        "region_b_key": "hippocampus",
+        "amount": 60,
+        "occurred_at": "2026-11-20T22:00:00.000Z",
+        "session_id": "s6",
+        "dedupe_key": "cross:2026-11-20:planning_problem_solving:rest_sleep:cingulate:hippocampus:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "hippocampus",
+        "region_b_key": "parietal_left",
+        "amount": 60,
+        "occurred_at": "2026-11-20T22:00:00.000Z",
+        "session_id": "s6",
+        "dedupe_key": "cross:2026-11-20:planning_problem_solving:rest_sleep:hippocampus:parietal_left:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "hippocampus",
+        "region_b_key": "parietal_right",
+        "amount": 60,
+        "occurred_at": "2026-11-20T22:00:00.000Z",
+        "session_id": "s6",
+        "dedupe_key": "cross:2026-11-20:planning_problem_solving:rest_sleep:hippocampus:parietal_right:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "hippocampus",
+        "region_b_key": "prefrontal_left",
+        "amount": 60,
+        "occurred_at": "2026-11-20T22:00:00.000Z",
+        "session_id": "s6",
+        "dedupe_key": "cross:2026-11-20:planning_problem_solving:rest_sleep:hippocampus:prefrontal_left:v2"
+      },
+      {
+        "type": "connection_gain",
+        "region_key": "hippocampus",
+        "region_b_key": "prefrontal_right",
+        "amount": 60,
+        "occurred_at": "2026-11-20T22:00:00.000Z",
+        "session_id": "s6",
+        "dedupe_key": "cross:2026-11-20:planning_problem_solving:rest_sleep:hippocampus:prefrontal_right:v2"
+      }
+    ],
+    "state": {
+      "regions": {
+        "amygdala": {
+          "neurons": 4000,
+          "lit": 4000,
+          "dimmed": 0,
+          "brightness": 681,
+          "last_active": "2026-11-18T19:00:00.000Z"
+        },
+        "cingulate": {
+          "neurons": 29450,
+          "lit": 29450,
+          "dimmed": 0,
+          "brightness": 716,
+          "last_active": "2026-11-20T09:00:00.000Z"
+        },
+        "hippocampus": {
+          "neurons": 30000,
+          "lit": 30000,
+          "dimmed": 0,
+          "brightness": 728,
+          "last_active": "2026-11-20T22:00:00.000Z"
+        },
+        "parietal_left": {
+          "neurons": 29450,
+          "lit": 29450,
+          "dimmed": 0,
+          "brightness": 716,
+          "last_active": "2026-11-20T09:00:00.000Z"
+        },
+        "parietal_right": {
+          "neurons": 29450,
+          "lit": 29450,
+          "dimmed": 0,
+          "brightness": 716,
+          "last_active": "2026-11-20T09:00:00.000Z"
+        },
+        "prefrontal_left": {
+          "neurons": 33450,
+          "lit": 33450,
+          "dimmed": 0,
+          "brightness": 716,
+          "last_active": "2026-11-20T09:00:00.000Z"
+        },
+        "prefrontal_right": {
+          "neurons": 33450,
+          "lit": 33450,
+          "dimmed": 0,
+          "brightness": 716,
+          "last_active": "2026-11-20T09:00:00.000Z"
+        },
+        "temporal_left": {
+          "neurons": 4000,
+          "lit": 4000,
+          "dimmed": 0,
+          "brightness": 681,
+          "last_active": "2026-11-18T19:00:00.000Z"
+        },
+        "temporal_right": {
+          "neurons": 4000,
+          "lit": 4000,
+          "dimmed": 0,
+          "brightness": 681,
+          "last_active": "2026-11-18T19:00:00.000Z"
+        }
+      },
+      "connections": [
+        {
+          "a": "cingulate",
+          "b": "parietal_left",
+          "strength": 140
+        },
+        {
+          "a": "cingulate",
+          "b": "parietal_right",
+          "strength": 140
+        },
+        {
+          "a": "cingulate",
+          "b": "prefrontal_left",
+          "strength": 153
+        },
+        {
+          "a": "cingulate",
+          "b": "prefrontal_right",
+          "strength": 153
+        },
+        {
+          "a": "parietal_left",
+          "b": "parietal_right",
+          "strength": 140
+        },
+        {
+          "a": "parietal_left",
+          "b": "prefrontal_left",
+          "strength": 153
+        },
+        {
+          "a": "parietal_left",
+          "b": "prefrontal_right",
+          "strength": 153
+        },
+        {
+          "a": "parietal_right",
+          "b": "prefrontal_left",
+          "strength": 153
+        },
+        {
+          "a": "parietal_right",
+          "b": "prefrontal_right",
+          "strength": 153
+        },
+        {
+          "a": "prefrontal_left",
+          "b": "prefrontal_right",
+          "strength": 167
+        },
+        {
+          "a": "cingulate",
+          "b": "cingulate",
+          "strength": 100
+        },
+        {
+          "a": "parietal_left",
+          "b": "parietal_left",
+          "strength": 100
+        },
+        {
+          "a": "parietal_right",
+          "b": "parietal_right",
+          "strength": 100
+        },
+        {
+          "a": "prefrontal_left",
+          "b": "prefrontal_left",
+          "strength": 100
+        },
+        {
+          "a": "prefrontal_right",
+          "b": "prefrontal_right",
+          "strength": 100
+        },
+        {
+          "a": "amygdala",
+          "b": "cingulate",
+          "strength": 13
+        },
+        {
+          "a": "amygdala",
+          "b": "parietal_left",
+          "strength": 13
+        },
+        {
+          "a": "amygdala",
+          "b": "parietal_right",
+          "strength": 13
+        },
+        {
+          "a": "amygdala",
+          "b": "prefrontal_left",
+          "strength": 13
+        },
+        {
+          "a": "amygdala",
+          "b": "prefrontal_right",
+          "strength": 13
+        },
+        {
+          "a": "cingulate",
+          "b": "temporal_left",
+          "strength": 13
+        },
+        {
+          "a": "cingulate",
+          "b": "temporal_right",
+          "strength": 13
+        },
+        {
+          "a": "parietal_left",
+          "b": "temporal_left",
+          "strength": 13
+        },
+        {
+          "a": "parietal_left",
+          "b": "temporal_right",
+          "strength": 13
+        },
+        {
+          "a": "parietal_right",
+          "b": "temporal_left",
+          "strength": 13
+        },
+        {
+          "a": "parietal_right",
+          "b": "temporal_right",
+          "strength": 13
+        },
+        {
+          "a": "prefrontal_left",
+          "b": "temporal_left",
+          "strength": 13
+        },
+        {
+          "a": "prefrontal_left",
+          "b": "temporal_right",
+          "strength": 13
+        },
+        {
+          "a": "prefrontal_right",
+          "b": "temporal_left",
+          "strength": 13
+        },
+        {
+          "a": "prefrontal_right",
+          "b": "temporal_right",
+          "strength": 13
+        },
+        {
+          "a": "cingulate",
+          "b": "hippocampus",
+          "strength": 60
+        },
+        {
+          "a": "hippocampus",
+          "b": "parietal_left",
+          "strength": 60
+        },
+        {
+          "a": "hippocampus",
+          "b": "parietal_right",
+          "strength": 60
+        },
+        {
+          "a": "hippocampus",
+          "b": "prefrontal_left",
+          "strength": 60
+        },
+        {
+          "a": "hippocampus",
+          "b": "prefrontal_right",
+          "strength": 60
+        }
+      ]
+    }
+  }
+}

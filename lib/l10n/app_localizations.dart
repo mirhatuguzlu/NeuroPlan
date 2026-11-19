@@ -2424,6 +2424,222 @@ abstract class L10n {
   /// In tr, this message translates to:
   /// **'Telefon durumu izni verilmedi; aramadan sonra dönüşte sorulur.'**
   String get focusPhoneDenied;
+
+  /// No description provided for @secAbout.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hakkında'**
+  String get secAbout;
+
+  /// No description provided for @aboutTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hakkında'**
+  String get aboutTitle;
+
+  /// No description provided for @aboutSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Lisanslar ve atıflar'**
+  String get aboutSubtitle;
+
+  /// No description provided for @aboutAppBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'NöroPlan açık kaynaklıdır ve AGPL-3.0 lisansıyla dağıtılır.'**
+  String get aboutAppBody;
+
+  /// No description provided for @aboutModelTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'3D beyin modeli'**
+  String get aboutModelTitle;
+
+  /// No description provided for @aboutModelBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'3D beyin, BodyParts3D 4.0 çokgen verisinden sadeleştirilip bölgelere göre birleştirilerek üretildi.'**
+  String get aboutModelBody;
+
+  /// No description provided for @aboutModelCredit.
+  ///
+  /// In tr, this message translates to:
+  /// **'BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0 International'**
+  String get aboutModelCredit;
+
+  /// No description provided for @aboutThreeBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'3D sahne Three.js ile çizilir (MIT lisansı). Sahne ve kütüphane uygulamanın içindedir; internet gerekmez.'**
+  String get aboutThreeBody;
+
+  /// No description provided for @aboutLicenses.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bütün lisansları göster'**
+  String get aboutLicenses;
+
+  /// No description provided for @brainListAction.
+  ///
+  /// In tr, this message translates to:
+  /// **'Liste görünümü'**
+  String get brainListAction;
+
+  /// No description provided for @brainResetView.
+  ///
+  /// In tr, this message translates to:
+  /// **'Görünümü sıfırla'**
+  String get brainResetView;
+
+  /// No description provided for @brainSceneLoading.
+  ///
+  /// In tr, this message translates to:
+  /// **'Beyin hazırlanıyor'**
+  String get brainSceneLoading;
+
+  /// No description provided for @brainSceneErrorTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'3D beyin bu cihazda açılamadı'**
+  String get brainSceneErrorTitle;
+
+  /// No description provided for @brainSceneErrorBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aynı bilgiyi liste olarak görebilirsin.'**
+  String get brainSceneErrorBody;
+
+  /// No description provided for @brainEmptyTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Henüz yanan nöron yok'**
+  String get brainEmptyTitle;
+
+  /// No description provided for @brainEmptyBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir odak oturumunu tamamladığında, işin kategorisiyle ilişkilendirilen bölgelerde nöronlar yanar. 3D beyin bir metafordur, ölçüm değildir.'**
+  String get brainEmptyBody;
+
+  /// No description provided for @brainTimeline.
+  ///
+  /// In tr, this message translates to:
+  /// **'Zaman çizelgesi'**
+  String get brainTimeline;
+
+  /// No description provided for @brainTimelineNow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugün'**
+  String get brainTimelineNow;
+
+  /// No description provided for @brainTimelineAt.
+  ///
+  /// In tr, this message translates to:
+  /// **'{date} itibarıyla'**
+  String brainTimelineAt(String date);
+
+  /// No description provided for @brainListTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Beyin bölgeleri'**
+  String get brainListTitle;
+
+  /// No description provided for @brainCategoriesTile.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kategoriler'**
+  String get brainCategoriesTile;
+
+  /// No description provided for @brainCategoriesBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Alt kategori ekle, taşı; her kökün bölgelerini gör.'**
+  String get brainCategoriesBody;
+
+  /// No description provided for @regionNeurons.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count, plural, =0{Henüz beslenmedi} other{{count} nöron · parlaklık %{brightness}}}'**
+  String regionNeurons(int count, int brightness);
+
+  /// No description provided for @regionDimmed.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} nöron sönük; yeniden odaklandıkça yanar.'**
+  String regionDimmed(int count);
+
+  /// No description provided for @regionHemisphere.
+  ///
+  /// In tr, this message translates to:
+  /// **'{side, select, left{Sol yarımküre} right{Sağ yarımküre} other{İki yarımküre}}'**
+  String regionHemisphere(String side);
+
+  /// No description provided for @regionInner.
+  ///
+  /// In tr, this message translates to:
+  /// **'İç yapı'**
+  String get regionInner;
+
+  /// No description provided for @regionLastActive.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son beslendiği gün: {date}'**
+  String regionLastActive(String date);
+
+  /// No description provided for @regionMinutes30.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son 30 günde bu bölgeyle ilişkilendirilen etkinliklere {minutes} dakika ayırdın.'**
+  String regionMinutes30(int minutes);
+
+  /// No description provided for @regionMinutes30None.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son 30 günde bu bölgeyle ilişkilendirilen bir odak oturumu yok.'**
+  String get regionMinutes30None;
+
+  /// No description provided for @regionChartLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son 30 gün, günlük yanan nöron'**
+  String get regionChartLabel;
+
+  /// No description provided for @regionChartSummary.
+  ///
+  /// In tr, this message translates to:
+  /// **'{days} gün beslendi; bir günde en çok {max} nöron.'**
+  String regionChartSummary(int days, int max);
+
+  /// No description provided for @regionFedBy.
+  ///
+  /// In tr, this message translates to:
+  /// **'Seni besleyenler (son 30 gün)'**
+  String get regionFedBy;
+
+  /// No description provided for @regionEvidence.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hangi kategoriler, hangi kanıtla'**
+  String get regionEvidence;
+
+  /// No description provided for @regionEvidenceNone.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu bölgeye bağlı bir kök kategori yok; beyin bütün görünsün diye çizilir.'**
+  String get regionEvidenceNone;
+
+  /// No description provided for @regionMetaphor.
+  ///
+  /// In tr, this message translates to:
+  /// **'3D beyin bir metafordur, ölçüm değildir. Kanıt düzeyi ilgili araştırmaların gücünü anlatır; senin beynini ölçmez.'**
+  String get regionMetaphor;
+
+  /// No description provided for @regionMinutes.
+  ///
+  /// In tr, this message translates to:
+  /// **'{minutes} dk'**
+  String regionMinutes(int minutes);
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

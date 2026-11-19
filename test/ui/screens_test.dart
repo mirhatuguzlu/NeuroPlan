@@ -149,7 +149,7 @@ void main() {
 
   testWidgets('Beyin: kök kategoriler, bölgeler ve kanıt düzeyi', (t) async {
     final h = await pumpApp(t);
-    await h.tap(find.text('Beyin').last);
+    await openCategories(h);
     expect(find.text('Bedensel Hareket'), findsOneWidget);
     await h.expectAccessible();
     await h.tap(find.text('Bedensel Hareket'));
@@ -172,7 +172,7 @@ void main() {
         catId = cat.id;
       },
     );
-    await h.tap(find.text('Beyin').last);
+    await openCategories(h);
     await h.tap(find.text('Öğrenme ve Bellek'));
     await centre(t, find.text('Okuma'));
     final g = await t.startGesture(t.getCenter(handleOf('Okuma')));
@@ -195,7 +195,7 @@ void main() {
         t,
         seed: (c) async => actId = await addDaily(c, 'Okuma'),
       );
-      await h.tap(find.text('Beyin').last);
+      await openCategories(h);
       await h.tap(find.text('Öğrenme ve Bellek'));
       await centre(t, find.text('Okuma'));
       final scroll = t.state<ScrollableState>(
@@ -337,4 +337,11 @@ Finder handleOf(String title) => find.descendant(
 Future<void> centre(WidgetTester t, Finder f) async {
   await Scrollable.ensureVisible(t.element(f), alignment: 0.5);
   await t.pump();
+}
+
+/// Beyin sekmesi → Liste görünümü → Kategoriler (D41).
+Future<void> openCategories(Harness h) async {
+  await h.tap(find.text('Beyin').last);
+  await h.tap(find.byTooltip('Liste görünümü'));
+  await h.tap(find.text('Kategoriler'));
 }

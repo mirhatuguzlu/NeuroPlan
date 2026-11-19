@@ -21,6 +21,7 @@ Veri modeli: [DB_SCHEMA.md](DB_SCHEMA.md).
 | Saat dilimi | `timezone` + `flutter_timezone` | 0.11 / 5.1 | IANA veritabanı, yaz saati geçişleri. | — |
 | Gün doğumu / namaz vakti | `adhan_dart` (saf Dart, bağımlılıksız) | 2.0 | Hesap çevrimdışı yapılır; Diyanet yöntemi (`turkiye`) hazır gelir. Aşama 2'de `adhan` yerine seçildi (D23). | `adhan` (2023'ten beri güncellenmiyor), kendi NOAA hesabımız. |
 | 3D köprü | `webview_flutter` | 4.14 | Resmi paket, `JavaScriptChannel` ve `loadFlutterAsset` destekler. | `flutter_inappwebview` |
+| 3D sahne | Three.js (yerel, tek IIFE paket) + meshoptimizer | r187 / 1.3 | Model ve kütüphane `assets/brain/brain.js` içinde; ağ yok (D7, D40). Geliştirici aracı `tool/brain` (Node, esbuild, glTF-Transform). | Draco (wasm dosyası `file://`'da yüklenmiyor) |
 
 **Önerinin değerlendirmesi:** Önerilen dörtlü (Riverpod, go_router, Drift, supabase_flutter) korunuyor. Tek ekleme, alan katmanının ayrı bir saf Dart paketi olmasıdır (Dart pub workspace). Bunun iki nedeni var:
 1. Saflığı derleyici korur. `package:flutter` import'u o pakette derleme hatası verir; yalnız kod incelemesine güvenilmez.
@@ -59,7 +60,7 @@ packages/neuroplan_core/      saf Dart alan katmanı
   lib/src/model/              Activity, ScheduleRule, Recurrence, Timing, FocusSession…
   lib/src/plan/               PlanEngine: tekrar genişletme, kısıt çözme, boşluk, yerleştirme
   lib/src/focus/              FocusClock (zaman damgalı sayaç), EscapeGuard (10 sn kuralı)
-  lib/src/brain/              BrainEngine: olay türetme (Aşama 3: kazanç + ceza), katlama, sönme
+  lib/src/brain/              Beyin v2: sabitler (brain_config), olay türetme, katlama + sönme, çizim planı + kalite kademesi
   lib/src/sync/               HLC, alan bazlı birleştirme
   lib/src/science/            sistem verisi modelleri (kök kategori, bölge, ağırlık)
   test/                       birim testleri + test vektörleri (JSON)
@@ -75,8 +76,9 @@ lib/
   l10n/                       app_tr.arb, app_en.arb
 assets/
   seed/system.json            kök kategori, bölge, ağırlık: TEK KAYNAK (SCIENCE.md'den)
-  brain/                      three.js + sahne (D7)
+  brain/                      index.html + brain.js (Three.js + sahne + gömülü GLB; tool/brain üretir, D40)
 tool/gen_seed_sql.dart        system.json → seed migration'ı (--check ile doğrular)
+tool/brain/                   3D model hattı (BodyParts3D → GLB) ve sahne kaynağı; docs/BRAIN_MODEL.md
 supabase/
   migrations/                 şema, RLS, seed (seed SQL, system.json'dan üretilir)
   functions/                  Edge Functions: delete_account, export_data, leaderboard
@@ -185,7 +187,8 @@ focus_sessions (gerçek) ──BrainEngine.derive──▶ brain_events (yalnız
 - `derive(oturum, ağırlıklar, engineVersion)` olayları üretir. Her olayın tekilleştirme anahtarı deterministiktir (ör. `gain:<oturum>:<bölge>:v1`). İstemci ile sunucu aynı olayı ürettiğinde tek satır kalır.
 - `fold(olaylar, asOf)` bölge durumunu (nöron, parlaklık, son etkinlik) ve bağlantıları üretir. Sonuç `brain_snapshots`'a yazılır. Olay kümesinin özeti değişirse ya da `engineVersion` artarsa yeniden hesaplanır.
 - Miktarlar tamsayıdır (binde bir birim). Yuvarlama "en büyük kalan" yöntemiyle deterministik yapılır.
-- **v1 formülünün iskeleti** (ayrıntı beyin aşamasında): bir dakikalık odak, her kategoride aynı sabit nöron kazancını verir. Bu kazanç kategorinin bölgelerine ağırlıklarla orantılı dağıtılır (normalleştirme, DB_SCHEMA §9). Aynı oturumda birlikte çalışan bölgeler arasında bağlantı güçlenir. Etkinlik olmadıkça parlaklık eşiklerle düşer; nöron silinmez (BRAIN-3).
+- **v2 formülü** (Aşama 4, D39; ayrıntı ve sabitler docs/BRAIN_MODEL.md §2): kazanç = odak dakikası × 1000 × ölçülen odak çarpanı × Pomodoro ekleri, kategori içinde normalleştirilmiş ağırlıkla dağılır. Bağlantılar: derin çalışmada en uzun kesintisiz süre, art arda günlerde aynı kategori (bölge içi), aynı gün farklı kategoriler (bölgeler arası). Sönme olaysızdır: parlaklık katlamada son kazançtan geçen süreyle (yarılanma 14 gün, taban %25) hesaplanır; nöron silinmez (BRAIN-3).
+- `derive` geçmişe de bakar (son 7 günün oturumları); geçmiş girdi olarak verilir, motor saat okumaz. Uygulamada `BrainRepository.deriveFor` oturum kaydedildikten sonra çağrılır; motor sürümü değişince `rebuildIfNeeded` olayları oturumlardan yeniden türetir.
 - **Sunucuda doğrulama:** sıralama tablosu için Edge Function aynı `neuroplan_core` kodunu (`dart compile js`) `focus_sessions` üzerinden yeniden çalıştırır. İstemcinin gönderdiği anlık görüntüye güvenilmez. Bu yol prototiple doğrulanacak. Olmazsa hesap TypeScript'e çevrilir ve aynı test vektörleriyle eşitliği korunur.
 
 ## 7a. Odak oturumu (Aşama 3, D31–D35)
@@ -203,29 +206,38 @@ focus_sessions (gerçek) ──BrainEngine.derive──▶ brain_events (yalnız
 - **Süreç ölse de:** son tarihte bildirim değişimi native `Handler`'la yapılır (ön plan servisi süreci canlı tutar); veri tarafı açılışta kurtarmada tamamlanır.
 - **Sabitleme (D36):** kural silahlıyken `FocusPlatform.pin`, değilken `unpin`. Onay penceresinin aldığı pencere odağı 30 sn boyunca kaçış sayılmaz.
 
-## 8. WebView köprüsü
+## 8. WebView köprüsü (Aşama 4, D40)
 ```
-Flutter: BrainScreen                               WebView: assets/brain/index.html (three.js)
-  BrainEngine.fold ─▶ snapshot
-  controller.runJavaScript("brain.receive(json)") ───────────▶  sahneyi günceller
-  JavaScriptChannel "NeuroBridge"   ◀───────────── NeuroBridge.postMessage(json)
-  bölge bilgi paneli (Flutter widget, metin SCIENCE.md'den)
+Flutter                                               WebView: assets/brain/index.html + brain.js
+  BrainRepository.watchHistory ─▶ foldBrain(asOf)
+        ─▶ renderPlan(kademe) ─▶ BrainController
+  WebViewController.runJavaScript(                      window.brain.receive(json) ─▶ sahne
+     "window.brain.receive(<json>)")  ─────────────────▶
+  JavaScriptChannel "NeuroBridge"   ◀───────────────── NeuroBridge.postMessage(json)
+  bölge sayfası, metin alternatifi (Flutter widget'ları; metin SCIENCE.md'den)
 ```
-Mesaj biçimi: `{"v": 1, "type": "...", "payload": {...}}`
+Mesaj biçimi: `{"v": 1, "type": "...", "payload": {...}}`. Dart'ta sealed sınıflar (`lib/ui/features/brain/bridge.dart`), JS'te `tool/brain/src/core.js`; ikisi de testli.
 | Yön | type | payload |
 |---|---|---|
-| Flutter → JS | `init` | tema renkleri, hareket azaltma, kalite düzeyi |
-| Flutter → JS | `state` | bölgeler `[{key, mesh, neurons, brightness}]`, bağlantılar `[{a, b, strength}]` |
-| Flutter → JS | `highlight` | bölge anahtarı |
-| JS → Flutter | `ready` | sahne sürümü |
-| JS → Flutter | `regionTapped` | bölge anahtarı; Flutter bilgi panelini açar (BRAIN-4) |
-| JS → Flutter | `perf` | ortalama fps; Flutter kalite düzeyini düşürür (BRAIN-5) |
-| JS → Flutter | `error` | hata mesajı |
+| Flutter → JS | `init` | `theme` (`background, shell, glow, signal, dim, line, penalty`: `#RRGGBB`), `rootColors` (kök → renk), `reducedMotion`, `tier` (`low`·`mid`·`high`), `seed` |
+| Flutter → JS | `state` | `asOf`, `regions: [{key, points, dimPoints, glow, root?}]`, `links: [{a, b, strength}]` (0–1000) |
+| Flutter → JS | `highlight` | `{key | null, mode: overview | focus}`; focus = bölge sayfası |
+| Flutter → JS | `event` | `{kind: gain | penalty, regions}`: son görülenden sonraki kazanç / ceza animasyonu |
+| Flutter → JS | `quality` | `{tier}` |
+| Flutter → JS | `visibility` | `{visible}`: görünmezken çizim durur |
+| Flutter → JS | `reset` | kamerayı sıfırla |
+| JS → Flutter | `ready` | `scene` (sahne sürümü), `regions` (modeldeki anahtarlar), `hints: {cores, memoryGb, renderer}` |
+| JS → Flutter | `regionTapped` | `{key | null}` |
+| JS → Flutter | `perf` | `{fps, frameMs, tier}`, 5 sn'de bir |
+| JS → Flutter | `reset` | kullanıcı çift dokunuşla görünümü sıfırladı |
+| JS → Flutter | `error` | `{message}`; `webgl` = cihazda WebGL yok |
 
-- JS tarafında iş kuralı yoktur, yalnız çizim yapılır. Hesap Dart'tadır (determinizm ve test için).
-- Sahne `loadFlutterAsset` ile yüklenir. Navigasyon temsilcisi dış URL'leri engeller, ağ erişimi yoktur (D7).
-- Bilinmeyen `v` ya da `type` değeri yok sayılır ve günlüğe yazılır.
-- Metin alternatifi (BRAIN-6) aynı anlık görüntüden Flutter'da liste olarak çizilir.
+- Sıra: sahne modeli yükleyince `ready` der; Flutter kademeyi ipuçlarından seçer, sonra `init` ve `state` gönderir. `ready`'den önce gönderilenler türe göre sırada bekler.
+- JS tarafında iş kuralı yoktur, yalnız çizilir. Nokta sayısı, ışıma, bağ seviyesi ve kademe Dart'ta hesaplanır (`renderPlan`, `QualityGovernor`).
+- Sahne `loadFlutterAsset` ile `file://` altında açılır. Orada ES modülü ve `fetch` çalışmadığı için Three.js, sahne ve GLB tek klasik betikte paketlenir. Gezinme temsilcisi uygulama varlıkları dışındaki her adresi engeller; ağ erişimi yoktur (D7).
+- Tek WebView vardır: uygulama kabuğu ilk karede kurar ve yükler (ön ısıtma). Bölge sayfası aynı sahneyi `focus` görünümünde kullanır; yalnız yerleşim değişir.
+- Bilinmeyen `v` ya da `type` değeri iki tarafta da yok sayılır ve günlüğe yazılır.
+- Metin alternatifi (BRAIN-6) aynı katlamadan Flutter'da liste olarak çizilir; ekran okuyucu açıkken Beyin sekmesi doğrudan listeyi gösterir.
 
 ## 9. Sunucu
 - Her tabloda RLS açıktır (DB_SCHEMA §6).

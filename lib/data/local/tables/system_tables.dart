@@ -27,6 +27,7 @@ class BrainRegions extends Table {
   TextColumn get nameEn => text()();
   TextColumn get hemisphere => text()();
   TextColumn get meshName => text()();
+  BoolColumn get isInner => boolean().withDefault(const Constant(false))();
 
   @override
   Set<Column<Object>> get primaryKey => {key};
@@ -39,6 +40,8 @@ class CategoryRegionWeights extends Table {
   TextColumn get evidenceLevel => text()();
   TextColumn get sourceIds => text().map(const StringListConverter())();
   TextColumn get sourceUrls => text().map(const StringListConverter())();
+  TextColumn get detailTr => text().withDefault(const Constant(''))();
+  TextColumn get detailEn => text().withDefault(const Constant(''))();
 
   @override
   Set<Column<Object>> get primaryKey => {rootCategoryKey, regionKey};

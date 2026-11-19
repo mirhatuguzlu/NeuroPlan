@@ -266,3 +266,51 @@ Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem 
 - Sabitleme ayarı kapalıysa ya da kullanıcı onaylamazsa oturum yine sürer; koruma uyarı + 10 sn kuralıdır.
 **Neden:** Proje sahibi önce "yalnız uyarı"yı seçti, sonra "uygulama sabitlensin" dedi. "Her oturumda" biçimi uygulandı (ayar anahtarı yok).
 **Durum:** Kabul. **D35'teki "Uygulama sabitleme yok" maddesinin yerine geçer.** Gerçek cihaz testi bekliyor (Xiaomi / HyperOS sabitleme davranışı dahil).
+
+## 2026-11-19 — D37: 3D beyin modeli ve lisansı
+**Karar:** Model BodyParts3D 4.0'dan (DBCLS) üretilir. DBCLS'nin güncel README'si (2025-02-27) veriyi **CC BY 4.0** ile lisanslıyor: ticari kullanım serbest, yalnız atıf. Atıf metni Hakkında ekranında ve lisans sayfasında: "BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0 International". Ham OBJ repoya girmez; türetilen model `tool/brain/model/brain.glb` ve paket `assets/brain/brain.js` girer. Three.js MIT lisansı da lisans sayfasındadır.
+- `partof` arşivinde amigdala, korpus kallozum, kaudat, putamen ve üst temporal girus yok; bunlar aynı kaynağın `isa` arşivinden alındı (aynı lisans).
+- Orbital girus dosyalarının sol/sağ ayrımı adda yok; derleme betiği x işaretiyle doğrular.
+**Neden:** Proje sahibi soru formunda BodyParts3D'yi seçti. Z-Anatomy (CC BY-SA 4.0) ShareAlike yükü ve NC lisanslı alt parçaları yüzünden seçilmedi.
+**Durum:** Kabul. **Açık nokta:** 2011 tarihli OBJ dosyalarının başlığında eski lisans (CC BY-SA 2.1 JP) yazıyor; güncel README bunun yerine geçiyor. BY-SA geçerli sayılsa da ticari kullanım serbesttir, yalnız türetilmiş model dosyası aynı lisansla paylaşılır (repo zaten açık). Yayın öncesi hukuk kontrolüne eklendi.
+
+## 2026-11-19 — D38: Beyin bölgeleri anatomik oldu
+**Karar:** `brain_regions` 20 işlevsel bölgeden 18 anatomik bölgeye geçti: frontal (motor alanlar), prefrontal, parietal, temporal, oksipital (sağ/sol ayrı), beyincik, beyin sapı, korpus kallozum, singulat, insula, striatum, hipokampüs, amigdala. Son altısı yarı saydam iç yapıdır (`is_inner`). Mesh adları bölgelerle birebir (`region_<key>`).
+- İşlevsel alt bölge adı (DLPFC, STS…) `category_region_weights.detail_tr/en` metninde kalır ve bölge sayfasında gösterilir. Eşleme tablosu DB_SCHEMA §2.3'te. Aynı hücreye düşen satırlarda en yüksek kanıt düzeyi alınır, kaynaklar birleşir. S5 (müzik) yalnız sağ frontal'e bağlandı; kaynak sağ presantral girus diyor.
+- Supabase: `20261119120000_brain_regions_v2.sql` (sütunlar + eski satırları silme) ve `20261119120100_system_seed_v2.sql` (üretilmiş seed). Eski seed migration'ına dokunulmadı.
+- Drift `schemaVersion 2`: yeni sütunlar, v1 beyin olayları + outbox kayıtları + anlık görüntü silinir, bölgeler yeniden seed edilir; açılışta olaylar oturumlardan yeniden türetilir. Sunucu eşitlemesi henüz yazılmadığı için silinen olay sunucuya hiç gitmemişti.
+**Neden:** Proje sahibi "mesh adları brain_regions ile birebir" istedi ve soru formunda anatomik bölgeleri seçti; işlevsel bölgelerin çoğu (dACC, TPJ, STS…) modelde ayrı parça değil.
+**Durum:** Kabul. Uzak Supabase'e iki yeni migration uygulanmadı (ayrı onay).
+
+## 2026-11-19 — D39: Beyin büyüme kuralları v2
+**Karar:** Kurallar ve sabitler docs/BRAIN_MODEL.md §2'de; sabitler tek dosyada (`brain_config.dart`). Özeti:
+- Kazanç = odak dakikası × 1000 × odak çarpanı × (1 + Pomodoro ekleri). **Odak çarpanı ölçülen kesintiden gelir** (geri dönülen her sayılan kaçış −%10, taban %60), kullanıcının 1–5 puanından değil.
+- Pomodoro: döngü başına +%5 (≤ %20), haftalık süreklilikte ek gün başına +%3 (≤ %18); bozulma seriyi sıfırlar. Derin çalışma: en uzun kesintisiz dakika × 20 bağ kalınlaşması.
+- Bağlantılar: art arda günlerde aynı kategori bölge içi bağ; aynı gün farklı kategoriler bölgeler arası bağ.
+- Ceza D31 gibi: bozulan oturum o kadar nöronu söndürür; sonraki kazanç önce sönükleri yakar. Hiçbir nöron silinmez.
+- **Sönme olaysızdır:** parlaklık katlamada son kazançtan geçen süreyle hesaplanır (yarılanma 14 gün, taban %25). `fade` olayı üretilmez; şemadaki tür yerinde durur.
+- Motor sürümü 2. Olaylar `derive(oturum, son 7 günün oturumları)` ile türetilir; motor saat okumaz. JSON test vektörü sunucu eşliği için.
+**Neden:** Aşama 4 talimatı; odak puanı kaynağı soru formundan.
+**Durum:** Geçici. Proje sahibi sabitleri sonra ayarlayacağını söyledi; değişince sürüm artar ve olaylar yeniden türetilir.
+
+## 2026-11-19 — D40: Sahne paketi ve köprü
+**Karar:**
+- Three.js r187, sahne ve GLB, esbuild ile tek klasik betik (`assets/brain/brain.js`, ~1,2 MB). WebView sahneyi `file://` altında açar; orada ES modülü ve `fetch` çalışmadığı için her şey tek dosyadadır. Sıkıştırma meshopt (çözücüsü JS'in içinde); Draco seçilmedi.
+- Köprü mesajları tipli ve sürümlü (`v: 1`), ARCHITECTURE §8. Dart sealed sınıflar + JS ayrıştırıcı, ikisi de testli.
+- Tek WebView: uygulama kabuğu ilk karede kurar (ön ısıtma). Görünmezken (başka sekme, üstte sayfa, arka plan) çizim durur.
+- Kalite kademesi Dart'ta seçilir (`QualityGovernor`): donanım ipuçlarından başlar, düşük fps raporlarında iner, geri yükselmez.
+- Nöron yerleşiminin tohumu kurulum başına rastgele kimliktir (giriş yok); `shortcut:` notu, giriş aşamasında Supabase kullanıcı kimliğine geçilecek.
+- WebGL çizgi kalınlığı 1 px olduğundan güçlü bağ daha çok paralel şerit ve daha parlak çizilir.
+**Durum:** Kabul.
+
+## 2026-11-19 — D41: Beyin sekmesi düzeni
+**Karar:**
+- Beyin sekmesi 3D sahneyle açılır. Üstte "Liste görünümü" (metin alternatifi: bölgeler, nöron sayısı, parlaklık) ve "Görünümü sıfırla" düğmeleri; altta zaman çizelgesi kaydırıcısı (ilk olaydan bugüne, gün adımlı). Ekran okuyucu açıkken sekme doğrudan listeyi gösterir.
+- Kategori ağacı Liste görünümünden "Kategoriler" satırıyla açılır (D25'teki Beyin sekmesi içeriği buraya taşındı).
+- Bölgeye dokununca **ayrı sayfa görünümü**: üstte aynı sahne o bölgeye yaklaşır, beynin geri kalanı silik; altta ad, yarımküre, nöron / parlaklık, son 30 gün grafiği, seni besleyen kategoriler ve kanıt satırları. Geri tuşu genel görünüme döner. WebView yeniden yaratılmaz.
+- Sahne her zaman koyudur: neon ışıma koyu zeminde okunur. Açık görünümde aktif temanın koyu eşi kullanılır (Geçici; tema aşamasında her temanın sahne renkleri ayrıca tanımlanacak).
+- Profil'e "Hakkında" bölümü eklendi: lisans ve atıflar.
+**Neden:** Proje sahibinin soru formu seçimleri (liste düğmesi, bölge sayfası).
+**Durum:** Kabul (sahne renkleri Geçici).
+
+**D25 güncellemesi (2026-11-19):** Beyin sekmesi artık 3D sahnedir; kategori listesi metin alternatifinin altına taşındı (D41).

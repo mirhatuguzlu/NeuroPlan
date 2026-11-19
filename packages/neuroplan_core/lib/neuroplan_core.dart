@@ -2,7 +2,10 @@
 /// (docs/ARCHITECTURE.md §3).
 library;
 
+export 'src/brain/brain_config.dart';
 export 'src/brain/brain_engine.dart';
+export 'src/brain/brain_fold.dart';
+export 'src/brain/render_plan.dart';
 export 'src/focus/escape_guard.dart';
 export 'src/focus/focus_clock.dart';
 export 'src/ids.dart';

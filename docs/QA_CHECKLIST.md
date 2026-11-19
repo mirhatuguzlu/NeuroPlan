@@ -76,3 +76,34 @@ Not: Bu bölüm sabitleme onaylanmadan ya da sabitlemeden çıkıldıktan sonra 
 - [ ] Sistem ayarında "animasyonları kaldır" açıkken ışıma durağan, geçişler anlık.
 - [ ] Yazı boyutu en büyükte odak ekranı ve bitiş adımları taşmaz.
 - [ ] TalkBack: sayaç "Kalan 12 dk" diye okunur; butonlar etiketli; bozuldu ekranında başlık önce okunur.
+
+## B. 3D beyin (Aşama 4)
+Hazırlık: en az bir tamamlanmış ve bir bozulmuş odak oturumu olsun (farklı kök kategorilerde). Fps ölçümü için `flutter run --profile`; `adb logcat | grep "\[brain\] fps"` 5 sn'de bir satır yazar.
+
+### B1. Açılış ve görünüm
+- [ ] Uygulama açılıp birkaç saniye sonra Beyin sekmesine geçince sahne hazır gelir (ön ısıtma); "Beyin hazırlanıyor" en çok bir an görünür.
+- [ ] Yarı saydam kabuk, kenarlarda parlama, lob sınırlarında ince çizgiler; dolu katman yok. İç yapılar (hipokampüs, amigdala…) kabuğun içinden seçilir.
+- [ ] Nöronlar beslenen bölgelerde, o bölgeyi en çok besleyen kategorinin renginde parlar; bozulan oturumun bölgelerinde sönük noktalar var.
+- [ ] Ara sıra bir bağ boyunca ışık darbesi kayar. Sistemde "animasyonları kaldır" açıksa dönme, pırıltı ve darbe yok.
+- [ ] Açık ve koyu görünümde sahne koyu kalır; renkler temadan gelir.
+- [ ] Uçak modunda da açılır (internet gerekmez).
+
+### B2. Etkileşim
+- [ ] Tek parmakla döner, iki parmakla yakınlaşır/uzaklaşır; sekme kaydırmaz.
+- [ ] Çift dokunuş ve "Görünümü sıfırla" kamerayı başa alır.
+- [ ] Bir bölgeye dokununca bölge sayfası: üstte o bölge yakında, kalanı silik; altta ad, nöron / parlaklık, son 30 gün, besleyen kategoriler, kanıt düzeyi ve DOI'ler. Geri tuşu genel görünüme döner.
+- [ ] Zaman çizelgesini geriye çekince beyin o günkü haliyle çizilir; "Bugün" düğmesi geri getirir.
+- [ ] Yeni bir oturum bitirip Beyin'e gelince kazanılan bölgeler bir kez parlar (bozulan oturumda ceza rengiyle).
+
+### B3. Performans
+- [ ] Orta seviye cihazda yüksek ya da orta kademede ≥ 55 fps (5 sn'lik rapor ortalaması). Sonuç docs/BRAIN_MODEL.md §6'ya yazılır.
+- [ ] Düşük seviye cihazda ≥ 30 fps; gerekirse kademe kendiliğinden iner (`[brain] fps … (low)`).
+- [ ] Başka sekmeye geçince ve uygulama arka plandayken fps satırları durur (çizim yok).
+- [ ] 10 dakika açık kalınca cihaz aşırı ısınmaz, bellek artmaz (Android Studio Profiler ya da `adb shell dumpsys meminfo com.mirhatuguzlu.neuroplan`).
+
+### B4. Erişilebilirlik
+- [ ] TalkBack açıkken Beyin sekmesi doğrudan bölge listesini gösterir; her satır ad, nöron ve parlaklıkla okunur; satırdan bölge sayfası açılır.
+- [ ] Yazı boyutu en büyükte bölge sayfası ve liste taşmaz.
+
+### B5. Göç (Aşama 3'ten güncelleyenler)
+- [ ] Aşama 3 kurulumunun üstüne kurulunca uygulama açılır; eski oturumlar beyinde görünür (olaylar v2 kurallarıyla yeniden türetilir).

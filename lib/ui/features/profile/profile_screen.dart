@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:neuroplan_core/neuroplan_core.dart';
@@ -210,6 +211,15 @@ class _Settings extends ConsumerWidget {
 
         section(l.secFocus),
         const FocusSettingsTiles(),
+
+        section(l.secAbout),
+        ListTile(
+          leading: const Icon(Symbols.info_rounded),
+          title: Text(l.aboutTitle),
+          subtitle: Text(l.aboutSubtitle),
+          trailing: const Icon(Symbols.chevron_right_rounded),
+          onTap: () => context.push('/profile/about'),
+        ),
       ],
     );
   }

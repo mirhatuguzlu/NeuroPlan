@@ -10,17 +10,21 @@ import 'package:neuroplan/app/next_up.dart';
 import 'package:neuroplan/app/notifications.dart';
 import 'package:neuroplan/app/providers.dart';
 import 'package:neuroplan/data/local/app_database.dart';
+import 'package:neuroplan/ui/features/brain/brain_scene.dart';
 import 'package:neuroplan/ui/features/focus/focus_controller.dart';
 import 'package:drift/drift.dart' as drift show driftRuntimeOptions;
 
 import '../data/test_support.dart';
+import '../support/fake_brain_scene.dart';
 import '../support/fake_focus_platform.dart';
 
 /// 18 Kasım 2026 çarşamba 10:00 (İstanbul).
 final testNow = DateTime.utc(2026, 11, 18, 7);
 
 class Harness {
-  Harness(this.tester, this.db, this.container, this.focus);
+  Harness(this.tester, this.db, this.container, this.focus, this.brain);
+
+  final FakeBrainScene brain;
 
   final FakeFocusPlatform focus;
 
@@ -74,6 +78,7 @@ Future<Harness> pumpApp(
   drift.driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
   await tester.binding.setSurfaceSize(const Size(412, 915));
   final db = AppDatabase(NativeDatabase.memory(), systemData: systemData);
+  final brain = FakeBrainScene();
   final container = ProviderContainer(
     overrides: [
       databaseProvider.overrideWithValue(db),
@@ -81,6 +86,7 @@ Future<Harness> pumpApp(
       nextUpProvider.overrideWithValue(_NoNextUp()),
       focusPlatformProvider.overrideWithValue(platform),
       focusNowProvider.overrideWithValue(() => Harness.focusNow),
+      brainSceneProvider.overrideWithValue(brain),
     ],
   );
   await tester.runAsync(() async {
@@ -100,7 +106,7 @@ Future<Harness> pumpApp(
       child: const NeuroPlanApp(),
     ),
   );
-  final h = Harness(tester, db, container, platform);
+  final h = Harness(tester, db, container, platform, brain);
   await h.settle();
   addTearDown(() async {
     await tester.pumpWidget(const SizedBox());

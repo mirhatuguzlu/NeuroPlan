@@ -42,7 +42,8 @@ final class BrainRegionDef {
       sortOrder = j['sort_order'] as int,
       nameTr = j['name_tr'] as String,
       nameEn = j['name_en'] as String,
-      hemisphere = j['hemisphere'] as String;
+      hemisphere = j['hemisphere'] as String,
+      isInner = j['is_inner'] as bool? ?? false;
 
   final String key;
   final int sortOrder;
@@ -52,7 +53,10 @@ final class BrainRegionDef {
   /// `left` · `right` · `bilateral`
   final String hemisphere;
 
-  /// 3D modeldeki düğüm adı; model beyin aşamasında bu kurala göre adlandırılır.
+  /// Yarı saydam iç yapı (hipokampüs, amigdala…); kabuğun içinde çizilir.
+  final bool isInner;
+
+  /// 3D modeldeki düğüm adı (`assets/brain`, tool/brain/regions.json).
   String get meshName => 'region_$key';
 }
 
@@ -62,13 +66,19 @@ final class RegionWeightDef {
       regionKey = j['region_key'] as String,
       weight = (j['weight'] as num).toDouble(),
       evidence = EvidenceLevel.fromJson(j['evidence_level']),
-      sourceIds = [for (final s in j['source_ids'] as List) s as String];
+      sourceIds = [for (final s in j['source_ids'] as List) s as String],
+      detailTr = j['detail_tr'] as String? ?? '',
+      detailEn = j['detail_en'] as String? ?? '';
 
   final String rootCategoryKey;
   final String regionKey;
   final double weight;
   final EvidenceLevel evidence;
   final List<String> sourceIds;
+
+  /// Kaynaktaki işlevsel alt bölge (ör. "Dorsolateral prefrontal korteks"); D38.
+  final String detailTr;
+  final String detailEn;
 }
 
 /// Sistem tablolarının tek kaynağı: `assets/seed/system.json`.

@@ -5,6 +5,9 @@ import 'package:material_ui/material_ui.dart';
 import '../data/local/app_database.dart';
 import '../ui/core/app_shell.dart';
 import '../ui/features/activity_wizard/activity_wizard_screen.dart';
+import '../ui/features/brain/brain_list_screen.dart';
+import '../ui/features/brain/brain_screen.dart';
+import '../ui/features/brain/region_info.dart';
 import '../ui/features/categories/category_tree_screen.dart';
 import '../ui/features/categories/move_screen.dart';
 import '../ui/features/focus/focus_controller.dart';
@@ -13,6 +16,7 @@ import '../ui/features/focus/focus_screen.dart';
 import '../ui/features/focus/focus_start_screen.dart';
 import '../ui/features/onboarding/onboarding_screen.dart';
 import '../ui/features/plan/plan_screen.dart';
+import '../ui/features/profile/about_screen.dart';
 import '../ui/features/profile/profile_screen.dart';
 import '../ui/features/project/project_screen.dart';
 import '../ui/features/today/today_screen.dart';
@@ -87,6 +91,29 @@ final routerProvider = Provider<GoRouter>((ref) {
         ),
       ),
       GoRoute(
+        path: '/brain/list',
+        parentNavigatorKey: _rootKey,
+        pageBuilder: (_, s) => sharedAxisPage(s, const BrainListScreen()),
+      ),
+      GoRoute(
+        path: '/brain/categories',
+        parentNavigatorKey: _rootKey,
+        pageBuilder: (_, s) => sharedAxisPage(s, const CategoryTreeScreen()),
+      ),
+      GoRoute(
+        path: '/brain/region/:key',
+        parentNavigatorKey: _rootKey,
+        pageBuilder: (_, s) => sharedAxisPage(
+          s,
+          RegionScreen(regionKey: s.pathParameters['key']!),
+        ),
+      ),
+      GoRoute(
+        path: '/profile/about',
+        parentNavigatorKey: _rootKey,
+        pageBuilder: (_, s) => sharedAxisPage(s, const AboutScreen()),
+      ),
+      GoRoute(
         path: '/focus',
         parentNavigatorKey: _rootKey,
         pageBuilder: (_, s) => sharedAxisPage(s, const FocusScreen()),
@@ -139,7 +166,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: '/brain',
-                pageBuilder: (_, s) => _tab(s, const CategoryTreeScreen()),
+                pageBuilder: (_, s) => _tab(s, const BrainScreen()),
               ),
             ],
           ),

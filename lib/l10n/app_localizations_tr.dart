@@ -1382,4 +1382,148 @@ class L10nTr extends L10n {
   @override
   String get focusPhoneDenied =>
       'Telefon durumu izni verilmedi; aramadan sonra dönüşte sorulur.';
+
+  @override
+  String get secAbout => 'Hakkında';
+
+  @override
+  String get aboutTitle => 'Hakkında';
+
+  @override
+  String get aboutSubtitle => 'Lisanslar ve atıflar';
+
+  @override
+  String get aboutAppBody =>
+      'NöroPlan açık kaynaklıdır ve AGPL-3.0 lisansıyla dağıtılır.';
+
+  @override
+  String get aboutModelTitle => '3D beyin modeli';
+
+  @override
+  String get aboutModelBody =>
+      '3D beyin, BodyParts3D 4.0 çokgen verisinden sadeleştirilip bölgelere göre birleştirilerek üretildi.';
+
+  @override
+  String get aboutModelCredit =>
+      'BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0 International';
+
+  @override
+  String get aboutThreeBody =>
+      '3D sahne Three.js ile çizilir (MIT lisansı). Sahne ve kütüphane uygulamanın içindedir; internet gerekmez.';
+
+  @override
+  String get aboutLicenses => 'Bütün lisansları göster';
+
+  @override
+  String get brainListAction => 'Liste görünümü';
+
+  @override
+  String get brainResetView => 'Görünümü sıfırla';
+
+  @override
+  String get brainSceneLoading => 'Beyin hazırlanıyor';
+
+  @override
+  String get brainSceneErrorTitle => '3D beyin bu cihazda açılamadı';
+
+  @override
+  String get brainSceneErrorBody => 'Aynı bilgiyi liste olarak görebilirsin.';
+
+  @override
+  String get brainEmptyTitle => 'Henüz yanan nöron yok';
+
+  @override
+  String get brainEmptyBody =>
+      'Bir odak oturumunu tamamladığında, işin kategorisiyle ilişkilendirilen bölgelerde nöronlar yanar. 3D beyin bir metafordur, ölçüm değildir.';
+
+  @override
+  String get brainTimeline => 'Zaman çizelgesi';
+
+  @override
+  String get brainTimelineNow => 'Bugün';
+
+  @override
+  String brainTimelineAt(String date) {
+    return '$date itibarıyla';
+  }
+
+  @override
+  String get brainListTitle => 'Beyin bölgeleri';
+
+  @override
+  String get brainCategoriesTile => 'Kategoriler';
+
+  @override
+  String get brainCategoriesBody =>
+      'Alt kategori ekle, taşı; her kökün bölgelerini gör.';
+
+  @override
+  String regionNeurons(int count, int brightness) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count nöron · parlaklık %$brightness',
+      zero: 'Henüz beslenmedi',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String regionDimmed(int count) {
+    return '$count nöron sönük; yeniden odaklandıkça yanar.';
+  }
+
+  @override
+  String regionHemisphere(String side) {
+    String _temp0 = intl.Intl.selectLogic(side, {
+      'left': 'Sol yarımküre',
+      'right': 'Sağ yarımküre',
+      'other': 'İki yarımküre',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get regionInner => 'İç yapı';
+
+  @override
+  String regionLastActive(String date) {
+    return 'Son beslendiği gün: $date';
+  }
+
+  @override
+  String regionMinutes30(int minutes) {
+    return 'Son 30 günde bu bölgeyle ilişkilendirilen etkinliklere $minutes dakika ayırdın.';
+  }
+
+  @override
+  String get regionMinutes30None =>
+      'Son 30 günde bu bölgeyle ilişkilendirilen bir odak oturumu yok.';
+
+  @override
+  String get regionChartLabel => 'Son 30 gün, günlük yanan nöron';
+
+  @override
+  String regionChartSummary(int days, int max) {
+    return '$days gün beslendi; bir günde en çok $max nöron.';
+  }
+
+  @override
+  String get regionFedBy => 'Seni besleyenler (son 30 gün)';
+
+  @override
+  String get regionEvidence => 'Hangi kategoriler, hangi kanıtla';
+
+  @override
+  String get regionEvidenceNone =>
+      'Bu bölgeye bağlı bir kök kategori yok; beyin bütün görünsün diye çizilir.';
+
+  @override
+  String get regionMetaphor =>
+      '3D beyin bir metafordur, ölçüm değildir. Kanıt düzeyi ilgili araştırmaların gücünü anlatır; senin beynini ölçmez.';
+
+  @override
+  String regionMinutes(int minutes) {
+    return '$minutes dk';
+  }
 }

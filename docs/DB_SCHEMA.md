@@ -77,38 +77,38 @@ Seed (renkler taslaktır; kontrastları tema aşamasında ölçülür):
 | `rest_sleep` | Dinlenme ve Uyku | Rest and Sleep | `bedtime` | `#4EA8DE` |
 
 ### 2.2 `brain_regions`
+**Aşama 4'te anatomik oldu (DECISIONS D38).** Her satır 3D modeldeki bir düğümdür; mesh adları birebir eşleşir. Kaynaklardaki işlevsel alt bölge (DLPFC, STS…) ağırlık satırında `detail_*` metni olarak kalır.
 | Sütun | Tip | Açıklama |
 |---|---|---|
 | `key` | text PK | |
 | `sort_order` | smallint | |
 | `name_tr`, `name_en` | text | |
 | `hemisphere` | text: `left` · `right` · `bilateral` | Bölgesel yan bilgisi (SCIENCE §1 ilke 3: kişilik miti değil) |
-| `mesh_name` | text | 3D modelde bu bölgeyi temsil eden düğümün (Object3D) adı. İki yanlı bölgede iki yarıyı içeren gruptur. Kural: `region_<key>`; model beyin aşamasında buna göre adlandırılır. |
+| `mesh_name` | text | 3D modeldeki düğüm adı: `region_<key>` (`tool/brain/regions.json`, docs/BRAIN_MODEL.md §1) |
+| `is_inner` | bool default false | Yarı saydam iç yapı (kabuğun içinde çizilir) |
 
-| key | TR | EN | yarımküre | kaynak |
+| key | TR | EN | yarımküre | iç yapı |
 |---|---|---|---|---|
-| `hippocampus` | Hipokampüs | Hippocampus | bilateral | S2, S7, S8, S13, S15, S18, S19 |
-| `motor_cortex` | Motor korteks | Motor cortex | bilateral | S5 |
-| `cerebellum` | Beyincik | Cerebellum | bilateral | S4, S13 |
-| `hmt_v5` | Görsel hareket alanı (hMT/V5) | Visual motion area (hMT/V5) | bilateral | S3 |
-| `intraparietal_sulcus` | Arka intraparietal sulkus | Posterior intraparietal sulcus | left | S3 |
-| `striatum` | Striatum | Striatum | bilateral | S4 |
-| `corpus_callosum` | Korpus kallozum | Corpus callosum | bilateral | S5 |
-| `auditory_cortex` | Birincil işitme alanı | Primary auditory cortex | right | S5 |
-| `language_frontal` | Alt ve orta frontal girus | Inferior and middle frontal gyrus | left | S7 |
-| `superior_temporal_gyrus` | Üst temporal girus | Superior temporal gyrus | left | S7 |
-| `posterior_parietal` | Arka parietal korteks | Posterior parietal cortex | bilateral | S8, S9, S16 |
-| `dlpfc` | Dorsolateral prefrontal korteks | Dorsolateral prefrontal cortex | bilateral | S9, S16 |
-| `dacc` | Dorsal ön singulat korteks | Dorsal anterior cingulate cortex | bilateral | S9, S16 |
-| `amygdala` | Amigdala | Amygdala | bilateral | S10, S11 |
-| `vmpfc` | Ventromedial prefrontal korteks | Ventromedial prefrontal cortex | bilateral | S10, S16 |
-| `sts` | Üst temporal sulkus | Superior temporal sulcus | bilateral | S12 |
-| `posterior_cingulate` | Arka singulat korteks | Posterior cingulate cortex | bilateral | S13, S16 |
-| `tpj` | Temporoparietal bileşke | Temporoparietal junction | bilateral | S13 |
-| `insula` | İnsula | Insula | bilateral | S15 |
-| `frontopolar` | Frontopolar korteks | Frontopolar cortex | bilateral | S15 |
+| `prefrontal_left` | Prefrontal korteks (sol) | Prefrontal cortex (left) | left | — |
+| `prefrontal_right` | Prefrontal korteks (sağ) | Prefrontal cortex (right) | right | — |
+| `frontal_left` | Frontal lob, motor alanlar (sol) | Frontal lobe, motor areas (left) | left | — |
+| `frontal_right` | Frontal lob, motor alanlar (sağ) | Frontal lobe, motor areas (right) | right | — |
+| `parietal_left` | Parietal lob (sol) | Parietal lobe (left) | left | — |
+| `parietal_right` | Parietal lob (sağ) | Parietal lobe (right) | right | — |
+| `temporal_left` | Temporal lob (sol) | Temporal lobe (left) | left | — |
+| `temporal_right` | Temporal lob (sağ) | Temporal lobe (right) | right | — |
+| `occipital_left` | Oksipital lob (sol) | Occipital lobe (left) | left | — |
+| `occipital_right` | Oksipital lob (sağ) | Occipital lobe (right) | right | — |
+| `cerebellum` | Beyincik | Cerebellum | bilateral | — |
+| `brainstem` | Beyin sapı | Brainstem | bilateral | — |
+| `corpus_callosum` | Korpus kallozum | Corpus callosum | bilateral | evet |
+| `cingulate` | Singulat korteks | Cingulate cortex | bilateral | evet |
+| `insula` | İnsula | Insula | bilateral | evet |
+| `striatum` | Striatum | Striatum | bilateral | evet |
+| `hippocampus` | Hipokampüs | Hippocampus | bilateral | evet |
+| `amygdala` | Amigdala | Amygdala | bilateral | evet |
 
-Sadeleştirme notu: Kaynaklarda S13 "sol hipokampüs", S5 ise "sağ presantral girus" der. Bunlar iki yanlı `hippocampus` ve `motor_cortex` satırlarına bağlandı. Kaynaktaki yan bilgisi, bölge bilgi panelindeki SCIENCE.md metninde korunur.
+Beyin sapının ağırlık satırı yoktur: beyin bütün görünsün diye çizilir, büyümez.
 
 ### 2.3 `category_region_weights`
 | Sütun | Tip | Açıklama |
@@ -119,45 +119,70 @@ Sadeleştirme notu: Kaynaklarda S13 "sol hipokampüs", S5 ise "sağ presantral g
 | `evidence_level` | text: `strong` · `moderate` · `weak` · `no_source` | SCIENCE §2 |
 | `source_ids` | text[] | `{S2}` gibi SCIENCE §5 kimlikleri |
 | `source_urls` | text[] | `https://doi.org/...` |
+| `detail_tr`, `detail_en` | text default `''` | Kaynaktaki işlevsel alt bölge (ör. "Dorsolateral prefrontal korteks"); bölge sayfasında gösterilir (D38) |
 
-**Ağırlık kuralı (SCIENCE §1 ilke 2):** tavan kanıt düzeyine göre belirlenir: `strong` 1.0, `moderate` 0.6, `weak` 0.3, `no_source` 0.1. v1'de ağırlık tavana eşittir. Bir bölgenin birden çok kaynağı varsa en yüksek düzey alınır. Çürütücü bulgu (S14) ayrıca kaynak olarak gösterilir.
+**Ağırlık kuralı (SCIENCE §1 ilke 2):** tavan kanıt düzeyine göre belirlenir: `strong` 1.0, `moderate` 0.6, `weak` 0.3, `no_source` 0.1. v1'de ağırlık tavana eşittir. Birden çok işlevsel satır aynı anatomik bölgeye düşerse en yüksek düzey alınır, kaynaklar birleşir. Çürütücü bulgu (S14) ayrıca kaynak olarak gösterilir.
 
-| Kök kategori | Bölge | Düzey | Ağırlık | Kaynak |
-|---|---|---|---|---|
-| body_movement | hippocampus | strong | 1.0 | S2 |
-| body_movement | motor_cortex | no_source | 0.1 | — |
-| body_movement | cerebellum | no_source | 0.1 | — |
-| motor_skill | hmt_v5 | moderate | 0.6 | S3 |
-| motor_skill | intraparietal_sulcus | moderate | 0.6 | S3 |
-| motor_skill | cerebellum | moderate | 0.6 | S4 |
-| motor_skill | striatum | moderate | 0.6 | S4 |
-| music_rhythm | motor_cortex | moderate | 0.6 | S5 |
-| music_rhythm | corpus_callosum | moderate | 0.6 | S5 |
-| music_rhythm | auditory_cortex | moderate | 0.6 | S5 |
-| learning_memory | hippocampus | moderate | 0.6 | S7, S8 |
-| learning_memory | language_frontal | moderate | 0.6 | S7 |
-| learning_memory | superior_temporal_gyrus | moderate | 0.6 | S7 |
-| learning_memory | posterior_parietal | moderate | 0.6 | S8 |
-| planning_problem_solving | dlpfc | moderate | 0.6 | S9 |
-| planning_problem_solving | dacc | moderate | 0.6 | S9 |
-| planning_problem_solving | posterior_parietal | moderate | 0.6 | S9 |
-| emotional_social | amygdala | moderate | 0.6 | S10, S11 |
-| emotional_social | vmpfc | moderate | 0.6 | S10 |
-| emotional_social | sts | moderate | 0.6 | S12 |
-| attention_contemplation | hippocampus | weak | 0.3 | S13, S14, S15 |
-| attention_contemplation | posterior_cingulate | weak | 0.3 | S13, S14 |
-| attention_contemplation | tpj | weak | 0.3 | S13, S14 |
-| attention_contemplation | cerebellum | weak | 0.3 | S13, S14 |
-| attention_contemplation | insula | weak | 0.3 | S15 |
-| attention_contemplation | frontopolar | weak | 0.3 | S15 |
-| creativity_art | vmpfc | weak | 0.3 | S16, S17 |
-| creativity_art | posterior_cingulate | weak | 0.3 | S16, S17 |
-| creativity_art | dacc | weak | 0.3 | S16, S17 |
-| creativity_art | dlpfc | weak | 0.3 | S16, S17 |
-| creativity_art | posterior_parietal | weak | 0.3 | S16, S17 |
-| rest_sleep | hippocampus | strong | 1.0 | S18, S19 |
+**İşlevsel → anatomik eşleme (Aşama 4, D38):**
+| İşlevsel (Aşama 1–3) | Anatomik |
+|---|---|
+| motor_cortex | frontal L+R; S5 (müzik) yalnız `frontal_right` (kaynak sağ presantral girus diyor) |
+| dlpfc, vmpfc, frontopolar | prefrontal L+R |
+| language_frontal (sol) | prefrontal_left |
+| dacc, posterior_cingulate | cingulate |
+| posterior_parietal, tpj | parietal L+R |
+| intraparietal_sulcus (sol) | parietal_left |
+| hmt_v5 | occipital L+R |
+| sts | temporal L+R |
+| superior_temporal_gyrus (sol) · auditory_cortex (sağ) | temporal_left · temporal_right |
+| hippocampus, cerebellum, amygdala, corpus_callosum, insula, striatum | aynı adla |
+
+| Kök kategori | Bölge | Düzey | Ağırlık | Kaynak | İşlevsel alt bölge |
+|---|---|---|---|---|---|
+| body_movement | hippocampus | strong | 1.0 | S2 | Hipokampüs |
+| body_movement | frontal_left | no_source | 0.1 | — | Motor korteks |
+| body_movement | frontal_right | no_source | 0.1 | — | Motor korteks |
+| body_movement | cerebellum | no_source | 0.1 | — | Beyincik |
+| motor_skill | occipital_left | moderate | 0.6 | S3 | Görsel hareket alanı (hMT/V5) |
+| motor_skill | occipital_right | moderate | 0.6 | S3 | Görsel hareket alanı (hMT/V5) |
+| motor_skill | parietal_left | moderate | 0.6 | S3 | Arka intraparietal sulkus |
+| motor_skill | cerebellum | moderate | 0.6 | S4 | Beyincik |
+| motor_skill | striatum | moderate | 0.6 | S4 | Striatum |
+| music_rhythm | frontal_right | moderate | 0.6 | S5 | Motor korteks |
+| music_rhythm | corpus_callosum | moderate | 0.6 | S5 | Korpus kallozum |
+| music_rhythm | temporal_right | moderate | 0.6 | S5 | Birincil işitme alanı |
+| learning_memory | hippocampus | moderate | 0.6 | S7, S8 | Hipokampüs |
+| learning_memory | prefrontal_left | moderate | 0.6 | S7 | Alt ve orta frontal girus |
+| learning_memory | temporal_left | moderate | 0.6 | S7 | Üst temporal girus |
+| learning_memory | parietal_left | moderate | 0.6 | S8 | Arka parietal korteks |
+| learning_memory | parietal_right | moderate | 0.6 | S8 | Arka parietal korteks |
+| planning_problem_solving | prefrontal_left | moderate | 0.6 | S9 | Dorsolateral prefrontal korteks |
+| planning_problem_solving | prefrontal_right | moderate | 0.6 | S9 | Dorsolateral prefrontal korteks |
+| planning_problem_solving | cingulate | moderate | 0.6 | S9 | Dorsal ön singulat korteks |
+| planning_problem_solving | parietal_left | moderate | 0.6 | S9 | Arka parietal korteks |
+| planning_problem_solving | parietal_right | moderate | 0.6 | S9 | Arka parietal korteks |
+| emotional_social | amygdala | moderate | 0.6 | S10, S11 | Amigdala |
+| emotional_social | prefrontal_left | moderate | 0.6 | S10 | Ventromedial prefrontal korteks |
+| emotional_social | prefrontal_right | moderate | 0.6 | S10 | Ventromedial prefrontal korteks |
+| emotional_social | temporal_left | moderate | 0.6 | S12 | Üst temporal sulkus |
+| emotional_social | temporal_right | moderate | 0.6 | S12 | Üst temporal sulkus |
+| attention_contemplation | hippocampus | weak | 0.3 | S13, S14, S15 | Hipokampüs |
+| attention_contemplation | cingulate | weak | 0.3 | S13, S14 | Arka singulat korteks |
+| attention_contemplation | parietal_left | weak | 0.3 | S13, S14 | Temporoparietal bileşke |
+| attention_contemplation | parietal_right | weak | 0.3 | S13, S14 | Temporoparietal bileşke |
+| attention_contemplation | cerebellum | weak | 0.3 | S13, S14 | Beyincik |
+| attention_contemplation | insula | weak | 0.3 | S15 | İnsula |
+| attention_contemplation | prefrontal_left | weak | 0.3 | S15 | Frontopolar korteks |
+| attention_contemplation | prefrontal_right | weak | 0.3 | S15 | Frontopolar korteks |
+| creativity_art | prefrontal_left | weak | 0.3 | S16, S17 | Ventromedial prefrontal korteks, Dorsolateral prefrontal korteks |
+| creativity_art | prefrontal_right | weak | 0.3 | S16, S17 | Ventromedial prefrontal korteks, Dorsolateral prefrontal korteks |
+| creativity_art | cingulate | weak | 0.3 | S16, S17 | Arka singulat korteks, Dorsal ön singulat korteks |
+| creativity_art | parietal_left | weak | 0.3 | S16, S17 | Arka parietal korteks |
+| creativity_art | parietal_right | weak | 0.3 | S16, S17 | Arka parietal korteks |
+| rest_sleep | hippocampus | strong | 1.0 | S18, S19 | Hipokampüs |
 
 Yaratıcılık satırları kaynağa sadık kalmak için yalnız üç ağın **frontal ve parietal** merkezlerini içerir: varsayılan mod ağı için vmPFC ve arka singulat, salience için dACC, yürütücü ağ için DLPFC ve arka parietal. İnsula bu yüzden yaratıcılığa bağlanmadı.
+Not: Hemisfere ayrılan bölgelerde normalleştirme bölge başınadır. Örneğin Planlama'da beş satır (prefrontal L/R, singulat, parietal L/R) eşit pay alır.
 
 ## 3. Plan tabloları
 
@@ -383,19 +408,19 @@ O sütunları vardır; satır güncellenmez, `updated_at = created_at` olur.
 | Sütun | Tip | Açıklama |
 |---|---|---|
 | O | | |
-| `type` | text: `neuron_gain` · `connection_gain` · `fade` · `penalty` | |
+| `type` | text: `neuron_gain` · `connection_gain` · `fade` · `penalty` | `fade` şemada durur ama v2 üretmez: sönme katlamada hesaplanır (D39) |
 | `region_key` | text null → brain_regions | |
 | `region_b_key` | text null → brain_regions | Bağlantının ikinci ucu |
 | `amount` | int not null | Binde bir birim (tamsayı, determinizm için) |
 | `occurred_at` | timestamptz not null | |
 | `session_id` | uuid null → focus_sessions | |
-| `dedupe_key` | text not null | `UNIQUE(user_id, dedupe_key)`. Ör. `gain:<oturum>:hippocampus:v1`, `fade:<bölge>:<eşik>:<son etkinlik tarihi>:v1`. İki cihaz ya da sunucu aynı olayı üretirse tek satır kalır. |
+| `dedupe_key` | text not null | `UNIQUE(user_id, dedupe_key)`. Biçimler docs/BRAIN_MODEL.md §2.1'de (ör. `gain:<oturum>:hippocampus:v2`). İki cihaz ya da sunucu aynı olayı üretirse tek satır kalır. |
 | `engine_version` | int not null | |
 
 | type | Ne zaman |
 |---|---|
-| `neuron_gain`, `connection_gain` | Tamamlanan oturumdan türetilir |
-| `fade` | Bölge etkinlik olmadan bir sönme eşiğini aştığında. Parlaklık düşer, nöron silinmez (BRAIN-3). |
+| `neuron_gain`, `connection_gain` | Tamamlanan oturumdan ve son 7 günün oturumlarından türetilir (kurallar: docs/BRAIN_MODEL.md §2) |
+| `fade` | Üretilmez (v2, D39). Parlaklık katlamada son kazançtan geçen süreyle hesaplanır; nöron silinmez (BRAIN-3). |
 | `penalty` | Bozulan oturumdan türetilir. Miktar: bozulmadan önceki odak dakikası × 1000, kazançla aynı dağıtım. O kadar nöronu **söndürür, silmez**; sonraki kazançlar yeniden yakar. Seri ödülünü sıfırlar (FOCUS-5). Önceki "düşürmez" kuralının yerine geçti (D31). |
 
 ### 4.4 `brain_snapshots`: önbellek
@@ -405,7 +430,7 @@ O sütunları vardır; satır güncellenmez, `updated_at = created_at` olur.
 | `engine_version` | int not null | `UNIQUE(user_id, engine_version)` |
 | `as_of` | timestamptz not null | |
 | `events_hash` | text not null | Katlanan olay kümesinin özeti; uyuşmazsa yeniden hesaplanır |
-| `state` | jsonb not null | `{"regions":{"hippocampus":{"neurons":12345,"brightness":800,"last_active":"2026-11-18"}},"connections":[{"a":"dlpfc","b":"dacc","strength":340}]}` |
+| `state` | jsonb not null | `{"regions":{"hippocampus":{"neurons":12345,"lit":12000,"dimmed":345,"brightness":800,"last_active":"2026-11-18T09:00:00.000Z","by_root":{"rest_sleep":12345}}},"connections":[{"a":"cingulate","b":"prefrontal_left","strength":340}]}` (binde-birim; `brightness` ‰) |
 
 Yerelde istemci hesaplar, eşitlenmez. Sunucuda Edge Function hesaplar (sıralama ve arkadaşla beyin karşılaştırma); istemci yalnız okur.
 

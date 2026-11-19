@@ -53,13 +53,38 @@ class AppDatabase extends _$AppDatabase {
   final SystemData systemData;
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
     onCreate: (m) async {
       await m.createAll();
       await _seedSystemData();
+    },
+    onUpgrade: (m, from, to) async {
+      if (from < 2) {
+        // Aşama 4 (D38): bölgeler anatomik oldu. v1 beyin olayları eski bölge anahtarlarına
+        // bağlı; oturumlardan yeniden türetilir (BrainRepository.rebuildIfNeeded). Sunucu
+        // eşitlemesi henüz yok, outbox'taki kayıtları da gönderilmeden silinir.
+        await m.addColumn(brainRegions, brainRegions.isInner);
+        await m.addColumn(
+          categoryRegionWeights,
+          categoryRegionWeights.detailTr,
+        );
+        await m.addColumn(
+          categoryRegionWeights,
+          categoryRegionWeights.detailEn,
+        );
+        // Çocuktan ebeveyne silinir; yabancı anahtar ihlali olmaz.
+        await (delete(
+          syncOutbox,
+        )..where((o) => o.targetTable.equals('brain_events'))).go();
+        await delete(brainEvents).go();
+        await delete(brainSnapshots).go();
+        await delete(categoryRegionWeights).go();
+        await delete(brainRegions).go();
+        await _seedBrainData();
+      }
     },
     beforeOpen: (_) => customStatement('PRAGMA foreign_keys = ON'),
   );
@@ -84,20 +109,26 @@ class AppDatabase extends _$AppDatabase {
     SyncedTable(brainEvents, BrainEvent.fromJson, appendOnly: true),
   ];
 
-  Future<void> _seedSystemData() => batch((b) {
-    b.insertAll(rootCategories, [
-      for (final c in systemData.rootCategories)
-        RootCategoriesCompanion.insert(
-          key: c.key,
-          sortOrder: c.sortOrder,
-          nameTr: c.nameTr,
-          nameEn: c.nameEn,
-          descriptionTr: c.descriptionTr,
-          descriptionEn: c.descriptionEn,
-          icon: c.icon,
-          color: c.color,
-        ),
-    ]);
+  Future<void> _seedSystemData() async {
+    await batch(
+      (b) => b.insertAll(rootCategories, [
+        for (final c in systemData.rootCategories)
+          RootCategoriesCompanion.insert(
+            key: c.key,
+            sortOrder: c.sortOrder,
+            nameTr: c.nameTr,
+            nameEn: c.nameEn,
+            descriptionTr: c.descriptionTr,
+            descriptionEn: c.descriptionEn,
+            icon: c.icon,
+            color: c.color,
+          ),
+      ]),
+    );
+    await _seedBrainData();
+  }
+
+  Future<void> _seedBrainData() => batch((b) {
     b.insertAll(brainRegions, [
       for (final r in systemData.regions)
         BrainRegionsCompanion.insert(
@@ -107,6 +138,7 @@ class AppDatabase extends _$AppDatabase {
           nameEn: r.nameEn,
           hemisphere: r.hemisphere,
           meshName: r.meshName,
+          isInner: Value(r.isInner),
         ),
     ]);
     b.insertAll(categoryRegionWeights, [
@@ -118,6 +150,8 @@ class AppDatabase extends _$AppDatabase {
           evidenceLevel: w.evidence.json,
           sourceIds: w.sourceIds,
           sourceUrls: systemData.sourceUrls(w),
+          detailTr: Value(w.detailTr),
+          detailEn: Value(w.detailEn),
         ),
     ]);
   });

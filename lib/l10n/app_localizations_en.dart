@@ -1391,4 +1391,151 @@ class L10nEn extends L10n {
   @override
   String get focusPhoneDenied =>
       'Phone state permission wasn\'t granted; you\'ll be asked after a call.';
+
+  @override
+  String get secAbout => 'About';
+
+  @override
+  String get aboutTitle => 'About';
+
+  @override
+  String get aboutSubtitle => 'Licenses and attributions';
+
+  @override
+  String get aboutAppBody =>
+      'NeuroPlan is open source and distributed under the AGPL-3.0 license.';
+
+  @override
+  String get aboutModelTitle => '3D brain model';
+
+  @override
+  String get aboutModelBody =>
+      'The 3D brain was made by simplifying the BodyParts3D 4.0 polygon data and merging it into regions.';
+
+  @override
+  String get aboutModelCredit =>
+      'BodyParts3D, © The Database Center for Life Science licensed under CC Attribution 4.0 International';
+
+  @override
+  String get aboutThreeBody =>
+      'The 3D scene is drawn with Three.js (MIT license). The scene and the library ship inside the app; no internet is needed.';
+
+  @override
+  String get aboutLicenses => 'Show all licenses';
+
+  @override
+  String get brainListAction => 'List view';
+
+  @override
+  String get brainResetView => 'Reset view';
+
+  @override
+  String get brainSceneLoading => 'Preparing the brain';
+
+  @override
+  String get brainSceneErrorTitle =>
+      'The 3D brain could not open on this device';
+
+  @override
+  String get brainSceneErrorBody =>
+      'You can see the same information as a list.';
+
+  @override
+  String get brainEmptyTitle => 'No lit neurons yet';
+
+  @override
+  String get brainEmptyBody =>
+      'When you complete a focus session, neurons light up in the regions associated with that activity\'s category. The 3D brain is a metaphor, not a measurement.';
+
+  @override
+  String get brainTimeline => 'Timeline';
+
+  @override
+  String get brainTimelineNow => 'Today';
+
+  @override
+  String brainTimelineAt(String date) {
+    return 'As of $date';
+  }
+
+  @override
+  String get brainListTitle => 'Brain regions';
+
+  @override
+  String get brainCategoriesTile => 'Categories';
+
+  @override
+  String get brainCategoriesBody =>
+      'Add and move subcategories; see each root\'s regions.';
+
+  @override
+  String regionNeurons(int count, int brightness) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count neurons · brightness $brightness%',
+      one: '1 neuron · brightness $brightness%',
+      zero: 'Not fed yet',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String regionDimmed(int count) {
+    return '$count neurons are dimmed; they light up again as you focus.';
+  }
+
+  @override
+  String regionHemisphere(String side) {
+    String _temp0 = intl.Intl.selectLogic(side, {
+      'left': 'Left hemisphere',
+      'right': 'Right hemisphere',
+      'other': 'Both hemispheres',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String get regionInner => 'Inner structure';
+
+  @override
+  String regionLastActive(String date) {
+    return 'Last fed: $date';
+  }
+
+  @override
+  String regionMinutes30(int minutes) {
+    return 'In the last 30 days you spent $minutes minutes on activities associated with this region.';
+  }
+
+  @override
+  String get regionMinutes30None =>
+      'No focus session associated with this region in the last 30 days.';
+
+  @override
+  String get regionChartLabel => 'Last 30 days, neurons lit per day';
+
+  @override
+  String regionChartSummary(int days, int max) {
+    return 'Fed on $days days; at most $max neurons in a day.';
+  }
+
+  @override
+  String get regionFedBy => 'What fed it (last 30 days)';
+
+  @override
+  String get regionEvidence => 'Which categories, with what evidence';
+
+  @override
+  String get regionEvidenceNone =>
+      'No root category is linked to this region; it is drawn so the brain looks whole.';
+
+  @override
+  String get regionMetaphor =>
+      'The 3D brain is a metaphor, not a measurement. The evidence level describes the strength of the research; it does not measure your brain.';
+
+  @override
+  String regionMinutes(int minutes) {
+    return '$minutes min';
+  }
 }

@@ -6,6 +6,7 @@ import 'package:neuroplan_core/neuroplan_core.dart';
 import '../data/local/app_database.dart';
 import '../data/plan/plan_source.dart';
 import '../data/repositories/activity_repository.dart';
+import '../data/repositories/brain_repository.dart';
 import '../data/repositories/category_repository.dart';
 import '../data/repositories/focus_repository.dart';
 import '../data/repositories/plan_repository.dart';
@@ -52,6 +53,13 @@ final focusRepositoryProvider = Provider(
 );
 final prefsRepositoryProvider = Provider(
   (ref) => PrefsRepository(ref.watch(databaseProvider)),
+);
+final brainRepositoryProvider = Provider(
+  (ref) => BrainRepository(
+    ref.watch(databaseProvider),
+    ref.watch(writerProvider),
+    ref.watch(prefsRepositoryProvider),
+  ),
 );
 
 final profileProvider = StreamProvider<Profile?>(

@@ -8,7 +8,8 @@ import 'dart:io';
 import 'package:neuroplan_core/neuroplan_core.dart';
 
 const seedJsonPath = 'assets/seed/system.json';
-const seedSqlPath = 'supabase/migrations/20261118120200_system_seed.sql';
+// İlk seed 20261118120200_system_seed.sql idi; Aşama 4'te bölgeler anatomik oldu (D38).
+const seedSqlPath = 'supabase/migrations/20261119120100_system_seed_v2.sql';
 
 String _q(String s) => "'${s.replaceAll("'", "''")}'";
 String _arr(List<String> xs) =>
@@ -40,37 +41,41 @@ String generateSeedSql(SystemData d) {
     )
     ..writeln()
     ..writeln(
-      'insert into public.brain_regions (key, sort_order, name_tr, name_en, hemisphere, mesh_name) values',
+      'insert into public.brain_regions (key, sort_order, name_tr, name_en, hemisphere, mesh_name, is_inner) values',
     );
   b.writeln(
     [
       for (final r in d.regions)
         '  (${_q(r.key)}, ${r.sortOrder}, ${_q(r.nameTr)}, ${_q(r.nameEn)}, '
-            '${_q(r.hemisphere)}, ${_q(r.meshName)})',
+            '${_q(r.hemisphere)}, ${_q(r.meshName)}, ${r.isInner})',
     ].join(',\n'),
   );
   b
     ..writeln(
       'on conflict (key) do update set sort_order = excluded.sort_order, '
       'name_tr = excluded.name_tr, name_en = excluded.name_en, '
-      'hemisphere = excluded.hemisphere, mesh_name = excluded.mesh_name;',
+      'hemisphere = excluded.hemisphere, mesh_name = excluded.mesh_name, '
+      'is_inner = excluded.is_inner;',
     )
     ..writeln()
     ..writeln(
       'insert into public.category_region_weights '
-      '(root_category_key, region_key, weight, evidence_level, source_ids, source_urls) values',
+      '(root_category_key, region_key, weight, evidence_level, source_ids, source_urls, '
+      'detail_tr, detail_en) values',
     );
   b.writeln(
     [
       for (final w in d.weights)
         '  (${_q(w.rootCategoryKey)}, ${_q(w.regionKey)}, ${w.weight.toStringAsFixed(2)}, '
-            '${_q(w.evidence.json)}, ${_arr(w.sourceIds)}, ${_arr(d.sourceUrls(w))})',
+            '${_q(w.evidence.json)}, ${_arr(w.sourceIds)}, ${_arr(d.sourceUrls(w))}, '
+            '${_q(w.detailTr)}, ${_q(w.detailEn)})',
     ].join(',\n'),
   );
   b.writeln(
     'on conflict (root_category_key, region_key) do update set weight = excluded.weight, '
     'evidence_level = excluded.evidence_level, source_ids = excluded.source_ids, '
-    'source_urls = excluded.source_urls;',
+    'source_urls = excluded.source_urls, detail_tr = excluded.detail_tr, '
+    'detail_en = excluded.detail_en;',
   );
   return b.toString();
 }

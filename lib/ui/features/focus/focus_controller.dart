@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:drift/drift.dart' show Value;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -282,7 +281,7 @@ class FocusController extends Notifier<FocusState> {
           segments: clock.toJson(),
           endedAt: now,
         );
-    await _brainEvents(s, 'completed', focused, now);
+    await _brainEvents(s);
     await _end(s.id, 'completed');
   });
 
@@ -593,7 +592,7 @@ class FocusController extends Notifier<FocusState> {
           endedAt: b.at,
         );
     await _record(b.record);
-    await _brainEvents(s, 'broken', focused, b.at);
+    await _brainEvents(s);
     await _end(s.id, 'broken');
   }
 
@@ -617,38 +616,10 @@ class FocusController extends Notifier<FocusState> {
     _emit();
   }
 
-  /// Kazanç ya da ceza olayları (D31); oturum anındaki kök kategoriden.
-  Future<void> _brainEvents(
-    FocusSession s,
-    String outcome,
-    int focusedSeconds,
-    DateTime at,
-  ) async {
-    final root = s.rootCategoryKey;
-    if (root == null) return;
-    final weights = await ref.read(categoryRepositoryProvider).weightsFor(root);
-    final repo = ref.read(focusRepositoryProvider);
-    for (final e in deriveBrainEvents(
-      sessionId: s.id,
-      outcome: outcome,
-      focusedSeconds: focusedSeconds,
-      endedAt: at,
-      weights: {for (final w in weights) w.regionKey: w.weight},
-    )) {
-      await repo.appendBrainEvent(
-        BrainEventsCompanion.insert(
-          id: newId(),
-          type: e.type,
-          regionKey: Value(e.regionKey),
-          amount: e.amount,
-          occurredAt: e.occurredAt,
-          sessionId: Value(e.sessionId),
-          dedupeKey: e.dedupeKey,
-          engineVersion: e.engineVersion,
-        ),
-      );
-    }
-  }
+  /// Kazanç, bağlantı ya da ceza olayları (D31, D39); oturum kaydedildikten sonra
+  /// veritabanındaki oturumdan ve geçmişinden türetilir.
+  Future<void> _brainEvents(FocusSession s) =>
+      ref.read(brainRepositoryProvider).deriveFor(s.id);
 
   // ---------------------------------------------------------------- kayıt
 

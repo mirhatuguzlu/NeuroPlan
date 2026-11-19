@@ -14,11 +14,11 @@ void main() {
       .readAsStringSync()
       .toLowerCase();
 
-  test('9 kök kategori, 20 bölge, tekil anahtarlar', () {
+  test('9 kök kategori, 18 anatomik bölge, tekil anahtarlar', () {
     expect(data.rootCategories, hasLength(9));
-    expect(data.regions, hasLength(20));
+    expect(data.regions, hasLength(18));
     expect(data.rootCategories.map((c) => c.key).toSet(), hasLength(9));
-    expect(data.regions.map((r) => r.key).toSet(), hasLength(20));
+    expect(data.regions.map((r) => r.key).toSet(), hasLength(18));
   });
 
   test('kök kategori adları SCIENCE.md başlıklarıyla aynı', () {
@@ -65,5 +65,49 @@ void main() {
     for (final w in data.weights) {
       expect(data.sources.keys, containsAll(w.sourceIds));
     }
+  });
+
+  test(
+    'yan bölgenin yarımküresi adıyla uyumlu, mesh adı kurala uyar (D38)',
+    () {
+      for (final r in data.regions) {
+        expect(r.meshName, 'region_${r.key}');
+        if (r.key.endsWith('_left')) expect(r.hemisphere, 'left');
+        if (r.key.endsWith('_right')) expect(r.hemisphere, 'right');
+      }
+      expect(
+        {
+          for (final r in data.regions)
+            if (r.isInner) r.key,
+        },
+        {
+          'corpus_callosum',
+          'cingulate',
+          'insula',
+          'striatum',
+          'hippocampus',
+          'amygdala',
+        },
+      );
+    },
+  );
+
+  test('her ağırlık satırının işlevsel alt bölge açıklaması var', () {
+    for (final w in data.weights) {
+      expect(
+        w.detailTr,
+        isNotEmpty,
+        reason: '${w.rootCategoryKey}/${w.regionKey}',
+      );
+      expect(w.detailEn, isNotEmpty);
+    }
+  });
+
+  test('model bölgeleri seed ile birebir (tool/brain/regions.json)', () {
+    final model =
+        (jsonDecode(File('../../tool/brain/regions.json').readAsStringSync())
+                as Map<String, Object?>)['regions']
+            as Map<String, Object?>;
+    expect(model.keys.toSet(), {for (final r in data.regions) r.key});
   });
 }

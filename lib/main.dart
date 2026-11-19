@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:drift_flutter/drift_flutter.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
@@ -29,10 +31,29 @@ Future<void> main() async {
     tz = 'UTC'; // IANA veritabanında olmayan cihaz kimliği
   }
   await container.read(profileRepositoryProvider).ensure(timezone: tz);
+  // Motor sürümü değiştiyse beyin olayları oturumlardan yeniden türetilir (D39).
+  unawaited(container.read(brainRepositoryProvider).rebuildIfNeeded());
+  LicenseRegistry.addLicense(_assetLicenses);
   runApp(
     UncontrolledProviderScope(
       container: container,
       child: const NeuroPlanApp(),
     ),
   );
+}
+
+/// Uygulamaya gömülü üçüncü taraf varlıklar (Hakkında → Lisanslar).
+Stream<LicenseEntry> _assetLicenses() async* {
+  yield const LicenseEntryWithLineBreaks(
+    ['BodyParts3D'],
+    'BodyParts3D, © The Database Center for Life Science licensed under CC '
+    'Attribution 4.0 International.\n'
+    'https://creativecommons.org/licenses/by/4.0/\n'
+    'https://dbarchive.biosciencedbc.jp/en/bodyparts3d/\n\n'
+    'The 3D brain in this app is a simplified, recombined derivative of the '
+    'BodyParts3D 4.0 polygon data (see tool/brain in the source repository).',
+  );
+  yield LicenseEntryWithLineBreaks([
+    'three.js',
+  ], await rootBundle.loadString('assets/brain/LICENSE_threejs.txt'));
 }
