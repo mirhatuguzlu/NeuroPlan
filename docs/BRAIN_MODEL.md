@@ -102,4 +102,15 @@ Bütün sabitler `brain_config.dart`'tadır (`BrainConfig`). Oranlar binde birdi
 - Ölçümler: §6.
 
 ## 6. Ölçümler
-Bu bölüm cihaz ölçümünden sonra doldurulur.
+- **Model:** 18 bölge, 59 992 üçgen, 1419 sınır kenarı, `brain.glb` 401 KB; paket `brain.js` 1,2 MB.
+- **Tarayıcı önizlemesi** (masaüstü, yüksek kademe): görünüm [screenshots/brain_scene_preview.jpg](screenshots/brain_scene_preview.jpg).
+- **Gerçek cihaz:** henüz ölçülmedi; proje sahibi QA_CHECKLIST B3 ile yapacak. Yük altında ölçmek için (veritabanına dokunmaz):
+  ```bash
+  flutter run --profile --dart-define-from-file=.env --dart-define=BRAIN_BENCH=6000 --dart-define=BRAIN_TIER=high
+  adb logcat | grep "[brain] fps"
+  ```
+  Kademe başına bir satır yazılır: cihaz, kademe, nöron sayısı, ortalama fps, en uzun kare.
+
+| Cihaz | Kademe | Nöron | fps | En uzun kare |
+|---|---|---|---|---|
+| | | | | |

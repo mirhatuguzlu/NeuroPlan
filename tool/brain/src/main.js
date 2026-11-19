@@ -559,8 +559,6 @@ function receive(text) {
   }
 }
 
-// Yalnız hata ayıklama: tarayıcı önizlemesinde ayarları denemek için.
-window.__brainDebug = { scene, camera, get renderer() { return renderer; }, get bloomPass() { return bloomPass; }, get composer() { return composer; } };
 window.brain = { receive, ping: () => post('ready', { scene: SCENE_VERSION, regions: [...regions.keys()], hints: hints() }) };
 
 function hints() {
