@@ -16,7 +16,12 @@ const post = (type, payload) => {
   if (window.NeuroBridge) window.NeuroBridge.postMessage(text);
   else console.log('[bridge]', text);
 };
-window.addEventListener('error', (e) => post('error', { message: String(e.message ?? e) }));
+// Yükleme bitmeden gelen hata sahneyi açamaz; sonrakiler yalnız günlüğe yazılır (sahne çalışmaya devam eder).
+let loaded = false;
+window.addEventListener('error', (e) => {
+  if (loaded) console.error('[brain]', e.message ?? e);
+  else post('error', { message: String(e.message ?? e) });
+});
 
 const HOME = new THREE.Vector3(2.3, 0.7, 2.6);
 const QUALITY = {
@@ -379,6 +384,7 @@ function frame(now) {
   pg.setAttribute('color', new THREE.BufferAttribute(pc, 3));
   pg.setAttribute('aSize', new THREE.BufferAttribute(new Float32Array(activePulses.length).fill(11), 1));
   pg.setAttribute('aRegion', new THREE.BufferAttribute(new Float32Array(activePulses.length).fill(-1), 1));
+  pulses.visible = activePulses.length > 0; // boş çizim çağrısı yapılmasın
 
   // Kazanç / ceza parlaması.
   for (const [k, f] of flashes) {
@@ -403,7 +409,7 @@ function frame(now) {
 function setVisible(v) {
   state.visible = v;
   cancelAnimationFrame(raf);
-  if (v) {
+  if (v && renderer && controls) {
     last = performance.now();
     perf.frames = 0;
     perf.since = last;
@@ -582,6 +588,7 @@ function hints() {
   }
   try {
     await loadModel();
+    loaded = true;
     post('ready', { scene: SCENE_VERSION, regions: [...regions.keys()], hints: h });
   } catch (e) {
     post('error', { message: String(e?.message ?? e) });
