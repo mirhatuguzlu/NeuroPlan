@@ -70,6 +70,7 @@ Mimari: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · Veri modeli: [docs/DB_SC
 - [x] **Aşama 4** — 3D beyin: lisanslı anatomik model ve model hattı, anatomik bölgeler + göç, büyüme kuralları v2 (saf Dart, test vektörlü), WebView'da yerel Three.js sahnesi (fresnel kabuk, nöronlar, bağlar, bloom), tipli köprü, kalite kademeleri, bölge sayfası, zaman çizelgesi, metin alternatifi, Hakkında ekranı
 - [x] **Aşama 4B** — Birlikte: KVKK/GDPR/Play araştırması (SOCIAL_SAFETY), misafir + Google girişi ve eşitleme, yaş adımı, davet/QR/kullanıcı adıyla arkadaşlık, tek partner kısıtı, veritabanında plan görünürlüğü, ortak odak (Realtime) + LiveKit ses, ortak etkinlik/proje, ortak boş zaman, mesajlaşma, sıralama, sunucuda beyin hesabı (Dart → JS), beyin karşılaştırma, şikâyet/engel/moderasyon, hesap silme, pgTAP RLS testleri
 - [ ] Tema, font ve ikon kararları (font testi; tema aşamasında)
+- [ ] Tanıtım sitesi (`mirhatuguzlu.github.io/NeuroPlan/`); hesap silme sayfası alt bilgideki bağlantıyla bu sitenin içinde (D51, son aşama)
 - [ ] Sonraki aşamalar [PRODUCT.md](docs/PRODUCT.md)'deki modüllere göre planlanacak
 
 ## Geliştirme ortamı

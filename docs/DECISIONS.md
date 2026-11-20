@@ -382,3 +382,12 @@ Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem 
 - **Google girişi:** `google_sign_in` 7 Android'de Credential Manager kullanır: hesap seçici sistemin alttan açılan penceresidir, tarayıcıya yönlenmez. Bu, Android istemcisinin (paket adı + SHA-1) Google Cloud'da kayıtlı olmasını ve Supabase'de "Skip nonce checks"in açık olmasını gerektirir. Web'den silme sayfası tarayıcıda çalıştığı için yalnız orada OAuth yönlendirmesi vardır.
 **Neden:** Proje sahibi bildirimlerin uygulama içinde açtırılmasını ve Google girişinin tarayıcıya gitmeden yapılmasını istedi. Açıklamalı istek reddedilme oranını düşürür; Android 13+ izni ilk reddedilişten sonra bir kez daha sorar, sonra yalnız ayar yolu kalır.
 **Durum:** Kabul. Gerçek cihazda doğrulama QA_CHECKLIST C14.
+
+## 2026-11-20 — D51: Tanıtım sitesi ve hesap silme sayfasının yeri
+**Karar:**
+- Uygulamanın tanıtım sayfası en son aşamada `https://mirhatuguzlu.github.io/NeuroPlan/` adresinde yayınlanacak.
+- Hesap silme sayfası bu sitenin içinde kalır ve adresi değişmez: `/NeuroPlan/account-deletion/`. Menüde öne çıkarılmaz; yalnız alt bilgide (footer) "Hesap silme" bağlantısı olarak durur, gizlilik ve topluluk kuralları bağlantılarının yanında.
+- Silme sayfası şimdiden bu adreste yayımlanabilir. Play Console'a girilen adres tanıtım sitesi gelince de çalışır.
+- Tanıtım sitesi yapılırken iç belgelerin (DECISIONS vb.) web'de görünüp görünmeyeceği yeniden düşünülecek. Seçenek: Pages kaynağını `/docs` yerine yalnız site dosyalarını yayımlayan bir GitHub Actions iş akışına taşımak.
+**Neden:** Proje sahibinin isteği. Silme yolu Play için erişilebilir olmalı ama tanıtım sayfasında öne çıkması gerekmez. Adres sabit kalırsa Play beyanı yeniden yapılmaz.
+**Durum:** Planlanan (son aşama).
