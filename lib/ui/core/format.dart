@@ -3,6 +3,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:neuroplan_core/neuroplan_core.dart';
 
+import '../../app/theme.dart';
 import '../../data/local/app_database.dart';
 import '../../l10n/app_localizations.dart';
 
@@ -67,9 +68,13 @@ IconData rootIcon(String? name) => switch (name) {
   _ => Symbols.circle_rounded,
 };
 
-Color rootColor(String? hex, ColorScheme scheme) {
-  if (hex == null || hex.length != 7) return scheme.outline;
-  return Color(int.parse('FF${hex.substring(1)}', radix: 16));
+/// Kök kategorinin bu temadaki rengi (D55); Ciddi'de sistem verisindeki renk.
+Color rootColor(BuildContext context, String? key, String? hex) =>
+    ChartColors.from(context).root(key, hex, Theme.of(context).colorScheme);
+
+extension ToneX on BuildContext {
+  /// Metin tonu (ARB `tone` seçimi): temaya göre (D55).
+  String get tone => AppTokens.of(this).theme.tone;
 }
 
 extension RootCategoryX on RootCategory {
@@ -86,11 +91,13 @@ extension BrainRegionX on BrainRegion {
 class RootBadge extends StatelessWidget {
   const RootBadge({
     super.key,
+    required this.rootKey,
     required this.icon,
     required this.color,
     this.size = 40,
   });
 
+  final String? rootKey;
   final String? icon;
   final String? color;
   final double size;
@@ -98,14 +105,15 @@ class RootBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final c = rootColor(context, rootKey, color);
     return ExcludeSemantics(
       child: Container(
         width: size,
         height: size,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: rootColor(color, scheme).withValues(alpha: 0.28),
-          border: Border.all(color: rootColor(color, scheme), width: 2),
+          color: c.withValues(alpha: 0.28),
+          border: Border.all(color: c, width: 2),
         ),
         child: Icon(rootIcon(icon), size: size * 0.55, color: scheme.onSurface),
       ),

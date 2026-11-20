@@ -77,7 +77,12 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
                   value: 'root:${r.key}',
                   label: r.name(context),
                   depth: 0,
-                  leading: RootBadge(icon: r.icon, color: r.color, size: 32),
+                  leading: RootBadge(
+                    rootKey: r.key,
+                    icon: r.icon,
+                    color: r.color,
+                    size: 32,
+                  ),
                 ),
                 ...children(null, r.key, 1),
               ],

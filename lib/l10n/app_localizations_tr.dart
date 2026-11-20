@@ -55,13 +55,40 @@ class L10nTr extends L10n {
   String get commonLoading => 'Yükleniyor';
 
   @override
-  String get errorTitle => 'Bir şeyler ters gitti';
+  String errorTitle(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Hoppala, bir şey takıldı',
+      'young': 'Ups, bir şey ters gitti',
+      'coder': 'Beklenmeyen bir istisna',
+      'calm': 'Küçük bir aksilik oldu',
+      'other': 'Bir şeyler ters gitti',
+    });
+    return '$_temp0';
+  }
 
   @override
-  String get errorBody => 'Verilerin cihazında güvende. Tekrar deneyebilirsin.';
+  String errorBody(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Verilerin cihazında sapasağlam. Bir daha deneyelim mi?',
+      'young': 'Verilerin cihazında güvende. Bir daha dene!',
+      'coder': 'Veri yerelde bütün, kayıp yok. Yeniden dene.',
+      'calm': 'Verilerin cihazında güvende. Hazır olduğunda yeniden dene.',
+      'other': 'Verilerin cihazında güvende. Tekrar deneyebilirsin.',
+    });
+    return '$_temp0';
+  }
 
   @override
-  String get saveError => 'Kaydedilemedi. Tekrar dene.';
+  String saveError(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Kaydedemedik, bir kez daha deneyelim.',
+      'young': 'Kaydedilmedi, tekrar dene!',
+      'coder': 'Yazma başarısız. Tekrar dene.',
+      'calm': 'Kaydedilemedi. Biraz sonra tekrar deneyebilirsin.',
+      'other': 'Kaydedilemedi. Tekrar dene.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String stepProgress(int current, int total) {
@@ -222,11 +249,30 @@ class L10nTr extends L10n {
       'Bu kategoriler sabittir; altına istediğin kadar kendi kategorini açarsın. Beyin bir metafordur, ölçüm değildir.';
 
   @override
-  String get onbFirstTitle => 'İlk rutinini ekleyelim';
+  String onbFirstTitle(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Haydi, ilk rutinini ekleyelim',
+      'young': 'İlk rutinini ekleyelim mi?',
+      'coder': 'İlk rutini tanımla',
+      'calm': 'İlk rutinini ekleyelim',
+      'other': 'İlk rutinini ekleyelim',
+    });
+    return '$_temp0';
+  }
 
   @override
-  String get onbFirstBody =>
-      'Uygulama senin hayatın hakkında hiçbir şey varsaymaz. Hazır örnek yok; ilk işini sen eklersin.';
+  String onbFirstBody(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful':
+          'Senin hayatını sen bilirsin; hazır örnek yok, ilk işi sen eklersin.',
+      'young': 'Hayatın sana özel: hazır örnek yok, ilk işini sen ekle.',
+      'coder':
+          'Varsayılan veri yok; şablon boş başlar. İlk kaydı sen eklersin.',
+      'calm': 'Uygulama senin hayatın hakkında bir şey varsaymaz. Acele etme; ilk işini sen eklersin.',
+      'other': 'Uygulama senin hayatın hakkında hiçbir şey varsaymaz. Hazır örnek yok; ilk işini sen eklersin.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get onbFirstAction => 'İlk rutinimi ekle';
@@ -243,14 +289,41 @@ class L10nTr extends L10n {
   }
 
   @override
-  String get todayEmptyTitle => 'Planın henüz boş';
+  String todayEmptyTitle(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Bugün bembeyaz bir sayfa',
+      'young': 'Günün şu an bomboş',
+      'coder': 'Bugün: 0 kayıt',
+      'calm': 'Bugün henüz sakin',
+      'other': 'Planın henüz boş',
+    });
+    return '$_temp0';
+  }
 
   @override
-  String get todayEmptyBody =>
-      'Rutinlerini ve işlerini ekledikçe günün burada belirir; boş zamanın da hesaplanır.';
+  String todayEmptyBody(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful':
+          'Rutinlerini ekledikçe gün renklenir; boş zamanını da biz buluruz.',
+      'young': 'Rutinlerini ekle, günün burada şekillensin; boş zamanını da hesaplarız.',
+      'coder': 'Rutin ve iş ekledikçe gün derlenir; boş dilimler otomatik hesaplanır.',
+      'calm': 'Rutinlerini ekledikçe günün burada yavaşça belirir; boş zamanın da hesaplanır.',
+      'other': 'Rutinlerini ve işlerini ekledikçe günün burada belirir; boş zamanın da hesaplanır.',
+    });
+    return '$_temp0';
+  }
 
   @override
-  String get todayEmptyAction => 'İlk rutinini ekle';
+  String todayEmptyAction(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'İlk rutinini ekleyelim',
+      'young': 'İlk rutinini ekle',
+      'coder': 'İlk rutini oluştur',
+      'calm': 'İlk rutinini ekle',
+      'other': 'İlk rutinini ekle',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get todayNothing => 'Bugün için planlanmış bir şey yok.';
@@ -869,7 +942,16 @@ class L10nTr extends L10n {
   }
 
   @override
-  String get catEmpty => 'Henüz alt kategori ya da iş yok.';
+  String catEmpty(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Burası henüz boş, ilk alt kategoriyi ekleyebilirsin.',
+      'young': 'Henüz bir şey yok, hemen ekle.',
+      'coder': 'Düğüm boş: alt kategori ya da iş yok.',
+      'calm': 'Burada henüz bir şey yok.',
+      'other': 'Henüz alt kategori ya da iş yok.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get catDragHint =>
@@ -1296,7 +1378,16 @@ class L10nTr extends L10n {
   }
 
   @override
-  String get focusBrokenHeading => 'Oturum bozuldu';
+  String focusBrokenHeading(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Bu sefer olmadı',
+      'young': 'Bu tur bozuldu',
+      'coder': 'Oturum sonlandı: bozuldu',
+      'calm': 'Oturum yarıda kaldı',
+      'other': 'Oturum bozuldu',
+    });
+    return '$_temp0';
+  }
 
   @override
   String focusBrokenWhat(String time) {
@@ -1313,8 +1404,16 @@ class L10nTr extends L10n {
       'Bu oturum beyne eklenmedi; sönen bir kısım yok.';
 
   @override
-  String get focusBrokenAgain =>
-      'Olabilir. Hazır olduğunda yeniden başlayabilirsin.';
+  String focusBrokenAgain(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Olur böyle şeyler. Hazır olunca yeniden başlarız.',
+      'young': 'Takma kafana, hazır olunca yeniden başla.',
+      'coder': 'Yeniden başlatmak her zaman mümkün.',
+      'calm': 'Sorun değil. Hazır hissettiğinde yeniden başlayabilirsin.',
+      'other': 'Olabilir. Hazır olduğunda yeniden başlayabilirsin.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get focusRestart => 'Yeniden başlat';
@@ -1347,7 +1446,16 @@ class L10nTr extends L10n {
   String get focusNoteLabel => 'Not (isteğe bağlı)';
 
   @override
-  String get focusGainTitle => 'Bu oturumun karşılığı';
+  String focusGainTitle(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Bu oturumun ödülü',
+      'young': 'Bu oturumdan kazancın',
+      'coder': 'Oturum çıktısı',
+      'calm': 'Bu oturumun karşılığı',
+      'other': 'Bu oturumun karşılığı',
+    });
+    return '$_temp0';
+  }
 
   @override
   String focusGainBody(String root, int minutes) {
@@ -1355,8 +1463,17 @@ class L10nTr extends L10n {
   }
 
   @override
-  String get focusGainNone =>
-      'Bir dakikadan kısa sürdü; beyne eklenecek süre birikmedi.';
+  String focusGainNone(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Çok kısa sürdü; beyne eklenecek süre birikmedi.',
+      'young': 'Bir dakikadan kısaydı; bu sefer kazanç yok.',
+      'coder': 'Süre < 1 dk; beyne yazılacak bir şey yok.',
+      'calm':
+          'Bir dakikadan kısa sürdü; bu sefer beyne eklenecek süre birikmedi.',
+      'other': 'Bir dakikadan kısa sürdü; beyne eklenecek süre birikmedi.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String focusGainShare(int percent) {
@@ -1452,7 +1569,16 @@ class L10nTr extends L10n {
   String get brainSceneErrorBody => 'Aynı bilgiyi liste olarak görebilirsin.';
 
   @override
-  String get brainEmptyTitle => 'Henüz yanan nöron yok';
+  String brainEmptyTitle(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Beyin seni bekliyor',
+      'young': 'Beynin ışıklarını yakmaya hazır',
+      'coder': 'Nöron sayısı: 0',
+      'calm': 'Beyin henüz sessiz',
+      'other': 'Henüz yanan nöron yok',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get brainEmptyBody =>
@@ -2561,7 +2687,16 @@ class L10nTr extends L10n {
       'Bütün verilerin tek bir JSON dosyası olarak; internet gerekmez.';
 
   @override
-  String get exportError => 'Dosya hazırlanamadı. Tekrar dene.';
+  String exportError(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Dosyayı hazırlayamadık, bir daha deneyelim.',
+      'young': 'Dosya hazırlanamadı, tekrar dene!',
+      'coder': 'Dışa aktarma başarısız. Tekrar dene.',
+      'calm': 'Dosya hazırlanamadı. Biraz sonra tekrar deneyebilirsin.',
+      'other': 'Dosya hazırlanamadı. Tekrar dene.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get sourcesTitle => 'Bilimsel kaynaklar';
@@ -2708,40 +2843,101 @@ class L10nTr extends L10n {
   String get stLoading => 'Yükleniyor';
 
   @override
-  String get stEmptyFocus =>
-      'Henüz veri yok. İlk odak oturumunu başlat, burası dolmaya başlar.';
+  String stEmptyFocus(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Burası henüz boş. İlk odak oturumunu başlat, grafikler renklenmeye başlasın.',
+      'young': 'Henüz veri yok. Bir odak oturumu başlat, burası dolsun!',
+      'coder': 'Veri kümesi boş. İlk odak oturumu ilk satırı yazar.',
+      'calm': 'Henüz veri yok. İlk odak oturumundan sonra burası yavaşça dolmaya başlar.',
+      'other':
+          'Henüz veri yok. İlk odak oturumunu başlat, burası dolmaya başlar.',
+    });
+    return '$_temp0';
+  }
 
   @override
-  String get stEmptyFocusAction => 'İlk odak oturumunu başlat';
+  String stEmptyFocusAction(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Haydi, ilk odak oturumu',
+      'young': 'Odak oturumu başlat',
+      'coder': 'Odak oturumu başlat',
+      'calm': 'İlk odak oturumunu başlat',
+      'other': 'İlk odak oturumunu başlat',
+    });
+    return '$_temp0';
+  }
 
   @override
-  String get stEmptyRated =>
-      'Henüz puan verdiğin bir odak oturumu yok. Oturum bitince odak ve yorgunluk puanını verdiğinde burada görünür.';
+  String stEmptyRated(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Puan verdiğin oturum yok. Oturum bitince odak ve yorgunluğunu puanla, burası şenlensin.',
+      'young': 'Puanlı oturum yok. Oturum sonunda puan ver, burada görünsün.',
+      'coder': 'Puanlı kayıt yok. Oturum sonunda odak ve yorgunluk puanı gir.',
+      'calm': 'Henüz puan verdiğin bir oturum yok. Oturum bitince odak ve yorgunluğunu puanladığında burada görünür.',
+      'other': 'Henüz puan verdiğin bir odak oturumu yok. Oturum bitince odak ve yorgunluk puanını verdiğinde burada görünür.',
+    });
+    return '$_temp0';
+  }
 
   @override
-  String get stEmptyPlan =>
-      'Bu dönemde planlanmış iş yok. Bir rutin ya da iş ekle; uyum ertesi günden itibaren ölçülür.';
+  String stEmptyPlan(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Bu dönemde planlı iş yok. Bir rutin ekle, uyumu ertesi gün ölçmeye başlarız.',
+      'young':
+          'Bu dönemde plan yok. Rutin ekle, uyum yarından itibaren ölçülsün.',
+      'coder': 'Bu aralıkta planlı kayıt yok. Uyum ertesi günden itibaren hesaplanır.',
+      'calm': 'Bu dönemde planlanmış iş yok. Bir rutin eklediğinde uyum ertesi günden itibaren ölçülür.',
+      'other': 'Bu dönemde planlanmış iş yok. Bir rutin ya da iş ekle; uyum ertesi günden itibaren ölçülür.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get stEmptyPlanAction => 'İş ekle';
 
   @override
-  String get stEmptyProjects =>
-      'Henüz proje yok. Son tarihi ve toplam süresi olan bir proje ekle, kalan işi burada izle.';
+  String stEmptyProjects(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Proje yok. Son tarihli bir proje ekle, kalan işi birlikte izleyelim.',
+      'young': 'Henüz proje yok. Bir proje ekle, kalan işi takip et.',
+      'coder': 'Proje tablosu boş. Toplam süre ve son tarihle bir proje ekle.',
+      'calm': 'Henüz proje yok. Son tarihi ve toplam süresi olan bir proje eklediğinde kalan işi burada izlersin.',
+      'other': 'Henüz proje yok. Son tarihi ve toplam süresi olan bir proje ekle, kalan işi burada izle.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get stEmptyProjectsAction => 'Proje ekle';
 
   @override
-  String get stEmptySleep =>
-      'Uyku pencereni henüz ayarlamadın. Ayarladığında planlanan uykun burada görünür.';
+  String stEmptySleep(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful':
+          'Uyku pencereni henüz söylemedin. Ayarla, uykunu burada görelim.',
+      'young': 'Uyku pencereni ayarla, uykun burada görünsün.',
+      'coder': 'Uyku penceresi tanımsız. Ayarlardan tanımla.',
+      'calm': 'Uyku pencereni henüz ayarlamadın. Ayarladığında planlanan uykun burada görünür.',
+      'other': 'Uyku pencereni henüz ayarlamadın. Ayarladığında planlanan uykun burada görünür.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get stEmptySleepAction => 'Uyku penceresini ayarla';
 
   @override
-  String get stEmptyWeekly =>
-      'Bu hafta ve geçen hafta odak oturumu yok. İlk oturumdan sonra rapor hazır olur.';
+  String stEmptyWeekly(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful':
+          'Bu iki haftada odak oturumu yok. İlk oturumdan sonra raporun hazır.',
+      'young': 'İki haftadır oturum yok. İlk oturumdan sonra rapor hazır!',
+      'coder': 'Son iki haftada kayıt yok; rapor üretilemedi.',
+      'calm': 'Bu hafta ve geçen hafta odak oturumu yok. İlk oturumdan sonra rapor hazır olur.',
+      'other': 'Bu hafta ve geçen hafta odak oturumu yok. İlk oturumdan sonra rapor hazır olur.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get stNoSessionsHere => 'Burada odak oturumu yok.';
@@ -2927,8 +3123,16 @@ class L10nTr extends L10n {
   }
 
   @override
-  String get stNoInterruptions =>
-      'Bu dönemde odak oturumlarında hiç kesinti olmadı.';
+  String stNoInterruptions(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Bu dönemde hiç bölünmedin, tertemiz!',
+      'young': 'Bu dönemde hiç kesinti yok!',
+      'coder': 'Kesinti sayısı: 0.',
+      'calm': 'Bu dönemde odak oturumlarında hiç kesinti olmadı.',
+      'other': 'Bu dönemde odak oturumlarında hiç kesinti olmadı.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get stReasonAppLeft => 'Uygulamadan çıkış';
@@ -3042,7 +3246,16 @@ class L10nTr extends L10n {
   }
 
   @override
-  String get stProjectDone => 'Proje tamamlandı.';
+  String stProjectDone(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Proje tamam! Eline sağlık.',
+      'young': 'Proje bitti, süper!',
+      'coder': 'Proje: tamamlandı (exit 0).',
+      'calm': 'Proje tamamlandı.',
+      'other': 'Proje tamamlandı.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get stProjectNoForecast =>
@@ -3099,7 +3312,16 @@ class L10nTr extends L10n {
   }
 
   @override
-  String get stBalanceAll => 'Bu dönemde bütün alanlara zaman ayırdın.';
+  String stBalanceAll(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Her alana biraz zaman ayırdın, rengârenk bir dönem!',
+      'young': 'Her alana zaman ayırdın, harika denge!',
+      'coder': 'Bütün kökler > 0 dk.',
+      'calm': 'Bu dönemde bütün alanlara zaman ayırdın.',
+      'other': 'Bu dönemde bütün alanlara zaman ayırdın.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String stBalanceNeglected(int n, String names) {
@@ -3114,7 +3336,16 @@ class L10nTr extends L10n {
   String get stShareImage => 'Görsel olarak paylaş';
 
   @override
-  String get stShareError => 'Görsel hazırlanamadı. Tekrar dene.';
+  String stShareError(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Görseli hazırlayamadık, bir daha deneyelim.',
+      'young': 'Görsel olmadı, tekrar dene!',
+      'coder': 'Görsel üretilemedi. Tekrar dene.',
+      'calm': 'Görsel hazırlanamadı. Biraz sonra tekrar deneyebilirsin.',
+      'other': 'Görsel hazırlanamadı. Tekrar dene.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get stWeekFocus => 'Odak süresi';

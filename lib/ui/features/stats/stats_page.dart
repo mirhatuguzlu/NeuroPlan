@@ -253,8 +253,8 @@ class EmptyChart extends StatelessWidget {
 
   /// En yaygın boş durum: henüz odak oturumu yok → Bugün'e git.
   factory EmptyChart.focus(BuildContext context, {String? body}) => EmptyChart(
-    body: body ?? context.l10n.stEmptyFocus,
-    actionLabel: context.l10n.stEmptyFocusAction,
+    body: body ?? context.l10n.stEmptyFocus(context.tone),
+    actionLabel: context.l10n.stEmptyFocusAction(context.tone),
     onAction: () => context.go('/today'),
   );
 

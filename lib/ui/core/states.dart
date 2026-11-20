@@ -68,8 +68,8 @@ class ErrorState extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MessageState(
     icon: Symbols.warning_rounded,
-    title: context.l10n.errorTitle,
-    body: context.l10n.errorBody,
+    title: context.l10n.errorTitle(context.tone),
+    body: context.l10n.errorBody(context.tone),
     actionLabel: context.l10n.commonRetry,
     onAction: onRetry,
   );
@@ -208,7 +208,9 @@ Future<bool> guard(BuildContext context, Future<void> Function() action) async {
     return true;
   } catch (e, st) {
     debugPrint('Kaydetme hatası: $e\n$st');
-    if (context.mounted) showSnack(context, context.l10n.saveError);
+    if (context.mounted) {
+      showSnack(context, context.l10n.saveError(context.tone));
+    }
     return false;
   }
 }

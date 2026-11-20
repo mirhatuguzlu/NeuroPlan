@@ -190,20 +190,20 @@ abstract class L10n {
   /// No description provided for @errorTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Bir şeyler ters gitti'**
-  String get errorTitle;
+  /// **'{tone, select, playful{Hoppala, bir şey takıldı} young{Ups, bir şey ters gitti} coder{Beklenmeyen bir istisna} calm{Küçük bir aksilik oldu} other{Bir şeyler ters gitti}}'**
+  String errorTitle(String tone);
 
   /// No description provided for @errorBody.
   ///
   /// In tr, this message translates to:
-  /// **'Verilerin cihazında güvende. Tekrar deneyebilirsin.'**
-  String get errorBody;
+  /// **'{tone, select, playful{Verilerin cihazında sapasağlam. Bir daha deneyelim mi?} young{Verilerin cihazında güvende. Bir daha dene!} coder{Veri yerelde bütün, kayıp yok. Yeniden dene.} calm{Verilerin cihazında güvende. Hazır olduğunda yeniden dene.} other{Verilerin cihazında güvende. Tekrar deneyebilirsin.}}'**
+  String errorBody(String tone);
 
   /// No description provided for @saveError.
   ///
   /// In tr, this message translates to:
-  /// **'Kaydedilemedi. Tekrar dene.'**
-  String get saveError;
+  /// **'{tone, select, playful{Kaydedemedik, bir kez daha deneyelim.} young{Kaydedilmedi, tekrar dene!} coder{Yazma başarısız. Tekrar dene.} calm{Kaydedilemedi. Biraz sonra tekrar deneyebilirsin.} other{Kaydedilemedi. Tekrar dene.}}'**
+  String saveError(String tone);
 
   /// No description provided for @stepProgress.
   ///
@@ -430,14 +430,14 @@ abstract class L10n {
   /// No description provided for @onbFirstTitle.
   ///
   /// In tr, this message translates to:
-  /// **'İlk rutinini ekleyelim'**
-  String get onbFirstTitle;
+  /// **'{tone, select, playful{Haydi, ilk rutinini ekleyelim} young{İlk rutinini ekleyelim mi?} coder{İlk rutini tanımla} calm{İlk rutinini ekleyelim} other{İlk rutinini ekleyelim}}'**
+  String onbFirstTitle(String tone);
 
   /// No description provided for @onbFirstBody.
   ///
   /// In tr, this message translates to:
-  /// **'Uygulama senin hayatın hakkında hiçbir şey varsaymaz. Hazır örnek yok; ilk işini sen eklersin.'**
-  String get onbFirstBody;
+  /// **'{tone, select, playful{Senin hayatını sen bilirsin; hazır örnek yok, ilk işi sen eklersin.} young{Hayatın sana özel: hazır örnek yok, ilk işini sen ekle.} coder{Varsayılan veri yok; şablon boş başlar. İlk kaydı sen eklersin.} calm{Uygulama senin hayatın hakkında bir şey varsaymaz. Acele etme; ilk işini sen eklersin.} other{Uygulama senin hayatın hakkında hiçbir şey varsaymaz. Hazır örnek yok; ilk işini sen eklersin.}}'**
+  String onbFirstBody(String tone);
 
   /// No description provided for @onbFirstAction.
   ///
@@ -466,20 +466,20 @@ abstract class L10n {
   /// No description provided for @todayEmptyTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Planın henüz boş'**
-  String get todayEmptyTitle;
+  /// **'{tone, select, playful{Bugün bembeyaz bir sayfa} young{Günün şu an bomboş} coder{Bugün: 0 kayıt} calm{Bugün henüz sakin} other{Planın henüz boş}}'**
+  String todayEmptyTitle(String tone);
 
   /// No description provided for @todayEmptyBody.
   ///
   /// In tr, this message translates to:
-  /// **'Rutinlerini ve işlerini ekledikçe günün burada belirir; boş zamanın da hesaplanır.'**
-  String get todayEmptyBody;
+  /// **'{tone, select, playful{Rutinlerini ekledikçe gün renklenir; boş zamanını da biz buluruz.} young{Rutinlerini ekle, günün burada şekillensin; boş zamanını da hesaplarız.} coder{Rutin ve iş ekledikçe gün derlenir; boş dilimler otomatik hesaplanır.} calm{Rutinlerini ekledikçe günün burada yavaşça belirir; boş zamanın da hesaplanır.} other{Rutinlerini ve işlerini ekledikçe günün burada belirir; boş zamanın da hesaplanır.}}'**
+  String todayEmptyBody(String tone);
 
   /// No description provided for @todayEmptyAction.
   ///
   /// In tr, this message translates to:
-  /// **'İlk rutinini ekle'**
-  String get todayEmptyAction;
+  /// **'{tone, select, playful{İlk rutinini ekleyelim} young{İlk rutinini ekle} coder{İlk rutini oluştur} calm{İlk rutinini ekle} other{İlk rutinini ekle}}'**
+  String todayEmptyAction(String tone);
 
   /// No description provided for @todayNothing.
   ///
@@ -1558,8 +1558,8 @@ abstract class L10n {
   /// No description provided for @catEmpty.
   ///
   /// In tr, this message translates to:
-  /// **'Henüz alt kategori ya da iş yok.'**
-  String get catEmpty;
+  /// **'{tone, select, playful{Burası henüz boş, ilk alt kategoriyi ekleyebilirsin.} young{Henüz bir şey yok, hemen ekle.} coder{Düğüm boş: alt kategori ya da iş yok.} calm{Burada henüz bir şey yok.} other{Henüz alt kategori ya da iş yok.}}'**
+  String catEmpty(String tone);
 
   /// No description provided for @catDragHint.
   ///
@@ -2290,8 +2290,8 @@ abstract class L10n {
   /// No description provided for @focusBrokenHeading.
   ///
   /// In tr, this message translates to:
-  /// **'Oturum bozuldu'**
-  String get focusBrokenHeading;
+  /// **'{tone, select, playful{Bu sefer olmadı} young{Bu tur bozuldu} coder{Oturum sonlandı: bozuldu} calm{Oturum yarıda kaldı} other{Oturum bozuldu}}'**
+  String focusBrokenHeading(String tone);
 
   /// No description provided for @focusBrokenWhat.
   ///
@@ -2314,8 +2314,8 @@ abstract class L10n {
   /// No description provided for @focusBrokenAgain.
   ///
   /// In tr, this message translates to:
-  /// **'Olabilir. Hazır olduğunda yeniden başlayabilirsin.'**
-  String get focusBrokenAgain;
+  /// **'{tone, select, playful{Olur böyle şeyler. Hazır olunca yeniden başlarız.} young{Takma kafana, hazır olunca yeniden başla.} coder{Yeniden başlatmak her zaman mümkün.} calm{Sorun değil. Hazır hissettiğinde yeniden başlayabilirsin.} other{Olabilir. Hazır olduğunda yeniden başlayabilirsin.}}'**
+  String focusBrokenAgain(String tone);
 
   /// No description provided for @focusRestart.
   ///
@@ -2380,8 +2380,8 @@ abstract class L10n {
   /// No description provided for @focusGainTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Bu oturumun karşılığı'**
-  String get focusGainTitle;
+  /// **'{tone, select, playful{Bu oturumun ödülü} young{Bu oturumdan kazancın} coder{Oturum çıktısı} calm{Bu oturumun karşılığı} other{Bu oturumun karşılığı}}'**
+  String focusGainTitle(String tone);
 
   /// No description provided for @focusGainBody.
   ///
@@ -2392,8 +2392,8 @@ abstract class L10n {
   /// No description provided for @focusGainNone.
   ///
   /// In tr, this message translates to:
-  /// **'Bir dakikadan kısa sürdü; beyne eklenecek süre birikmedi.'**
-  String get focusGainNone;
+  /// **'{tone, select, playful{Çok kısa sürdü; beyne eklenecek süre birikmedi.} young{Bir dakikadan kısaydı; bu sefer kazanç yok.} coder{Süre < 1 dk; beyne yazılacak bir şey yok.} calm{Bir dakikadan kısa sürdü; bu sefer beyne eklenecek süre birikmedi.} other{Bir dakikadan kısa sürdü; beyne eklenecek süre birikmedi.}}'**
+  String focusGainNone(String tone);
 
   /// No description provided for @focusGainShare.
   ///
@@ -2554,8 +2554,8 @@ abstract class L10n {
   /// No description provided for @brainEmptyTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Henüz yanan nöron yok'**
-  String get brainEmptyTitle;
+  /// **'{tone, select, playful{Beyin seni bekliyor} young{Beynin ışıklarını yakmaya hazır} coder{Nöron sayısı: 0} calm{Beyin henüz sessiz} other{Henüz yanan nöron yok}}'**
+  String brainEmptyTitle(String tone);
 
   /// No description provided for @brainEmptyBody.
   ///
@@ -4456,8 +4456,8 @@ abstract class L10n {
   /// No description provided for @exportError.
   ///
   /// In tr, this message translates to:
-  /// **'Dosya hazırlanamadı. Tekrar dene.'**
-  String get exportError;
+  /// **'{tone, select, playful{Dosyayı hazırlayamadık, bir daha deneyelim.} young{Dosya hazırlanamadı, tekrar dene!} coder{Dışa aktarma başarısız. Tekrar dene.} calm{Dosya hazırlanamadı. Biraz sonra tekrar deneyebilirsin.} other{Dosya hazırlanamadı. Tekrar dene.}}'**
+  String exportError(String tone);
 
   /// No description provided for @sourcesTitle.
   ///
@@ -4738,26 +4738,26 @@ abstract class L10n {
   /// No description provided for @stEmptyFocus.
   ///
   /// In tr, this message translates to:
-  /// **'Henüz veri yok. İlk odak oturumunu başlat, burası dolmaya başlar.'**
-  String get stEmptyFocus;
+  /// **'{tone, select, playful{Burası henüz boş. İlk odak oturumunu başlat, grafikler renklenmeye başlasın.} young{Henüz veri yok. Bir odak oturumu başlat, burası dolsun!} coder{Veri kümesi boş. İlk odak oturumu ilk satırı yazar.} calm{Henüz veri yok. İlk odak oturumundan sonra burası yavaşça dolmaya başlar.} other{Henüz veri yok. İlk odak oturumunu başlat, burası dolmaya başlar.}}'**
+  String stEmptyFocus(String tone);
 
   /// No description provided for @stEmptyFocusAction.
   ///
   /// In tr, this message translates to:
-  /// **'İlk odak oturumunu başlat'**
-  String get stEmptyFocusAction;
+  /// **'{tone, select, playful{Haydi, ilk odak oturumu} young{Odak oturumu başlat} coder{Odak oturumu başlat} calm{İlk odak oturumunu başlat} other{İlk odak oturumunu başlat}}'**
+  String stEmptyFocusAction(String tone);
 
   /// No description provided for @stEmptyRated.
   ///
   /// In tr, this message translates to:
-  /// **'Henüz puan verdiğin bir odak oturumu yok. Oturum bitince odak ve yorgunluk puanını verdiğinde burada görünür.'**
-  String get stEmptyRated;
+  /// **'{tone, select, playful{Puan verdiğin oturum yok. Oturum bitince odak ve yorgunluğunu puanla, burası şenlensin.} young{Puanlı oturum yok. Oturum sonunda puan ver, burada görünsün.} coder{Puanlı kayıt yok. Oturum sonunda odak ve yorgunluk puanı gir.} calm{Henüz puan verdiğin bir oturum yok. Oturum bitince odak ve yorgunluğunu puanladığında burada görünür.} other{Henüz puan verdiğin bir odak oturumu yok. Oturum bitince odak ve yorgunluk puanını verdiğinde burada görünür.}}'**
+  String stEmptyRated(String tone);
 
   /// No description provided for @stEmptyPlan.
   ///
   /// In tr, this message translates to:
-  /// **'Bu dönemde planlanmış iş yok. Bir rutin ya da iş ekle; uyum ertesi günden itibaren ölçülür.'**
-  String get stEmptyPlan;
+  /// **'{tone, select, playful{Bu dönemde planlı iş yok. Bir rutin ekle, uyumu ertesi gün ölçmeye başlarız.} young{Bu dönemde plan yok. Rutin ekle, uyum yarından itibaren ölçülsün.} coder{Bu aralıkta planlı kayıt yok. Uyum ertesi günden itibaren hesaplanır.} calm{Bu dönemde planlanmış iş yok. Bir rutin eklediğinde uyum ertesi günden itibaren ölçülür.} other{Bu dönemde planlanmış iş yok. Bir rutin ya da iş ekle; uyum ertesi günden itibaren ölçülür.}}'**
+  String stEmptyPlan(String tone);
 
   /// No description provided for @stEmptyPlanAction.
   ///
@@ -4768,8 +4768,8 @@ abstract class L10n {
   /// No description provided for @stEmptyProjects.
   ///
   /// In tr, this message translates to:
-  /// **'Henüz proje yok. Son tarihi ve toplam süresi olan bir proje ekle, kalan işi burada izle.'**
-  String get stEmptyProjects;
+  /// **'{tone, select, playful{Proje yok. Son tarihli bir proje ekle, kalan işi birlikte izleyelim.} young{Henüz proje yok. Bir proje ekle, kalan işi takip et.} coder{Proje tablosu boş. Toplam süre ve son tarihle bir proje ekle.} calm{Henüz proje yok. Son tarihi ve toplam süresi olan bir proje eklediğinde kalan işi burada izlersin.} other{Henüz proje yok. Son tarihi ve toplam süresi olan bir proje ekle, kalan işi burada izle.}}'**
+  String stEmptyProjects(String tone);
 
   /// No description provided for @stEmptyProjectsAction.
   ///
@@ -4780,8 +4780,8 @@ abstract class L10n {
   /// No description provided for @stEmptySleep.
   ///
   /// In tr, this message translates to:
-  /// **'Uyku pencereni henüz ayarlamadın. Ayarladığında planlanan uykun burada görünür.'**
-  String get stEmptySleep;
+  /// **'{tone, select, playful{Uyku pencereni henüz söylemedin. Ayarla, uykunu burada görelim.} young{Uyku pencereni ayarla, uykun burada görünsün.} coder{Uyku penceresi tanımsız. Ayarlardan tanımla.} calm{Uyku pencereni henüz ayarlamadın. Ayarladığında planlanan uykun burada görünür.} other{Uyku pencereni henüz ayarlamadın. Ayarladığında planlanan uykun burada görünür.}}'**
+  String stEmptySleep(String tone);
 
   /// No description provided for @stEmptySleepAction.
   ///
@@ -4792,8 +4792,8 @@ abstract class L10n {
   /// No description provided for @stEmptyWeekly.
   ///
   /// In tr, this message translates to:
-  /// **'Bu hafta ve geçen hafta odak oturumu yok. İlk oturumdan sonra rapor hazır olur.'**
-  String get stEmptyWeekly;
+  /// **'{tone, select, playful{Bu iki haftada odak oturumu yok. İlk oturumdan sonra raporun hazır.} young{İki haftadır oturum yok. İlk oturumdan sonra rapor hazır!} coder{Son iki haftada kayıt yok; rapor üretilemedi.} calm{Bu hafta ve geçen hafta odak oturumu yok. İlk oturumdan sonra rapor hazır olur.} other{Bu hafta ve geçen hafta odak oturumu yok. İlk oturumdan sonra rapor hazır olur.}}'**
+  String stEmptyWeekly(String tone);
 
   /// No description provided for @stNoSessionsHere.
   ///
@@ -5080,8 +5080,8 @@ abstract class L10n {
   /// No description provided for @stNoInterruptions.
   ///
   /// In tr, this message translates to:
-  /// **'Bu dönemde odak oturumlarında hiç kesinti olmadı.'**
-  String get stNoInterruptions;
+  /// **'{tone, select, playful{Bu dönemde hiç bölünmedin, tertemiz!} young{Bu dönemde hiç kesinti yok!} coder{Kesinti sayısı: 0.} calm{Bu dönemde odak oturumlarında hiç kesinti olmadı.} other{Bu dönemde odak oturumlarında hiç kesinti olmadı.}}'**
+  String stNoInterruptions(String tone);
 
   /// No description provided for @stReasonAppLeft.
   ///
@@ -5260,8 +5260,8 @@ abstract class L10n {
   /// No description provided for @stProjectDone.
   ///
   /// In tr, this message translates to:
-  /// **'Proje tamamlandı.'**
-  String get stProjectDone;
+  /// **'{tone, select, playful{Proje tamam! Eline sağlık.} young{Proje bitti, süper!} coder{Proje: tamamlandı (exit 0).} calm{Proje tamamlandı.} other{Proje tamamlandı.}}'**
+  String stProjectDone(String tone);
 
   /// No description provided for @stProjectNoForecast.
   ///
@@ -5338,8 +5338,8 @@ abstract class L10n {
   /// No description provided for @stBalanceAll.
   ///
   /// In tr, this message translates to:
-  /// **'Bu dönemde bütün alanlara zaman ayırdın.'**
-  String get stBalanceAll;
+  /// **'{tone, select, playful{Her alana biraz zaman ayırdın, rengârenk bir dönem!} young{Her alana zaman ayırdın, harika denge!} coder{Bütün kökler > 0 dk.} calm{Bu dönemde bütün alanlara zaman ayırdın.} other{Bu dönemde bütün alanlara zaman ayırdın.}}'**
+  String stBalanceAll(String tone);
 
   /// No description provided for @stBalanceNeglected.
   ///
@@ -5362,8 +5362,8 @@ abstract class L10n {
   /// No description provided for @stShareError.
   ///
   /// In tr, this message translates to:
-  /// **'Görsel hazırlanamadı. Tekrar dene.'**
-  String get stShareError;
+  /// **'{tone, select, playful{Görseli hazırlayamadık, bir daha deneyelim.} young{Görsel olmadı, tekrar dene!} coder{Görsel üretilemedi. Tekrar dene.} calm{Görsel hazırlanamadı. Biraz sonra tekrar deneyebilirsin.} other{Görsel hazırlanamadı. Tekrar dene.}}'**
+  String stShareError(String tone);
 
   /// No description provided for @stWeekFocus.
   ///

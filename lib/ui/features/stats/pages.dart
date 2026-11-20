@@ -55,8 +55,12 @@ Map<String, RootCategory> _roots(WidgetRef ref) => {
 String _rootName(BuildContext c, Map<String, RootCategory> roots, String key) =>
     roots[key]?.name(c) ?? c.l10n.stNoCategory;
 
-Widget _rootBadge(Map<String, RootCategory> roots, String key) =>
-    RootBadge(icon: roots[key]?.icon, color: roots[key]?.color, size: 32);
+Widget _rootBadge(Map<String, RootCategory> roots, String key) => RootBadge(
+  rootKey: key,
+  icon: roots[key]?.icon,
+  color: roots[key]?.color,
+  size: 32,
+);
 
 /// Kovalı grafiklerin ortak x etiketi.
 String Function(int) _x(BuildContext c, List<DayRange> b, DayRange r) {
@@ -107,6 +111,7 @@ class _TimeBodyState extends ConsumerState<_TimeBody> {
             value: e.value.toDouble(),
             valueText: '${durationText(l, e.value)} · ${pct(e.value, t.total)}',
             leading: _rootBadge(roots, e.key),
+            color: rootColor(context, e.key, roots[e.key]?.color),
           ),
         );
       }
@@ -285,7 +290,7 @@ class _AdherenceBodyState extends ConsumerState<_AdherenceBody> {
         if (a.planned == 0) {
           return EmptyChart(
             icon: Symbols.calendar_month_rounded,
-            body: l.stEmptyPlan,
+            body: l.stEmptyPlan(context.tone),
             actionLabel: l.stEmptyPlanAction,
             onAction: () => context.push('/add'),
           );
@@ -383,7 +388,7 @@ class _BestHoursBodyState extends State<_BestHoursBody> {
     final s = widget.s;
     final h = focusHeat(s.sessions, widget.range, s.cal);
     if (h.rated == 0) {
-      return EmptyChart.focus(context, body: l.stEmptyRated);
+      return EmptyChart.focus(context, body: l.stEmptyRated(context.tone));
     }
     final best = h.bestWindow();
     final insight = best == null
@@ -497,6 +502,7 @@ class _ConsistencyBodyState extends State<_ConsistencyBody> {
               child: _Stat(
                 label: l.stStreakLongest,
                 value: l.stDays(st.longest),
+                index: 1,
               ),
             ),
           ],
@@ -550,15 +556,17 @@ class _ConsistencyBodyState extends State<_ConsistencyBody> {
 }
 
 class _Stat extends StatelessWidget {
-  const _Stat({required this.label, required this.value});
+  const _Stat({required this.label, required this.value, this.index = 0});
   final String label;
   final String value;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return MergeSemantics(
       child: Card(
+        color: AppTokens.tint(context, index),
         child: Padding(
           padding: const EdgeInsets.all(Gap.l),
           child: Column(
@@ -598,7 +606,7 @@ class _QualityBodyState extends State<_QualityBody> {
     final colors = ChartColors.from(context);
     final q = qualityTrend(s.sessions, widget.range, s.cal);
     if (q.every((p) => p.count == 0)) {
-      return EmptyChart.focus(context, body: l.stEmptyRated);
+      return EmptyChart.focus(context, body: l.stEmptyRated(context.tone));
     }
     final focus = ChartSeries(l.stFocusScore, [
       for (final p in q) p.focus,
@@ -700,7 +708,10 @@ class _InterruptionsBodyState extends State<_InterruptionsBody> {
     );
     if (st.sessions == 0) return EmptyChart.focus(context);
     if (st.total == 0) {
-      return Insight(l.stNoInterruptions, icon: Symbols.check_circle_rounded);
+      return Insight(
+        l.stNoInterruptions(context.tone),
+        icon: Symbols.check_circle_rounded,
+      );
     }
     final reasons = st.byReason.entries.toList()
       ..sort((a, b) => b.value - a.value);
@@ -733,6 +744,7 @@ class _InterruptionsBodyState extends State<_InterruptionsBody> {
               child: _Stat(
                 label: l.stPerSession,
                 value: scoreText(context, st.perSession),
+                index: 1,
               ),
             ),
           ],
@@ -1060,7 +1072,7 @@ class _ProjectsBody extends ConsumerWidget {
     if (projects.isEmpty) {
       return EmptyChart(
         icon: Symbols.flag_rounded,
-        body: l.stEmptyProjects,
+        body: l.stEmptyProjects(context.tone),
         actionLabel: l.stEmptyProjectsAction,
         onAction: () => context.push('/add'),
       );
@@ -1165,7 +1177,7 @@ class _ProjectBurnState extends State<_ProjectBurn> {
     final deadline = p.deadlineAt == null ? null : dayOf(p.deadlineAt!);
     final ok = b.onTime(deadline);
     final finishText = b.remaining == 0
-        ? l.stProjectDone
+        ? l.stProjectDone(context.tone)
         : b.finish == null
         ? l.stProjectNoForecast
         : (b.byPlan ? l.stProjectFinishPlan : l.stProjectFinishPace)(
@@ -1284,7 +1296,7 @@ class _SleepBodyState extends ConsumerState<_SleepBody> {
         if (st.average == null) {
           return EmptyChart(
             icon: Symbols.bedtime_rounded,
-            body: l.stEmptySleep,
+            body: l.stEmptySleep(context.tone),
             actionLabel: l.stEmptySleepAction,
             onAction: () => context.push('/profile/settings'),
           );
@@ -1413,7 +1425,7 @@ class _BalanceBodyState extends ConsumerState<_BalanceBody> {
     if (t.total == 0) return EmptyChart.focus(context);
     final b = balance(t, keys);
     final insight = b.neglected.isEmpty
-        ? l.stBalanceAll
+        ? l.stBalanceAll(context.tone)
         : l.stBalanceNeglected(
             b.neglected.length,
             b.neglected.map((k) => _rootName(context, roots, k)).join(', '),
@@ -1436,6 +1448,7 @@ class _BalanceBodyState extends ConsumerState<_BalanceBody> {
                       ? l.stNone
                       : '${durationText(l, b.minutes[k]!)} · ${l.stPercent((b.share(k) * 100).round())}',
                   leading: _rootBadge(roots, k),
+                  color: rootColor(context, k, roots[k]?.color),
                   tappable: b.minutes[k]! > 0,
                 ),
             ],
@@ -1479,7 +1492,7 @@ class _ChartError extends StatelessWidget {
   @override
   Widget build(BuildContext context) => EmptyChart(
     icon: Symbols.warning_rounded,
-    body: context.l10n.errorBody,
+    body: context.l10n.errorBody(context.tone),
     actionLabel: context.l10n.commonRetry,
     onAction: onRetry,
   );

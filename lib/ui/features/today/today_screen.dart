@@ -71,9 +71,9 @@ class _TodayBody extends ConsumerWidget {
           Expanded(
             child: MessageState(
               icon: Symbols.today_rounded,
-              title: l.todayEmptyTitle,
-              body: l.todayEmptyBody,
-              actionLabel: l.todayEmptyAction,
+              title: l.todayEmptyTitle(context.tone),
+              body: l.todayEmptyBody(context.tone),
+              actionLabel: l.todayEmptyAction(context.tone),
               onAction: () => context.push('/add'),
             ),
           ),
@@ -556,9 +556,14 @@ class _InstanceTileState extends State<_InstanceTile> {
       padding: const EdgeInsets.symmetric(horizontal: Gap.l, vertical: Gap.xs),
       // Sakin zaman çizelgesi: satırlar kart değil; yalnız şu anki / sıradaki iş tonla öne çıkar.
       child: Material(
+        // Renkli temalarda satır işin kök rengiyle boyanır (D55).
         color: widget.highlight
             ? scheme.surfaceContainerHigh
-            : Colors.transparent,
+            : AppTokens.tintOf(
+                    context,
+                    rootColor(context, activity?.rootCategoryKey, null),
+                  ) ??
+                  Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppTokens.of(context).radius),
         ),

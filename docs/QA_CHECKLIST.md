@@ -228,6 +228,10 @@ Otomatik testler: `flutter test test/ui/stats_test.dart` (12 sayfa boş/dolu, he
 - [ ] Beyin sekmesi her temada okunur (sahne temanın koyu şemasından renk alır).
 - [ ] Yüksek Kontrast temada kart ve düğme çerçeveleri kalın, odaklı alan belirgin.
 
+- [ ] Eğlenceli: profil kartları ve analiz listesi farklı renklerde; Bugün satırları işin kök rengiyle boyalı. Genç: canlı bloklar. Kodcu: dolgusuz çerçeveler. Minimal: ince çizgiler. Her biri açık ve koyu görünümle denendi.
+- [ ] Tema değişince boş durum ve hata metinleri temanın tonunda (ör. Kodcu: "Bugün: 0 kayıt").
+- [ ] Tabletta / yatayda profil kartları dört sütun; büyük yazıda tek sütun.
+
 ### D3. Analiz sayfaları
 - [ ] Profil: dört kart (bu hafta odak, uyum, seri, en güçlü bölge); her karta dokununca kendi sayfası açılır.
 - [ ] Her sayfanın başlığı sorudur; altında tek cümlelik yorum var. Aralık seçici (Hafta / Ay / 3 ay / Yıl / Tümü) seçimi sayfalar arasında korunur.

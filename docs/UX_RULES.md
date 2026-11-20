@@ -221,6 +221,7 @@ Kaçınılacaklar (frontend-design): her etikette TÜMÜ BÜYÜK HARF, başlıkt
 - **Sürükle-bırak:** yalnız basılı tutmaya güvenilmez; görünür bir `drag_indicator` tutamacı olur ve tutamaçtan hemen sürüklenir. Parmak liste kenarına gelince liste kendiliğinden kayar (`lib/ui/core/drag.dart` → `DragItem`). Her sürükleme işinin dokunarak yapılan bir alternatifi vardır (ör. "Taşı").
 
 ## 10. Metin ve ton
+- Ton temadan gelir (D55): ARB'de `{tone, select, playful{…} young{…} coder{…} calm{…} other{…}}`, çağrı `l.key(context.tone)`. Yeni boş durum, hata ve başarı metinleri bu biçimde yazılır.
 - Her tema kendi tonunu taşır (Ciddi: net ve kısa; Eğlenceli / Genç: sıcak, oyunbaz; Kodcu: teknik esprili) ama hiçbir tonda suçlama, utandırma ya da sahte aciliyet yok. Örn. sönen beyin bölgeleri için “İhmal ettin!” değil, nötr bir hatırlatma.
 - Bilimsel cümleler yalnız SCIENCE.md'den; “beynin büyüdü” gibi ölçüm iddiası yok.
 - Türkçe büyük/küçük harf dönüşümleri yerel ayarla yapılır (i → İ, ı → I).
@@ -232,7 +233,7 @@ Android geri tuşu / geri hareketi her ekranda tahmin edilebilir davranır (`Pop
 
 ## 12. Grafikler (Profil / Analiz)
 Her grafikte başlık, eksen ve birim, dokununca değer, boş / yükleniyor durumu ve ekran okuyucu için tek cümlelik metin özeti bulunur. Renk paleti temadan gelir ve renk körlüğüne dayanıklıdır.
-- Uygulama (Aşama 5, D54): renkler `ChartColors` ThemeExtension'ından (dataviz skill'inin doğrulanmış paleti; değiştirilirse `validate_palette.js` yeniden koşturulur). Tek eksen; ≥ 2 seride lejant; yazı rengi seri rengi değildir; ızgara sessiz ve düz.
+- Uygulama (Aşama 5, D54, D55): renkler `ChartColors` ThemeExtension'ından; her temanın kendi doğrulanmış paleti, rampası ve 9 kök rengi var (değiştirilirse `validate_palette.js` yeniden koşturulur). Tek eksen; ≥ 2 seride lejant; yazı rengi seri rengi değildir; ızgara sessiz ve düz.
 - Her analiz sayfası tek soruya cevap verir ve başlığı o sorudur; grafiğin altında tek cümlelik yorum (`Insight`) ve "Liste olarak göster" (tablo görünümü). Dokunulan değer, grafiğin altında ilgili oturumlarla açılır.
 - Hesaplar `neuroplan_core` içindeki saf fonksiyonlardır (`stats.dart`); widget hesap yapmaz.
 

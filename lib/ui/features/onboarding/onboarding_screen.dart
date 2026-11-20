@@ -340,8 +340,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         ),
         WizardStep(
           id: 'first',
-          title: l.onbFirstTitle,
-          subtitle: l.onbFirstBody,
+          title: l.onbFirstTitle(context.tone),
+          subtitle: l.onbFirstBody(context.tone),
           optional: true,
           nextLabel: l.onbFirstAction,
           onNext: () => _complete(addFirst: true),
@@ -368,7 +368,11 @@ class _RootList extends ConsumerWidget {
             MergeSemantics(
               child: ListTile(
                 contentPadding: EdgeInsets.zero,
-                leading: RootBadge(icon: r.icon, color: r.color),
+                leading: RootBadge(
+                  rootKey: r.key,
+                  icon: r.icon,
+                  color: r.color,
+                ),
                 title: Text(r.name(context)),
                 subtitle: Text(r.description(context)),
               ),

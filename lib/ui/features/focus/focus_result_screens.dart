@@ -61,7 +61,7 @@ class FocusBrokenScreen extends ConsumerWidget {
                     Semantics(
                       header: true,
                       child: Text(
-                        l.focusBrokenHeading,
+                        l.focusBrokenHeading(context.tone),
                         style: theme.textTheme.headlineSmall,
                       ),
                     ),
@@ -81,7 +81,10 @@ class FocusBrokenScreen extends ConsumerWidget {
                       style: theme.textTheme.bodyLarge,
                     ),
                     const SizedBox(height: Gap.m),
-                    Text(l.focusBrokenAgain, style: theme.textTheme.bodyLarge),
+                    Text(
+                      l.focusBrokenAgain(context.tone),
+                      style: theme.textTheme.bodyLarge,
+                    ),
                   ],
                 ),
         ),
@@ -200,7 +203,7 @@ class _FocusFinishScreenState extends ConsumerState<FocusFinishScreen> {
         ),
         WizardStep(
           id: 'gain',
-          title: l.focusGainTitle,
+          title: l.focusGainTitle(context.tone),
           nextLabel: l.focusDone,
           body: _Gain(sessionId: widget.sessionId),
         ),
@@ -309,7 +312,7 @@ class _Gain extends ConsumerWidget {
       children: [
         Text(
           minutes < 1
-              ? l.focusGainNone
+              ? l.focusGainNone(context.tone)
               : l.focusGainBody(info?.root?.name(context) ?? '', minutes),
           style: theme.textTheme.bodyLarge,
         ),
@@ -341,8 +344,9 @@ class _Gain extends ConsumerWidget {
                           minHeight: 8,
                           borderRadius: BorderRadius.circular(4),
                           color: rootColor(
+                            context,
+                            info?.root?.key,
                             info?.root?.color,
-                            theme.colorScheme,
                           ),
                         ),
                       ),

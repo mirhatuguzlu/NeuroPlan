@@ -370,7 +370,7 @@ class _RegionGlowState extends ConsumerState<_RegionGlow>
   Widget build(BuildContext context) {
     final info = ref.watch(focusRegionsProvider(widget.rootKey)).value;
     final scheme = Theme.of(context).colorScheme;
-    final color = rootColor(info?.root?.color, scheme);
+    final color = rootColor(context, info?.root?.key, info?.root?.color);
     final region = info?.regions.firstOrNull?.region;
     return Column(
       children: [

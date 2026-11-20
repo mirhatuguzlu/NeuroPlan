@@ -34,7 +34,7 @@ class _ExportTileState extends ConsumerState<ExportTile> {
       );
     } on Object catch (e) {
       debugPrint('[export] $e');
-      if (mounted) showSnack(context, l.exportError);
+      if (mounted) showSnack(context, l.exportError(context.tone));
     } finally {
       if (mounted) setState(() => _busy = false);
     }

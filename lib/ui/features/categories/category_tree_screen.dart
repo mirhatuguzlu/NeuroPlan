@@ -46,7 +46,7 @@ Future<void> moveItem(
   } on ArgumentError {
     if (context.mounted) showSnack(context, l.moveCannotIntoSelf);
   } catch (e) {
-    if (context.mounted) showSnack(context, l.saveError);
+    if (context.mounted) showSnack(context, l.saveError(context.tone));
   }
 }
 
@@ -149,7 +149,7 @@ class _RootCardState extends ConsumerState<_RootCard> {
     } on CategoryInUseException {
       if (mounted) showSnack(context, l.catInUse);
     } catch (_) {
-      if (mounted) showSnack(context, l.saveError);
+      if (mounted) showSnack(context, l.saveError(context.tone));
     }
   }
 
@@ -222,7 +222,11 @@ class _RootCardState extends ConsumerState<_RootCard> {
                     ? null
                     : theme.colorScheme.secondaryContainer,
                 minTileHeight: 72,
-                leading: RootBadge(icon: root.icon, color: root.color),
+                leading: RootBadge(
+                  rootKey: root.key,
+                  icon: root.icon,
+                  color: root.color,
+                ),
                 title: Text(
                   root.name(context),
                   style: theme.textTheme.titleMedium,
@@ -270,7 +274,7 @@ class _RootCardState extends ConsumerState<_RootCard> {
                             padding: const EdgeInsets.symmetric(
                               horizontal: Gap.l,
                             ),
-                            child: Text(l.catEmpty),
+                            child: Text(l.catEmpty(context.tone)),
                           ),
                         ...tree,
                         if (_addingUnder == '')

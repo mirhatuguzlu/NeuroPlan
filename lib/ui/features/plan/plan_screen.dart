@@ -60,7 +60,7 @@ class _PlanScreenState extends ConsumerState<PlanScreen> {
               icon: Symbols.calendar_month_rounded,
               title: l.rulesEmptyTitle,
               body: l.rulesEmptyBody,
-              actionLabel: l.todayEmptyAction,
+              actionLabel: l.todayEmptyAction(context.tone),
               onAction: () => context.push('/add'),
             );
           }

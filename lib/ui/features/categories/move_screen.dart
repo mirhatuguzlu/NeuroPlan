@@ -82,7 +82,12 @@ class MoveScreen extends ConsumerWidget {
             children: [
               for (final r in roots) ...[
                 ListTile(
-                  leading: RootBadge(icon: r.icon, color: r.color, size: 32),
+                  leading: RootBadge(
+                    rootKey: r.key,
+                    icon: r.icon,
+                    color: r.color,
+                    size: 32,
+                  ),
                   title: Text(r.name(context)),
                   onTap: () => move(r.key, null),
                 ),

@@ -102,13 +102,45 @@ class _Bar extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final tokens = AppTokens.of(context);
+    // Görünüm temaya göre değişir, yapı ve konum değişmez (UX_RULES §6, D55).
+    final (color, side, elevation) = switch (tokens.theme.look) {
+      Look.tonal => (
+        scheme.surfaceContainer,
+        BorderSide(color: scheme.outlineVariant),
+        3.0,
+      ),
+      Look.colorful => (scheme.primaryContainer, BorderSide.none, 3.0),
+      Look.vivid => (
+        scheme.secondaryContainer,
+        BorderSide(color: scheme.secondary, width: 2),
+        2.0,
+      ),
+      Look.terminal => (
+        scheme.surface,
+        BorderSide(color: scheme.primary.withValues(alpha: 0.6)),
+        0.0,
+      ),
+      Look.soft => (scheme.surfaceContainer, BorderSide.none, 0.0),
+      Look.bold => (
+        scheme.surface,
+        BorderSide(color: scheme.outline, width: 2),
+        0.0,
+      ),
+      Look.hairline => (
+        scheme.surface,
+        BorderSide(color: scheme.outlineVariant),
+        0.0,
+      ),
+    };
     return Material(
-      elevation: 3,
-      color: scheme.surfaceContainer,
+      elevation: elevation,
+      color: color,
       shadowColor: scheme.shadow,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(tokens.navRadius),
-        side: BorderSide(color: scheme.outlineVariant),
+        borderRadius: BorderRadius.circular(
+          tokens.theme.look == Look.terminal ? tokens.radius : tokens.navRadius,
+        ),
+        side: side,
       ),
       child: SizedBox(
         height: AppShell.barHeight,

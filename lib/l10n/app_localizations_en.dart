@@ -55,14 +55,41 @@ class L10nEn extends L10n {
   String get commonLoading => 'Loading';
 
   @override
-  String get errorTitle => 'Something went wrong';
+  String errorTitle(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Whoops, something got stuck',
+      'young': 'Oops, something went wrong',
+      'coder': 'Unhandled exception',
+      'calm': 'A small hiccup',
+      'other': 'Something went wrong',
+    });
+    return '$_temp0';
+  }
 
   @override
-  String get errorBody =>
-      'Your data is safe on this device. You can try again.';
+  String errorBody(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful':
+          'Your data is safe and sound on your device. Shall we try again?',
+      'young': 'Your data is safe on your device. Give it another go!',
+      'coder': 'Local data is intact, nothing lost. Retry.',
+      'calm': 'Your data is safe on your device. Try again when you\'re ready.',
+      'other': 'Your data is safe on this device. You can try again.',
+    });
+    return '$_temp0';
+  }
 
   @override
-  String get saveError => 'Couldn\'t save. Try again.';
+  String saveError(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'We couldn\'t save that, let\'s try once more.',
+      'young': 'Not saved, try again!',
+      'coder': 'Write failed. Retry.',
+      'calm': 'Couldn\'t save. You can try again in a moment.',
+      'other': 'Couldn\'t save. Try again.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String stepProgress(int current, int total) {
@@ -222,11 +249,30 @@ class L10nEn extends L10n {
       'These categories are fixed; you add as many of your own categories under them as you like. The brain is a metaphor, not a measurement.';
 
   @override
-  String get onbFirstTitle => 'Let\'s add your first routine';
+  String onbFirstTitle(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Let\'s add your first routine',
+      'young': 'Ready for your first routine?',
+      'coder': 'Define your first routine',
+      'calm': 'Let\'s add your first routine',
+      'other': 'Let\'s add your first routine',
+    });
+    return '$_temp0';
+  }
 
   @override
-  String get onbFirstBody =>
-      'The app assumes nothing about your life. There are no ready-made examples; you add the first item yourself.';
+  String onbFirstBody(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'You know your life best; there are no ready-made examples, you add the first item.',
+      'young':
+          'Your life, your rules: no ready-made examples, add your first item.',
+      'coder':
+          'No seed data; the template starts empty. You insert the first row.',
+      'calm': 'The app assumes nothing about your life. No rush; you add your first item.',
+      'other': 'The app assumes nothing about your life. There are no ready-made examples; you add the first item yourself.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get onbFirstAction => 'Add my first routine';
@@ -243,14 +289,40 @@ class L10nEn extends L10n {
   }
 
   @override
-  String get todayEmptyTitle => 'Your plan is empty';
+  String todayEmptyTitle(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Today is a blank page',
+      'young': 'Your day is wide open',
+      'coder': 'Today: 0 rows',
+      'calm': 'Today is quiet so far',
+      'other': 'Your plan is empty',
+    });
+    return '$_temp0';
+  }
 
   @override
-  String get todayEmptyBody =>
-      'As you add routines and tasks your day appears here, and your free time is calculated.';
+  String todayEmptyBody(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Add routines and your day fills with colour; we\'ll find your free time too.',
+      'young': 'Add your routines and watch your day take shape; we\'ll work out your free time.',
+      'coder': 'Add routines and tasks to compile your day; free slots are computed automatically.',
+      'calm': 'As you add routines, your day appears here gently; your free time is worked out too.',
+      'other': 'As you add routines and tasks your day appears here, and your free time is calculated.',
+    });
+    return '$_temp0';
+  }
 
   @override
-  String get todayEmptyAction => 'Add your first routine';
+  String todayEmptyAction(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Let\'s add your first routine',
+      'young': 'Add your first routine',
+      'coder': 'Create first routine',
+      'calm': 'Add your first routine',
+      'other': 'Add your first routine',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get todayNothing => 'Nothing is planned for today.';
@@ -872,7 +944,16 @@ class L10nEn extends L10n {
   }
 
   @override
-  String get catEmpty => 'No subcategories or items yet.';
+  String catEmpty(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Nothing here yet; you can add the first subcategory.',
+      'young': 'Nothing yet, add something now.',
+      'coder': 'Empty node: no subcategories or items.',
+      'calm': 'Nothing here yet.',
+      'other': 'No subcategories or items yet.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get catDragHint =>
@@ -1299,7 +1380,16 @@ class L10nEn extends L10n {
   }
 
   @override
-  String get focusBrokenHeading => 'Session broken';
+  String focusBrokenHeading(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Not this time',
+      'young': 'This round broke',
+      'coder': 'Session terminated: broken',
+      'calm': 'The session stopped halfway',
+      'other': 'Session broken',
+    });
+    return '$_temp0';
+  }
 
   @override
   String focusBrokenWhat(String time) {
@@ -1316,8 +1406,16 @@ class L10nEn extends L10n {
       'This session wasn\'t added to the brain; nothing went dark.';
 
   @override
-  String get focusBrokenAgain =>
-      'It happens. Start again whenever you\'re ready.';
+  String focusBrokenAgain(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'It happens. We\'ll start again when you\'re ready.',
+      'young': 'No worries, start again when you\'re ready.',
+      'coder': 'Restart is always available.',
+      'calm': 'That\'s fine. Start again whenever you feel ready.',
+      'other': 'It happens. Start again whenever you\'re ready.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get focusRestart => 'Start again';
@@ -1350,7 +1448,16 @@ class L10nEn extends L10n {
   String get focusNoteLabel => 'Note (optional)';
 
   @override
-  String get focusGainTitle => 'What this session added';
+  String focusGainTitle(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Your reward for this session',
+      'young': 'What you earned',
+      'coder': 'Session output',
+      'calm': 'What this session gave',
+      'other': 'What this session added',
+    });
+    return '$_temp0';
+  }
 
   @override
   String focusGainBody(String root, int minutes) {
@@ -1358,8 +1465,17 @@ class L10nEn extends L10n {
   }
 
   @override
-  String get focusGainNone =>
-      'It lasted less than a minute; no time to add to the brain yet.';
+  String focusGainNone(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Too short this time; not enough time to add to the brain.',
+      'young': 'Under a minute, so no gain this time.',
+      'coder': 'Duration < 1 min; nothing to write to the brain.',
+      'calm':
+          'It lasted under a minute; no time built up for the brain this time.',
+      'other': 'It lasted less than a minute; no time to add to the brain yet.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String focusGainShare(int percent) {
@@ -1463,7 +1579,16 @@ class L10nEn extends L10n {
       'You can see the same information as a list.';
 
   @override
-  String get brainEmptyTitle => 'No lit neurons yet';
+  String brainEmptyTitle(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Your brain is waiting for you',
+      'young': 'Ready to light up your brain',
+      'coder': 'Neuron count: 0',
+      'calm': 'The brain is quiet so far',
+      'other': 'No lit neurons yet',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get brainEmptyBody =>
@@ -2598,7 +2723,16 @@ class L10nEn extends L10n {
       'All your data as one JSON file; no internet needed.';
 
   @override
-  String get exportError => 'Couldn\'t prepare the file. Try again.';
+  String exportError(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'We couldn\'t prepare the file, let\'s try again.',
+      'young': 'File didn\'t work, try again!',
+      'coder': 'Export failed. Retry.',
+      'calm': 'Couldn\'t prepare the file. You can try again in a moment.',
+      'other': 'Couldn\'t prepare the file. Try again.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get sourcesTitle => 'Scientific sources';
@@ -2751,40 +2885,99 @@ class L10nEn extends L10n {
   String get stLoading => 'Loading';
 
   @override
-  String get stEmptyFocus =>
-      'No data yet. Start your first focus session and this fills up.';
+  String stEmptyFocus(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Nothing here yet. Start your first focus session and the charts come alive.',
+      'young': 'No data yet. Start a focus session and fill this up!',
+      'coder': 'Empty dataset. Your first focus session writes the first row.',
+      'calm':
+          'No data yet. After your first focus session this slowly fills up.',
+      'other': 'No data yet. Start your first focus session and this fills up.',
+    });
+    return '$_temp0';
+  }
 
   @override
-  String get stEmptyFocusAction => 'Start your first focus session';
+  String stEmptyFocusAction(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Let\'s start a focus session',
+      'young': 'Start a focus session',
+      'coder': 'Start focus session',
+      'calm': 'Start your first focus session',
+      'other': 'Start your first focus session',
+    });
+    return '$_temp0';
+  }
 
   @override
-  String get stEmptyRated =>
-      'You haven\'t rated a focus session yet. Rate focus and fatigue when a session ends and it shows up here.';
+  String stEmptyRated(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'No rated sessions yet. Rate your focus and fatigue after a session and this lights up.',
+      'young': 'No rated sessions. Rate them at the end and they show up here.',
+      'coder': 'No rated rows. Enter focus and fatigue scores at the end of a session.',
+      'calm': 'You haven\'t rated a session yet. Rate focus and fatigue when one ends and it shows up here.',
+      'other': 'You haven\'t rated a focus session yet. Rate focus and fatigue when a session ends and it shows up here.',
+    });
+    return '$_temp0';
+  }
 
   @override
-  String get stEmptyPlan =>
-      'Nothing was planned in this period. Add a routine or task; adherence is measured from the next day.';
+  String stEmptyPlan(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Nothing was planned this period. Add a routine and we\'ll start measuring tomorrow.',
+      'young': 'No plan this period. Add a routine and adherence counts from tomorrow.',
+      'coder':
+          'No planned rows in range. Adherence is computed from the next day.',
+      'calm': 'Nothing was planned this period. Once you add a routine, adherence is measured from the next day.',
+      'other': 'Nothing was planned in this period. Add a routine or task; adherence is measured from the next day.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get stEmptyPlanAction => 'Add an item';
 
   @override
-  String get stEmptyProjects =>
-      'No projects yet. Add one with a deadline and total time to track the remaining work here.';
+  String stEmptyProjects(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'No projects. Add one with a deadline and we\'ll track what\'s left together.',
+      'young': 'No projects yet. Add one and track what\'s left.',
+      'coder': 'Projects table empty. Add one with a total and a deadline.',
+      'calm': 'No projects yet. Add one with a deadline and total time to follow the remaining work here.',
+      'other': 'No projects yet. Add one with a deadline and total time to track the remaining work here.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get stEmptyProjectsAction => 'Add a project';
 
   @override
-  String get stEmptySleep =>
-      'You haven\'t set a sleep window yet. Once you do, your planned sleep shows up here.';
+  String stEmptySleep(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'You haven\'t told us your sleep window yet. Set it and we\'ll show your sleep here.',
+      'young': 'Set your sleep window and your sleep shows up here.',
+      'coder': 'Sleep window undefined. Define it in Settings.',
+      'calm': 'You haven\'t set a sleep window yet. Once you do, your planned sleep shows up here.',
+      'other': 'You haven\'t set a sleep window yet. Once you do, your planned sleep shows up here.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get stEmptySleepAction => 'Set sleep window';
 
   @override
-  String get stEmptyWeekly =>
-      'No focus sessions this week or last week. The report is ready after your first session.';
+  String stEmptyWeekly(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'No focus sessions these two weeks. Your report is ready after the first one.',
+      'young': 'No sessions for two weeks. Report\'s ready after your first!',
+      'coder': 'No rows in the last two weeks; report not generated.',
+      'calm': 'No focus sessions this week or last week. The report is ready after your first session.',
+      'other': 'No focus sessions this week or last week. The report is ready after your first session.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get stNoSessionsHere => 'No focus sessions here.';
@@ -3001,8 +3194,16 @@ class L10nEn extends L10n {
   }
 
   @override
-  String get stNoInterruptions =>
-      'No interruptions in your focus sessions this period.';
+  String stNoInterruptions(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Not a single interruption this period, spotless!',
+      'young': 'Zero interruptions this period!',
+      'coder': 'Interruption count: 0.',
+      'calm': 'No interruptions in your focus sessions this period.',
+      'other': 'No interruptions in your focus sessions this period.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get stReasonAppLeft => 'Left the app';
@@ -3117,7 +3318,16 @@ class L10nEn extends L10n {
   }
 
   @override
-  String get stProjectDone => 'Project complete.';
+  String stProjectDone(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'Project done! Nicely done.',
+      'young': 'Project finished, awesome!',
+      'coder': 'Project: complete (exit 0).',
+      'calm': 'Project complete.',
+      'other': 'Project complete.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get stProjectNoForecast =>
@@ -3174,7 +3384,16 @@ class L10nEn extends L10n {
   }
 
   @override
-  String get stBalanceAll => 'You gave time to every area this period.';
+  String stBalanceAll(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'You gave every area some time, a colourful period!',
+      'young': 'Time for every area, great balance!',
+      'coder': 'All roots > 0 min.',
+      'calm': 'You gave time to every area this period.',
+      'other': 'You gave time to every area this period.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String stBalanceNeglected(int n, String names) {
@@ -3195,7 +3414,16 @@ class L10nEn extends L10n {
   String get stShareImage => 'Share as image';
 
   @override
-  String get stShareError => 'Couldn\'t prepare the image. Try again.';
+  String stShareError(String tone) {
+    String _temp0 = intl.Intl.selectLogic(tone, {
+      'playful': 'We couldn\'t prepare the image, let\'s try again.',
+      'young': 'Image didn\'t work, try again!',
+      'coder': 'Image render failed. Retry.',
+      'calm': 'Couldn\'t prepare the image. You can try again in a moment.',
+      'other': 'Couldn\'t prepare the image. Try again.',
+    });
+    return '$_temp0';
+  }
 
   @override
   String get stWeekFocus => 'Focus time';

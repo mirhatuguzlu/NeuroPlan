@@ -24,7 +24,8 @@ String socialErrorText(L10n l, Object e) {
       l.tgErrPartnerTaken,
     SocialError.conflict => l.tgErrAlready,
     SocialError.invalid => l.tgErrInvalid,
-    SocialError.unknown => l.errorBody,
+    // Bağlamsız yardımcı: sosyal hata metinleri nötr tondadır.
+    SocialError.unknown => l.errorBody(AppTheme.serious.tone),
   };
 }
 
@@ -62,7 +63,7 @@ class SocialAsync<T> extends StatelessWidget {
     AsyncData(:final value) => data(value),
     AsyncError(:final error) => MessageState(
       icon: Symbols.warning_rounded,
-      title: context.l10n.errorTitle,
+      title: context.l10n.errorTitle(context.tone),
       body: socialErrorText(context.l10n, error),
       actionLabel: context.l10n.commonRetry,
       onAction: onRetry,

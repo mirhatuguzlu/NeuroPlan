@@ -43,7 +43,7 @@ class _WeeklyReportBodyState extends ConsumerState<WeeklyReportBody> {
       );
     } on Object catch (e) {
       debugPrint('[report] paylaşım: $e');
-      if (mounted) showSnack(context, l.stShareError);
+      if (mounted) showSnack(context, l.stShareError(context.tone));
     }
   }
 
@@ -58,7 +58,7 @@ class _WeeklyReportBodyState extends ConsumerState<WeeklyReportBody> {
     final items = hist.value?.items ?? const <StatPlanItem>[];
     final r = weeklyReport(s.sessions, items, s.today, s.cal);
     if (r.current.focusMinutes == 0 && r.previous.focusMinutes == 0) {
-      return EmptyChart.focus(context, body: l.stEmptyWeekly);
+      return EmptyChart.focus(context, body: l.stEmptyWeekly(context.tone));
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -170,33 +170,54 @@ class _ReportCard extends ConsumerWidget {
               style: theme.textTheme.titleLarge,
             ),
             const SizedBox(height: Gap.l),
-            for (final (icon, label, value, change) in rows)
+            for (final (i, (icon, label, value, change)) in rows.indexed)
               MergeSemantics(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: Gap.s),
-                  child: Row(
-                    children: [
-                      ExcludeSemantics(
-                        child: Icon(icon, color: theme.colorScheme.primary),
-                      ),
-                      const SizedBox(width: Gap.m),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(label, style: theme.textTheme.bodyMedium),
-                            if (change != null)
-                              Text(
-                                change,
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: theme.colorScheme.onSurfaceVariant,
-                                ),
-                              ),
-                          ],
+                child: Container(
+                  // Renkli temalarda her satır kendi rengini alır (D55).
+                  margin: const EdgeInsets.only(bottom: Gap.xs),
+                  decoration: BoxDecoration(
+                    color: AppTokens.tint(context, i),
+                    borderRadius: BorderRadius.circular(
+                      AppTokens.of(context).radius,
+                    ),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: Gap.s,
+                    horizontal: Gap.s,
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.zero,
+                    child: Row(
+                      children: [
+                        ExcludeSemantics(
+                          child: Icon(icon, color: theme.colorScheme.primary),
                         ),
-                      ),
-                      Text(value, style: theme.textTheme.titleLarge),
-                    ],
+                        const SizedBox(width: Gap.m),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(label, style: theme.textTheme.bodyMedium),
+                              if (change != null)
+                                Text(
+                                  change,
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: theme.colorScheme.onSurfaceVariant,
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: Gap.s),
+                        Flexible(
+                          child: Text(
+                            value,
+                            textAlign: TextAlign.end,
+                            style: theme.textTheme.titleLarge,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

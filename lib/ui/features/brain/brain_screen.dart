@@ -85,7 +85,15 @@ class _BrainScreenState extends ConsumerState<BrainScreen> {
         ref.read(rootCategoriesProvider).value ?? const <RootCategory>[];
     ref.read(brainControllerProvider.notifier).configure(
       sceneThemeFor(scheme),
-      {for (final r in roots) r.key: r.color},
+      {
+        for (final r in roots)
+          r.key: hexOf(
+            ChartColors.of(
+              scheme,
+              AppTokens.of(context).theme,
+            ).root(r.key, r.color, scheme),
+          ),
+      },
       MediaQuery.disableAnimationsOf(context),
     );
   }
@@ -305,7 +313,10 @@ class _EmptyNote extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(l.brainEmptyTitle, style: theme.textTheme.titleMedium),
+            Text(
+              l.brainEmptyTitle(context.tone),
+              style: theme.textTheme.titleMedium,
+            ),
             const SizedBox(height: Gap.xs),
             Text(l.brainEmptyBody, style: theme.textTheme.bodyMedium),
           ],

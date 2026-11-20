@@ -10,15 +10,95 @@ abstract final class Gap {
   static const xxl = 32.0;
 }
 
-/// Temalar (PRODUCT THEME-1/2, D54). `profiles.theme` anahtarı; null = Ciddi.
+/// Kart ve yüzey dili (D55): temalar yalnız renkle değil biçimle de ayrışır.
+enum Look {
+  /// Sakin tonlu kartlar (Ciddi).
+  tonal,
+
+  /// Her kart ve satır farklı renkle boyanır (Eğlenceli).
+  colorful,
+
+  /// Doygun renk blokları, belirgin kenar (Genç).
+  vivid,
+
+  /// Dolgusuz, ince vurgu çerçeveli, keskin köşe (Kodcu).
+  terminal,
+
+  /// Düz, gölgesiz, düşük uyarım (Sakin).
+  soft,
+
+  /// Kalın çerçeve, en yüksek kontrast (Yüksek Kontrast).
+  bold,
+
+  /// Dolgusuz, saç teli çizgi (Minimal).
+  hairline,
+}
+
+/// Temalar (PRODUCT THEME-1/2, D54, D55). `profiles.theme` anahtarı; null = Ciddi.
+/// [tone] metin tonudur (ARB'deki `tone` seçimi): Ciddi, Yüksek Kontrast ve Minimal nötr
+/// tonu paylaşır.
 enum AppTheme {
-  serious(Color(0xFF5B57D9), _atkinson, null, null, 16, 400),
-  playful(Color(0xFFE8613C), _atkinson, 'Nunito', null, 24, 500),
-  young(Color(0xFF00A88A), 'Lexend', 'Lexend', null, 20, 500),
-  coder(Color(0xFF2E9E5B), _atkinson, null, 'JetBrainsMono', 8, 300),
-  calm(Color(0xFF5E8798), _atkinson, null, null, 20, 300),
-  highContrast(Color(0xFF1F4FD1), _atkinson, null, null, 12, 600),
-  minimal(Color(0xFF2F6FDE), _atkinson, null, null, 12, 400);
+  serious(
+    Color(0xFF5B57D9),
+    _atkinson,
+    null,
+    null,
+    16,
+    400,
+    Look.tonal,
+    'serious',
+  ),
+  playful(
+    Color(0xFFE8613C),
+    _atkinson,
+    'Nunito',
+    null,
+    24,
+    500,
+    Look.colorful,
+    'playful',
+  ),
+  young(
+    Color(0xFF00A88A),
+    'Lexend',
+    'Lexend',
+    null,
+    20,
+    500,
+    Look.vivid,
+    'young',
+  ),
+  coder(
+    Color(0xFF2E9E5B),
+    _atkinson,
+    null,
+    'JetBrainsMono',
+    6,
+    300,
+    Look.terminal,
+    'coder',
+  ),
+  calm(Color(0xFF5E8798), _atkinson, null, null, 20, 300, Look.soft, 'calm'),
+  highContrast(
+    Color(0xFF1F4FD1),
+    _atkinson,
+    null,
+    null,
+    12,
+    600,
+    Look.bold,
+    'serious',
+  ),
+  minimal(
+    Color(0xFF2F6FDE),
+    _atkinson,
+    null,
+    null,
+    10,
+    400,
+    Look.hairline,
+    'serious',
+  );
 
   const AppTheme(
     this.seed,
@@ -27,6 +107,8 @@ enum AppTheme {
     this.numeric,
     this.radius,
     this.iconWeight,
+    this.look,
+    this.tone,
   );
 
   final Color seed;
@@ -39,6 +121,8 @@ enum AppTheme {
   final String? numeric;
   final double radius;
   final double iconWeight;
+  final Look look;
+  final String tone;
 
   static AppTheme of(String? key) =>
       values.where((t) => t.name == key).firstOrNull ?? serious;
@@ -88,6 +172,27 @@ class AppTokens extends ThemeExtension<AppTokens> {
   static AppTokens of(BuildContext context) =>
       Theme.of(context).extension<AppTokens>() ?? const AppTokens();
 
+  /// Renkli temalarda [accent] ile boyanmış yüzey (kart, satır); diğerlerinde null
+  /// (tema kartı kullanılır). Yazı onSurface kalır: boya hafiftir, kontrastı testlidir.
+  static Color? tintOf(BuildContext context, Color accent) {
+    final t = Theme.of(context);
+    final dark = t.brightness == Brightness.dark;
+    final a = switch (of(context).theme.look) {
+      Look.colorful => dark ? 0.22 : 0.16,
+      Look.vivid => dark ? 0.30 : 0.24,
+      _ => null,
+    };
+    return a == null
+        ? null
+        : Color.alphaBlend(accent.withValues(alpha: a), t.colorScheme.surface);
+  }
+
+  /// Sıradaki [i]. kart için boya (renkli temalarda palet sırasıyla döner).
+  static Color? tint(BuildContext context, int i) {
+    final s = ChartColors.from(context).series;
+    return tintOf(context, s[i % s.length]);
+  }
+
   /// Azaltılmış hareket açıksa geçişler anlık olur (UX_RULES §5).
   static Duration duration(BuildContext context, Duration d) =>
       MediaQuery.disableAnimationsOf(context) ? Duration.zero : d;
@@ -99,14 +204,28 @@ class AppTokens extends ThemeExtension<AppTokens> {
   AppTokens lerp(AppTokens? other, double t) => other ?? this;
 }
 
-/// Grafik renkleri (UX_RULES §12, D54). dataviz skill'inin doğrulanmış paleti: kategorik
-/// sıra renk körlüğü güvenliğinin kendisidir, temaya göre değişmez; açık ve koyu adımlar
-/// ayrı seçilmiştir. Yazı rengi asla seri rengi değildir (ColorScheme'den gelir).
+typedef _Palette = ({
+  List<Color> light,
+  List<Color> dark,
+  ({Color light, Color dark}) ninth,
+  List<Color> ramp,
+});
+
+/// Grafik renkleri (UX_RULES §12, D54, D55). Her temanın kendi kategorik paleti, sıralı
+/// rampası ve 9 kök rengi vardır. Paletler dataviz doğrulayıcısıyla seçildi: kategorik sıra
+/// renk körlüğü güvenliğinin kendisidir (komşu çiftlerde CVD ΔE ≥ 8, normal görüşte ≥ 15,
+/// iki modda). Sakin'de soluk tonlarla bu kapıları geçen sıra bulunamadığı için Minimal'in
+/// serisini paylaşır; rampası ve kök renkleri kendinedir. Yazı rengi asla seri rengi değildir.
 @immutable
 class ChartColors extends ThemeExtension<ChartColors> {
-  const ChartColors._(this.series, this.ramp, this.grid, this.empty);
+  const ChartColors._(
+    this.series,
+    this.ramp,
+    this.grid,
+    this.empty,
+    this._roots,
+  );
 
-  /// Kategorik: mavi, turuncu, aqua, sarı, magenta, yeşil, mor, kırmızı.
   final List<Color> series;
 
   /// Sıralı (büyüklük): az → çok; koyu modda çapa çevrilir (az = yüzeye yakın).
@@ -116,6 +235,23 @@ class ChartColors extends ThemeExtension<ChartColors> {
   /// Verisi olmayan hücre; en düşük değerden ayrı.
   final Color empty;
 
+  /// Kök anahtarı → renk; null = sistem verisindeki renk (Ciddi).
+  final Map<String, Color>? _roots;
+
+  /// Kök kategoriler, sistem verisindeki sırayla (assets/seed/system.json; test eşitliği denetler).
+  static const rootKeys = [
+    'body_movement',
+    'motor_skill',
+    'music_rhythm',
+    'learning_memory',
+    'planning_problem_solving',
+    'emotional_social',
+    'attention_contemplation',
+    'creativity_art',
+    'rest_sleep',
+  ];
+
+  /// Ciddi: dataviz skill'inin varsayılan paleti.
   static const _light = [
     Color(0xFF2A78D6),
     Color(0xFFEB6834),
@@ -136,7 +272,6 @@ class ChartColors extends ThemeExtension<ChartColors> {
     Color(0xFF9085E9),
     Color(0xFFE66767),
   ];
-  // Mavi rampa 150 · 250 · 350 · 450 · 550 · 650.
   static const _blue = [
     Color(0xFFB7D3F6),
     Color(0xFF86B6EF),
@@ -146,19 +281,218 @@ class ChartColors extends ThemeExtension<ChartColors> {
     Color(0xFF104281),
   ];
 
-  factory ChartColors.of(ColorScheme s) => s.brightness == Brightness.light
-      ? ChartColors._(
-          _light,
-          _blue,
-          s.outlineVariant,
-          s.surfaceContainerHighest,
-        )
-      : ChartColors._(
-          _dark,
-          _blue.reversed.toList(),
-          s.outlineVariant,
-          s.surfaceContainerHighest,
-        );
+  static _Palette? _palette(AppTheme t) => switch (t) {
+    AppTheme.serious => null,
+    AppTheme.playful => (
+      light: [
+        Color(0xFFE14B39),
+        Color(0xFF06999A),
+        Color(0xFFDC7D12),
+        Color(0xFFAB58BE),
+        Color(0xFF2F9F3D),
+        Color(0xFF337BD0),
+        Color(0xFFD6A20A),
+        Color(0xFFDF5E97),
+      ],
+      dark: [
+        Color(0xFFE9523F),
+        Color(0xFF19A0A0),
+        Color(0xFFCC7200),
+        Color(0xFFB561C8),
+        Color(0xFF2F9F3D),
+        Color(0xFF4087DE),
+        Color(0xFFB88A01),
+        Color(0xFFD4558E),
+      ],
+      ninth: (light: Color(0xFF0386B1), dark: Color(0xFF0396C6)),
+      ramp: [
+        Color(0xFFFFD2CA),
+        Color(0xFFFFA191),
+        Color(0xFFF17260),
+        Color(0xFFCE5342),
+        Color(0xFFAC3225),
+        Color(0xFF8A0700),
+      ],
+    ),
+    AppTheme.young => (
+      light: [
+        Color(0xFF773CD6),
+        Color(0xFF15AC7D),
+        Color(0xFF2955D3),
+        Color(0xFFC5AF06),
+        Color(0xFFD43691),
+        Color(0xFFEA630C),
+        Color(0xFF158EAB),
+        Color(0xFF4D9501),
+      ],
+      dark: [
+        Color(0xFF945FF9),
+        Color(0xFF0EA175),
+        Color(0xFF4475F6),
+        Color(0xFFA6930B),
+        Color(0xFFDF419B),
+        Color(0xFFE15F0A),
+        Color(0xFF1898B7),
+        Color(0xFF519C03),
+      ],
+      ninth: (light: Color(0xFFBB565A), dark: Color(0xFFCC6568)),
+      ramp: [
+        Color(0xFFE0D8FE),
+        Color(0xFFC3AFFF),
+        Color(0xFFA884FF),
+        Color(0xFF8C5EE8),
+        Color(0xFF703DC6),
+        Color(0xFF5517A5),
+      ],
+    ),
+    AppTheme.coder => (
+      light: [
+        Color(0xFF038D25),
+        Color(0xFFAE3EA8),
+        Color(0xFFE24A3F),
+        Color(0xFF235BC8),
+        Color(0xFF9B980B),
+        Color(0xFF9575E2),
+        Color(0xFFE69D12),
+        Color(0xFF199EAA),
+      ],
+      dark: [
+        Color(0xFF2DA73D),
+        Color(0xFFC252BB),
+        Color(0xFFE54D42),
+        Color(0xFF407AEA),
+        Color(0xFF9B980B),
+        Color(0xFF8968D4),
+        Color(0xFFC28412),
+        Color(0xFF199EAA),
+      ],
+      ninth: (light: Color(0xFFB65577), dark: Color(0xFFC76486)),
+      ramp: [
+        Color(0xFF96FA9A),
+        Color(0xFF75D87A),
+        Color(0xFF54B85B),
+        Color(0xFF31983D),
+        Color(0xFF01791E),
+        Color(0xFF035814),
+      ],
+    ),
+    AppTheme.calm => (
+      light: [
+        Color(0xFF2971C6),
+        Color(0xFFCB882E),
+        Color(0xFF14938D),
+        Color(0xFFC66846),
+        Color(0xFF2C94B0),
+        Color(0xFFC05B6E),
+        Color(0xFF7466B5),
+        Color(0xFF57914A),
+      ],
+      dark: [
+        Color(0xFF4087DE),
+        Color(0xFFC17F21),
+        Color(0xFF169D97),
+        Color(0xFFCA6B49),
+        Color(0xFF2C94B0),
+        Color(0xFFCA6477),
+        Color(0xFF8678C9),
+        Color(0xFF5D9850),
+      ],
+      ninth: (light: Color(0xFFA45B9F), dark: Color(0xFFB46AAE)),
+      ramp: [
+        Color(0xFF93F1F0),
+        Color(0xFF72D0D0),
+        Color(0xFF50B0B0),
+        Color(0xFF2B9191),
+        Color(0xFF067272),
+        Color(0xFF075353),
+      ],
+    ),
+    AppTheme.highContrast => (
+      light: [
+        Color(0xFF0061BE),
+        Color(0xFFDA720D),
+        Color(0xFFAB4B90),
+        Color(0xFFD23F18),
+        Color(0xFF299FCD),
+        Color(0xFFC8B212),
+        Color(0xFF724AAB),
+        Color(0xFF0A9068),
+      ],
+      dark: [
+        Color(0xFF308CF6),
+        Color(0xFFDA720D),
+        Color(0xFFC664A8),
+        Color(0xFFE4512C),
+        Color(0xFF259CCA),
+        Color(0xFFA6930B),
+        Color(0xFF956ED2),
+        Color(0xFF0EA175),
+      ],
+      ninth: (light: Color(0xFF698722), dark: Color(0xFF779634)),
+      ramp: [
+        Color(0xFFC9E0FE),
+        Color(0xFF91C1FF),
+        Color(0xFF53A0FF),
+        Color(0xFF207FE8),
+        Color(0xFF0061BE),
+        Color(0xFF00468C),
+      ],
+    ),
+    AppTheme.minimal => (
+      light: [
+        Color(0xFF2971C6),
+        Color(0xFFCB882E),
+        Color(0xFF14938D),
+        Color(0xFFC66846),
+        Color(0xFF2C94B0),
+        Color(0xFFC05B6E),
+        Color(0xFF7466B5),
+        Color(0xFF57914A),
+      ],
+      dark: [
+        Color(0xFF4087DE),
+        Color(0xFFC17F21),
+        Color(0xFF169D97),
+        Color(0xFFCA6B49),
+        Color(0xFF2C94B0),
+        Color(0xFFCA6477),
+        Color(0xFF8678C9),
+        Color(0xFF5D9850),
+      ],
+      ninth: (light: Color(0xFF8B7B02), dark: Color(0xFF9C8A04)),
+      ramp: [
+        Color(0xFFCDE0F9),
+        Color(0xFFADC0D8),
+        Color(0xFF8EA0B8),
+        Color(0xFF708298),
+        Color(0xFF54657A),
+        Color(0xFF39495D),
+      ],
+    ),
+  };
+
+  factory ChartColors.of(ColorScheme s, [AppTheme theme = AppTheme.serious]) {
+    final p = _palette(theme);
+    final dark = s.brightness == Brightness.dark;
+    final series = p == null
+        ? (dark ? _dark : _light)
+        : (dark ? p.dark : p.light);
+    final ramp = p?.ramp ?? _blue;
+    return ChartColors._(
+      series,
+      dark ? ramp.reversed.toList() : ramp,
+      s.outlineVariant,
+      s.surfaceContainerHighest,
+      p == null
+          ? null
+          : {
+              for (var i = 0; i < rootKeys.length; i++)
+                rootKeys[i]: i < 8
+                    ? series[i]
+                    : (dark ? p.ninth.dark : p.ninth.light),
+            },
+    );
+  }
 
   static ChartColors from(BuildContext c) =>
       Theme.of(c).extension<ChartColors>() ??
@@ -167,12 +501,25 @@ class ChartColors extends ThemeExtension<ChartColors> {
   /// 0..1 → rampa adımı.
   Color level(double t) => ramp[(t.clamp(0, 1) * (ramp.length - 1)).round()];
 
+  /// Kök kategorinin bu temadaki rengi; Ciddi'de sistem verisindeki renk ([systemHex]).
+  Color root(String? key, String? systemHex, ColorScheme scheme) =>
+      _roots?[key] ?? hexColor(systemHex) ?? scheme.outline;
+
   @override
   ChartColors copyWith() => this;
 
   @override
   ChartColors lerp(ChartColors? other, double t) => other ?? this;
 }
+
+/// `#RRGGBB` → renk; biçim bozuksa null.
+Color? hexColor(String? hex) => hex == null || hex.length != 7
+    ? null
+    : Color(int.parse('FF${hex.substring(1)}', radix: 16));
+
+/// Renk → `#RRGGBB` (beyin sahnesi köprüsü).
+String hexOf(Color c) =>
+    '#${(c.toARGB32() & 0xFFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase()}';
 
 ColorScheme _scheme(AppTheme t, Brightness b) => switch (t) {
   AppTheme.calm => ColorScheme.fromSeed(
@@ -245,21 +592,40 @@ ThemeData buildTheme(
   );
   final base = ThemeData(colorScheme: scheme, brightness: brightness);
   final highContrast = theme == AppTheme.highContrast;
+  final look = theme.look;
+  final (cardColor, cardSide) = switch (look) {
+    Look.tonal ||
+    Look.colorful => (scheme.surfaceContainerLow, BorderSide.none),
+    Look.vivid => (
+      scheme.secondaryContainer,
+      BorderSide(color: scheme.secondary, width: 1.5),
+    ),
+    Look.terminal => (
+      scheme.surface,
+      BorderSide(color: scheme.primary.withValues(alpha: 0.55)),
+    ),
+    Look.soft => (scheme.surfaceContainer, BorderSide.none),
+    Look.bold => (scheme.surface, BorderSide(color: scheme.outline, width: 2)),
+    Look.hairline => (scheme.surface, BorderSide(color: scheme.outlineVariant)),
+  };
   return ThemeData(
     colorScheme: scheme,
     textTheme: _text(theme, base.textTheme),
     fontFamily: theme.body,
-    extensions: [tokens, ChartColors.of(scheme)],
+    extensions: [tokens, ChartColors.of(scheme, theme)],
     visualDensity: VisualDensity.standard,
     materialTapTargetSize: MaterialTapTargetSize.padded,
     iconTheme: IconThemeData(weight: theme.iconWeight),
     cardTheme: CardThemeData(
-      shape: highContrast
-          ? shape.copyWith(side: BorderSide(color: scheme.outline, width: 2))
-          : shape,
+      shape: shape.copyWith(side: cardSide),
       margin: EdgeInsets.zero,
-      color: scheme.surfaceContainerLow,
-      elevation: 0,
+      color: cardColor,
+      elevation: look == Look.colorful ? 1 : 0,
+      shadowColor: scheme.primary.withValues(alpha: 0.3),
+    ),
+    dividerTheme: DividerThemeData(
+      color: look == Look.bold ? scheme.outline : null,
+      thickness: look == Look.bold ? 2 : null,
     ),
     listTileTheme: ListTileThemeData(
       shape: shape,

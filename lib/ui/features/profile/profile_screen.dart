@@ -57,7 +57,7 @@ class ProfileScreen extends ConsumerWidget {
             const SizedBox(height: Gap.s),
             for (final p in StatPage.values)
               ListTile(
-                leading: Icon(p.icon),
+                leading: _ListBadge(icon: p.icon, index: p.index),
                 title: Text(p.question(l)),
                 trailing: const Icon(Symbols.chevron_right_rounded),
                 onTap: () => context.push('/profile/stats/${p.name}'),
@@ -143,10 +143,14 @@ class _Summary extends ConsumerWidget {
     ];
     return LayoutBuilder(
       builder: (context, box) {
-        final one =
-            box.maxWidth < 320 ||
-            MediaQuery.textScalerOf(context).scale(1) > 1.5;
-        final w = one ? box.maxWidth : (box.maxWidth - Gap.m) / 2;
+        // Dar ekran ya da büyük yazı: tek sütun; tablet / yatay: dört sütun.
+        final scale = MediaQuery.textScalerOf(context).scale(1);
+        final cols = box.maxWidth < 320 || scale > 1.5
+            ? 1
+            : box.maxWidth >= 640 && scale <= 1.2
+            ? 4
+            : 2;
+        final w = (box.maxWidth - Gap.m * (cols - 1)) / cols;
         return Wrap(
           spacing: Gap.m,
           runSpacing: Gap.m,
@@ -155,6 +159,24 @@ class _Summary extends ConsumerWidget {
           ],
         );
       },
+    );
+  }
+}
+
+/// Analiz listesinin ikonu: renkli temalarda renkli dairede, diğerlerinde yalın.
+class _ListBadge extends StatelessWidget {
+  const _ListBadge({required this.icon, required this.index});
+  final IconData icon;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    final tint = AppTokens.tint(context, index);
+    if (tint == null) return Icon(icon);
+    return CircleAvatar(
+      radius: 20,
+      backgroundColor: tint,
+      child: Icon(icon, color: Theme.of(context).colorScheme.onSurface),
     );
   }
 }
@@ -178,6 +200,8 @@ class _Card extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Card(
+      // Renkli temalarda her kart kendi rengini alır (D55).
+      color: AppTokens.tint(context, page.index),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () => context.push('/profile/stats/${page.name}'),

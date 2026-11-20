@@ -94,7 +94,11 @@ class _FriendPlanScreenState extends ConsumerState<FriendPlanScreen> {
                       child: ListTile(
                         leading: root == null
                             ? const Icon(Symbols.schedule_rounded)
-                            : RootBadge(icon: root.icon, color: root.color),
+                            : RootBadge(
+                                rootKey: root.key,
+                                icon: root.icon,
+                                color: root.color,
+                              ),
                         title: Text(e.title ?? l.tgBusy),
                         subtitle: Text(
                           [
@@ -372,7 +376,7 @@ class _PrivacyScreenState extends ConsumerState<PrivacyScreen> {
                 ),
                 for (final r in roots) ...[
                   levelTile(
-                    RootBadge(icon: r.icon, color: r.color),
+                    RootBadge(rootKey: r.key, icon: r.icon, color: r.color),
                     r.name(context),
                     null,
                     r.key,

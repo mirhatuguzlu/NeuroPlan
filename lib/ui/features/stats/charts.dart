@@ -354,9 +354,13 @@ class RankedBars extends StatelessWidget {
                                   ),
                                 ),
                                 const SizedBox(width: Gap.s),
-                                Text(
-                                  r.valueText,
-                                  style: theme.textTheme.labelLarge,
+                                // Büyük yazıda değer alt satıra kayar, taşmaz.
+                                Flexible(
+                                  child: Text(
+                                    r.valueText,
+                                    textAlign: TextAlign.end,
+                                    style: theme.textTheme.labelLarge,
+                                  ),
                                 ),
                               ],
                             ),
@@ -374,7 +378,7 @@ class RankedBars extends StatelessWidget {
                                             box.maxWidth * r.value / top,
                                           ),
                                     decoration: BoxDecoration(
-                                      color: color,
+                                      color: r.color ?? color,
                                       borderRadius:
                                           const BorderRadius.horizontal(
                                             right: Radius.circular(4),
@@ -411,6 +415,7 @@ class RankedRow {
     required this.valueText,
     this.leading,
     this.tappable = true,
+    this.color,
   });
   final String key;
   final String label;
@@ -418,6 +423,9 @@ class RankedRow {
   final String valueText;
   final Widget? leading;
   final bool tappable;
+
+  /// Satırın kendi rengi (kök kategori, D55); yoksa tek seri rengi.
+  final Color? color;
 }
 
 /// Seri adları: renk kutusu + ad (renk yanında her zaman metin).
@@ -444,7 +452,12 @@ class ChartLegend extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: Gap.xs),
-              Text(s.label, style: Theme.of(context).textTheme.labelMedium),
+              Flexible(
+                child: Text(
+                  s.label,
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+              ),
             ],
           ),
       ],
@@ -478,25 +491,33 @@ class HeatGrid extends StatelessWidget {
       child: LayoutBuilder(
         builder: (context, box) {
           final cell = (box.maxWidth - labelW) / 24;
-          return Column(
-            children: [
-              for (var d = 1; d <= 7; d++)
-                Row(
-                  children: [
-                    SizedBox(
-                      width: labelW,
-                      child: Text(
-                        weekdayShort(context, d),
-                        style: _axis(context),
+          final rowH = math.max(cell, 18.0);
+          // Tek dokunma alanı: hücreler 48 dp'den küçük; hücre konumdan bulunur (D55).
+          final grid = GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTapUp: onSelect == null
+                ? null
+                : (e) {
+                    final d = (e.localPosition.dy ~/ rowH) + 1;
+                    final h = ((e.localPosition.dx - labelW) ~/ cell);
+                    if (d >= 1 && d <= 7 && h >= 0 && h < 24) onSelect!(d, h);
+                  },
+            child: Column(
+              children: [
+                for (var d = 1; d <= 7; d++)
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: labelW,
+                        child: Text(
+                          weekdayShort(context, d),
+                          style: _axis(context),
+                        ),
                       ),
-                    ),
-                    for (var h = 0; h < 24; h++)
-                      GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: onSelect == null ? null : () => onSelect!(d, h),
-                        child: Container(
+                      for (var h = 0; h < 24; h++)
+                        Container(
                           width: cell,
-                          height: math.max(cell, 18),
+                          height: rowH,
                           padding: const EdgeInsets.all(1),
                           child: DecoratedBox(
                             decoration: BoxDecoration(
@@ -514,9 +535,14 @@ class HeatGrid extends StatelessWidget {
                             ),
                           ),
                         ),
-                      ),
-                  ],
-                ),
+                    ],
+                  ),
+              ],
+            ),
+          );
+          return Column(
+            children: [
+              grid,
               Row(
                 children: [
                   const SizedBox(width: labelW),
@@ -597,23 +623,34 @@ class YearCalendar extends StatelessWidget {
     final colors = ChartColors.from(context);
     final scheme = Theme.of(context).colorScheme;
     const cell = 16.0;
-    return Semantics(
-      label: semantics,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        reverse: true,
-        child: Row(
-          children: [
-            for (var w = 0; w < weeks; w++)
-              Column(
-                children: [
-                  for (var d = 1; d <= 7; d++)
-                    GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: onSelect == null || level(w, d) == -1
-                          ? null
-                          : () => onSelect!(w, d),
-                      child: Container(
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      reverse: true,
+      child: Semantics(
+        label: semantics,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          // Tek dokunma alanı (hücreler 48 dp'den küçük); gelecek günler seçilmez.
+          onTapUp: onSelect == null
+              ? null
+              : (e) {
+                  final w = e.localPosition.dx ~/ cell;
+                  final d = (e.localPosition.dy ~/ cell) + 1;
+                  if (w >= 0 &&
+                      w < weeks &&
+                      d >= 1 &&
+                      d <= 7 &&
+                      level(w, d) != -1) {
+                    onSelect!(w, d);
+                  }
+                },
+          child: Row(
+            children: [
+              for (var w = 0; w < weeks; w++)
+                Column(
+                  children: [
+                    for (var d = 1; d <= 7; d++)
+                      Container(
                         width: cell,
                         height: cell,
                         padding: const EdgeInsets.all(1.5),
@@ -633,10 +670,10 @@ class YearCalendar extends StatelessWidget {
                           ),
                         },
                       ),
-                    ),
-                ],
-              ),
-          ],
+                  ],
+                ),
+            ],
+          ),
         ),
       ),
     );
