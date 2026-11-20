@@ -4,6 +4,22 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+// Uygulama ayarı (D52): kökteki git-ignored `.env` her derlemede okunur ve BuildConfig.ENV olarak
+// APK'ya girer; Dart açılışta kanal üzerinden alır. Böylece `flutter run`, ▶ ve `flutter build`
+// ek bayrak istemez. Yalnız istemcide açık olması tasarım gereği serbest olan anahtarlar alınır.
+val envKeys = listOf(
+    "SUPABASE_URL", "SUPABASE_ANON_KEY", "GOOGLE_WEB_CLIENT_ID",
+    "FIREBASE_API_KEY", "FIREBASE_APP_ID", "FIREBASE_SENDER_ID", "FIREBASE_PROJECT_ID",
+)
+val envFile = rootProject.file("../.env")
+val envValues = (if (envFile.exists()) envFile.readLines() else emptyList())
+    .map { it.trim() }
+    .filter { it.isNotEmpty() && !it.startsWith("#") && it.contains("=") }
+    .map { it.split("=", limit = 2) }
+    .associate { (k, v) -> k.trim() to v.trim().trim('"', '\'') }
+    .filterKeys { it in envKeys }
+    .filterValues { it.isNotEmpty() && !it.contains('"') && !it.contains('\\') }
+
 android {
     namespace = "com.mirhatuguzlu.neuroplan"
     // flutter_local_notifications 23 androidx.core 1.19 ister (compileSdk ≥ 37); targetSdk Flutter varsayılanı.
@@ -30,6 +46,15 @@ android {
         // flag during build.
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        buildConfigField(
+            "String[]",
+            "ENV",
+            envValues.entries.joinToString(", ", "{", "}") { "\"${it.key}=${it.value}\"" },
+        )
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {

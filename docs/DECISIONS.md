@@ -29,7 +29,7 @@ Durumlar: **Kabul** · **Geçici** (değişmesi bekleniyor) · **Açık** (karar
 **Durum:** Kabul.
 
 ## 2026-11-18 — D6: Ortam değişkenleri ve anahtarlar
-**Karar:** Supabase URL ve anon/publishable key `.env` dosyasında (git-ignored), örnek `.env.example`'da. Uygulamaya `flutter run --dart-define-from-file=.env` ile verilir, kodda `String.fromEnvironment` ile okunur. `flutter_dotenv` kullanılmaz.
+**Karar:** Supabase URL ve anon/publishable key `.env` dosyasında (git-ignored), örnek `.env.example`'da. Uygulamaya `flutter run --dart-define-from-file=.env` ile verilir, kodda `String.fromEnvironment` ile okunur. `flutter_dotenv` kullanılmaz. *(2026-11-20: D52 ile değişti; Android derlemesi `.env` dosyasını kendisi okur.)*
 **Neden:** Ek bağımlılık gerektirmez; `flutter_dotenv` dosyayı asset olarak APK'ya gömer. Not: anon/publishable key tasarım gereği istemcide bulunur ve APK'dan çıkarılabilir; güvenlik RLS ile sağlanır. `service_role` / secret key istemciye ve repoya hiç girmez, yalnız Edge Functions ortamında.
 **Durum:** Kabul.
 
@@ -392,3 +392,12 @@ Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem 
 **Neden:** Proje sahibinin isteği. Silme yolu Play için erişilebilir olmalı ama tanıtım sayfasında öne çıkması gerekmez. Adres sabit kalırsa Play beyanı yeniden yapılmaz.
 **Durum:** Planlanan (son aşama).
 - **2026-11-20 eki:** Silme sayfasının `config.js`'i (Supabase URL, publishable key, iletişim e-postası) GitHub Pages'te yayımlanmak üzere repoya alındı; `.gitignore` satırı kaldırıldı. CLAUDE.md kural 7'nin istisnası: bu değerler zaten herkese açık tasarlanmıştır, secret key yoktur, güvenliği RLS sağlar. `config.example.js` boş şablon olarak kalır.
+
+## 2026-11-20 — D52: `.env` Android derlemesince okunur; `--dart-define-from-file` gerekmez
+**Karar:**
+- `android/app/build.gradle.kts` her derlemede kökteki git-ignored `.env` dosyasını okur. Yalnız beyaz listedeki yedi anahtarı (`SUPABASE_URL`, `SUPABASE_ANON_KEY`, `GOOGLE_WEB_CLIENT_ID`, dört `FIREBASE_*`) `BuildConfig.ENV` olarak APK'ya gömer. Beyaz liste, `.env` dosyasına yanlışlıkla yazılmış gizli bir anahtarın APK'ya girmesini önler.
+- Dart açılışta `Env.load()` ile değerleri `neuroplan/focus` kanalının `env` çağrısıyla alır; `Env` alanları artık derleme sabiti değil, okunan değerdir. `.env` yoksa değerler boştur ve uygulama yalnız cihazda çalışır.
+- `flutter run`, Android Studio ▶ ve `flutter build apk` ek bayrak istemez. Değerler zaten APK'daydı (dart-define da gömüyordu); güvenlik modeli değişmez, RLS korur.
+- iOS aşamasında Runner aynı `env` çağrısını karşılayacak (`shortcut:` notu `lib/app/env.dart` içinde).
+**Neden:** Proje sahibi uygulamayı her başlatışta bayrak verme zorunluluğunun kaldırılmasını istedi; bayraksız başlatılan uygulama sessizce sunucusuz açılıyor ve Google girişi görünmüyordu.
+**Durum:** Kabul. Bayraksız `flutter run` ile gerçek cihazda doğrulandı (ayarlar dolu, Google oturumu korunuyor).

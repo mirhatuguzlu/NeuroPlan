@@ -31,7 +31,7 @@ Ayrıntı her zaman `docs/` altında; bu dosya kısa kalır.
 ```bash
 flutter analyze
 flutter test
-flutter run --dart-define-from-file=.env
+flutter run                     # .env Android derlemesince otomatik okunur (D52)
 supabase migration new <ad>   # migration'lar: supabase/migrations
 ```
 

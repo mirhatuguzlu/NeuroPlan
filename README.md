@@ -81,7 +81,7 @@ git clone https://github.com/mirhatuguzlu/NeuroPlan.git
 cd NeuroPlan
 cp .env.example .env    # kendi Supabase URL'ni ve anon / publishable key'ini yaz
 flutter pub get
-flutter run --dart-define-from-file=.env
+flutter run   # .env otomatik okunur (D52)
 ```
 
 Kontroller:

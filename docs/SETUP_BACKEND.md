@@ -523,11 +523,9 @@ Bu bölüm hukuki tavsiye değildir; avukatla birlikte yürüt.
 
 **11.2 İki cihaz**
 
-> **Uygulama her zaman `.env` ile başlatılmalı.** `.env` olmadan derlenen uygulama sunucuyu hiç tanımaz: Profil'de "Yalnız bu cihazda" yazar, Google ile bağlan düğmesi çıkmaz, Birlikte çalışmaz.
-> - Terminalden: komutta mutlaka `--dart-define-from-file=.env` olmalı (aşağıda).
-> - Android Studio'nun ▶ (Run) düğmesi: **Run → Edit Configurations… → main.dart → Additional run args** alanında `--dart-define-from-file=.env` yazmalı. Bu bilgisayarda ayarlı. `.idea` klasörü git'e girmediği için başka bilgisayarda yeniden yazılır.
-> - Kontrol: terminalde `[env] SUPABASE_URL boş` satırı görünürse uygulama `.env`'siz başlamış demektir.
-> - `.env` değiştiyse hot reload yetmez: uygulamayı durdurup yeniden başlat.
+> **`.env` derlemede otomatik okunur (D52).** `flutter run`, Android Studio'nun ▶ düğmesi ve `flutter build apk` ek bayrak istemez; derleme kökteki `.env`'i APK'ya gömer. Kurulu uygulama telefonda `.env` aramaz, değerler APK'nın içindedir.
+> - `.env` olmadan derlenen uygulama sunucuyu tanımaz: Profil'de "Yalnız bu cihazda" yazar, Google ile bağlan düğmesi çıkmaz. Terminalde `[env] SUPABASE_URL boş` satırı bunu gösterir.
+> - `.env` değiştiyse hot reload yetmez: uygulamayı durdurup yeniden başlat (yeniden derlenir).
 
 1. Cihazları USB ile bağla. Geliştirici seçenekleri → USB hata ayıklama açık olsun.
 2. Cihaz kimliklerini gör:
@@ -536,9 +534,9 @@ Bu bölüm hukuki tavsiye değildir; avukatla birlikte yürüt.
    ```
 3. İki ayrı terminalde (Terminal → New Terminal), her cihaz için birer kez:
    ```bash
-   flutter run --dart-define-from-file=.env -d <cihaz-kimliği>
+   flutter run -d <cihaz-kimliği>
    ```
-   İkinci cihaz USB ile bağlanamıyorsa: `flutter build apk --debug --dart-define-from-file=.env` ve `build\app\outputs\flutter-apk\app-debug.apk` dosyasını telefona kopyalayıp kur.
+   İkinci cihaz USB ile bağlanamıyorsa: `flutter build apk --debug` ve `build\app\outputs\flutter-apk\app-debug.apk` dosyasını telefona kopyalayıp kur.
 4. İki **farklı** Google hesabıyla giriş yap. "Testing" durumundaysa ikisi de 1.2'deki test kullanıcıları listesinde olmalı.
 
 **11.3** [QA_CHECKLIST.md](QA_CHECKLIST.md) bölüm C'yi sırayla yap:
@@ -551,7 +549,7 @@ Bu bölüm hukuki tavsiye değildir; avukatla birlikte yürüt.
 | Belirti | Bak |
 |---|---|
 | Google hesap seçici açılıyor, seçince hata | 1.4 SHA-1 eksik ya da yanlış; 2.2 "Skip nonce checks" kapalı; `.env`'de Web değil Android istemci kimliği var |
-| Hesap seçici hiç açılmıyor | `.env`'de `GOOGLE_WEB_CLIENT_ID` boş; uygulamayı `--dart-define-from-file=.env` ile çalıştırmadın |
+| Hesap seçici hiç açılmıyor | `.env`'de `GOOGLE_WEB_CLIENT_ID` boş ya da uygulama `.env` eklenmeden önce derlendi (yeniden başlat) |
 | "Access blocked / app not verified" | 1.2 onay ekranı "Testing" ve hesap test kullanıcısı değil |
 | Misafir oturumu açılmıyor | 2.2 "Allow anonymous sign-ins" kapalı ya da CAPTCHA açık |
 | Birlikte sekmesi "sunucuya ulaşılamadı" | Adım 3 uygulanmadı; panoda **Logs → Postgres** |

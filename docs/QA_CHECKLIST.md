@@ -2,7 +2,7 @@
 
 Emülatör davranışına güvenilmez (lifecycle, pencere odağı, ekran kilidi, arama ve ön plan servisi cihaza ve üreticiye göre değişir). Her madde **gerçek Android cihazda** denenir. Sonuç, cihaz modeli ve Android sürümüyle birlikte not edilir.
 
-Hazırlık: `flutter run --dart-define-from-file=.env` (ya da `flutter build apk --debug` ve kurulum). Bugün'de "odak gerektirir" etiketli bir iş olsun. Bildirim izni verilsin.
+Hazırlık: `flutter run` (ya da `flutter build apk --debug` ve kurulum). Bugün'de "odak gerektirir" etiketli bir iş olsun. Bildirim izni verilsin.
 
 ## A. Odak oturumu (Aşama 3)
 

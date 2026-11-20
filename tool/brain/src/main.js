@@ -296,6 +296,7 @@ function rebuildLinks() {
 // ---------------------------------------------------------------- karşılaştırma (Aşama 4B)
 // İkinci beyin aynı sahnede, aynı kabuk geometrisiyle yan yana çizilir (tek WebView, D40).
 const COMPARE_HOME = new THREE.Vector3(0, 0.9, 5.6);
+const viewSize = new THREE.Vector2();
 const TWIN_OFFSET = 1.15;
 let twin = null; // { group, shells: Map key → { material, inner }, neurons, links }
 
@@ -413,6 +414,11 @@ const perf = { frames: 0, since: performance.now(), worst: 0 };
 
 function frame(now) {
   raf = requestAnimationFrame(frame);
+  // WebView ilk açılışta 0×0 boyutla kurulabiliyor ve sonra 'resize' her cihazda gelmiyor;
+  // o zaman tuval 0 boyutta kalır, her çizim "framebuffer incomplete" verir ve sahne siyah görünür.
+  if (!innerWidth || !innerHeight) return;
+  renderer.getSize(viewSize);
+  if (viewSize.x !== innerWidth || viewSize.y !== innerHeight) resize();
   const dt = Math.min(0.1, (now - last) / 1000);
   last = now;
   perf.frames++;

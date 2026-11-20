@@ -21,6 +21,7 @@ Future<void> main() async {
     jsonDecode(await rootBundle.loadString('assets/seed/system.json'))
         as Map<String, Object?>,
   );
+  await Env.load();
   if (Env.backendConfigured) {
     await Supabase.initialize(
       url: Env.supabaseUrl,
@@ -28,8 +29,8 @@ Future<void> main() async {
     );
   } else {
     debugPrint(
-      '[env] SUPABASE_URL boş: uygulama --dart-define-from-file=.env olmadan '
-      'başlatıldı; giriş, eşitleme ve Birlikte kapalı.',
+      '[env] SUPABASE_URL boş: derlemede .env yoktu ya da eksikti; '
+      'giriş, eşitleme ve Birlikte kapalı.',
     );
   }
   final db = AppDatabase(driftDatabase(name: 'neuroplan'), systemData: system);

@@ -34,6 +34,9 @@ class MainActivity : FlutterActivity() {
         val messenger = flutterEngine.dartExecutor.binaryMessenger
         MethodChannel(messenger, "neuroplan/focus").setMethodCallHandler { call, result ->
             when (call.method) {
+                "env" -> result.success(
+                    BuildConfig.ENV.associate { it.substringBefore('=') to it.substringAfter('=') },
+                )
                 "deviceState" -> result.success(deviceState())
                 "phonePermission" -> result.success(hasPhonePermission())
                 "requestPhonePermission" ->

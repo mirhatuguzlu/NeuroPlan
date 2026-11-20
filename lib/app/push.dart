@@ -19,7 +19,7 @@ class Push {
   static const channelId = 'together_messages';
 
   static FirebaseOptions? get options => Env.firebaseConfigured
-      ? const FirebaseOptions(
+      ? FirebaseOptions(
           apiKey: Env.firebaseApiKey,
           appId: Env.firebaseAppId,
           messagingSenderId: Env.firebaseSenderId,
