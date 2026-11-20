@@ -51,6 +51,14 @@ class AboutScreen extends StatelessWidget {
           block(Symbols.view_in_ar_rounded, 'Three.js', [
             Text(l.aboutThreeBody),
           ]),
+          block(Symbols.text_fields_rounded, l.aboutFontsTitle, [
+            Text(l.aboutFontsBody),
+            const SizedBox(height: Gap.s),
+            Text(
+              embeddedFonts.map((f) => f.$1).join('\n'),
+              style: theme.textTheme.bodySmall,
+            ),
+          ]),
           Align(
             alignment: Alignment.centerLeft,
             child: OutlinedButton.icon(

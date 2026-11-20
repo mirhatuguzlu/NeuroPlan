@@ -306,7 +306,7 @@ void main() {
     await h.expectAccessible();
     await h.tap(find.byTooltip('Ayarlar'));
     expect(find.text('Uyku penceresi'), findsOneWidget);
-    expect(find.text('Tema'), findsOneWidget);
+    expect(find.text('Görünüm ve tema'), findsOneWidget);
     await h.expectAccessible();
   });
 

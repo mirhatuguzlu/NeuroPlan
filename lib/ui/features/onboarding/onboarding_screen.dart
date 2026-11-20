@@ -138,7 +138,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               if (_birthYearSaved)
-                Text('', style: Theme.of(context).textTheme.headlineSmall)
+                Text(
+                  l.onbAgeSaved("$_birthYear"),
+                  style: Theme.of(context).textTheme.titleMedium,
+                )
               else
                 BirthYearField(
                   value: _birthYear,
@@ -186,6 +189,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               ),
               ThemeChoice(
                 value: _theme,
+                mode: _mode,
                 onChanged: (v) {
                   setState(() => _theme = v);
                   _update(ProfilesCompanion(theme: Value(v)));

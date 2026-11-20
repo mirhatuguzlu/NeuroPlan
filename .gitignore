@@ -48,6 +48,9 @@ app.*.map.json
 .widget_preview/
 
 # Secrets — never commit (see CLAUDE.md)
+android/key.properties
+*.jks
+*.keystore
 .env
 .env.*
 !.env.example
@@ -55,3 +58,4 @@ app.*.map.json
 # 3D beyin geliştirici aracı (tool/brain)
 tool/brain/node_modules/
 tool/brain/out/
+.impeccable/

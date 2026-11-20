@@ -192,7 +192,7 @@ O sütunları vardır; tek istisna `id = user_id = auth.users.id` olmasıdır. Y
 |---|---|---|
 | `display_name` | text null | |
 | `locale` | text null: `tr` · `en` | null = cihaz dili |
-| `theme` | text null | Tema anahtarı: `playful` · `young` · `coder` · `calm` · `highContrast` · `minimal`; null = Ciddi (D54) |
+| `theme` | text null | Tema anahtarı: `playful` · `young` · `coder` · `calm` · `highContrast` · `minimal` · `paper` · `nature` · `night`; null = Ciddi (D54, D56). Değer kısıtı yok (≤ 40 karakter): bilinmeyen anahtar Ciddi sayılır |
 | `theme_mode` | text: `system` · `light` · `dark` | varsayılan `system` |
 | `timezone` | text not null | IANA adı, ilk açılışta cihazdan alınır |
 | `sleep_goal_minutes` | int null | Uyku hedefi (analiz); uyku penceresi bunu yazmaz, null = 8 saat (D54) |
@@ -434,7 +434,7 @@ O sütunları vardır; satır güncellenmez, `updated_at = created_at` olur.
 
 Yerelde istemci hesaplar, eşitlenmez. Sunucuda Edge Function hesaplar (sıralama ve arkadaşla beyin karşılaştırma); istemci yalnız okur.
 
-### 4.5 `entitlements` (Aşama 6'da doldurulacak)
+### 4.5 `entitlements` (abonelik altyapısıyla, yayından önce; D58)
 | Sütun | Tip | Açıklama |
 |---|---|---|
 | O | | |
@@ -446,6 +446,16 @@ Yerelde istemci hesaplar, eşitlenmez. Sunucuda Edge Function hesaplar (sıralam
 | `expires_at` | timestamptz null | |
 
 Yalnız sunucu yazar (satın almayı doğrulayan Edge Function); istemci okur. Satır yoksa plan `free` kabul edilir.
+
+### 4.6 `feature_flags` (Aşama 6, D58)
+| Sütun | Tip | Açıklama |
+|---|---|---|
+| `key` | text PK | Özellik adı (`lib/app/feature_flags.dart` → `Feature`): `together` · `messages` · `cofocus` · `voice` · `leaderboard` · `brainCompare` · `crashReports` |
+| `enabled` | boolean | false = özellik kapalı |
+| `note` | text null | Neden kapatıldı (≤ 200, yalnız ekip için) |
+| `updated_at` | timestamptz | |
+
+Kullanıcıya bağlı değildir, eşitlenmez. Herkes (anon dahil) okur; istemcide yazma politikası yok, Studio'dan yazılır. Satır yoksa kod varsayılanı (açık) geçer. Uygulama açılışta ve ön plana dönüşte okur, cihazda `sync_state.flags.remote` anahtarında önbellekler.
 
 ## 5. Sosyal tablolar (Aşama 4B, D42–D48)
 Ortak kurallar:
@@ -506,7 +516,7 @@ Ortak boş zaman fonksiyonu (SOCIAL-5) her zaman `busy` düzeyini kullanır. İs
 | Tablo grubu | Politika |
 |---|---|
 | Kullanıcı tabloları | SELECT, INSERT, UPDATE: `using (user_id = (select auth.uid()))` ve aynı `with check`. **DELETE politikası yok:** silme yumuşaktır, kalıcı silme yalnız service role ile yapılır. |
-| Sistem tabloları | `for select to anon, authenticated using (true)`; yazma politikası yok |
+| Sistem tabloları, `feature_flags` | `for select to anon, authenticated using (true)`; yazma politikası yok |
 | Sunucunun yazdığı tablolar (`entitlements`, `leaderboard_entries`, sunucu `brain_snapshots`) | Yalnız SELECT politikası |
 | Sosyal tablolar | Yardımcı fonksiyonlar: `is_friend(a, b)`, `is_blocked(a, b)`, `is_member(conversation)` (`security definer`, `set search_path = ''`, `stable`). Yazma politikalarında `(auth.jwt()->>'is_anonymous')::boolean is not true`. **Bu yardımcılar REST'ten çağrılamaz** (`EXECUTE` geri alındı). Politikalarda yalnız çağıranın kendi ilişkisini söyleyenler kullanılır: `is_my_friend(other)`, `is_member`, `is_*_party`. Böylece kimse iki yabancının arkadaşlığını sorgulayamaz. |
 

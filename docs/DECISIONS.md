@@ -445,3 +445,60 @@ Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem 
 - **Duyarlı düzen:** profil kartları dar ekranda ya da büyük yazıda tek, telefonda iki, tablette dört sütun. Sıralı çubuk değerleri, lejant ve rapor satırları büyük yazıda alt satıra kayar. Isı haritası ve yıllık takvimde hücre başına dokunma yerine tek dokunma alanı vardır (hücreler 48 dp'den küçük; liste görünümü erişilebilir yoldur).
 - **Test:** `test/ui/theme_matrix_test.dart` 7 tema × açık/koyu için bütün ana ekranları ve 12 analiz sayfasını gezer, her birinde kontrast, dokunma alanı ve etiket kurallarını çalıştırır. Ayrıca 320×640, 360×740 + yazı 1.6, yatay telefon, tablet ve açık katlanabilir boyutlarında taşma arar. `test/ui/theme_test.dart` paletlerin, 9 kök renginin ve tonların temaya göre ayrıştığını doğrular.
 **Durum:** Kabul.
+
+## 2026-11-20 — D56: Tema token yapısı, üç yeni tema, önizlemeli seçici
+**Karar (proje sahibinin seçimleri):**
+- `AppTheme` tek tanım olarak kalır ve tokenları genişler: hareket (`Motion`: hız çarpanı + eğri karakteri), tip ölçeği, dokunma alanı, şema türü, koyu öncelik. Ayrıntı ve tema × token matrisi: [THEMES.md](THEMES.md).
+- Yeni temalar (ui-ux-pro-max önerisi, proje sahibi üçünü de seçti): **Kâğıt** (akademik, e-mürekkep: kâğıt zemin, mürekkep çizgisi, anlık geçiş, başlık IBM Plex Sans), **Doğa** (topraksı, yavaş, başlık Nunito), **Gece** (gerçek siyah OLED, koyu öncelikli). Toplam on tema. Yeni metin tonu yok: Kâğıt ve Gece nötr, Doğa Sakin'in tonunu paylaşır.
+- Tema seçici ayrı ekran ("Görünüm ve tema"): görünüm + her temanın canlı önizlemesi; dokununca anında uygulanır. Geçiş `themeAnimationDuration` (temanın hızı); renkler ve grafik paleti ara değer alır.
+- Dokunsal geri bildirim tek yardımcıda (`Haptics`); iş bitince satırda tek seferlik işaret animasyonu.
+
+**Geçici kararlar (gece alındı, onay bekliyor):**
+- Grafik serileri: Kâğıt, Sakin ve Minimal'in sakin serisini; Gece, Ciddi'nin serisini paylaşır (rampa ve 9. kök rengi kendilerinin). Doğa'nın topraksı serisi arama betiğiyle bulundu ve iki modda doğrulayıcıyı uyarısız geçti.
+- Eğlenceli: yazı 1,06×, dolu / çerçeveli düğme en az 56 dp, liste satırı 60 dp.
+- Hareket çarpanları: sakin 0,8 · yumuşak 1,25 · canlı 1,0 · çevik 0,85 · anlık 0.
+- Kodcu ve Gece "sistem" görünümünde koyu açılır; açık seçilirse açık kalır.
+- Seçili tema `radio_button_checked` ile işaretlenir (`check_circle` "bitti" demektir).
+**Durum:** Kabul (geçici maddeler onay bekliyor).
+
+## 2026-11-20 — D57: Dil denetimi
+**Karar:**
+- `test/l10n/hardcoded_strings_test.dart` arayüz kodunda (`lib/ui`, `lib/app`) harf içeren düz dize arar (`Text('…')`, `tooltip:`, `label:` …); izinli özel adlar yalnız `Three.js` ve adresler. Boş `Text('')` da hata sayılır.
+- `test/l10n/arb_test.dart`: TR ve EN aynı anahtarlar, aynı yer tutucular (ICU iç içe seçimleri dahil), 26 tonlu metnin beş tonu iki dilde, tema ve Eğlenceli metinlerinde "çocuk / child / kid" yok, tarih / saat / ondalık biçimleri dile göre.
+- `test/l10n/science_l10n_test.dart`: kök kategori ad + açıklama, bölge adı, kategori–bölge ayrıntısı iki dilde dolu; kaynak kimlikleri geçerli.
+- Düzeltilenler: yaş adımındaki boş metin, enlem / boylamın yerel ondalığı, mesaj ipucu ("dokun").
+**Geçici:** depolardaki Türkçe istisna metinleri geliştirici içindir, arayüze çıkmaz (`guard` tonlu genel hata gösterir); çevrilmedi. "·" ve ":" gibi ayraçlarla birleştirilen metinler iki dilde aynı noktalamayı kullandığı için ARB'ye taşınmadı.
+**Durum:** Kabul.
+
+## 2026-11-20 — D58: Abonelik yayından önceye; özellik bayrakları şimdi
+**Karar (proje sahibinin seçimi):**
+- Abonelik altyapısının tamamı (sağlayıcı seçimi, satın alma, yetki servisi) Google Play yayınından önce ayrı bir adımda kurulacak. Bu aşamada abonelik kodu yazılmadı; `entitlements` tablosu (DB_SCHEMA §4.5) hazır bekliyor. Önerilen sağlayıcı RevenueCat'ti (makbuz doğrulama, yenileme, iOS'a aynı kod); karar o adımda verilecek.
+- Özellik bayrakları: Supabase'de salt okunur `feature_flags` tablosu + kod varsayılanı (açık). Uygulama açılışta ve ön plana dönüşte okur, `sync_state`'te önbellekler. Bayraklar: `together`, `messages`, `cofocus`, `voice`, `leaderboard`, `brainCompare`, `crashReports`.
+- Kapalı bölüm: Birlikte'nin tamamı kapalıysa açıklayan boş durum; alt özellik kapalıysa girişi görünmez (boş ya da işlevsiz düğme kalmaz).
+**Durum:** Kabul. Migration `20261120180000_feature_flags.sql` **uzak Supabase'e uygulanmadı** (proje sahibinin onayı bekleniyor); uygulanana dek istemci varsayılanla çalışır.
+
+## 2026-11-20 — D59: Çökme raporları Crashlytics; kullanım analitiği yok
+**Karar (proje sahibinin seçimi):**
+- Firebase Crashlytics (`firebase_crashlytics`): Firebase zaten projede, yeni veri işleyen eklenmez. `.env`'deki seçeneklerle başlatılır; hata ayıklama derlemesinde kapalı; kullanıcı kimliği, e-posta, plan içeriği eklenmez.
+- Ayarlar → Veriler → "Çökme raporları gönder" (cihaza özel, varsayılan açık) ve `crashReports` bayrağı.
+- Crashlytics Gradle eklentisi kullanılmaz (google-services.json yok, D52): derleme kimliği zorunluluğu `android/app/src/main/res/values/crashlytics.xml` ile kapatıldı. Bedeli: R8 eşleme dosyası yüklenmez (küçültme kapalı olduğu için şimdilik etkisi yok), yerel (NDK) çökme sembolleri yok.
+- Kullanım analitiği şimdilik yok (proje sahibinin seçimi). Gizlilik politikası ve Data Safety buna göre güncellendi.
+**Geçici:** çökme raporlarının hukuki sebebi meşru menfaat (itiraz = anahtarı kapatmak); avukat incelemesine.
+**Durum:** Kabul. Firebase konsolunda Crashlytics'in açılması proje sahibinde (SETUP_BACKEND §10.3); gerçek bir çökme raporunun panoya düştüğü henüz doğrulanmadı.
+
+## 2026-11-20 — D60: Test, golden ve CI stratejisi
+**Karar:**
+- Golden: `test/golden/` 10 tema × açık/koyu × TR/EN × Bugün, Plan, Beyin, Profil = 160 görüntü, 412×915 @1×, gerçek fontlar ve gerçek gölgelerle. Etiket `golden`; referanslar Windows'ta üretilir, CI atlar (font işleme işletim sistemine göre farklı).
+- Uçtan uca: `test/ui/app_flow_test.dart` (ana bilgisayar, CI) ve `integration_test/app_flow_test.dart` (gerçek cihaz): kurulum → sihirbaz → odak → beyin olayı. Cihazda hata ayıklama derlemesinde geçti (Redmi Note 10 5G). Profil derlemesinde (`flutter drive`) test klavyesine metin düşmediği için akış testi atlanır; profil koşusu yalnız kare ölçer.
+- `flutter test integration_test` ve `flutter drive` varsayılan olarak uygulamayı kaldırır (cihaz verisi silinir): her zaman `--no-uninstall` / `--keep-app-running`.
+- CI (`.github/workflows/ci.yml`, ubuntu, Flutter 3.50.0): analyze, test (golden hariç), çekirdek `dart test`, seed denetimi, `tool/brain` testleri, `--split-per-abi` release APK artefaktı. pgTAP ve cihaz testleri CI'da yok.
+- Sihirbaz taslağının başlangıç tarihi uygulama saatinden (`nowProvider`) alınır; Bugün ile aynı "şimdi" (test saatinde tutarsızlık bulundu).
+**Geçici:** ilk sekme kurulumundaki ~100 ms'lik kare (PERFORMANCE.md §2) açık iş olarak kaldı.
+**Durum:** Kabul.
+
+## 2026-11-20 — D61: Yayın hazırlığı, imza ve sürüm
+**Karar:**
+- Belgeler: [RELEASE.md](RELEASE.md) (hedef kitle 13–15 / 16–17 / 18+, 12 ve altı işaretsiz; Data Safety tablosu; imzalama; sürümleme; mağaza görselleri; kısa / uzun açıklama TR/EN), `docs/legal/terms_of_use.md` (yeni), gizlilik politikası güncellemesi (Crashlytics, saklama süreleri, haklar), [IOS_PORT.md](IOS_PORT.md), [PERFORMANCE.md](PERFORMANCE.md), [AUDIT.md](AUDIT.md).
+- İmza: Play App Signing + yükleme anahtarı. `android/key.properties` (git-ignored) varsa release onunla imzalanır, yoksa hata ayıklama anahtarıyla (CI derleyebilsin diye; Play reddeder). Anahtarı proje sahibi üretir.
+- Sürüm: `X.Y.Z+N`, `N` her yüklemede artar; etiket `vX.Y.Z`, aday `vX.Y.Z-rc.N`. Bu aşama `1.0.0+1`, etiket `v1.0.0-rc.1` (proje sahibinin seçimi, push edilir).
+**Durum:** Kabul. Play Console beyanları, hukuk incelemesi ve mağaza görselleri proje sahibinde (yayından hemen önce, D53).

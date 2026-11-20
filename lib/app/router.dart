@@ -20,6 +20,7 @@ import '../ui/features/profile/about_screen.dart';
 import '../ui/features/profile/profile_screen.dart';
 import '../ui/features/profile/settings_screen.dart';
 import '../ui/features/profile/sources_screen.dart';
+import '../ui/features/profile/theme_screen.dart';
 import '../ui/features/stats/pages.dart';
 import '../ui/features/stats/stats_page.dart';
 import '../ui/features/project/project_screen.dart';
@@ -124,6 +125,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         pageBuilder: (_, s) => sharedAxisPage(s, const AboutScreen()),
       ),
       _page('/profile/settings', (_) => const SettingsScreen()),
+      _page('/profile/settings/theme', (_) => const ThemeScreen()),
       _page('/profile/sources', (_) => const SourcesScreen()),
       GoRoute(
         path: '/profile/stats/:page',

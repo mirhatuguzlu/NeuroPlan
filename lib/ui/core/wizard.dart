@@ -1,3 +1,5 @@
+import 'feedback.dart';
+
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -82,7 +84,8 @@ class WizardScaffoldState extends State<WizardScaffold> {
     }
     if (!mounted) return;
     if (_index == widget.steps.length - 1) {
-      await guard(context, widget.onFinish);
+      final saved = await guard(context, widget.onFinish);
+      if (saved && mounted) Haptics.success(context);
     } else {
       _go(_index + 1);
     }

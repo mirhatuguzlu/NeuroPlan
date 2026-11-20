@@ -2,6 +2,7 @@ import 'package:drift/drift.dart' show Value;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:neuroplan_core/neuroplan_core.dart';
 
+import '../../../app/providers.dart';
 import '../../../data/repositories/activity_repository.dart';
 import '../../../data/local/app_database.dart';
 import '../../core/summaries.dart';
@@ -243,6 +244,7 @@ class ActivityDraft {
   }
 }
 
+/// Başlangıç tarihi uygulama saatinden (Bugün ile aynı "şimdi"; testte sabit).
 final activityDraftProvider = Provider<ActivityDraft>(
-  (ref) => ActivityDraft(DateTime.now()),
+  (ref) => ActivityDraft(ref.read(nowProvider).value ?? DateTime.now()),
 );

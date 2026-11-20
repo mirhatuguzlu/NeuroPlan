@@ -81,6 +81,9 @@ assets/
   brain/                      index.html + brain.js (Three.js + sahne + gömülü GLB; tool/brain üretir, D40)
 tool/gen_seed_sql.dart        system.json → seed migration'ı (--check ile doğrular)
 tool/brain/                   3D model hattı (BodyParts3D → GLB) ve sahne kaynağı; docs/BRAIN_MODEL.md
+integration_test/             gerçek cihazda uçtan uca test ve kare ölçümü
+test_driver/                  profil ölçümü sürücüsü (flutter drive)
+.github/workflows/ci.yml      CI
 supabase/
   migrations/                 şema, RLS, seed (seed SQL, system.json'dan üretilir)
   functions/                  Edge Functions: delete_account, export_data, leaderboard
@@ -214,6 +217,12 @@ focus_sessions (gerçek) ──BrainEngine.derive──▶ brain_events (yalnız
 - Geçmiş planı (uyum, uyku) motor yeniden kurar; `planHistoryProvider` aralık başına sonucu tutar, 31 günden uzun aralığı `Isolate.run` ile koşturur.
 - Ekranlar: Profil (özet kartları + 12 analiz), `/profile/stats/:page`, `/profile/settings`, `/profile/sources`.
 
+## 7c. Tema, bayrak ve çökme raporu (Aşama 6, D56–D60)
+- **Tema:** `AppTheme` tek tanımdır; `buildTheme(parlaklık, tema)` saf ve önbellekli bir fonksiyondur, `MaterialApp` iki parlaklığı ve `themeAnimationDuration`'ı ondan alır. Ayrıntı: [THEMES.md](THEMES.md).
+- **Özellik bayrakları:** `lib/app/feature_flags.dart`. Uygulama kökü `featureFlagsSyncProvider`'ı izler: açılışta ve ön plana dönüşte `feature_flags` tablosu okunur, `sync_state` (`flags.remote`) önbelleğine yazılır; ekranlar `featureOn(ref, Feature.x)` ile okur. Sunucu yoksa ya da hata varsa son bilinen değer, o da yoksa kod varsayılanı (açık).
+- **Çökme raporu:** `lib/app/crash_reports.dart`. Firebase `.env`'den başlatılır (Push ile aynı örnek); hata ayıklama derlemesinde kapalı. `FlutterError.onError` ve `PlatformDispatcher.onError` Crashlytics'e gider; kullanıcı kimliği eklenmez. Toplama, cihaz tercihi (`pref.crash_reports`) ve `crashReports` bayrağı birlikte açıkken açıktır. Crashlytics Gradle eklentisi kullanılmaz (`google-services.json` yok, D52); derleme kimliği zorunluluğu `res/values/crashlytics.xml` ile kapalı.
+- **Abonelik:** yayından önce (D58); `entitlements` tablosu hazır, istemci kodu yok.
+
 ## 8. WebView köprüsü (Aşama 4, D40)
 ```
 Flutter                                               WebView: assets/brain/index.html + brain.js
@@ -259,7 +268,7 @@ Mesaj biçimi: `{"v": 1, "type": "...", "payload": {...}}`. Dart'ta sealed sın�
   - Sıralama ve beyin: `friends_leaderboard`, `global_leaderboard`, `can_view_brain`; zamanlanmış `refresh_global_leaderboard` (pg_cron)
   - Moderasyon (yalnız Studio / moderatör): `resolve_report`, görünüm `moderation_queue`
 - **Realtime:** `messages`, `friendships`, `cofocus_participants`, `shared_activity_*` değişiklikleri (RLS'li Postgres Changes); ortak odak için özel kanal `cofocus:<id>` (presence + broadcast, `realtime.messages` RLS'i).
-- **Edge Functions** (`service_role` yalnız burada): `delete_account`, `voice_token` (LiveKit, D46), `brain_snapshot` (sunucu beyni, D47), `push_message` (FCM; JWT değil Vault'taki paylaşılan sırla, `messages` tetikleyicisi `pg_net` ile çağırır, D49); sonra `export_data`, Aşama 6'da `verify_purchase`. Sıralama Edge Function değil SQL'dir (oturum satırları yeter, motor gerekmez).
+- **Edge Functions** (`service_role` yalnız burada): `delete_account`, `voice_token` (LiveKit, D46), `brain_snapshot` (sunucu beyni, D47), `push_message` (FCM; JWT değil Vault'taki paylaşılan sırla, `messages` tetikleyicisi `pg_net` ile çağırır, D49); sonra `export_data`; satın alma doğrulaması abonelik altyapısıyla yayından önce (D58). Sıralama Edge Function değil SQL'dir (oturum satırları yeter, motor gerekmez).
 
 ## 10. Test stratejisi
 | Katman | Nasıl |
@@ -267,7 +276,10 @@ Mesaj biçimi: `{"v": 1, "type": "...", "payload": {...}}`. Dart'ta sealed sın�
 | core | Birim testleri + JSON test vektörleri (plan, beyin, HLC birleştirme). |
 | data | Drift bellek içi veritabanında depo CRUD testleri; her yazmanın outbox'a düştüğü doğrulanır; sahte uzak servisle eşitleme testleri. |
 | Supabase | Yerel stack'te `supabase db reset` + RLS testleri (SQL betiği: kullanıcı A, B'nin satırını göremez/yazamaz). Docker gerektirir. |
-| ui | Widget testleri + UX_RULES §9 erişilebilirlik eşleyicileri. |
+| ui | Widget testleri + UX_RULES §9 erişilebilirlik eşleyicileri; tema matrisi (10 tema × açık/koyu, 5 ekran boyutu); `test/l10n/` (sabit metin taraması, ARB eşitliği, tonlar, iki dilli bilimsel içerik, yerel biçimler). |
+| görsel | `test/golden/`: 10 tema × açık/koyu × TR/EN × 4 ana ekran, gerçek fontlarla; etiket `golden`, CI'da atlanır (D60). |
+| uçtan uca | `test/ui/app_flow_test.dart` (ana bilgisayar, CI) ve `integration_test/app_flow_test.dart` (gerçek cihaz): kurulum → sihirbaz → odak → beyin olayı. Profil ölçümü `test_driver/` ile (PERFORMANCE.md). |
+| CI | `.github/workflows/ci.yml`: analyze, test (golden hariç), çekirdek `dart test`, seed denetimi, `tool/brain` testleri, ABI'ye bölünmüş release APK. |
 
 ## 11. Riskler
 1. ~~Dart kodunun `dart compile js` ile Edge Function'da (Deno) çalışması~~ Aşama 4B'de doğrulandı (`brain_snapshot`, D47).

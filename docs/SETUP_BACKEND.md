@@ -483,6 +483,8 @@ Bu bölüm hukuki tavsiye değildir; avukatla birlikte yürüt.
   - yalnız beyana dayalı yaş doğrulaması.
 
 ### 10.2 Play Console
+> Güncel ve tam liste: [RELEASE.md](RELEASE.md) (hedef kitle, Data Safety tablosu, imzalama, sürümleme, mağaza metinleri). Aşağıdaki özet onunla aynı tutulur.
+
 [play.google.com/console](https://play.google.com/console) → uygulama → soldan **Policy and programs → App content** (Türkçe: **Politika → Uygulama içeriği**). Her kartta **Start** / **Manage**:
 - **Privacy policy:** 8.3'teki gizlilik adresi.
 - **App access:**
@@ -501,6 +503,8 @@ Bu bölüm hukuki tavsiye değildir; avukatla birlikte yürüt.
     - Uygulama etkinliği (planlar, odak oturumları)
     - Yaklaşık konum (0,1°'ye yuvarlanmış, eşitleniyor)
     - Ses: sesli sohbette **aktarılır, saklanmaz**
+    - Doğum yılı, arkadaş listesi, bildirim cihaz kimliği
+    - Kilitlenme günlükleri ve tanılama (Firebase Crashlytics; kullanıcı kapatabilir)
   - Hepsi aktarımda şifreli.
   - Kullanıcı silme isteyebilir → 8.3'teki silme adresi.
 - **Account deletion:** uygulama içi yol (Profil → Hesabı ve verileri sil) + 8.3 silme adresi.
@@ -513,6 +517,15 @@ Bu bölüm hukuki tavsiye değildir; avukatla birlikte yürüt.
 - **Kategori:** Productivity.
 
 ---
+
+### 10.3 Firebase Crashlytics (Aşama 6, D59)
+1. [console.firebase.google.com](https://console.firebase.google.com) → projen → **Crashlytics** → **Enable**.
+2. Ek dosya ya da `.env` anahtarı gerekmez: Crashlytics, push için zaten girdiğin `FIREBASE_*` değerleriyle başlar.
+3. Hata ayıklama derlemesi rapor göndermez. Denemek için: `flutter run --release`, uygulamada bir hata oluşturulamıyorsa ilk gerçek sürümü bekle; pano ilk raporla dolar (birkaç dakika).
+4. Bir sorun çıkarsa kapatmak için Supabase Studio → `feature_flags` → `crashReports` = false (yeni sürüm gerekmez).
+
+### 10.4 Özellik bayrakları (D58)
+Studio → Table editor → `feature_flags` → **Insert row**: `key` = özellik adı (`together`, `messages`, `cofocus`, `voice`, `leaderboard`, `brainCompare`, `crashReports`), `enabled` = false. Uygulama bir sonraki açılışta ya da ön plana dönüşte okur. Açmak için satırı sil ya da `enabled` = true.
 
 ## 11. Doğrulama
 

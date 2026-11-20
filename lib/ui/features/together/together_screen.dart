@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../../../app/feature_flags.dart';
 import '../../../app/providers.dart';
 import '../../../app/theme.dart';
 import '../../../data/local/app_database.dart';
@@ -41,6 +42,13 @@ class _Gate extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = context.l10n;
+    if (!featureOn(ref, Feature.together)) {
+      return MessageState(
+        icon: Symbols.info_rounded,
+        title: l.featureOffTitle,
+        body: l.featureOffBody,
+      );
+    }
     if (ref.watch(socialApiProvider) == null) {
       return MessageState(
         icon: Symbols.cloud_off_rounded,
@@ -427,12 +435,13 @@ class _Hub extends ConsumerWidget {
                   '/together/friends',
                   subtitle: l.tgChoosePartnerBody,
                 ),
-              tile(
-                Symbols.timer_rounded,
-                l.tgCofocusNew,
-                '/together/cofocus/new',
-                subtitle: l.tgCofocusNewBody,
-              ),
+              if (featureOn(ref, Feature.cofocus))
+                tile(
+                  Symbols.timer_rounded,
+                  l.tgCofocusNew,
+                  '/together/cofocus/new',
+                  subtitle: l.tgCofocusNewBody,
+                ),
               tile(
                 Symbols.event_upcoming_rounded,
                 l.tgShared,
@@ -445,12 +454,13 @@ class _Hub extends ConsumerWidget {
                 '/together/free-time',
               ),
               SectionTitle(l.tgSecPeople),
-              tile(
-                Symbols.chat_rounded,
-                l.tgMessages,
-                '/together/messages',
-                badge: badges.unread,
-              ),
+              if (featureOn(ref, Feature.messages))
+                tile(
+                  Symbols.chat_rounded,
+                  l.tgMessages,
+                  '/together/messages',
+                  badge: badges.unread,
+                ),
               tile(
                 Symbols.group_rounded,
                 l.tgFriends,
@@ -458,11 +468,12 @@ class _Hub extends ConsumerWidget {
                 badge: badges.friendRequests,
               ),
               tile(Symbols.person_add_rounded, l.tgInvite, '/together/invite'),
-              tile(
-                Symbols.leaderboard_rounded,
-                l.tgLeaderboard,
-                '/together/leaderboard',
-              ),
+              if (featureOn(ref, Feature.leaderboard))
+                tile(
+                  Symbols.leaderboard_rounded,
+                  l.tgLeaderboard,
+                  '/together/leaderboard',
+                ),
               SectionTitle(l.tgSecPrivacy),
               tile(
                 Symbols.lock_rounded,

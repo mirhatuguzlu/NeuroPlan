@@ -57,7 +57,7 @@ Asla: iç içe diyalog, açılışta tanıtım / reklam pop-up'ı, ilk kullanım
 - Formlar: görünür etiket (yer tutucu etiket yerine geçmez), hata alanın yanında, doğrulama gönderirken ve alandan çıkarken.
 
 ## 5. Hareket dili (geçişler)
-- **Tek ortak dil, 60 fps.** Süreler ve eğriler yalnız Flutter'ın Material 3 tokenlarından seçilir: `Durations` (ör. `short4`, `medium2`, `long2`) ve `Easing` (`emphasizedDecelerate` girişte, `emphasizedAccelerate` çıkışta, `standard` ekran içi). Koda gelişigüzel `Duration(milliseconds: …)` yazılmaz; tokenlar bir `ThemeExtension`'da toplanır.
+- **Tek ortak dil, 60 fps.** Hızı ve eğri karakterini tema seçer (`Motion`: sakin, yumuşak, canlı, çevik, anlık; THEMES.md §1), süreler yine Material 3 tokenlarıdır ve `AppTokens.duration()` temanın çarpanını uygular. Süreler ve eğriler yalnız Flutter'ın Material 3 tokenlarından seçilir: `Durations` (ör. `short4`, `medium2`, `long2`) ve `Easing` (`emphasizedDecelerate` girişte, `emphasizedAccelerate` çıkışta, `standard` ekran içi). Koda gelişigüzel `Duration(milliseconds: …)` yazılmaz; tokenlar bir `ThemeExtension`'da toplanır.
 - Sayfa geçişleri üç desenle sınırlıdır ve her desenin tek anlamı vardır (`lib/app/transitions.dart`; `animations` paketi `material_ui` ile uyumsuz olduğu için kullanılmaz, D28):
   | Desen | Anlam |
   |---|---|
@@ -76,7 +76,7 @@ Asla: iç içe diyalog, açılışta tanıtım / reklam pop-up'ı, ilk kullanım
 - Her hedef en az 48×48dp; seçili hedef belirgin gösterge + `Semantics(selected: true)`.
 - `Scaffold(extendBody: true)` ile içerik menünün altına uzanır; listelerin son öğesi menünün arkasında kalmasın diye alt dolgu eklenir.
 - Klavye açıkken gizlenir. Odak oturumu ve sihirbazlarda görünmez (tek amaç kuralı).
-- Seçimde hafif dokunsal geri bildirim (kullanıcı kapatabilir).
+- Seçimde hafif dokunsal geri bildirim (kullanıcı kapatabilir). Bütün dokunsal geri bildirim `lib/ui/core/feedback.dart` → `Haptics` üzerinden: seçimde tık; iş bitince, odak tamamlanınca ve sihirbaz kaydedilince hafif darbe (Eğlenceli/Genç'te biraz belirgin, Kâğıt'ta yalnız tık; D56).
 - Görünümü (gölge, bulanıklık, kontur) temaya göre değişir; yapısı ve konumu değişmez.
 
 ## 7. Tipografi
@@ -99,7 +99,11 @@ Her temanın ruhuna uygun, uzun okumada göz yormayan **sans-serif** fontlar se�
 | Eğlenceli | Atkinson Hyperlegible Next | Nunito | Yuvarlak, sıcak |
 | Genç | Lexend | Lexend (geniş, kalın) | Enerjik, rahat okunur |
 | Kodcu | Atkinson Hyperlegible Next | JetBrains Mono (sayaç, sayılar, kod benzeri etiketler) | Terminal hissi; uzun gövde metni monospace değil |
-| Sakin / Yüksek Kontrast / Minimal (öneri) | Atkinson Hyperlegible Next | — | Okunabilirlik ve düşük uyarım |
+| Sakin / Yüksek Kontrast / Minimal / Gece | Atkinson Hyperlegible Next | — | Okunabilirlik ve düşük uyarım |
+| Kâğıt | Atkinson Hyperlegible Next | IBM Plex Sans | Akademik, sakin otorite (D56) |
+| Doğa | Atkinson Hyperlegible Next | Nunito | Yuvarlak, sıcak, yavaş |
+
+Kesin seçimler ve gerekçeler: [THEMES.md](THEMES.md) §4.
 
 Kaçınılacaklar (frontend-design): her etikette TÜMÜ BÜYÜK HARF, başlıkta tek kelimeyi farklı renk/italikle vurgulama, içeriğin üstüne gereksiz küçük etiketler.
 
@@ -208,6 +212,10 @@ Kaçınılacaklar (frontend-design): her etikette TÜMÜ BÜYÜK HARF, başlıkt
 | Analiz: denge | `balance` |
 | Haftalık rapor | `summarize` |
 | Analiz yorumu (grafiğin tek cümlesi) | `lightbulb` (Önerilen saat ile aynı aile: öneri/çıkarım) |
+| Seçili seçenek (tema kartı) | `radio_button_checked` |
+| Fontlar (Hakkında) | `text_fields` |
+| Çökme raporları (ayar) | `bug_report` |
+| Bölüm şu an kapalı (özellik bayrağı) | `info` (Bilgi ile aynı kavram) |
 
 ## 9. Erişilebilirlik
 - **Kontrast (WCAG 2.2 AA):** normal metin ≥ 4.5:1; büyük metin, ikon ve arayüz bileşeni sınırları ≥ 3:1. Yüksek Kontrast teması AAA (7:1) hedefler. Her tema açık ve koyu modda ölçülür.

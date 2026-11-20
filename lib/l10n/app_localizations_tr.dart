@@ -1551,6 +1551,13 @@ class L10nTr extends L10n {
       '3D sahne Three.js ile çizilir (MIT lisansı). Sahne ve kütüphane uygulamanın içindedir; internet gerekmez.';
 
   @override
+  String get aboutFontsTitle => 'Fontlar';
+
+  @override
+  String get aboutFontsBody =>
+      'Bütün fontlar uygulamanın içindedir ve SIL Open Font License 1.1 ile dağıtılır. Lisans metinleri aşağıdaki düğmede.';
+
+  @override
   String get aboutLicenses => 'Bütün lisansları göster';
 
   @override
@@ -1735,6 +1742,11 @@ class L10nTr extends L10n {
   @override
   String get onbAgeTooYoung =>
       'NöroPlan 13 yaş ve üstü içindir. Bu yıl seçiliyken devam edilemez.';
+
+  @override
+  String onbAgeSaved(String year) {
+    return 'Doğum yılın kaydedildi: $year. Yaş sonradan küçültülemez.';
+  }
 
   @override
   String get tgOfflineTitle => 'Birlikte bölümü sunucu ister';
@@ -2275,7 +2287,7 @@ class L10nTr extends L10n {
       'Mesajlar yalnız ikinize görünür. Uygunsuz kelimeler yıldızlanır.';
 
   @override
-  String get tgMessageHint => 'Tepki, kopyala ya da şikâyet için basılı tut';
+  String get tgMessageHint => 'Tepki, kopyala ya da şikâyet için dokun';
 
   @override
   String get tgWriteMessage => 'Mesaj yaz';
@@ -2753,6 +2765,51 @@ class L10nTr extends L10n {
 
   @override
   String get themeMinimalBody => 'Gri yüzeyler, tek vurgu rengi';
+
+  @override
+  String get themePaper => 'Kâğıt';
+
+  @override
+  String get themePaperBody =>
+      'Kâğıt ve mürekkep, geçişsiz; uzun okuma ve ders için';
+
+  @override
+  String get themeNature => 'Doğa';
+
+  @override
+  String get themeNatureBody => 'Topraksı sıcak renkler, yumuşak hatlar';
+
+  @override
+  String get themeNight => 'Gece';
+
+  @override
+  String get themeNightBody =>
+      'Gerçek siyah zemin, az ışık; gece ve OLED ekran için';
+
+  @override
+  String get themeScreenTitle => 'Görünüm ve tema';
+
+  @override
+  String get themePreviewBody => 'Sıradaki iş 15 dk sonra · 25 dk odak';
+
+  @override
+  String themeRowValue(String theme, String mode) {
+    return '$theme · $mode';
+  }
+
+  @override
+  String get featureOffTitle => 'Bu bölüm şu an kapalı';
+
+  @override
+  String get featureOffBody =>
+      'Bakım ya da düzenleme için geçici olarak kapattık. Verilerin yerinde; bölüm açılınca kaldığın yerden devam edersin.';
+
+  @override
+  String get settingCrashReports => 'Çökme raporları gönder';
+
+  @override
+  String get settingCrashReportsBody =>
+      'Uygulama çökerse kimliksiz hata ayrıntısı Firebase Crashlytics\'e gider. Planların, notların ve adın gitmez.';
 
   @override
   String get pfAnalyses => 'Analizler';

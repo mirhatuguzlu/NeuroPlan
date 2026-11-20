@@ -1,3 +1,5 @@
+import 'feedback.dart';
+
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
@@ -25,6 +27,7 @@ class InstanceActions {
       () => ref.read(planRepositoryProvider).complete(i, DateTime.now()),
     );
     if (ok && context.mounted) {
+      Haptics.success(context);
       showSnack(
         context,
         context.l10n.snackDone(title(i)),

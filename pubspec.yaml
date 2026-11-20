@@ -66,9 +66,14 @@ dependencies:
   fl_chart: ^1.3.1
   share_plus: ^13.3.1
   path_provider: ^2.1.6
+  firebase_crashlytics: ^6.1.0
 
 dev_dependencies:
   flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  flutter_driver:
     sdk: flutter
 
   # The "flutter_lints" package below contains a set of recommended lints to
@@ -99,6 +104,7 @@ flutter:
     - assets/fonts/OFL_nunito.txt
     - assets/fonts/OFL_lexend.txt
     - assets/fonts/OFL_jetbrainsmono.txt
+    - assets/fonts/OFL_ibmplexsans.txt
   # Gömülü, OFL lisanslı değişken fontlar (UX_RULES §7, D54).
   fonts:
     - family: AtkinsonHyperlegibleNext
@@ -113,6 +119,9 @@ flutter:
     - family: JetBrainsMono
       fonts:
         - asset: assets/fonts/JetBrainsMono.ttf
+    - family: IBMPlexSans
+      fonts:
+        - asset: assets/fonts/IBMPlexSans.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

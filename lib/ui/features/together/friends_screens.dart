@@ -6,6 +6,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+import '../../../app/feature_flags.dart';
 import '../../../app/theme.dart';
 import '../../../data/remote/social_api.dart';
 import '../../core/format.dart';
@@ -209,16 +210,17 @@ class FriendScreen extends ConsumerWidget {
                 title: Text(l.tgSeePlan),
                 onTap: () => context.push('/together/friend/$userId/plan'),
               ),
-              ListTile(
-                leading: const Icon(Symbols.compare_arrows_rounded),
-                title: Text(l.tgCompareBrains),
-                onTap: () {
-                  ref
-                      .read(brainControllerProvider.notifier)
-                      .startCompare(userId, f.displayName);
-                  context.go('/brain');
-                },
-              ),
+              if (featureOn(ref, Feature.brainCompare))
+                ListTile(
+                  leading: const Icon(Symbols.compare_arrows_rounded),
+                  title: Text(l.tgCompareBrains),
+                  onTap: () {
+                    ref
+                        .read(brainControllerProvider.notifier)
+                        .startCompare(userId, f.displayName);
+                    context.go('/brain');
+                  },
+                ),
               SectionTitle(l.tgPartner),
               if (f.isPartner)
                 ListTile(

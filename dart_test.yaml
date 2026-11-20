@@ -1,0 +1,4 @@
+# Etiketler (D60). golden: görsel referanslar; CI'da atlanır (font işleme işletim
+# sistemine bağlı), yerelde `flutter test` ile koşar.
+tags:
+  golden:

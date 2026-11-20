@@ -510,6 +510,17 @@ class _InstanceTile extends StatefulWidget {
 }
 
 class _InstanceTileState extends State<_InstanceTile> {
+  /// Bu satır az önce "bitti" oldu: işaret bir kez belirir (UX_RULES §5).
+  var _justDone = false;
+
+  @override
+  void didUpdateWidget(_InstanceTile old) {
+    super.didUpdateWidget(old);
+    _justDone =
+        old.instance.status != InstanceStatus.done &&
+        widget.instance.status == InstanceStatus.done;
+  }
+
   var _open = false;
 
   @override
@@ -633,7 +644,27 @@ class _InstanceTileState extends State<_InstanceTile> {
                               ),
                           ],
                         ),
-                  trailing: done || skipped
+                  trailing: done && _justDone
+                      ? ExcludeSemantics(
+                          child: TweenAnimationBuilder<double>(
+                            tween: Tween(begin: 0.4, end: 1),
+                            duration: AppTokens.duration(
+                              context,
+                              Durations.medium4,
+                            ),
+                            curve: AppTokens.of(context).enterCurve,
+                            builder: (context, t, child) => Opacity(
+                              opacity: t.clamp(0, 1),
+                              child: Transform.scale(scale: t, child: child),
+                            ),
+                            child: Icon(
+                              Symbols.check_circle_rounded,
+                              fill: 1,
+                              color: scheme.primary,
+                            ),
+                          ),
+                        )
+                      : done || skipped
                       ? null
                       : ExcludeSemantics(
                           child: Icon(

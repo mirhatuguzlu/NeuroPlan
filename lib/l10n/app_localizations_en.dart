@@ -1559,6 +1559,13 @@ class L10nEn extends L10n {
       'The 3D scene is drawn with Three.js (MIT license). The scene and the library ship inside the app; no internet is needed.';
 
   @override
+  String get aboutFontsTitle => 'Fonts';
+
+  @override
+  String get aboutFontsBody =>
+      'All fonts are bundled with the app and distributed under the SIL Open Font License 1.1. The licence texts are behind the button below.';
+
+  @override
   String get aboutLicenses => 'Show all licenses';
 
   @override
@@ -1746,6 +1753,11 @@ class L10nEn extends L10n {
   @override
   String get onbAgeTooYoung =>
       'NeuroPlan is for ages 13 and up. You cannot continue with this year.';
+
+  @override
+  String onbAgeSaved(String year) {
+    return 'Your birth year is saved: $year. Age can only go up later.';
+  }
 
   @override
   String get tgOfflineTitle => 'Together needs a server';
@@ -2287,7 +2299,7 @@ class L10nEn extends L10n {
       'Messages are only visible to the two of you. Inappropriate words are starred out.';
 
   @override
-  String get tgMessageHint => 'Long-press to react, copy or report';
+  String get tgMessageHint => 'Tap to react, copy or report';
 
   @override
   String get tgWriteMessage => 'Write a message';
@@ -2789,6 +2801,51 @@ class L10nEn extends L10n {
 
   @override
   String get themeMinimalBody => 'Grey surfaces, one accent colour';
+
+  @override
+  String get themePaper => 'Paper';
+
+  @override
+  String get themePaperBody =>
+      'Paper and ink, no motion; for long reading and study';
+
+  @override
+  String get themeNature => 'Nature';
+
+  @override
+  String get themeNatureBody => 'Warm earthy colours, soft shapes';
+
+  @override
+  String get themeNight => 'Night';
+
+  @override
+  String get themeNightBody =>
+      'True black, low light; for nights and OLED screens';
+
+  @override
+  String get themeScreenTitle => 'Appearance and theme';
+
+  @override
+  String get themePreviewBody => 'Next task in 15 min · 25 min focus';
+
+  @override
+  String themeRowValue(String theme, String mode) {
+    return '$theme · $mode';
+  }
+
+  @override
+  String get featureOffTitle => 'This section is off for now';
+
+  @override
+  String get featureOffBody =>
+      'We have switched it off temporarily for maintenance. Your data is safe; you can pick up where you left off when it is back.';
+
+  @override
+  String get settingCrashReports => 'Send crash reports';
+
+  @override
+  String get settingCrashReportsBody =>
+      'If the app crashes, anonymous error details go to Firebase Crashlytics. Your plans, notes and name are never sent.';
 
   @override
   String get pfAnalyses => 'Insights';

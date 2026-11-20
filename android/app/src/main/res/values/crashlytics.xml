@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Crashlytics Gradle eklentisi kullanılmıyor (google-services.json yok, Firebase ayarı .env'den;
+     D52, D59). Derleme kimliği zorunluluğu kapatılır; Dart hataları ve Java/Kotlin çökmeleri
+     yine raporlanır, yalnız R8 eşleme dosyası yüklenmez (küçültme kapalı). -->
+<resources>
+    <bool name="com.crashlytics.RequireBuildId">false</bool>
+</resources>

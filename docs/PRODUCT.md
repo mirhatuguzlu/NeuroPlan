@@ -103,6 +103,11 @@ Kullanıcı hayatını aşağıdaki öğe türleriyle tanımlar. Her öğe bir k
   - **Sakin:** düşük doygunluk, az hareket, az bildirim dili; akşam kullanımı ve dikkat hassasiyeti için.
   - **Yüksek Kontrast:** WCAG AAA hedefli kontrast, kalın odak çerçeveleri; az görenler için.
   - **Minimal:** tek vurgu rengi, süssüz; dikkat dağıtmayan sade görünüm.
+- `THEME-2b` Aşama 6 ek temaları (2026-11-20 onaylandı, D56; ui-ux-pro-max önerisi):
+  - **Kâğıt (Akademik):** kâğıt zemin ve mürekkep, geçişsiz (e-mürekkep hissi); uzun okuma ve ders için.
+  - **Doğa:** topraksı sıcak renkler, yumuşak hatlar, yavaş hareket.
+  - **Gece (OLED):** gerçek siyah zemin, az ışık; koyu öncelikli.
+- `THEME-5` Tema değişimi uygulamayı yeniden başlatmadan, temanın hızıyla yumuşakça geçer; seçici her temayı canlı önizlemeyle gösterir. Token yapısı ve paylaşım kararları: [THEMES.md](THEMES.md).
 - `THEME-3` Her tema; renk paleti (açık + koyu), font çifti, ikon ağırlığı, hareket yoğunluğu ve metin tonunu birlikte tanımlar (UX_RULES.md §4–6).
 - `THEME-4` 3D beynin neon renkleri temaya uyar.
 
@@ -124,7 +129,8 @@ Aşama 4B'de uygulandı; güvenlik ve uyum: [SOCIAL_SAFETY.md](SOCIAL_SAFETY.md)
 - `SOCIAL-8` Güvenlik: engelle, şikâyet et, daveti geri al, arkadaşlıktan çıkar her sosyal ekrandan erişilebilir; şikâyetler Supabase'de incelenir.
 
 ### 5.11 Abonelik (`SUB`) — ileride
-- `SUB-1` Google Play Billing (iOS'ta App Store). Hangi özelliklerin ücretli olacağı açık konu.
+- `SUB-1` Google Play Billing (iOS'ta App Store). Hangi özelliklerin ücretli olacağı açık konu. Altyapı (sağlayıcı, yetki servisi) Play yayınından önce kurulacak (D58); bugün yalnız özellik bayrakları var (`SUB-3`).
+- `SUB-3` Her sunucuya bağlı özellik tek yerden (`feature_flags` tablosu) yeni sürüm çıkarmadan kapatılabilir; kapalı bölüm boş buton değil, açıklayan bir boş durum gösterir.
 - `SUB-2` Ücretsiz sürüm planlama + odak + beyin çekirdeğini kapsar (öneri).
 
 ## 6. İşlevsel olmayan gereksinimler
@@ -135,7 +141,7 @@ Aşama 4B'de uygulandı; güvenlik ve uyum: [SOCIAL_SAFETY.md](SOCIAL_SAFETY.md)
 | Gizlilik | En az veri; sosyal paylaşım varsayılan kapalı; analiz verisi cihazda hesaplanır. |
 | Performans | Sayfa geçişleri ve 3D beyin 60 fps hedef; soğuk açılış hedefi Aşama 1'de ölçülüp belirlenir. |
 | Erişilebilirlik | WCAG 2.2 AA; 48dp dokunma alanı; ekran okuyucu etiketleri; metin ölçekleme %200'e kadar bozulmaz. |
-| Kalite | Her özellik testli; `flutter analyze` temiz; bilimsel metin SCIENCE.md'den. |
+| Kalite | Her özellik testli; `flutter analyze` temiz; bilimsel metin SCIENCE.md'den. CI: analyze, test, Android derlemesi (D60). Çökme raporları Firebase Crashlytics, kullanıcı kapatabilir; kullanım analitiği yok (D59). |
 
 ## 7. Ekran listesi (taslak, Aşama 1'de kesinleşir)
 Karşılama + ilk kurulum sihirbazı · Bugün · Plan (takvim) · Öğe oluşturma sihirbazı · Kategoriler · Odak oturumu · Beyin · Profil/Analiz · Sosyal (arkadaşlar, mesajlar, ortak oturum) · Ayarlar (tema, dil, bildirim, hesap).

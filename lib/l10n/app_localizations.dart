@@ -2515,6 +2515,18 @@ abstract class L10n {
   /// **'3D sahne Three.js ile çizilir (MIT lisansı). Sahne ve kütüphane uygulamanın içindedir; internet gerekmez.'**
   String get aboutThreeBody;
 
+  /// No description provided for @aboutFontsTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Fontlar'**
+  String get aboutFontsTitle;
+
+  /// No description provided for @aboutFontsBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bütün fontlar uygulamanın içindedir ve SIL Open Font License 1.1 ile dağıtılır. Lisans metinleri aşağıdaki düğmede.'**
+  String get aboutFontsBody;
+
   /// No description provided for @aboutLicenses.
   ///
   /// In tr, this message translates to:
@@ -2784,6 +2796,12 @@ abstract class L10n {
   /// In tr, this message translates to:
   /// **'NöroPlan 13 yaş ve üstü içindir. Bu yıl seçiliyken devam edilemez.'**
   String get onbAgeTooYoung;
+
+  /// No description provided for @onbAgeSaved.
+  ///
+  /// In tr, this message translates to:
+  /// **'Doğum yılın kaydedildi: {year}. Yaş sonradan küçültülemez.'**
+  String onbAgeSaved(String year);
 
   /// No description provided for @tgOfflineTitle.
   ///
@@ -3742,7 +3760,7 @@ abstract class L10n {
   /// No description provided for @tgMessageHint.
   ///
   /// In tr, this message translates to:
-  /// **'Tepki, kopyala ya da şikâyet için basılı tut'**
+  /// **'Tepki, kopyala ya da şikâyet için dokun'**
   String get tgMessageHint;
 
   /// No description provided for @tgWriteMessage.
@@ -4566,6 +4584,84 @@ abstract class L10n {
   /// In tr, this message translates to:
   /// **'Gri yüzeyler, tek vurgu rengi'**
   String get themeMinimalBody;
+
+  /// No description provided for @themePaper.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kâğıt'**
+  String get themePaper;
+
+  /// No description provided for @themePaperBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kâğıt ve mürekkep, geçişsiz; uzun okuma ve ders için'**
+  String get themePaperBody;
+
+  /// No description provided for @themeNature.
+  ///
+  /// In tr, this message translates to:
+  /// **'Doğa'**
+  String get themeNature;
+
+  /// No description provided for @themeNatureBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Topraksı sıcak renkler, yumuşak hatlar'**
+  String get themeNatureBody;
+
+  /// No description provided for @themeNight.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gece'**
+  String get themeNight;
+
+  /// No description provided for @themeNightBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gerçek siyah zemin, az ışık; gece ve OLED ekran için'**
+  String get themeNightBody;
+
+  /// No description provided for @themeScreenTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Görünüm ve tema'**
+  String get themeScreenTitle;
+
+  /// No description provided for @themePreviewBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sıradaki iş 15 dk sonra · 25 dk odak'**
+  String get themePreviewBody;
+
+  /// No description provided for @themeRowValue.
+  ///
+  /// In tr, this message translates to:
+  /// **'{theme} · {mode}'**
+  String themeRowValue(String theme, String mode);
+
+  /// No description provided for @featureOffTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu bölüm şu an kapalı'**
+  String get featureOffTitle;
+
+  /// No description provided for @featureOffBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bakım ya da düzenleme için geçici olarak kapattık. Verilerin yerinde; bölüm açılınca kaldığın yerden devam edersin.'**
+  String get featureOffBody;
+
+  /// No description provided for @settingCrashReports.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çökme raporları gönder'**
+  String get settingCrashReports;
+
+  /// No description provided for @settingCrashReportsBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uygulama çökerse kimliksiz hata ayrıntısı Firebase Crashlytics\'e gider. Planların, notların ve adın gitmez.'**
+  String get settingCrashReportsBody;
 
   /// No description provided for @pfAnalyses.
   ///

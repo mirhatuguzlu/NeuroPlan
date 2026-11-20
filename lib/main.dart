@@ -13,6 +13,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'app/app.dart';
 import 'app/env.dart';
 import 'app/providers.dart';
+import 'app/theme.dart';
 import 'data/local/app_database.dart';
 
 Future<void> main() async {
@@ -74,12 +75,7 @@ Stream<LicenseEntry> _assetLicenses() async* {
   yield LicenseEntryWithLineBreaks([
     'three.js',
   ], await rootBundle.loadString('assets/brain/LICENSE_threejs.txt'));
-  for (final (name, file) in const [
-    ('Atkinson Hyperlegible Next', 'atkinsonhyperlegiblenext'),
-    ('Nunito', 'nunito'),
-    ('Lexend', 'lexend'),
-    ('JetBrains Mono', 'jetbrainsmono'),
-  ]) {
+  for (final (name, file) in embeddedFonts) {
     yield LicenseEntryWithLineBreaks([
       name,
     ], await rootBundle.loadString('assets/fonts/OFL_$file.txt'));

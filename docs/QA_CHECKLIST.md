@@ -247,3 +247,42 @@ Otomatik testler: `flutter test test/ui/stats_test.dart` (12 sayfa boş/dolu, he
 - [ ] Ayarlar → Verilerimi dışa aktar: uçak modunda da çalışır; JSON dosyası Drive / Dosyalar'a kaydedilebilir ve açılınca tablolar görünür.
 - [ ] Ayarlar → Bilimsel kaynaklar: 22 kaynak listelenir; kopyalanan bağlantı doi.org'a gider.
 - [ ] Ayarlar → Uyku hedefi değiştirilince Uykum yeterli mi? sayfasındaki hedef çizgisi ve fark cümlesi değişir; uyku penceresini değiştirmek hedefi değiştirmez.
+
+## E. Temalar, dil, bayraklar, çökme raporu (Aşama 6)
+Otomatik testler: `flutter test` (tema matrisi 10 tema, `test/l10n/`, `test/ui/stage6_test.dart`, `test/ui/app_flow_test.dart`), golden `flutter test --tags golden` (güncelleme: `--update-goldens`, yalnız Windows'ta), cihazda `flutter test integration_test -d <cihaz> --no-uninstall` (bitince gerçek uygulamayı yeniden kur; PERFORMANCE.md §5).
+
+### E1. Tema seçici ve geçiş
+- [ ] Ayarlar → Görünüm ve tema: on temanın her biri önizlemesiyle görünür; önizleme seçili görünümde (açık/koyu) çizilir, Kodcu ve Gece "sistem"de koyu.
+- [ ] Bir temaya dokununca uygulama yeniden başlamadan, yumuşakça geçer (Kâğıt'ta anlık). Geri dönünce Bugün ve Beyin yeni temada.
+- [ ] Sistem ayarında "animasyonları kaldır" açıkken geçiş anlıktır.
+- [ ] TalkBack: her tema kartı "ad, açıklama, seçili / seçili değil" okunur; önizleme kutusu okunmaz.
+- [ ] Yazı boyutu en büyükte kartlar taşmaz.
+- [ ] İlk kurulumdaki görünüm adımı aynı önizlemeli kartları gösterir.
+
+### E2. Yeni temalar ve fontlar
+- [ ] Kâğıt: sıcak kâğıt zemin, ince mürekkep çizgileri, keskin köşe, başlıklar IBM Plex Sans; sayfa geçişleri anlık.
+- [ ] Doğa: topraksı renkler, iri köşe, yavaş geçişler; grafik renkleri ayırt edilebilir.
+- [ ] Gece koyu: zemin gerçek siyah (OLED'de pikseller kapalı), kartlarda hafif vurgu çerçevesi.
+- [ ] D1 font dizisi IBM Plex Sans başlıkta da okunur (Türkçe harfler tam).
+- [ ] Ayarlar → Hakkında → Fontlar beş fontu listeler; "Bütün lisansları göster"de IBM Plex Sans OFL metni var.
+
+### E3. Mikro etkileşimler
+- [ ] Bugün'de bir işi "Bitti" yapınca hafif titreşim ve satırda bir kez beliren işaret; ekranı yeniden açınca işaret canlanmaz.
+- [ ] Odak oturumu tamamlanınca bir kez hafif titreşim; sihirbaz kaydedilince de.
+- [ ] Ayarlar'da "Dokunsal geri bildirim" kapalıyken hiçbiri titreşmez.
+- [ ] Mesaj balonuna dokununca tepki / kopyala / şikâyet menüsü açılır (uzun basma da çalışır).
+
+### E4. Dil
+- [ ] Dil İngilizce'ye alınınca bütün ekranlar, tarih ("November 20, 2026"), saat ve ondalık ("1.5") İngilizce biçimde; Türkçe'de "20 Kasım 2026", "1,5".
+- [ ] Ayarlar → Konum: enlem / boylam Türkçe'de virgülle.
+- [ ] Kurulumda doğum yılı kaydedildikten sonra adımda "Doğum yılın kaydedildi: …" yazar (boş alan yok).
+
+### E5. Özellik bayrakları (sunucu gerekir)
+- [ ] Studio'da `feature_flags`'e `together` = false ekle → uygulamayı arka plana alıp geri getir → Birlikte "Bu bölüm şu an kapalı" der. Satırı silince geri gelir.
+- [ ] `voice` = false → ortak odakta ses bölümü görünmez; `messages`, `cofocus`, `leaderboard`, `brainCompare` = false → ilgili satır görünmez.
+- [ ] Uçak modunda son bilinen bayraklar geçerli kalır.
+
+### E6. Çökme raporları
+- [ ] Ayarlar → Veriler → "Çökme raporları gönder" varsayılan açık; kapatılınca kalıcı (yeniden açılışta da kapalı).
+- [ ] Release derlemesinde ilk çökme Firebase Crashlytics panosunda görünür; raporda e-posta, ad ya da plan içeriği yok.
+- [ ] `crashReports` bayrağı false iken anahtar Ayarlar'da görünmez.

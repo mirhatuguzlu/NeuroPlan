@@ -272,7 +272,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                         constraints: BoxConstraints(
                           maxWidth: MediaQuery.sizeOf(context).width * 0.8,
                         ),
+                        // Dokunma da açar: uzun basma tek başına keşfedilmez (D56 denetimi).
                         child: GestureDetector(
+                          onTap: m.deleted
+                              ? null
+                              : () => _messageActions(m, mine),
                           onLongPress: m.deleted
                               ? null
                               : () => _messageActions(m, mine),

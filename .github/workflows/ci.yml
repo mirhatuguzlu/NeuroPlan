@@ -1,0 +1,72 @@
+# Analyze, test ve Android derlemesi (D60). Golden testleri atlanır: referans görüntüler
+# Windows'ta üretilir ve font işleme Linux'ta farklıdır. pgTAP (supabase test db) ve cihaz
+# gerektiren integration_test burada koşmaz; yerelde çalıştırılır (README "Kontroller").
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  flutter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.50.0
+          cache: true
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Bağımlılıklar
+        run: flutter pub get
+
+      - name: Biçim (yalnız bilgi)
+        run: dart format --output=none --set-exit-if-changed lib test || echo "::warning::dart format farkı var"
+
+      - name: Analiz
+        run: flutter analyze
+
+      - name: Uygulama testleri
+        run: flutter test --exclude-tags golden
+
+      - name: Alan katmanı testleri
+        working-directory: packages/neuroplan_core
+        run: dart test
+
+      - name: Seed migration'ı system.json ile aynı mı
+        run: dart run tool/gen_seed_sql.dart --check
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: tool/brain/package-lock.json
+
+      - name: 3D sahne yardımcıları
+        working-directory: tool/brain
+        run: npm ci && npm test
+
+      # Sır yoksa (.env, imza anahtarı) uygulama sunucusuz ve hata ayıklama anahtarıyla
+      # imzalanır; yalnız derlemenin kırılmadığını gösterir. Yayın paketi yerelde üretilir.
+      - name: Android derlemesi
+        run: flutter build apk --release --split-per-abi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: apk
+          path: build/app/outputs/flutter-apk/*.apk
+          retention-days: 7

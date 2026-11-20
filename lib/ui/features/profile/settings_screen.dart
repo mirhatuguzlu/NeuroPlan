@@ -1,10 +1,13 @@
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:neuroplan_core/neuroplan_core.dart';
 
+import '../../../app/crash_reports.dart';
+import '../../../app/feature_flags.dart';
 import '../../../app/providers.dart';
 import '../../../app/theme.dart';
 import '../../../data/local/app_database.dart';
@@ -15,12 +18,12 @@ import '../../core/format.dart';
 import '../../core/location.dart';
 import '../../core/prayer_fields.dart';
 import '../../core/states.dart';
-import '../../core/theme_choice.dart';
 import 'account_tiles.dart';
 import 'data_tiles.dart';
 import '../../core/wizard.dart';
 import 'focus_settings.dart';
 import 'notification_settings.dart';
+import 'theme_screen.dart';
 
 /// Ayarlar: kurulumda verilen her kararın sonradan değiştirildiği yer (Aşama 5 §4).
 class SettingsScreen extends ConsumerWidget {
@@ -109,38 +112,12 @@ class _Settings extends ConsumerWidget {
             ),
           ],
         ),
-        ExpansionTile(
-          leading: const Icon(Symbols.contrast_rounded),
-          title: Text(l.settingAppearance),
-          subtitle: Text(switch (p.themeMode) {
-            'light' => l.modeLight,
-            'dark' => l.modeDark,
-            _ => l.modeSystem,
-          }),
-          children: [
-            ChoiceList<String>(
-              value: p.themeMode,
-              options: [
-                ('system', l.modeSystem, null),
-                ('light', l.modeLight, null),
-                ('dark', l.modeDark, null),
-              ],
-              onChanged: (v) =>
-                  _update(context, ref, ProfilesCompanion(themeMode: Value(v))),
-            ),
-          ],
-        ),
-        ExpansionTile(
+        ListTile(
           leading: const Icon(Symbols.style_rounded),
-          title: Text(l.settingTheme),
-          subtitle: Text(themeName(l, AppTheme.of(p.theme))),
-          children: [
-            ThemeChoice(
-              value: p.theme,
-              onChanged: (v) =>
-                  _update(context, ref, ProfilesCompanion(theme: Value(v))),
-            ),
-          ],
+          title: Text(l.themeScreenTitle),
+          subtitle: Text(themeSummary(context, p)),
+          trailing: const Icon(Symbols.chevron_right_rounded),
+          onTap: () => context.push('/profile/settings/theme'),
         ),
         SwitchListTile(
           secondary: const Icon(Symbols.vibration_rounded),
@@ -242,6 +219,7 @@ class _Settings extends ConsumerWidget {
         const AccountTiles(),
 
         section(l.secData),
+        const _CrashReportsTile(),
         const ExportTile(),
         ListTile(
           leading: const Icon(Symbols.science_rounded),
@@ -290,8 +268,14 @@ class _LocationTileState extends ConsumerState<_LocationTile> {
           subtitle: Text(
             has
                 ? l.locationValue(
-                    p.locationLat!.toStringAsFixed(1),
-                    p.locationLon!.toStringAsFixed(1),
+                    NumberFormat(
+                      '0.0',
+                      context.localeName,
+                    ).format(p.locationLat),
+                    NumberFormat(
+                      '0.0',
+                      context.localeName,
+                    ).format(p.locationLon),
                   )
                 : l.notSet,
           ),
@@ -410,4 +394,28 @@ class _MinutesSettingState extends State<_MinutesSetting> {
       onFieldSubmitted: (_) => _commit(),
     ),
   );
+}
+
+/// Çökme raporları anahtarı (cihaza özel, D59). Bayrakla kapatılmışsa görünmez.
+class _CrashReportsTile extends ConsumerWidget {
+  const _CrashReportsTile();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l = context.l10n;
+    if (!featureOn(ref, Feature.crashReports)) return const SizedBox.shrink();
+    final on = ref.watch(crashReportsPrefProvider).value ?? true;
+    return SwitchListTile(
+      secondary: const Icon(Symbols.bug_report_rounded),
+      title: Text(l.settingCrashReports),
+      subtitle: Text(l.settingCrashReportsBody),
+      value: on,
+      onChanged: (v) => guard(
+        context,
+        () => ref
+            .read(prefsRepositoryProvider)
+            .set(crashReportsPref, v ? null : '0'),
+      ),
+    );
+  }
 }

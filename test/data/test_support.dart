@@ -9,10 +9,16 @@ import 'package:neuroplan/data/sync/local_writer.dart';
 import 'package:neuroplan/data/sync/sync_engine.dart';
 import 'package:neuroplan_core/neuroplan_core.dart';
 
-final systemData = SystemData.fromJson(
+/// Sistem verisi. Ana bilgisayarda dosyadan; cihazda (integration_test) dosya sistemi yoktur,
+/// orada test başında [useSystemJson] ile varlık paketinden verilir.
+SystemData get systemData => _system ??= SystemData.fromJson(
   jsonDecode(File('assets/seed/system.json').readAsStringSync())
       as Map<String, Object?>,
 );
+SystemData? _system;
+
+void useSystemJson(String json) =>
+    _system = SystemData.fromJson(jsonDecode(json) as Map<String, Object?>);
 
 /// Bellek içi veritabanı + saat + yazıcı; [now] verilirse HLC saati sabitlenir.
 class TestDevice {

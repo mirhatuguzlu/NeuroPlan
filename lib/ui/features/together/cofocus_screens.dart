@@ -4,6 +4,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:neuroplan_core/neuroplan_core.dart';
 
+import '../../../app/feature_flags.dart';
 import '../../../app/providers.dart';
 import '../../../app/theme.dart';
 import '../../../data/remote/social_api.dart';
@@ -163,7 +164,7 @@ class _CofocusLobbyScreenState extends ConsumerState<CofocusLobbyScreen> {
                 voice: st.voice,
                 me: p.userId == me,
               ),
-          if (s.voice && !ended) ...[
+          if (s.voice && !ended && featureOn(ref, Feature.voice)) ...[
             SectionTitle(l.tgVoice),
             _VoiceControls(voice: st.voice),
           ],

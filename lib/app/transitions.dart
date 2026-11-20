@@ -37,7 +37,7 @@ class SharedAxisSwitch extends StatelessWidget {
     Widget child, {
     bool reverse = false,
   }) {
-    if (MediaQuery.disableAnimationsOf(context)) return child;
+    if (!AppTokens.animates(context)) return child;
     final t = AppTokens.of(context);
     final sign = reverse ? -1.0 : 1.0;
     final inSlide = Tween(

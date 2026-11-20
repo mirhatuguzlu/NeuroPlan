@@ -1,3 +1,5 @@
+import '../../core/feedback.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -134,6 +136,15 @@ class _FocusFinishScreenState extends ConsumerState<FocusFinishScreen> {
   int? _focus;
   int? _fatigue;
   final _note = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Oturum tamamlandı: tek seferlik, kullanıcının eylemine bağlı geri bildirim.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) Haptics.success(context);
+    });
+  }
 
   @override
   void dispose() {

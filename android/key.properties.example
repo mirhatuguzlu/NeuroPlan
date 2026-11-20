@@ -1,0 +1,5 @@
+# Kopyala: android/key.properties (git-ignored). Değerleri yalnız sen yazarsın (docs/RELEASE.md §3).
+storeFile=../upload-keystore.jks
+storePassword=
+keyAlias=upload
+keyPassword=

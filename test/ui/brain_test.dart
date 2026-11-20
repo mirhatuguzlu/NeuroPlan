@@ -223,7 +223,14 @@ void main() {
       ),
       findsOneWidget,
     );
-    expect(find.text('Bütün lisansları göster'), findsOneWidget);
+    expect(find.text('Fontlar'), findsOneWidget);
+    expect(find.textContaining('IBM Plex Sans'), findsOneWidget);
     await h.expectAccessible();
+    await t.scrollUntilVisible(
+      find.text('Bütün lisansları göster'),
+      200,
+      scrollable: find.byType(Scrollable).last,
+    );
+    expect(find.text('Bütün lisansları göster'), findsOneWidget);
   });
 }

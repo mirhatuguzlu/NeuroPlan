@@ -10,7 +10,7 @@ Durum: **Onaylandı, 2026-11-19 (Aşama 4B).** Soru formu: önce giriş + eşitl
 2. **Partnerin planı sunucuda yok.** D22 gereği plan motorunun çıktısı bellekte kalır; `plan_instances` yalnız kullanıcı bir oluşuma dokununca yazılır. Bu yüzden şemadaki `friend_calendar` fonksiyonu bugün neredeyse boş döner. Öneri §4.2: cihaz önümüzdeki 14 günün hesaplanmış bloklarını (yalnız zaman + aktivite kimliği) sunucuya yayınlar; görünürlük yine veritabanında uygulanır.
 3. **Türkiye'de 15 yaş sınırı yürürlükte.** 7578 sayılı Kanun'la 5651 sayılı Kanun ek madde 4'e eklenen hükme göre sosyal ağ sağlayıcı 15 yaşını doldurmamış çocuklara hizmet sunamaz; 15–18 yaşa "ayrıştırılmış hizmet" ve ebeveyn araçları ister. Yönetmelik 1 Kasım 2026'da yürürlüğe girdi. Veli onayıyla istisna yok. NöroPlan'ın davetle sınırlı arkadaş özelliklerinin "sosyal ağ sağlayıcı" tanımına girip girmediği belirsiz; ihtiyatlı yol §2.3'te.
 
-Ayrıca: ilk kurulumda **yaş adımı yok**. `profiles.birth_year` sütunu var ama arayüz sormuyor (AUTH-2 eksik). 4B'de eklenmeli.
+Ayrıca: ilk kurulumda yaş adımı yoktu (AUTH-2); 4B'de eklendi: doğum yılı zorunlu, 13 yaş altı devam edemez (Aşama 6'da yeniden doğrulandı, `test/ui/screens_test.dart`).
 
 ## 1. KVKK (Türkiye)
 | Konu | Bulgu | Uygulamaya etkisi |

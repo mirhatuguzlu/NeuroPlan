@@ -32,84 +32,156 @@ enum Look {
 
   /// Dolgusuz, saç teli çizgi (Minimal).
   hairline,
+
+  /// Kâğıt zemin, mürekkep çizgisi, neredeyse keskin köşe (Kâğıt).
+  paper,
+
+  /// Yumuşak, topraksı tonlu yüzeyler, iri köşe (Doğa).
+  earthy,
+
+  /// Gerçek siyah zemin, hafif vurgu çerçevesi (Gece).
+  oled,
 }
 
-/// Temalar (PRODUCT THEME-1/2, D54, D55). `profiles.theme` anahtarı; null = Ciddi.
-/// [tone] metin tonudur (ARB'deki `tone` seçimi): Ciddi, Yüksek Kontrast ve Minimal nötr
-/// tonu paylaşır.
+/// Hareketin hızı ve karakteri (UX_RULES §5, D56). Süreler yine Material 3
+/// tokenlarıdır; tema yalnız çarpanı ve eğriyi seçer ([AppTokens.duration]).
+enum Motion {
+  /// Az ve kısa hareket, standart eğri (Ciddi, Kodcu, Yüksek Kontrast, Minimal).
+  quiet(0.8, Easing.standardDecelerate, Easing.standardAccelerate),
+
+  /// Yavaş ve yumuşak (Sakin, Doğa, Gece).
+  soft(1.25, Easing.standardDecelerate, Easing.standardAccelerate),
+
+  /// Vurgulu eğri, normal hız (Eğlenceli).
+  lively(1, Easing.emphasizedDecelerate, Easing.emphasizedAccelerate),
+
+  /// Vurgulu eğri, çevik (Genç).
+  brisk(0.85, Easing.emphasizedDecelerate, Easing.emphasizedAccelerate),
+
+  /// Anlık: e-mürekkep hissi, geçiş yok (Kâğıt).
+  instant(0, Easing.standard, Easing.standard);
+
+  const Motion(this.speed, this.enterCurve, this.exitCurve);
+
+  final double speed;
+  final Curve enterCurve;
+  final Curve exitCurve;
+}
+
+/// Temalar (PRODUCT THEME-1/2, D54–D56). `profiles.theme` anahtarı; null = Ciddi.
+/// Bütün tema tokenları burada; kararlar ve paylaşımlar docs/THEMES.md'de.
+/// [tone] metin tonudur (ARB'deki `tone` seçimi): Ciddi, Yüksek Kontrast, Minimal,
+/// Kâğıt ve Gece nötr tonu, Doğa Sakin'in tonunu paylaşır.
 enum AppTheme {
   serious(
-    Color(0xFF5B57D9),
-    _atkinson,
-    null,
-    null,
-    16,
-    400,
-    Look.tonal,
-    'serious',
+    seed: Color(0xFF5B57D9),
+    radius: 16,
+    iconWeight: 400,
+    look: Look.tonal,
+    tone: 'serious',
+    motion: Motion.quiet,
   ),
   playful(
-    Color(0xFFE8613C),
-    _atkinson,
-    'Nunito',
-    null,
-    24,
-    500,
-    Look.colorful,
-    'playful',
+    seed: Color(0xFFE8613C),
+    heading: 'Nunito',
+    radius: 24,
+    iconWeight: 500,
+    look: Look.colorful,
+    tone: 'playful',
+    motion: Motion.lively,
+    variant: DynamicSchemeVariant.vibrant,
+    typeScale: 1.06,
+    touch: 56,
   ),
   young(
-    Color(0xFF00A88A),
-    'Lexend',
-    'Lexend',
-    null,
-    20,
-    500,
-    Look.vivid,
-    'young',
+    seed: Color(0xFF00A88A),
+    body: 'Lexend',
+    heading: 'Lexend',
+    radius: 20,
+    iconWeight: 500,
+    look: Look.vivid,
+    tone: 'young',
+    motion: Motion.brisk,
+    variant: DynamicSchemeVariant.vibrant,
   ),
   coder(
-    Color(0xFF2E9E5B),
-    _atkinson,
-    null,
-    'JetBrainsMono',
-    6,
-    300,
-    Look.terminal,
-    'coder',
+    seed: Color(0xFF2E9E5B),
+    numeric: 'JetBrainsMono',
+    radius: 6,
+    iconWeight: 300,
+    look: Look.terminal,
+    tone: 'coder',
+    motion: Motion.quiet,
+    darkFirst: true,
   ),
-  calm(Color(0xFF5E8798), _atkinson, null, null, 20, 300, Look.soft, 'calm'),
+  calm(
+    seed: Color(0xFF5E8798),
+    radius: 20,
+    iconWeight: 300,
+    look: Look.soft,
+    tone: 'calm',
+    motion: Motion.soft,
+    variant: DynamicSchemeVariant.neutral,
+  ),
   highContrast(
-    Color(0xFF1F4FD1),
-    _atkinson,
-    null,
-    null,
-    12,
-    600,
-    Look.bold,
-    'serious',
+    seed: Color(0xFF1F4FD1),
+    radius: 12,
+    iconWeight: 600,
+    look: Look.bold,
+    tone: 'serious',
+    motion: Motion.quiet,
   ),
   minimal(
-    Color(0xFF2F6FDE),
-    _atkinson,
-    null,
-    null,
-    10,
-    400,
-    Look.hairline,
-    'serious',
+    seed: Color(0xFF2F6FDE),
+    radius: 10,
+    iconWeight: 400,
+    look: Look.hairline,
+    tone: 'serious',
+    motion: Motion.quiet,
+  ),
+  paper(
+    seed: Color(0xFF2B4C7E),
+    heading: 'IBMPlexSans',
+    radius: 4,
+    iconWeight: 300,
+    look: Look.paper,
+    tone: 'serious',
+    motion: Motion.instant,
+  ),
+  nature(
+    seed: Color(0xFF6E7F3A),
+    heading: 'Nunito',
+    radius: 24,
+    iconWeight: 400,
+    look: Look.earthy,
+    tone: 'calm',
+    motion: Motion.soft,
+  ),
+  night(
+    seed: Color(0xFF7B83EB),
+    radius: 16,
+    iconWeight: 300,
+    look: Look.oled,
+    tone: 'serious',
+    motion: Motion.soft,
+    darkFirst: true,
   );
 
-  const AppTheme(
-    this.seed,
-    this.body,
+  const AppTheme({
+    required this.seed,
+    this.body = _atkinson,
     this.heading,
     this.numeric,
-    this.radius,
-    this.iconWeight,
-    this.look,
-    this.tone,
-  );
+    required this.radius,
+    required this.iconWeight,
+    required this.look,
+    required this.tone,
+    required this.motion,
+    this.variant = DynamicSchemeVariant.tonalSpot,
+    this.typeScale = 1,
+    this.touch = 52,
+    this.darkFirst = false,
+  });
 
   final Color seed;
   final String body;
@@ -123,12 +195,42 @@ enum AppTheme {
   final double iconWeight;
   final Look look;
   final String tone;
+  final Motion motion;
+
+  /// Material şema türü (renklerin doygunluğu).
+  final DynamicSchemeVariant variant;
+
+  /// Yazı boyutu çarpanı (Eğlenceli biraz iri).
+  final double typeScale;
+
+  /// Dolu ve çerçeveli butonların en küçük yüksekliği (dp; alt sınır 48).
+  final double touch;
+
+  /// Görünüm "sistem" iken de koyu açılır (Kodcu, Gece).
+  final bool darkFirst;
 
   static AppTheme of(String? key) =>
       values.where((t) => t.name == key).firstOrNull ?? serious;
+
+  /// "Sistem" görünümünde bu temanın ve cihazın parlaklığı.
+  Brightness brightnessFor(String? mode, Brightness platform) => switch (mode) {
+    'light' => Brightness.light,
+    'dark' => Brightness.dark,
+    _ => darkFirst ? Brightness.dark : platform,
+  };
 }
 
 const _atkinson = 'AtkinsonHyperlegibleNext';
+
+/// Uygulamaya gömülü fontlar (görünen ad, `assets/fonts/OFL_<dosya>.txt`). Hepsi SIL
+/// Open Font License 1.1; Hakkında ekranı ve lisans sayfası buradan okur (UX_RULES §7).
+const embeddedFonts = [
+  ('Atkinson Hyperlegible Next', 'atkinsonhyperlegiblenext'),
+  ('Nunito', 'nunito'),
+  ('Lexend', 'lexend'),
+  ('JetBrains Mono', 'jetbrainsmono'),
+  ('IBM Plex Sans', 'ibmplexsans'),
+];
 
 /// Fontlar değişken (tek dosya, `wght` ekseni): ağırlık eksene de yazılır, yoksa motor
 /// varsayılan örneği çizer. Koddaki ağırlık değişikliği de bunu kullanır.
@@ -137,19 +239,15 @@ TextStyle weighted(TextStyle s, FontWeight w) => s.copyWith(
   fontVariations: [FontVariation('wght', w.value.toDouble())],
 );
 
-/// Temaya göre değişebilen tokenlar: köşe ve hareket (UX_RULES §5). Süre ve eğriler
-/// yalnız Material 3 tokenlarından seçilir.
+/// Temaya göre değişen tokenlar: köşe ve hareket (UX_RULES §5, D56). Süre ve eğriler
+/// yalnız Material 3 tokenlarından seçilir; tema hız çarpanını ve eğri karakterini
+/// verir ([Motion]).
 @immutable
 class AppTokens extends ThemeExtension<AppTokens> {
   const AppTokens({
     this.theme = AppTheme.serious,
     this.radius = 16,
     this.navRadius = 28,
-    this.enter = Durations.medium2,
-    this.exit = Durations.short3,
-    this.enterCurve = Easing.emphasizedDecelerate,
-    this.exitCurve = Easing.emphasizedAccelerate,
-    this.standardCurve = Easing.standard,
     this.breathe = const Duration(
       milliseconds: 4000,
     ), // 4 × Durations.extralong4
@@ -158,16 +256,22 @@ class AppTokens extends ThemeExtension<AppTokens> {
   final AppTheme theme;
 
   /// Odak ekranındaki "yanıyor" ışımasının yarım nefesi; yalnız oturum sürerken (anlam
-  /// taşıyan hareket, UX_RULES §5).
+  /// taşıyan hareket, UX_RULES §5). Temadan bağımsızdır: anlamı hızı belirler.
   final Duration breathe;
 
   final double radius;
   final double navRadius;
-  final Duration enter;
-  final Duration exit;
-  final Curve enterCurve;
-  final Curve exitCurve;
-  final Curve standardCurve;
+
+  Curve get enterCurve => theme.motion.enterCurve;
+  Curve get exitCurve => theme.motion.exitCurve;
+  Curve get standardCurve => Easing.standard;
+
+  /// Tema geçişinin süresi (MaterialApp.themeAnimationDuration).
+  Duration get themeSwitch => scaled(Durations.long2);
+
+  /// [d]'yi temanın hız çarpanıyla ölçekler.
+  Duration scaled(Duration d) =>
+      Duration(microseconds: (d.inMicroseconds * theme.motion.speed).round());
 
   static AppTokens of(BuildContext context) =>
       Theme.of(context).extension<AppTokens>() ?? const AppTokens();
@@ -193,15 +297,24 @@ class AppTokens extends ThemeExtension<AppTokens> {
     return tintOf(context, s[i % s.length]);
   }
 
-  /// Azaltılmış hareket açıksa geçişler anlık olur (UX_RULES §5).
+  /// Temanın hızıyla ölçeklenmiş süre; azaltılmış hareket açıksa ya da tema anlıksa
+  /// sıfır (UX_RULES §5).
   static Duration duration(BuildContext context, Duration d) =>
-      MediaQuery.disableAnimationsOf(context) ? Duration.zero : d;
+      MediaQuery.disableAnimationsOf(context)
+      ? Duration.zero
+      : of(context).scaled(d);
+
+  /// Geçiş çizilmeli mi (azaltılmış hareket ya da anlık tema değilse).
+  static bool animates(BuildContext context) =>
+      !MediaQuery.disableAnimationsOf(context) &&
+      of(context).theme.motion != Motion.instant;
 
   @override
   AppTokens copyWith() => this;
 
   @override
-  AppTokens lerp(AppTokens? other, double t) => other ?? this;
+  AppTokens lerp(AppTokens? other, double t) =>
+      other == null || t < 0.5 ? this : other;
 }
 
 typedef _Palette = ({
@@ -279,6 +392,41 @@ class ChartColors extends ThemeExtension<ChartColors> {
     Color(0xFF2A78D6),
     Color(0xFF1C5CAB),
     Color(0xFF104281),
+  ];
+
+  /// Minimal ve Kâğıt'ın (ve Sakin'in) ortak sakin serisi.
+  static const _minimalSeries = (
+    light: [
+      Color(0xFF2971C6),
+      Color(0xFFCB882E),
+      Color(0xFF14938D),
+      Color(0xFFC66846),
+      Color(0xFF2C94B0),
+      Color(0xFFC05B6E),
+      Color(0xFF7466B5),
+      Color(0xFF57914A),
+    ],
+    dark: [
+      Color(0xFF4087DE),
+      Color(0xFFC17F21),
+      Color(0xFF169D97),
+      Color(0xFFCA6B49),
+      Color(0xFF2C94B0),
+      Color(0xFFCA6477),
+      Color(0xFF8678C9),
+      Color(0xFF5D9850),
+    ],
+  );
+
+  static const _natureSeries = [
+    Color(0xFFAE5528),
+    Color(0xFF45A075),
+    Color(0xFFB46D10),
+    Color(0xFF955890),
+    Color(0xFF76771A),
+    Color(0xFFD8625C),
+    Color(0xFF46712B),
+    Color(0xFF139CB6),
   ];
 
   static _Palette? _palette(AppTheme t) => switch (t) {
@@ -377,26 +525,8 @@ class ChartColors extends ThemeExtension<ChartColors> {
       ],
     ),
     AppTheme.calm => (
-      light: [
-        Color(0xFF2971C6),
-        Color(0xFFCB882E),
-        Color(0xFF14938D),
-        Color(0xFFC66846),
-        Color(0xFF2C94B0),
-        Color(0xFFC05B6E),
-        Color(0xFF7466B5),
-        Color(0xFF57914A),
-      ],
-      dark: [
-        Color(0xFF4087DE),
-        Color(0xFFC17F21),
-        Color(0xFF169D97),
-        Color(0xFFCA6B49),
-        Color(0xFF2C94B0),
-        Color(0xFFCA6477),
-        Color(0xFF8678C9),
-        Color(0xFF5D9850),
-      ],
+      light: _minimalSeries.light,
+      dark: _minimalSeries.dark,
       ninth: (light: Color(0xFFA45B9F), dark: Color(0xFFB46AAE)),
       ramp: [
         Color(0xFF93F1F0),
@@ -439,26 +569,8 @@ class ChartColors extends ThemeExtension<ChartColors> {
       ],
     ),
     AppTheme.minimal => (
-      light: [
-        Color(0xFF2971C6),
-        Color(0xFFCB882E),
-        Color(0xFF14938D),
-        Color(0xFFC66846),
-        Color(0xFF2C94B0),
-        Color(0xFFC05B6E),
-        Color(0xFF7466B5),
-        Color(0xFF57914A),
-      ],
-      dark: [
-        Color(0xFF4087DE),
-        Color(0xFFC17F21),
-        Color(0xFF169D97),
-        Color(0xFFCA6B49),
-        Color(0xFF2C94B0),
-        Color(0xFFCA6477),
-        Color(0xFF8678C9),
-        Color(0xFF5D9850),
-      ],
+      light: _minimalSeries.light,
+      dark: _minimalSeries.dark,
       ninth: (light: Color(0xFF8B7B02), dark: Color(0xFF9C8A04)),
       ramp: [
         Color(0xFFCDE0F9),
@@ -467,6 +579,49 @@ class ChartColors extends ThemeExtension<ChartColors> {
         Color(0xFF708298),
         Color(0xFF54657A),
         Color(0xFF39495D),
+      ],
+    ),
+    // Kâğıt: Minimal'in sakin serisi; mürekkep mavisi rampa ve kahve dokuzuncu renk.
+    AppTheme.paper => (
+      light: _minimalSeries.light,
+      dark: _minimalSeries.dark,
+      ninth: (light: Color(0xFF8C6B4A), dark: Color(0xFFA07C58)),
+      ramp: [
+        Color(0xFFD1DFF2),
+        Color(0xFFABBCD3),
+        Color(0xFF869AB4),
+        Color(0xFF637996),
+        Color(0xFF415A79),
+        Color(0xFF243E5F),
+      ],
+    ),
+    // Doğa: topraksı seri (terrakota, deniz yeşili, aşı boyası, erik, zeytin, mercan,
+    // yosun, çamurcun); aynı renkler iki modda da kapıları geçti.
+    AppTheme.nature => (
+      light: _natureSeries,
+      dark: _natureSeries,
+      ninth: (light: Color(0xFF4B6FA5), dark: Color(0xFF5A80B8)),
+      ramp: [
+        Color(0xFFD6E4C1),
+        Color(0xFFB1C297),
+        Color(0xFF8EA16E),
+        Color(0xFF6C8046),
+        Color(0xFF4C611C),
+        Color(0xFF304600),
+      ],
+    ),
+    // Gece: Ciddi'nin doğrulanmış serisi; çivit rampa ve camgöbeği dokuzuncu renk.
+    AppTheme.night => (
+      light: _light,
+      dark: _dark,
+      ninth: (light: Color(0xFF1E93A6), dark: Color(0xFF2BA9BD)),
+      ramp: [
+        Color(0xFFD3DBFF),
+        Color(0xFFAEB6EE),
+        Color(0xFF8A92D3),
+        Color(0xFF6870B8),
+        Color(0xFF494D9D),
+        Color(0xFF302D85),
       ],
     ),
   };
@@ -509,7 +664,19 @@ class ChartColors extends ThemeExtension<ChartColors> {
   ChartColors copyWith() => this;
 
   @override
-  ChartColors lerp(ChartColors? other, double t) => other ?? this;
+  ChartColors lerp(ChartColors? other, double t) {
+    if (other == null) return this;
+    List<Color> mix(List<Color> a, List<Color> b) => a.length != b.length
+        ? (t < 0.5 ? a : b)
+        : [for (var i = 0; i < a.length; i++) Color.lerp(a[i], b[i], t)!];
+    return ChartColors._(
+      mix(series, other.series),
+      mix(ramp, other.ramp),
+      Color.lerp(grid, other.grid, t)!,
+      Color.lerp(empty, other.empty, t)!,
+      t < 0.5 ? _roots : other._roots,
+    );
+  }
 }
 
 /// `#RRGGBB` → renk; biçim bozuksa null.
@@ -521,70 +688,102 @@ Color? hexColor(String? hex) => hex == null || hex.length != 7
 String hexOf(Color c) =>
     '#${(c.toARGB32() & 0xFFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase()}';
 
-ColorScheme _scheme(AppTheme t, Brightness b) => switch (t) {
-  AppTheme.calm => ColorScheme.fromSeed(
-    seedColor: t.seed,
-    brightness: b,
-    dynamicSchemeVariant: DynamicSchemeVariant.neutral,
-  ),
-  AppTheme.highContrast => ColorScheme.fromSeed(
-    seedColor: t.seed,
-    brightness: b,
-    contrastLevel: 1, // WCAG AAA hedefi (UX_RULES §9)
-  ),
-  // Minimal: gri yüzeyler, tek vurgu rengi.
-  AppTheme.minimal => () {
-    final accent = ColorScheme.fromSeed(seedColor: t.seed, brightness: b);
-    return ColorScheme.fromSeed(
-      seedColor: t.seed,
-      brightness: b,
-      dynamicSchemeVariant: DynamicSchemeVariant.monochrome,
+ColorScheme _scheme(AppTheme t, Brightness b) {
+  ColorScheme seeded(Color seed, DynamicSchemeVariant v) =>
+      ColorScheme.fromSeed(
+        seedColor: seed,
+        brightness: b,
+        dynamicSchemeVariant: v,
+        contrastLevel: t == AppTheme.highContrast
+            ? 1
+            : 0, // YK: WCAG AAA hedefi
+      );
+  // Tek vurgu rengi, yüzeyler başka bir tohumdan (Minimal: gri, Kâğıt: sıcak kâğıt).
+  ColorScheme accented(ColorScheme surfaces) {
+    final accent = seeded(t.seed, DynamicSchemeVariant.tonalSpot);
+    return surfaces.copyWith(
       primary: accent.primary,
       onPrimary: accent.onPrimary,
       primaryContainer: accent.primaryContainer,
       onPrimaryContainer: accent.onPrimaryContainer,
     );
-  }(),
-  AppTheme.playful || AppTheme.young => ColorScheme.fromSeed(
-    seedColor: t.seed,
-    brightness: b,
-    dynamicSchemeVariant: DynamicSchemeVariant.vibrant,
-  ),
-  _ => ColorScheme.fromSeed(seedColor: t.seed, brightness: b),
-};
+  }
+
+  return switch (t) {
+    AppTheme.minimal => accented(
+      seeded(t.seed, DynamicSchemeVariant.monochrome),
+    ),
+    AppTheme.paper => accented(
+      seeded(const Color(0xFF8C7A55), DynamicSchemeVariant.neutral),
+    ),
+    // Gece koyuda gerçek siyah (OLED); kaplar siyaha yakın basamaklar.
+    AppTheme.night when b == Brightness.dark =>
+      seeded(t.seed, t.variant).copyWith(
+        surface: const Color(0xFF000000),
+        surfaceDim: const Color(0xFF000000),
+        surfaceContainerLowest: const Color(0xFF000000),
+        surfaceContainerLow: const Color(0xFF0B0B10),
+        surfaceContainer: const Color(0xFF121218),
+        surfaceContainerHigh: const Color(0xFF1A1A21),
+        surfaceContainerHighest: const Color(0xFF23232B),
+        surfaceBright: const Color(0xFF2B2B33),
+      ),
+    _ => seeded(t.seed, t.variant),
+  };
+}
 
 TextTheme _text(AppTheme t, TextTheme base) {
-  TextStyle? f(TextStyle? s, String family) => s == null
-      ? null
-      : weighted(
-          s.copyWith(fontFamily: family),
-          s.fontWeight ?? FontWeight.w400,
-        );
+  // Boyutlar çizimde M3 geometrisinden gelir; ölçekli temada yalnız boyut önceden yazılır
+  // (stil `inherit: true` kalır ki tema geçişinde ara değer alınabilsin).
+  final geo = Typography.material2021().englishLike;
+  TextStyle? f(TextStyle? s, TextStyle? g, String family) {
+    if (s == null) return null;
+    final size = s.fontSize ?? g?.fontSize;
+    return weighted(
+      s.copyWith(
+        fontFamily: family,
+        fontSize: t.typeScale == 1 || size == null
+            ? s.fontSize
+            : size * t.typeScale,
+      ),
+      s.fontWeight ?? FontWeight.w400,
+    );
+  }
+
   final h = t.heading ?? t.body;
   final n = t.numeric ?? h;
   return base.copyWith(
-    displayLarge: f(base.displayLarge, n),
-    displayMedium: f(base.displayMedium, n),
-    displaySmall: f(base.displaySmall, n),
-    headlineLarge: f(base.headlineLarge, h),
-    headlineMedium: f(base.headlineMedium, h),
-    headlineSmall: f(base.headlineSmall, h),
-    titleLarge: f(base.titleLarge, h),
-    titleMedium: f(base.titleMedium, t.body),
-    titleSmall: f(base.titleSmall, t.body),
-    bodyLarge: f(base.bodyLarge, t.body)?.copyWith(height: 1.5),
-    bodyMedium: f(base.bodyMedium, t.body)?.copyWith(height: 1.45),
-    bodySmall: f(base.bodySmall, t.body)?.copyWith(height: 1.4),
-    labelLarge: f(base.labelLarge, t.body),
-    labelMedium: f(base.labelMedium, t.body),
-    labelSmall: f(base.labelSmall, t.numeric ?? t.body),
+    displayLarge: f(base.displayLarge, geo.displayLarge, n),
+    displayMedium: f(base.displayMedium, geo.displayMedium, n),
+    displaySmall: f(base.displaySmall, geo.displaySmall, n),
+    headlineLarge: f(base.headlineLarge, geo.headlineLarge, h),
+    headlineMedium: f(base.headlineMedium, geo.headlineMedium, h),
+    headlineSmall: f(base.headlineSmall, geo.headlineSmall, h),
+    titleLarge: f(base.titleLarge, geo.titleLarge, h),
+    titleMedium: f(base.titleMedium, geo.titleMedium, t.body),
+    titleSmall: f(base.titleSmall, geo.titleSmall, t.body),
+    bodyLarge: f(base.bodyLarge, geo.bodyLarge, t.body)?.copyWith(height: 1.5),
+    bodyMedium: f(
+      base.bodyMedium,
+      geo.bodyMedium,
+      t.body,
+    )?.copyWith(height: 1.45),
+    bodySmall: f(base.bodySmall, geo.bodySmall, t.body)?.copyWith(height: 1.4),
+    labelLarge: f(base.labelLarge, geo.labelLarge, t.body),
+    labelMedium: f(base.labelMedium, geo.labelMedium, t.body),
+    labelSmall: f(base.labelSmall, geo.labelSmall, t.numeric ?? t.body),
   );
 }
 
+/// Tema verisi saf bir fonksiyondur; tema seçicideki önizlemeler aynı nesneyi kullanır.
 ThemeData buildTheme(
   Brightness brightness, {
   AppTheme theme = AppTheme.serious,
-}) {
+}) => _themes[(theme, brightness)] ??= _build(brightness, theme);
+
+final _themes = <(AppTheme, Brightness), ThemeData>{};
+
+ThemeData _build(Brightness brightness, AppTheme theme) {
   final scheme = _scheme(theme, brightness);
   final tokens = AppTokens(theme: theme, radius: theme.radius);
   final shape = RoundedRectangleBorder(
@@ -607,6 +806,15 @@ ThemeData buildTheme(
     Look.soft => (scheme.surfaceContainer, BorderSide.none),
     Look.bold => (scheme.surface, BorderSide(color: scheme.outline, width: 2)),
     Look.hairline => (scheme.surface, BorderSide(color: scheme.outlineVariant)),
+    Look.paper => (
+      scheme.surface,
+      BorderSide(color: scheme.onSurface.withValues(alpha: 0.22)),
+    ),
+    Look.earthy => (scheme.surfaceContainerLow, BorderSide.none),
+    Look.oled => (
+      scheme.surfaceContainerLow,
+      BorderSide(color: scheme.primary.withValues(alpha: 0.35)),
+    ),
   };
   return ThemeData(
     colorScheme: scheme,
@@ -629,15 +837,15 @@ ThemeData buildTheme(
     ),
     listTileTheme: ListTileThemeData(
       shape: shape,
-      minTileHeight: 56,
+      minTileHeight: theme.touch + 4,
       contentPadding: const EdgeInsets.symmetric(horizontal: Gap.l),
     ),
     filledButtonTheme: FilledButtonThemeData(
-      style: FilledButton.styleFrom(minimumSize: const Size(64, 52)),
+      style: FilledButton.styleFrom(minimumSize: Size(64, theme.touch)),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        minimumSize: const Size(64, 52),
+        minimumSize: Size(64, theme.touch),
         side: highContrast ? BorderSide(color: scheme.outline, width: 2) : null,
       ),
     ),

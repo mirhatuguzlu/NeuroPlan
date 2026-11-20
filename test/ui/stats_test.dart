@@ -320,7 +320,7 @@ void main() {
       }
       // Ayarlardan seçilen tema kaydedilir; Ciddi seçilince anahtar boşalır (varsayılan).
       await h.tap(find.byTooltip('Ayarlar'));
-      await h.tap(find.text('Tema'));
+      await h.tap(find.text('Görünüm ve tema'));
       await h.tap(find.text('Ciddi'));
       final p = await t.runAsync(() => h.read(profileRepositoryProvider).get());
       expect(p!.theme, isNull);

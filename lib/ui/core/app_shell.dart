@@ -1,10 +1,10 @@
-import 'package:flutter/services.dart';
+import 'feedback.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 
-import '../../app/providers.dart';
 import '../../app/theme.dart';
 import '../../app/transitions.dart';
 import '../features/brain/brain_controller.dart';
@@ -27,7 +27,6 @@ class AppShell extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = context.l10n;
-    final haptics = ref.watch(profileProvider).value?.hapticsEnabled ?? true;
     final keyboard = MediaQuery.viewInsetsOf(context).bottom > 0;
     // Ön ısıtma: beyin sahnesi ilk kareden sonra arka planda yüklenir (BRAIN-5).
     WidgetsBinding.instance.addPostFrameCallback(
@@ -65,7 +64,7 @@ class AppShell extends ConsumerWidget {
                       destinations: destinations,
                       selected: shell.currentIndex,
                       onSelect: (i) {
-                        if (haptics) HapticFeedback.selectionClick();
+                        Haptics.select(context);
                         shell.goBranch(
                           i,
                           initialLocation: i == shell.currentIndex,
@@ -131,6 +130,17 @@ class _Bar extends StatelessWidget {
         BorderSide(color: scheme.outlineVariant),
         0.0,
       ),
+      Look.paper => (
+        scheme.surface,
+        BorderSide(color: scheme.onSurface.withValues(alpha: 0.22)),
+        0.0,
+      ),
+      Look.earthy => (scheme.secondaryContainer, BorderSide.none, 1.0),
+      Look.oled => (
+        scheme.surfaceContainerLow,
+        BorderSide(color: scheme.primary.withValues(alpha: 0.35)),
+        0.0,
+      ),
     };
     return Material(
       elevation: elevation,
@@ -138,7 +148,9 @@ class _Bar extends StatelessWidget {
       shadowColor: scheme.shadow,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(
-          tokens.theme.look == Look.terminal ? tokens.radius : tokens.navRadius,
+          tokens.theme.look == Look.terminal || tokens.theme.look == Look.paper
+              ? tokens.radius
+              : tokens.navRadius,
         ),
         side: side,
       ),

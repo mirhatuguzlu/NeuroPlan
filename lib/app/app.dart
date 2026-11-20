@@ -2,6 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../l10n/app_localizations.dart';
+import 'crash_reports.dart';
+import 'feature_flags.dart';
 import 'next_up.dart';
 import 'providers.dart';
 import 'router.dart';
@@ -14,6 +16,8 @@ class NeuroPlanApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final profile = ref.watch(profileProvider).value;
     listenNextUp(ref);
+    ref.watch(featureFlagsSyncProvider);
+    ref.watch(crashReportsProvider);
     final theme = AppTheme.of(profile?.theme);
     return MaterialApp.router(
       onGenerateTitle: (c) => L10n.of(c).appTitle,
@@ -23,8 +27,19 @@ class NeuroPlanApp extends ConsumerWidget {
       themeMode: switch (profile?.themeMode) {
         'light' => ThemeMode.light,
         'dark' => ThemeMode.dark,
+        _ when theme.darkFirst => ThemeMode.dark,
         _ => ThemeMode.system,
       },
+      // Tema değişimi yeniden başlatmadan, temanın hızıyla yumuşakça geçer (D56).
+      themeAnimationDuration:
+          WidgetsBinding
+              .instance
+              .platformDispatcher
+              .accessibilityFeatures
+              .disableAnimations
+          ? Duration.zero
+          : AppTokens(theme: theme).themeSwitch,
+      themeAnimationCurve: Easing.standard,
       locale: profile?.locale == null ? null : Locale(profile!.locale!),
       // Geniş ekranda içerik okunur genişlikte ortalanır (UX_RULES §7; tablet düzeni sonra).
       builder: (context, child) => ColoredBox(
