@@ -50,6 +50,12 @@ claude plugin marketplace add flutter/agent-plugins
 claude plugin install dart-flutter@dart-flutter
 claude plugin marketplace add nextlevelbuilder/ui-ux-pro-max-skill
 claude plugin install ui-ux-pro-max@ui-ux-pro-max-skill
+claude plugin marketplace add multica-ai/andrej-karpathy-skills
+claude plugin install andrej-karpathy-skills@karpathy-skills
+claude plugin install superpowers@claude-plugins-official
+claude plugin install mattpocock-skills@claude-plugins-official
+claude plugin marketplace add affaan-m/ECC
+claude plugin install ecc@ecc            # hook'lar kapalı: ~/.claude/settings.json "env": {"ECC_HOOKS_ENABLED": "false"}
 npx skills add dart-lang/skills --skill '*' -g --agent claude-code -y
 npx skills add anthropics/skills --skill frontend-design -g --agent claude-code -y
 npx impeccable install --providers=claude --global --no-hooks -y
