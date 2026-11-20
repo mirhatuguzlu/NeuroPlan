@@ -396,8 +396,8 @@ copy docs\account-deletion\config.example.js docs\account-deletion\config.js
 - `contactEmail`: silme isteklerinin geleceği adres. **Mutlaka doldur**; Play bu yolu ister.
 - `supabaseUrl` ve `supabaseKey`: yalnız "sayfadan sil" yolu için. `.env`'deki `SUPABASE_URL` ve `SUPABASE_ANON_KEY` ile aynı değerler.
 
-### 8.2 Yayınlama kararı (senin)
-`config.js` git-ignored. CLAUDE.md kural 7, Supabase değerlerini yalnız `.env`'de tutar. Seçenekler:
+### 8.2 Yayınlama kararı
+**Seçilen: (a)** (2026-11-20, D51). `config.js` repoda ve GitHub Pages ile yayımlanır; içinde yalnız publishable key ve iletişim e-postası var. Diğer seçenekler kayıt için:
 - **(a) GitHub Pages, en kolayı:**
   - Repo herkese açık, Pages ücretsiz.
   - Kök `.gitignore`'daki `docs/account-deletion/config.js` satırını sil ve `config.js`'i commit'le.

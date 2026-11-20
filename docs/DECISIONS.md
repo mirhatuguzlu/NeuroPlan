@@ -391,3 +391,4 @@ Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem 
 - Tanıtım sitesi yapılırken iç belgelerin (DECISIONS vb.) web'de görünüp görünmeyeceği yeniden düşünülecek. Seçenek: Pages kaynağını `/docs` yerine yalnız site dosyalarını yayımlayan bir GitHub Actions iş akışına taşımak.
 **Neden:** Proje sahibinin isteği. Silme yolu Play için erişilebilir olmalı ama tanıtım sayfasında öne çıkması gerekmez. Adres sabit kalırsa Play beyanı yeniden yapılmaz.
 **Durum:** Planlanan (son aşama).
+- **2026-11-20 eki:** Silme sayfasının `config.js`'i (Supabase URL, publishable key, iletişim e-postası) GitHub Pages'te yayımlanmak üzere repoya alındı; `.gitignore` satırı kaldırıldı. CLAUDE.md kural 7'nin istisnası: bu değerler zaten herkese açık tasarlanmıştır, secret key yoktur, güvenliği RLS sağlar. `config.example.js` boş şablon olarak kalır.

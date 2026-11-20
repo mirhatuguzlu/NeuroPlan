@@ -55,6 +55,3 @@ app.*.map.json
 # 3D beyin geliştirici aracı (tool/brain)
 tool/brain/node_modules/
 tool/brain/out/
-
-# Hesap silme sayfasının yerel ayarı (docs/account-deletion/config.example.js)
-docs/account-deletion/config.js
