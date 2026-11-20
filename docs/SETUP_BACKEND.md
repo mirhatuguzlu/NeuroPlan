@@ -343,16 +343,42 @@ Mesaj eklenince veritabanı push fonksiyonunu çağırır. Adresi ve sırrı Vau
    select vault.create_secret('https://<REF>.supabase.co/functions/v1/push_message', 'push_function_url');
    select vault.create_secret('<5.5 PUSH_WEBHOOK_SECRET ile aynı değer>', 'push_webhook_secret');
    ```
-3. **Run** (Ctrl+Enter). Her satır bir kimlik (uuid) döndürür.
+3. **Run** (Ctrl+Enter).
+   - SQL Editor yalnız **son** satırın sonucunu gösterir: tek bir kimlik (uuid) görürsün. Bu normaldir; iki kayıt da oluşmuştur.
+   - Bu kimliği **saklaman gerekmez**. Kayıtlara her zaman adlarıyla ulaşılır.
 4. Sorgu sekmesini kaydetme ya da kapattıktan sonra sil; sırrı içeriyor.
+
+Aynı sorguyu ikinci kez çalıştırmak `duplicate key value violates unique constraint` hatası verir. Bunun anlamı "bu adla kayıt zaten var"; zararsızdır. Var olanı değiştirmek için aşağıdaki "Değiştirmek" bölümünü kullan.
 
 Bu iki kayıt yoksa tetikleyici hiçbir şey yapmaz: mesajlar yine gider, yalnız push gelmez.
 
-Sırrı değiştirmek için:
+### 7.1 Kontrol
+Bu sorgu sırrı ekrana tam yazmaz; yalnız ilk 4 karakterini ve uzunluğunu gösterir:
 ```sql
-select vault.update_secret((select id from vault.secrets where name = 'push_webhook_secret'), '<yeni>');
+select name,
+       case when name = 'push_function_url' then decrypted_secret
+            else left(decrypted_secret, 4) || '…' end as deger,
+       length(decrypted_secret) as uzunluk
+from vault.decrypted_secrets
+where name in ('push_function_url', 'push_webhook_secret');
 ```
-Sonra `.env.prod`'u da güncelle ve 6.3'ü tekrarla.
+Doğru sonuç iki satırdır:
+- `push_function_url`: `https://<senin REF'in>.supabase.co/functions/v1/push_message`. İçinde `<REF>` yazısı **kalmamış** olmalı.
+- `push_webhook_secret`: uzunluk **48**, ilk 4 karakter `.env.prod`'daki `PUSH_WEBHOOK_SECRET`'ın ilk 4 karakteriyle aynı.
+
+### 7.2 Değiştirmek
+Kontrolde bir satır yanlışsa düzelt. `update_secret` başarılı olunca **boş sonuç** döndürür; bu normaldir.
+- **Komuttaki `<...>` kısmını, köşeli parantezler dahil, gerçek değerle değiştir.** `'<yeni>'` diye bırakırsan sır kelimenin tam olarak "<yeni>" olur ve push çalışmaz.
+- Sır için: `.env.prod`'u aç ve `PUSH_WEBHOOK_SECRET=` satırında eşittirden sonrasını kopyala. Tırnak ve boşluk alma.
+  ```sql
+  select vault.update_secret((select id from vault.secrets where name = 'push_webhook_secret'), 'BURAYA_GERCEK_SIR');
+  ```
+- Adres için:
+  ```sql
+  select vault.update_secret((select id from vault.secrets where name = 'push_function_url'), 'https://GERCEK_REF.supabase.co/functions/v1/push_message');
+  ```
+- Sonra 7.1'i tekrar çalıştır.
+- Sırrı tamamen yenilemek istersen (5.5'te yeni değer ürettiysen) iki yeri birlikte güncelle: önce `.env.prod`, sonra 6.3 (`secrets set`), en son yukarıdaki Vault komutu.
 
 ---
 
