@@ -197,6 +197,17 @@ Kaçınılacaklar (frontend-design): her etikette TÜMÜ BÜYÜK HARF, başlıkt
 | Hesabı sil | `delete_forever` |
 | Bütün kategoriler | `select_all` |
 | Kaydet (satır içi alan) | `check` |
+| Tema | `style` |
+| Verileri dışa aktar | `download` |
+| Analiz: zaman dağılımı | `donut_large` |
+| Analiz: plana uyum | `task_alt` |
+| Seri / tutarlılık | `local_fire_department` |
+| Analiz: odak kalitesi | `monitoring` |
+| Analiz: kesintiler | `notifications_paused` |
+| Analiz: mod karşılaştırması | `difference` |
+| Analiz: denge | `balance` |
+| Haftalık rapor | `summarize` |
+| Analiz yorumu (grafiğin tek cümlesi) | `lightbulb` (Önerilen saat ile aynı aile: öneri/çıkarım) |
 
 ## 9. Erişilebilirlik
 - **Kontrast (WCAG 2.2 AA):** normal metin ≥ 4.5:1; büyük metin, ikon ve arayüz bileşeni sınırları ≥ 3:1. Yüksek Kontrast teması AAA (7:1) hedefler. Her tema açık ve koyu modda ölçülür.
@@ -221,6 +232,9 @@ Android geri tuşu / geri hareketi her ekranda tahmin edilebilir davranır (`Pop
 
 ## 12. Grafikler (Profil / Analiz)
 Her grafikte başlık, eksen ve birim, dokununca değer, boş / yükleniyor durumu ve ekran okuyucu için tek cümlelik metin özeti bulunur. Renk paleti temadan gelir ve renk körlüğüne dayanıklıdır.
+- Uygulama (Aşama 5, D54): renkler `ChartColors` ThemeExtension'ından (dataviz skill'inin doğrulanmış paleti; değiştirilirse `validate_palette.js` yeniden koşturulur). Tek eksen; ≥ 2 seride lejant; yazı rengi seri rengi değildir; ızgara sessiz ve düz.
+- Her analiz sayfası tek soruya cevap verir ve başlığı o sorudur; grafiğin altında tek cümlelik yorum (`Insight`) ve "Liste olarak göster" (tablo görünümü). Dokunulan değer, grafiğin altında ilgili oturumlarla açılır.
+- Hesaplar `neuroplan_core` içindeki saf fonksiyonlardır (`stats.dart`); widget hesap yapmaz.
 
 ## 13. Teslim öncesi kontrol listesi (her ekran)
 - [ ] Ekranın tek amacı bir cümleyle yazılabiliyor.

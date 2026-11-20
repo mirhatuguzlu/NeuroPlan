@@ -74,4 +74,14 @@ Stream<LicenseEntry> _assetLicenses() async* {
   yield LicenseEntryWithLineBreaks([
     'three.js',
   ], await rootBundle.loadString('assets/brain/LICENSE_threejs.txt'));
+  for (final (name, file) in const [
+    ('Atkinson Hyperlegible Next', 'atkinsonhyperlegiblenext'),
+    ('Nunito', 'nunito'),
+    ('Lexend', 'lexend'),
+    ('JetBrains Mono', 'jetbrainsmono'),
+  ]) {
+    yield LicenseEntryWithLineBreaks([
+      name,
+    ], await rootBundle.loadString('assets/fonts/OFL_$file.txt'));
+  }
 }

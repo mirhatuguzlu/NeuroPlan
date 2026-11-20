@@ -120,7 +120,7 @@ class L10nEn extends L10n {
 
   @override
   String get onbAppearanceBody =>
-      'Light, dark or the same as your device. You can change it any time in Profile.';
+      'Pick light or dark and a theme. You can change it any time in Settings.';
 
   @override
   String get onbSleepTitle => 'When do you usually sleep?';
@@ -978,7 +978,7 @@ class L10nEn extends L10n {
   String get chunkRemove => 'Remove chunk';
 
   @override
-  String get profileTitle => 'Profile and settings';
+  String get profileTitle => 'Profile';
 
   @override
   String get secGeneral => 'General';
@@ -2577,4 +2577,650 @@ class L10nEn extends L10n {
 
   @override
   String get tgCofocusChooseFirst => 'Pick your task first to start.';
+
+  @override
+  String get settingsTitle => 'Settings';
+
+  @override
+  String get settingTheme => 'Theme';
+
+  @override
+  String get settingSleepGoal => 'Sleep goal';
+
+  @override
+  String get secData => 'Data and sources';
+
+  @override
+  String get exportTitle => 'Export my data';
+
+  @override
+  String get exportSubtitle =>
+      'All your data as one JSON file; no internet needed.';
+
+  @override
+  String get exportError => 'Couldn\'t prepare the file. Try again.';
+
+  @override
+  String get sourcesTitle => 'Scientific sources';
+
+  @override
+  String get sourcesSubtitle =>
+      'The studies behind every scientific statement in the app';
+
+  @override
+  String get sourcesIntro =>
+      'Every scientific statement in the app rests on a peer-reviewed source in this list. Evidence levels are shown on the region pages.';
+
+  @override
+  String get sourcesCopy => 'Copy link';
+
+  @override
+  String get themeSerious => 'Serious';
+
+  @override
+  String get themeSeriousBody => 'Calm authority, readability first';
+
+  @override
+  String get themePlayful => 'Playful';
+
+  @override
+  String get themePlayfulBody => 'Rounded shapes, warm colours';
+
+  @override
+  String get themeYoung => 'Young';
+
+  @override
+  String get themeYoungBody => 'Energetic and easy to read';
+
+  @override
+  String get themeCoder => 'Coder';
+
+  @override
+  String get themeCoderBody => 'A terminal feel; monospaced numbers';
+
+  @override
+  String get themeCalm => 'Calm';
+
+  @override
+  String get themeCalmBody => 'Low saturation, for evenings';
+
+  @override
+  String get themeHighContrast => 'High contrast';
+
+  @override
+  String get themeHighContrastBody => 'Maximum contrast, bold outlines';
+
+  @override
+  String get themeMinimal => 'Minimal';
+
+  @override
+  String get themeMinimalBody => 'Grey surfaces, one accent colour';
+
+  @override
+  String get pfAnalyses => 'Insights';
+
+  @override
+  String get pfWeekFocus => 'Focus this week';
+
+  @override
+  String pfLastWeek(String time) {
+    return 'Last week $time';
+  }
+
+  @override
+  String get pfAdherence => 'Plan adherence this week';
+
+  @override
+  String get pfNoPlanYet => 'No planned items yet';
+
+  @override
+  String get pfStreak => 'Streak';
+
+  @override
+  String pfLongest(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n days',
+      one: '1 day',
+    );
+    return 'Longest: $_temp0';
+  }
+
+  @override
+  String get pfStrongest => 'Strongest region';
+
+  @override
+  String get pfStrongestEmpty => 'Starts with your first focus session';
+
+  @override
+  String get stQTime => 'Where does my time go?';
+
+  @override
+  String get stQAdherence => 'How well do I follow my plan?';
+
+  @override
+  String get stQBestHours => 'When do I focus best?';
+
+  @override
+  String get stQConsistency => 'Am I consistent?';
+
+  @override
+  String get stQQuality => 'How is my focus quality changing?';
+
+  @override
+  String get stQInterruptions => 'What interrupts me?';
+
+  @override
+  String get stQModes => 'Does Pomodoro or deep work suit me better?';
+
+  @override
+  String get stQBrain => 'How is my brain map growing?';
+
+  @override
+  String get stQProjects => 'Will my projects finish on time?';
+
+  @override
+  String get stQSleep => 'Am I planning enough sleep?';
+
+  @override
+  String get stQBalance => 'Am I balanced?';
+
+  @override
+  String get stQWeekly => 'Weekly report';
+
+  @override
+  String get stPeriodWeek => 'Week';
+
+  @override
+  String get stPeriodMonth => 'Month';
+
+  @override
+  String get stPeriodQuarter => '3 months';
+
+  @override
+  String get stPeriodYear => 'Year';
+
+  @override
+  String get stPeriodAll => 'All';
+
+  @override
+  String get stShowList => 'Show as list';
+
+  @override
+  String get stLoading => 'Loading';
+
+  @override
+  String get stEmptyFocus =>
+      'No data yet. Start your first focus session and this fills up.';
+
+  @override
+  String get stEmptyFocusAction => 'Start your first focus session';
+
+  @override
+  String get stEmptyRated =>
+      'You haven\'t rated a focus session yet. Rate focus and fatigue when a session ends and it shows up here.';
+
+  @override
+  String get stEmptyPlan =>
+      'Nothing was planned in this period. Add a routine or task; adherence is measured from the next day.';
+
+  @override
+  String get stEmptyPlanAction => 'Add an item';
+
+  @override
+  String get stEmptyProjects =>
+      'No projects yet. Add one with a deadline and total time to track the remaining work here.';
+
+  @override
+  String get stEmptyProjectsAction => 'Add a project';
+
+  @override
+  String get stEmptySleep =>
+      'You haven\'t set a sleep window yet. Once you do, your planned sleep shows up here.';
+
+  @override
+  String get stEmptySleepAction => 'Set sleep window';
+
+  @override
+  String get stEmptyWeekly =>
+      'No focus sessions this week or last week. The report is ready after your first session.';
+
+  @override
+  String get stNoSessionsHere => 'No focus sessions here.';
+
+  @override
+  String stMoreSessions(int n) {
+    return 'and $n more';
+  }
+
+  @override
+  String get stFreeSession => 'Free focus';
+
+  @override
+  String get stBroken => 'broken';
+
+  @override
+  String stFocusScoreShort(int n) {
+    return 'focus $n/5';
+  }
+
+  @override
+  String stPercent(int n) {
+    return '$n%';
+  }
+
+  @override
+  String stDays(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n days',
+      one: '1 day',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String stNeurons(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n neurons',
+      one: '1 neuron',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String stNeuronsGained(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n neurons',
+      one: '1 neuron',
+    );
+    return '+$_temp0';
+  }
+
+  @override
+  String stPoints(int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n points',
+      one: '1 point',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get stNoCategory => 'Uncategorised';
+
+  @override
+  String get stUncategorized => 'No subcategory';
+
+  @override
+  String get stDirectly => 'This category itself';
+
+  @override
+  String get stUpLevel => 'Up one level';
+
+  @override
+  String get stNone => 'none';
+
+  @override
+  String stTimeInsight(String name, String time, int pct) {
+    return 'You spent the most time on $name: $time ($pct%).';
+  }
+
+  @override
+  String stTimeTotal(String time) {
+    return 'Total focus: $time. Focus time in broken sessions counts too.';
+  }
+
+  @override
+  String get stPlanned => 'Planned';
+
+  @override
+  String get stDone => 'Done';
+
+  @override
+  String get stAdherence => 'Plan adherence';
+
+  @override
+  String stDoneOf(int done, int planned) {
+    return '$done of $planned items';
+  }
+
+  @override
+  String stAdherenceInsight(int done, int planned, int pct) {
+    return 'You did $done of the $planned items you planned ($pct%).';
+  }
+
+  @override
+  String get stDailyAdherence => 'Daily adherence';
+
+  @override
+  String stBestInsight(String from, String to, String score) {
+    return 'Your best focus hours are $from–$to (average focus score $score).';
+  }
+
+  @override
+  String get stBestNeedMore =>
+      'To find your best hours, you need at least 3 rated sessions in the same time window.';
+
+  @override
+  String get stHeatCaption =>
+      'Each cell is the average focus score (1–5) of sessions started on that day and hour. Grey: no sessions.';
+
+  @override
+  String stScoreCount(String score, int n) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n sessions',
+      one: '1 session',
+    );
+    return '$score · $_temp0';
+  }
+
+  @override
+  String get stNoRating => 'No rating';
+
+  @override
+  String stStreakInsight(int current, int longest) {
+    return 'Your current streak is $current days; your longest is $longest days.';
+  }
+
+  @override
+  String get stStreakCurrent => 'Current streak';
+
+  @override
+  String get stStreakLongest => 'Longest streak';
+
+  @override
+  String stCalendarCaption(int n) {
+    return 'In the last year you completed at least one focus session on $n days.';
+  }
+
+  @override
+  String get stLess => 'Less';
+
+  @override
+  String get stMore => 'More';
+
+  @override
+  String get stFocusScore => 'Focus score';
+
+  @override
+  String get stFatigueScore => 'Fatigue score';
+
+  @override
+  String stFocusFatigue(String focus, String fatigue) {
+    return 'Focus $focus · Fatigue $fatigue';
+  }
+
+  @override
+  String stQualityUp(String d) {
+    return 'Your focus score rose by $d in the second half of the period.';
+  }
+
+  @override
+  String stQualityDown(String d) {
+    return 'Your focus score fell by $d in the second half of the period.';
+  }
+
+  @override
+  String get stQualityStable =>
+      'Your focus score stayed about the same this period.';
+
+  @override
+  String get stQualityNeedMore =>
+      'A trend needs rated sessions at two or more different times.';
+
+  @override
+  String get stQualityCaption =>
+      'Scores are the values you give at the end of a session (1–5).';
+
+  @override
+  String get stInterruptions => 'Interruptions';
+
+  @override
+  String get stPerSession => 'Per session';
+
+  @override
+  String get stByReason => 'By reason';
+
+  @override
+  String get stByHour => 'By hour of day';
+
+  @override
+  String stInterruptInsight(String reason, String hour, int n) {
+    return 'There were $n interruptions this period; most often: $reason, mostly around $hour.';
+  }
+
+  @override
+  String get stNoInterruptions =>
+      'No interruptions in your focus sessions this period.';
+
+  @override
+  String get stReasonAppLeft => 'Left the app';
+
+  @override
+  String get stReasonShade => 'Notification shade';
+
+  @override
+  String get stReasonScreenOff => 'Screen turned off';
+
+  @override
+  String get stReasonCall => 'Phone call';
+
+  @override
+  String get stReasonAlarm => 'Alarm';
+
+  @override
+  String get stReasonOther => 'Other';
+
+  @override
+  String stModesNeedMore(int pomodoro, int deep) {
+    return 'To compare, you need $pomodoro more Pomodoro and $deep more deep work sessions.';
+  }
+
+  @override
+  String stModeProgress(String mode, int n) {
+    return '$mode: $n of 5 sessions';
+  }
+
+  @override
+  String get stModesHow =>
+      'Pick the mode when you start a focus session; once you have 5 sessions of each, we compare them using your own data.';
+
+  @override
+  String stModesPomodoroHigher(String a, String b) {
+    return 'In your data, your focus score is higher with Pomodoro ($a vs $b).';
+  }
+
+  @override
+  String stModesDeepHigher(String a, String b) {
+    return 'In your data, your focus score is higher with deep work ($a vs $b).';
+  }
+
+  @override
+  String get stModesClose =>
+      'In your data, your focus scores in the two modes are close.';
+
+  @override
+  String get stModesScience =>
+      'Research shows no consistent evidence that one method is better in general; this comparison is only your own data.';
+
+  @override
+  String get stCompletion => 'Completion rate';
+
+  @override
+  String get stAvgLength => 'Average length';
+
+  @override
+  String get stSessions => 'Sessions';
+
+  @override
+  String stModeSessions(String mode) {
+    return '$mode sessions';
+  }
+
+  @override
+  String stBrainInsight(String region, int n) {
+    return 'In your brain map this period, the most neurons were added to $region ($n).';
+  }
+
+  @override
+  String get stBrainNoGrowth =>
+      'No neurons were added to your brain map this period.';
+
+  @override
+  String stBrainCaption(int n) {
+    return 'Lines show totals for the three regions that gained the most. Connection strength this period: +$n.';
+  }
+
+  @override
+  String get stFadingTitle => 'Fading regions';
+
+  @override
+  String get stFadingNone => 'No regions are fading right now.';
+
+  @override
+  String get stFadingBody =>
+      'Activities linked to these regions haven\'t had time for a while. Neurons are never removed; they light up again when you return.';
+
+  @override
+  String stBrightness(int n) {
+    return 'Brightness $n%';
+  }
+
+  @override
+  String get stBrainMetaphor =>
+      'The brain map is a metaphor, not a measurement of your brain.';
+
+  @override
+  String get stOpenProject => 'Open project';
+
+  @override
+  String get stProjectNoTotal =>
+      'No total time set; add one to the project to calculate the remaining work.';
+
+  @override
+  String get stRemaining => 'Remaining';
+
+  @override
+  String stRemainingOf(String left, String total) {
+    return '$left of $total left';
+  }
+
+  @override
+  String get stProjectDone => 'Project complete.';
+
+  @override
+  String get stProjectNoForecast =>
+      'No recent work or planned parts to forecast from.';
+
+  @override
+  String stProjectFinishPlan(String date) {
+    return 'Expected finish by plan: $date';
+  }
+
+  @override
+  String stProjectFinishPace(String date) {
+    return 'Expected finish at your last-14-day pace: $date';
+  }
+
+  @override
+  String stProjectOnTime(String date) {
+    return 'deadline $date, on track';
+  }
+
+  @override
+  String stProjectLate(String date) {
+    return 'deadline $date, not on track at this pace';
+  }
+
+  @override
+  String get stSleepPlanned => 'Planned sleep';
+
+  @override
+  String stSleepInsight(String avg, String diff) {
+    return 'Your planned sleep averages $avg; $diff.';
+  }
+
+  @override
+  String get stSleepOnGoal => 'right on your goal';
+
+  @override
+  String stSleepAbove(String d) {
+    return '$d above your goal';
+  }
+
+  @override
+  String stSleepBelow(String d) {
+    return '$d below your goal';
+  }
+
+  @override
+  String get stSleepNotice =>
+      'Your planned sleep is under 7 hours. You might want to look at your sleep window.';
+
+  @override
+  String stSleepGoalLine(String goal) {
+    return 'The horizontal line is your sleep goal: $goal. Values are the planned window, not measured sleep.';
+  }
+
+  @override
+  String get stBalanceAll => 'You gave time to every area this period.';
+
+  @override
+  String stBalanceNeglected(int n, String names) {
+    String _temp0 = intl.Intl.pluralLogic(
+      n,
+      locale: localeName,
+      other: '$n areas had no focus time this period',
+      one: 'One area had no focus time this period',
+    );
+    return '$_temp0: $names.';
+  }
+
+  @override
+  String get stBalanceCaption =>
+      'How focus sessions split across root categories. Rest and Sleep isn\'t measured by focus, so it never counts as neglected.';
+
+  @override
+  String get stShareImage => 'Share as image';
+
+  @override
+  String get stShareError => 'Couldn\'t prepare the image. Try again.';
+
+  @override
+  String get stWeekFocus => 'Focus time';
+
+  @override
+  String get stWeekSessions => 'Completed sessions';
+
+  @override
+  String get stWeekActiveDays => 'Active days';
+
+  @override
+  String get stSameAsLastWeek => 'same as last week';
+
+  @override
+  String stUpBy(String d) {
+    return '$d more than last week';
+  }
+
+  @override
+  String stDownBy(String d) {
+    return '$d less than last week';
+  }
+
+  @override
+  String stWeekTop(String name) {
+    return 'Most time: $name';
+  }
 }

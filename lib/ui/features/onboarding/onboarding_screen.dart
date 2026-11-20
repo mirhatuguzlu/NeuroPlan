@@ -15,6 +15,7 @@ import '../../core/format.dart';
 import '../../core/location.dart';
 import '../../core/prayer_fields.dart';
 import '../../core/states.dart';
+import '../../core/theme_choice.dart';
 import '../../core/wizard.dart';
 import '../together/together_screen.dart' show BirthYearField, minAgeOf;
 
@@ -30,6 +31,7 @@ class OnboardingScreen extends ConsumerStatefulWidget {
 class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   String? _locale;
   var _mode = 'system';
+  String? _theme;
   var _bed = 23 * 60;
   var _wake = 7 * 60;
   LocateResult? _located;
@@ -48,6 +50,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     _birthYearSaved = p?.birthYear != null;
     _locale = p?.locale;
     _mode = p?.themeMode ?? 'system';
+    _theme = p?.theme;
     _method = p?.prayerMethod;
     _madhab = p?.prayerMadhab ?? 'shafi';
     if (p?.locationLat != null) _located = LocateResult.saved;
@@ -62,7 +65,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     await SleepWindow.save(
       db: ref.read(databaseProvider),
       activities: ref.read(activityRepositoryProvider),
-      profiles: ref.read(profileRepositoryProvider),
       existing: SleepWindow.find(data),
       title: context.l10n.sleepActivityTitle,
       today: data.calendar
@@ -162,17 +164,34 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           title: l.onbAppearanceTitle,
           subtitle: l.onbAppearanceBody,
           optional: true,
-          body: ChoiceList<String>(
-            value: _mode,
-            options: [
-              ('system', l.modeSystem, null),
-              ('light', l.modeLight, null),
-              ('dark', l.modeDark, null),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ChoiceList<String>(
+                value: _mode,
+                options: [
+                  ('system', l.modeSystem, null),
+                  ('light', l.modeLight, null),
+                  ('dark', l.modeDark, null),
+                ],
+                onChanged: (v) {
+                  setState(() => _mode = v);
+                  _update(ProfilesCompanion(themeMode: Value(v)));
+                },
+              ),
+              const Divider(height: Gap.xl),
+              Text(
+                l.settingTheme,
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              ThemeChoice(
+                value: _theme,
+                onChanged: (v) {
+                  setState(() => _theme = v);
+                  _update(ProfilesCompanion(theme: Value(v)));
+                },
+              ),
             ],
-            onChanged: (v) {
-              setState(() => _mode = v);
-              _update(ProfilesCompanion(themeMode: Value(v)));
-            },
           ),
         ),
         WizardStep(

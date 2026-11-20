@@ -99,7 +99,7 @@ Kullanıcı hayatını aşağıdaki öğe türleriyle tanımlar. Her öğe bir k
 
 ### 5.8 Temalar (`THEME`)
 - `THEME-1` İstenen temalar: **Ciddi, Eğlenceli, Genç, Kodcu.**
-- `THEME-2` Önerilen ek temalar (onay bekliyor):
+- `THEME-2` Ek temalar (2026-11-20 onaylandı, D54):
   - **Sakin:** düşük doygunluk, az hareket, az bildirim dili; akşam kullanımı ve dikkat hassasiyeti için.
   - **Yüksek Kontrast:** WCAG AAA hedefli kontrast, kalın odak çerçeveleri; az görenler için.
   - **Minimal:** tek vurgu rengi, süssüz; dikkat dağıtmayan sade görünüm.
@@ -155,6 +155,5 @@ Alt menü (floating) en fazla 5 hedef içerir; öneri: Bugün · Plan · Odak ·
 5. **Canlı sesli oturum altyapısı** (WebRTC sağlayıcısı, maliyet) — açık karar.
 
 ## 10. Açık sorular
-- Önerilen ek temaların onayı (`THEME-2`).
 - Grup mesajlaşma (`SOCIAL-6`).
 - Ücretli özellik sınırları (`SUB-1`).

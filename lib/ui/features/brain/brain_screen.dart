@@ -22,8 +22,12 @@ String _hex(Color c) =>
 
 /// Sahne her zaman koyudur (neon ışıma koyu zeminde okunur): açık görünümde aktif
 /// temanın koyu eşi kullanılır (D41).
-ThemeData stageTheme(ThemeData t) =>
-    t.brightness == Brightness.dark ? t : buildTheme(Brightness.dark);
+ThemeData stageTheme(ThemeData t) => t.brightness == Brightness.dark
+    ? t
+    : buildTheme(
+        Brightness.dark,
+        theme: t.extension<AppTokens>()?.theme ?? AppTheme.serious,
+      );
 
 SceneTheme sceneThemeFor(ColorScheme d) {
   return SceneTheme(

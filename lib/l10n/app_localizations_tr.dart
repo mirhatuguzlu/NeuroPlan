@@ -119,7 +119,7 @@ class L10nTr extends L10n {
 
   @override
   String get onbAppearanceBody =>
-      'Açık, koyu ya da cihazınla aynı. İstediğin zaman Profil\'den değiştirebilirsin.';
+      'Açık ya da koyu görünüm ve bir tema seç. İstediğin zaman Ayarlar\'dan değiştirebilirsin.';
 
   @override
   String get onbSleepTitle => 'Genelde ne zaman uyursun?';
@@ -975,7 +975,7 @@ class L10nTr extends L10n {
   String get chunkRemove => 'Parçayı kaldır';
 
   @override
-  String get profileTitle => 'Profil ve ayarlar';
+  String get profileTitle => 'Profil';
 
   @override
   String get secGeneral => 'Genel';
@@ -2540,4 +2540,606 @@ class L10nTr extends L10n {
 
   @override
   String get tgCofocusChooseFirst => 'Başlamak için önce işini seç.';
+
+  @override
+  String get settingsTitle => 'Ayarlar';
+
+  @override
+  String get settingTheme => 'Tema';
+
+  @override
+  String get settingSleepGoal => 'Uyku hedefi';
+
+  @override
+  String get secData => 'Veri ve kaynaklar';
+
+  @override
+  String get exportTitle => 'Verilerimi dışa aktar';
+
+  @override
+  String get exportSubtitle =>
+      'Bütün verilerin tek bir JSON dosyası olarak; internet gerekmez.';
+
+  @override
+  String get exportError => 'Dosya hazırlanamadı. Tekrar dene.';
+
+  @override
+  String get sourcesTitle => 'Bilimsel kaynaklar';
+
+  @override
+  String get sourcesSubtitle =>
+      'Uygulamadaki bilimsel ifadelerin dayandığı çalışmalar';
+
+  @override
+  String get sourcesIntro =>
+      'Uygulamadaki her bilimsel ifade bu listedeki hakemli bir kaynağa dayanır. Kanıt düzeyleri bölge sayfalarında yazar.';
+
+  @override
+  String get sourcesCopy => 'Bağlantıyı kopyala';
+
+  @override
+  String get themeSerious => 'Ciddi';
+
+  @override
+  String get themeSeriousBody => 'Sakin otorite, önce okunabilirlik';
+
+  @override
+  String get themePlayful => 'Eğlenceli';
+
+  @override
+  String get themePlayfulBody => 'Yuvarlak hatlar, sıcak renkler';
+
+  @override
+  String get themeYoung => 'Genç';
+
+  @override
+  String get themeYoungBody => 'Enerjik ve rahat okunur';
+
+  @override
+  String get themeCoder => 'Kodcu';
+
+  @override
+  String get themeCoderBody => 'Terminal hissi; sayılar eş aralıklı';
+
+  @override
+  String get themeCalm => 'Sakin';
+
+  @override
+  String get themeCalmBody => 'Düşük doygunluk, akşam için';
+
+  @override
+  String get themeHighContrast => 'Yüksek kontrast';
+
+  @override
+  String get themeHighContrastBody => 'En yüksek kontrast, kalın çerçeveler';
+
+  @override
+  String get themeMinimal => 'Minimal';
+
+  @override
+  String get themeMinimalBody => 'Gri yüzeyler, tek vurgu rengi';
+
+  @override
+  String get pfAnalyses => 'Analizler';
+
+  @override
+  String get pfWeekFocus => 'Bu hafta odak';
+
+  @override
+  String pfLastWeek(String time) {
+    return 'Geçen hafta $time';
+  }
+
+  @override
+  String get pfAdherence => 'Bu hafta plana uyum';
+
+  @override
+  String get pfNoPlanYet => 'Henüz planlı iş yok';
+
+  @override
+  String get pfStreak => 'Seri';
+
+  @override
+  String pfLongest(int n) {
+    return 'En uzun: $n gün';
+  }
+
+  @override
+  String get pfStrongest => 'En güçlü bölge';
+
+  @override
+  String get pfStrongestEmpty => 'İlk odak oturumunla başlar';
+
+  @override
+  String get stQTime => 'Zamanım nereye gidiyor?';
+
+  @override
+  String get stQAdherence => 'Plana ne kadar uyuyorum?';
+
+  @override
+  String get stQBestHours => 'Ne zaman en iyi odaklanıyorum?';
+
+  @override
+  String get stQConsistency => 'Tutarlı mıyım?';
+
+  @override
+  String get stQQuality => 'Odak kalitem nasıl değişiyor?';
+
+  @override
+  String get stQInterruptions => 'Ne beni bölüyor?';
+
+  @override
+  String get stQModes => 'Pomodoro mu derin çalışma mı bana daha iyi geliyor?';
+
+  @override
+  String get stQBrain => 'Beynim nasıl gelişiyor?';
+
+  @override
+  String get stQProjects => 'Projelerim yetişecek mi?';
+
+  @override
+  String get stQSleep => 'Uykum yeterli mi?';
+
+  @override
+  String get stQBalance => 'Dengeli miyim?';
+
+  @override
+  String get stQWeekly => 'Haftalık rapor';
+
+  @override
+  String get stPeriodWeek => 'Hafta';
+
+  @override
+  String get stPeriodMonth => 'Ay';
+
+  @override
+  String get stPeriodQuarter => '3 ay';
+
+  @override
+  String get stPeriodYear => 'Yıl';
+
+  @override
+  String get stPeriodAll => 'Tümü';
+
+  @override
+  String get stShowList => 'Liste olarak göster';
+
+  @override
+  String get stLoading => 'Yükleniyor';
+
+  @override
+  String get stEmptyFocus =>
+      'Henüz veri yok. İlk odak oturumunu başlat, burası dolmaya başlar.';
+
+  @override
+  String get stEmptyFocusAction => 'İlk odak oturumunu başlat';
+
+  @override
+  String get stEmptyRated =>
+      'Henüz puan verdiğin bir odak oturumu yok. Oturum bitince odak ve yorgunluk puanını verdiğinde burada görünür.';
+
+  @override
+  String get stEmptyPlan =>
+      'Bu dönemde planlanmış iş yok. Bir rutin ya da iş ekle; uyum ertesi günden itibaren ölçülür.';
+
+  @override
+  String get stEmptyPlanAction => 'İş ekle';
+
+  @override
+  String get stEmptyProjects =>
+      'Henüz proje yok. Son tarihi ve toplam süresi olan bir proje ekle, kalan işi burada izle.';
+
+  @override
+  String get stEmptyProjectsAction => 'Proje ekle';
+
+  @override
+  String get stEmptySleep =>
+      'Uyku pencereni henüz ayarlamadın. Ayarladığında planlanan uykun burada görünür.';
+
+  @override
+  String get stEmptySleepAction => 'Uyku penceresini ayarla';
+
+  @override
+  String get stEmptyWeekly =>
+      'Bu hafta ve geçen hafta odak oturumu yok. İlk oturumdan sonra rapor hazır olur.';
+
+  @override
+  String get stNoSessionsHere => 'Burada odak oturumu yok.';
+
+  @override
+  String stMoreSessions(int n) {
+    return 've $n oturum daha';
+  }
+
+  @override
+  String get stFreeSession => 'Serbest odak';
+
+  @override
+  String get stBroken => 'bozuldu';
+
+  @override
+  String stFocusScoreShort(int n) {
+    return 'odak $n/5';
+  }
+
+  @override
+  String stPercent(int n) {
+    return '%$n';
+  }
+
+  @override
+  String stDays(int n) {
+    return '$n gün';
+  }
+
+  @override
+  String stNeurons(int n) {
+    return '$n nöron';
+  }
+
+  @override
+  String stNeuronsGained(int n) {
+    return '+$n nöron';
+  }
+
+  @override
+  String stPoints(int n) {
+    return '$n puan';
+  }
+
+  @override
+  String get stNoCategory => 'Kategorisiz';
+
+  @override
+  String get stUncategorized => 'Alt kategorisiz';
+
+  @override
+  String get stDirectly => 'Doğrudan bu kategori';
+
+  @override
+  String get stUpLevel => 'Bir üst düzey';
+
+  @override
+  String get stNone => 'yok';
+
+  @override
+  String stTimeInsight(String name, String time, int pct) {
+    return 'En çok zamanı $name alanına ayırdın: $time (%$pct).';
+  }
+
+  @override
+  String stTimeTotal(String time) {
+    return 'Toplam odak: $time. Bozulan oturumlardaki odak süresi de sayılır.';
+  }
+
+  @override
+  String get stPlanned => 'Planlanan';
+
+  @override
+  String get stDone => 'Yapılan';
+
+  @override
+  String get stAdherence => 'Plana uyum';
+
+  @override
+  String stDoneOf(int done, int planned) {
+    return '$done / $planned iş';
+  }
+
+  @override
+  String stAdherenceInsight(int done, int planned, int pct) {
+    return 'Planladığın $planned işin $done tanesini yaptın (%$pct).';
+  }
+
+  @override
+  String get stDailyAdherence => 'Günlük uyum';
+
+  @override
+  String stBestInsight(String from, String to, String score) {
+    return 'En iyi odak saatin $from–$to (ortalama odak puanı $score).';
+  }
+
+  @override
+  String get stBestNeedMore =>
+      'En iyi saatini bulmak için aynı saat dilimlerinde en az 3 puanlı oturum gerekiyor.';
+
+  @override
+  String get stHeatCaption =>
+      'Her hücre o gün ve saatte başlayan oturumların ortalama odak puanı (1–5). Gri: oturum yok.';
+
+  @override
+  String stScoreCount(String score, int n) {
+    return '$score · $n oturum';
+  }
+
+  @override
+  String get stNoRating => 'Puan yok';
+
+  @override
+  String stStreakInsight(int current, int longest) {
+    return 'Güncel serin $current gün, en uzun serin $longest gün.';
+  }
+
+  @override
+  String get stStreakCurrent => 'Güncel seri';
+
+  @override
+  String get stStreakLongest => 'En uzun seri';
+
+  @override
+  String stCalendarCaption(int n) {
+    return 'Son bir yılda $n gün en az bir odak oturumu tamamladın.';
+  }
+
+  @override
+  String get stLess => 'Az';
+
+  @override
+  String get stMore => 'Çok';
+
+  @override
+  String get stFocusScore => 'Odak puanı';
+
+  @override
+  String get stFatigueScore => 'Yorgunluk puanı';
+
+  @override
+  String stFocusFatigue(String focus, String fatigue) {
+    return 'Odak $focus · Yorgunluk $fatigue';
+  }
+
+  @override
+  String stQualityUp(String d) {
+    return 'Odak puanın dönemin ikinci yarısında $d puan yükseldi.';
+  }
+
+  @override
+  String stQualityDown(String d) {
+    return 'Odak puanın dönemin ikinci yarısında $d puan düştü.';
+  }
+
+  @override
+  String get stQualityStable => 'Odak puanın bu dönemde yaklaşık aynı kaldı.';
+
+  @override
+  String get stQualityNeedMore =>
+      'Eğilim için en az iki farklı zamanda puanlı oturum gerekiyor.';
+
+  @override
+  String get stQualityCaption =>
+      'Puanlar oturum sonunda senin verdiğin değerlerdir (1–5).';
+
+  @override
+  String get stInterruptions => 'Kesinti';
+
+  @override
+  String get stPerSession => 'Oturum başına';
+
+  @override
+  String get stByReason => 'Sebebe göre';
+
+  @override
+  String get stByHour => 'Günün saatine göre';
+
+  @override
+  String stInterruptInsight(String reason, String hour, int n) {
+    return 'Bu dönemde $n kesinti oldu; en sık sebep: $reason, en çok $hour civarında.';
+  }
+
+  @override
+  String get stNoInterruptions =>
+      'Bu dönemde odak oturumlarında hiç kesinti olmadı.';
+
+  @override
+  String get stReasonAppLeft => 'Uygulamadan çıkış';
+
+  @override
+  String get stReasonShade => 'Bildirim paneli';
+
+  @override
+  String get stReasonScreenOff => 'Ekran kapandı';
+
+  @override
+  String get stReasonCall => 'Telefon araması';
+
+  @override
+  String get stReasonAlarm => 'Alarm';
+
+  @override
+  String get stReasonOther => 'Diğer';
+
+  @override
+  String stModesNeedMore(int pomodoro, int deep) {
+    return 'Karşılaştırma için Pomodoro\'dan $pomodoro, derin çalışmadan $deep oturum daha gerekiyor.';
+  }
+
+  @override
+  String stModeProgress(String mode, int n) {
+    return '$mode: $n / 5 oturum';
+  }
+
+  @override
+  String get stModesHow =>
+      'Odak oturumunu başlatırken modu seç; her iki moddan en az 5 oturum olunca kendi verinle karşılaştırırız.';
+
+  @override
+  String stModesPomodoroHigher(String a, String b) {
+    return 'Senin verinde Pomodoro\'da odak puanın daha yüksek ($a – $b).';
+  }
+
+  @override
+  String stModesDeepHigher(String a, String b) {
+    return 'Senin verinde derin çalışmada odak puanın daha yüksek ($a – $b).';
+  }
+
+  @override
+  String get stModesClose =>
+      'Senin verinde iki modda odak puanın birbirine yakın.';
+
+  @override
+  String get stModesScience =>
+      'Araştırmalarda iki yöntemin birbirinden genel olarak daha iyi olduğuna dair tutarlı bir kanıt yok; bu kıyas yalnız senin verindir.';
+
+  @override
+  String get stCompletion => 'Tamamlanma oranı';
+
+  @override
+  String get stAvgLength => 'Ortalama süre';
+
+  @override
+  String get stSessions => 'Oturum';
+
+  @override
+  String stModeSessions(String mode) {
+    return '$mode oturumları';
+  }
+
+  @override
+  String stBrainInsight(String region, int n) {
+    return 'Beyin haritanda bu dönemde en çok $region bölgesine nöron eklendi ($n).';
+  }
+
+  @override
+  String get stBrainNoGrowth => 'Bu dönemde beyin haritana nöron eklenmedi.';
+
+  @override
+  String stBrainCaption(int n) {
+    return 'Çizgiler en çok nöron eklenen üç bölgenin toplamı. Bu dönemde bağlantı gücü: +$n.';
+  }
+
+  @override
+  String get stFadingTitle => 'Sönen bölgeler';
+
+  @override
+  String get stFadingNone => 'Şu an sönen bölge yok.';
+
+  @override
+  String get stFadingBody =>
+      'Bu bölgelerle ilişkili etkinliklere bir süredir zaman ayrılmadı. Nöronlar silinmez; yeniden çalışınca canlanır.';
+
+  @override
+  String stBrightness(int n) {
+    return 'Parlaklık %$n';
+  }
+
+  @override
+  String get stBrainMetaphor =>
+      'Beyin haritası bir metafordur, beyninin ölçümü değildir.';
+
+  @override
+  String get stOpenProject => 'Projeyi aç';
+
+  @override
+  String get stProjectNoTotal =>
+      'Toplam süre girilmemiş; kalan işi hesaplamak için projeye toplam süre ekle.';
+
+  @override
+  String get stRemaining => 'Kalan';
+
+  @override
+  String stRemainingOf(String left, String total) {
+    return 'Kalan $left / $total';
+  }
+
+  @override
+  String get stProjectDone => 'Proje tamamlandı.';
+
+  @override
+  String get stProjectNoForecast =>
+      'Tahmin için yakın zamanda çalışma ya da planlı parça yok.';
+
+  @override
+  String stProjectFinishPlan(String date) {
+    return 'Plana göre tahmini bitiş: $date';
+  }
+
+  @override
+  String stProjectFinishPace(String date) {
+    return 'Son 14 günün temposuyla tahmini bitiş: $date';
+  }
+
+  @override
+  String stProjectOnTime(String date) {
+    return 'son tarih $date, yetişiyor';
+  }
+
+  @override
+  String stProjectLate(String date) {
+    return 'son tarih $date, bu tempoyla yetişmiyor';
+  }
+
+  @override
+  String get stSleepPlanned => 'Planlanan uyku';
+
+  @override
+  String stSleepInsight(String avg, String diff) {
+    return 'Planlanan uykun ortalama $avg; $diff.';
+  }
+
+  @override
+  String get stSleepOnGoal => 'hedefinle aynı';
+
+  @override
+  String stSleepAbove(String d) {
+    return 'hedefinden $d fazla';
+  }
+
+  @override
+  String stSleepBelow(String d) {
+    return 'hedefinden $d az';
+  }
+
+  @override
+  String get stSleepNotice =>
+      'Planlanan uykun 7 saatin altında. İstersen uyku pencereni gözden geçirebilirsin.';
+
+  @override
+  String stSleepGoalLine(String goal) {
+    return 'Yatay çizgi uyku hedefin: $goal. Değerler planlanan penceredir, ölçülen uyku değil.';
+  }
+
+  @override
+  String get stBalanceAll => 'Bu dönemde bütün alanlara zaman ayırdın.';
+
+  @override
+  String stBalanceNeglected(int n, String names) {
+    return 'Bu dönemde $n alana odak zamanı ayrılmadı: $names.';
+  }
+
+  @override
+  String get stBalanceCaption =>
+      'Odak oturumlarının kök kategorilere göre dağılımı. Dinlenme ve Uyku odakla ölçülmediği için ihmal sayılmaz.';
+
+  @override
+  String get stShareImage => 'Görsel olarak paylaş';
+
+  @override
+  String get stShareError => 'Görsel hazırlanamadı. Tekrar dene.';
+
+  @override
+  String get stWeekFocus => 'Odak süresi';
+
+  @override
+  String get stWeekSessions => 'Tamamlanan oturum';
+
+  @override
+  String get stWeekActiveDays => 'Aktif gün';
+
+  @override
+  String get stSameAsLastWeek => 'geçen haftayla aynı';
+
+  @override
+  String stUpBy(String d) {
+    return 'geçen haftadan $d fazla';
+  }
+
+  @override
+  String stDownBy(String d) {
+    return 'geçen haftadan $d az';
+  }
+
+  @override
+  String stWeekTop(String name) {
+    return 'En çok zaman: $name';
+  }
 }

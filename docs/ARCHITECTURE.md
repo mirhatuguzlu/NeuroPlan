@@ -21,6 +21,8 @@ Veri modeli: [DB_SCHEMA.md](DB_SCHEMA.md).
 | Saat dilimi | `timezone` + `flutter_timezone` | 0.11 / 5.1 | IANA veritabanı, yaz saati geçişleri. | — |
 | Gün doğumu / namaz vakti | `adhan_dart` (saf Dart, bağımlılıksız) | 2.0 | Hesap çevrimdışı yapılır; Diyanet yöntemi (`turkiye`) hazır gelir. Aşama 2'de `adhan` yerine seçildi (D23). | `adhan` (2023'ten beri güncellenmiyor), kendi NOAA hesabımız. |
 | 3D köprü | `webview_flutter` | 4.14 | Resmi paket, `JavaScriptChannel` ve `loadFlutterAsset` destekler. | `flutter_inappwebview` |
+| Grafik | `fl_chart` | 1.3 | Çizgi ve sütun; dokunma, eksen ve renkler hazır. Isı haritası ve yıllık takvim kendi widget'ımız (D54). | Hepsini kendimiz çizmek |
+| Paylaşım | `share_plus` + `path_provider` | 13.3 / 2.1 | Dışa aktarılan JSON ve haftalık rapor görseli sistem paylaşım menüsüyle (D54). | Yalnız İndirilenler'e yazmak |
 | 3D sahne | Three.js (yerel, tek IIFE paket) + meshoptimizer | r187 / 1.3 | Model ve kütüphane `assets/brain/brain.js` içinde; ağ yok (D7, D40). Geliştirici aracı `tool/brain` (Node, esbuild, glTF-Transform). | Draco (wasm dosyası `file://`'da yüklenmiyor) |
 
 **Önerinin değerlendirmesi:** Önerilen dörtlü (Riverpod, go_router, Drift, supabase_flutter) korunuyor. Tek ekleme, alan katmanının ayrı bir saf Dart paketi olmasıdır (Dart pub workspace). Bunun iki nedeni var:
@@ -205,6 +207,12 @@ focus_sessions (gerçek) ──BrainEngine.derive──▶ brain_events (yalnız
 - **Denetleyici:** `FocusController` (`lib/ui/features/focus/focus_controller.dart`) uygulama kökünde canlıdır (router dinler). Olayları sırayla işler; açılışta süren oturumu kurtarır. Süren oturum varken router her yolu `/focus`'a, biten oturumu sonuç ekranına yönlendirir.
 - **Süreç ölse de:** son tarihte bildirim değişimi native `Handler`'la yapılır (ön plan servisi süreci canlı tutar); veri tarafı açılışta kurtarmada tamamlanır.
 - **Sabitleme (D36):** kural silahlıyken `FocusPlatform.pin`, değilken `unpin`. Onay penceresinin aldığı pencere odağı 30 sn boyunca kaçış sayılmaz.
+
+## 7b. Profil ve analiz (Aşama 5, D54)
+- Hesaplar `packages/neuroplan_core/lib/src/stats/stats.dart` içinde saf fonksiyonlardır: girdi düz kayıtlar (`StatSession`, `StatInterruption`, `StatPlanItem`, `BrainEventDraft`), çıktı küçük sonuç sınıfları. Takvim günü kullanıcının saat dilimindedir (`PlanCalendar`). 1 yıllık sahte veride bütün analizler birlikte ~36 ms (`test/stats/stats_perf_test.dart`).
+- `StatsRepository` biten oturumları ve kesintileri çekirdek türlerine çevirir; `statsContextProvider` plan verisi, oturumlar, beyin olayları ve bölgeleri birleştirir. İnternet gerekmez.
+- Geçmiş planı (uyum, uyku) motor yeniden kurar; `planHistoryProvider` aralık başına sonucu tutar, 31 günden uzun aralığı `Isolate.run` ile koşturur.
+- Ekranlar: Profil (özet kartları + 12 analiz), `/profile/stats/:page`, `/profile/settings`, `/profile/sources`.
 
 ## 8. WebView köprüsü (Aşama 4, D40)
 ```

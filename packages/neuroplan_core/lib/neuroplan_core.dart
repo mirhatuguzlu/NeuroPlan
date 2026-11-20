@@ -19,5 +19,6 @@ export 'src/plan/chunk_planner.dart';
 export 'src/plan/plan_engine.dart';
 export 'src/plan/plan_types.dart';
 export 'src/science/system_data.dart';
+export 'src/stats/stats.dart';
 export 'src/sync/hlc.dart';
 export 'src/sync/merge.dart';

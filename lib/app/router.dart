@@ -18,6 +18,10 @@ import '../ui/features/onboarding/onboarding_screen.dart';
 import '../ui/features/plan/plan_screen.dart';
 import '../ui/features/profile/about_screen.dart';
 import '../ui/features/profile/profile_screen.dart';
+import '../ui/features/profile/settings_screen.dart';
+import '../ui/features/profile/sources_screen.dart';
+import '../ui/features/stats/pages.dart';
+import '../ui/features/stats/stats_page.dart';
 import '../ui/features/project/project_screen.dart';
 import '../ui/features/today/today_screen.dart';
 import '../ui/features/together/cofocus_screens.dart';
@@ -118,6 +122,18 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/profile/about',
         parentNavigatorKey: _rootKey,
         pageBuilder: (_, s) => sharedAxisPage(s, const AboutScreen()),
+      ),
+      _page('/profile/settings', (_) => const SettingsScreen()),
+      _page('/profile/sources', (_) => const SourcesScreen()),
+      GoRoute(
+        path: '/profile/stats/:page',
+        parentNavigatorKey: _rootKey,
+        redirect: (_, s) =>
+            StatPage.of(s.pathParameters['page']!) == null ? '/profile' : null,
+        pageBuilder: (_, s) => sharedAxisPage(
+          s,
+          StatsScreen(page: StatPage.of(s.pathParameters['page']!)!),
+        ),
       ),
       ..._togetherRoutes,
       GoRoute(

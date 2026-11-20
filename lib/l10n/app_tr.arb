@@ -83,7 +83,7 @@
   "modeDark": "Koyu",
   "onbLanguageTitle": "Hangi dili kullanalım?",
   "onbAppearanceTitle": "Nasıl görünsün?",
-  "onbAppearanceBody": "Açık, koyu ya da cihazınla aynı. İstediğin zaman Profil'den değiştirebilirsin.",
+  "onbAppearanceBody": "Açık ya da koyu görünüm ve bir tema seç. İstediğin zaman Ayarlar'dan değiştirebilirsin.",
   "onbSleepTitle": "Genelde ne zaman uyursun?",
   "onbSleepBody": "Uyku pencereni koruruz: otomatik plan bu saatlere hiçbir şey koymaz.",
   "sleepBedtime": "Yatış",
@@ -576,7 +576,7 @@
   "manualNoSlots": "Önümüzdeki günlerde uygun boş dilim yok.",
   "projectNotFound": "Bu proje bulunamadı.",
   "chunkRemove": "Parçayı kaldır",
-  "profileTitle": "Profil ve ayarlar",
+  "profileTitle": "Profil",
   "secGeneral": "Genel",
   "secPlan": "Plan",
   "secLocation": "Konum ve vakitler",
@@ -1516,5 +1516,524 @@
       }
     }
   },
-  "tgCofocusChooseFirst": "Başlamak için önce işini seç."
+  "tgCofocusChooseFirst": "Başlamak için önce işini seç.",
+  "settingsTitle": "Ayarlar",
+  "settingTheme": "Tema",
+  "settingSleepGoal": "Uyku hedefi",
+  "secData": "Veri ve kaynaklar",
+  "exportTitle": "Verilerimi dışa aktar",
+  "exportSubtitle": "Bütün verilerin tek bir JSON dosyası olarak; internet gerekmez.",
+  "exportError": "Dosya hazırlanamadı. Tekrar dene.",
+  "sourcesTitle": "Bilimsel kaynaklar",
+  "sourcesSubtitle": "Uygulamadaki bilimsel ifadelerin dayandığı çalışmalar",
+  "sourcesIntro": "Uygulamadaki her bilimsel ifade bu listedeki hakemli bir kaynağa dayanır. Kanıt düzeyleri bölge sayfalarında yazar.",
+  "sourcesCopy": "Bağlantıyı kopyala",
+  "themeSerious": "Ciddi",
+  "themeSeriousBody": "Sakin otorite, önce okunabilirlik",
+  "themePlayful": "Eğlenceli",
+  "themePlayfulBody": "Yuvarlak hatlar, sıcak renkler",
+  "themeYoung": "Genç",
+  "themeYoungBody": "Enerjik ve rahat okunur",
+  "themeCoder": "Kodcu",
+  "themeCoderBody": "Terminal hissi; sayılar eş aralıklı",
+  "themeCalm": "Sakin",
+  "themeCalmBody": "Düşük doygunluk, akşam için",
+  "themeHighContrast": "Yüksek kontrast",
+  "themeHighContrastBody": "En yüksek kontrast, kalın çerçeveler",
+  "themeMinimal": "Minimal",
+  "themeMinimalBody": "Gri yüzeyler, tek vurgu rengi",
+  "pfAnalyses": "Analizler",
+  "pfWeekFocus": "Bu hafta odak",
+  "pfLastWeek": "Geçen hafta {time}",
+  "@pfLastWeek": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "pfAdherence": "Bu hafta plana uyum",
+  "pfNoPlanYet": "Henüz planlı iş yok",
+  "pfStreak": "Seri",
+  "pfLongest": "En uzun: {n} gün",
+  "@pfLongest": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "pfStrongest": "En güçlü bölge",
+  "pfStrongestEmpty": "İlk odak oturumunla başlar",
+  "stQTime": "Zamanım nereye gidiyor?",
+  "stQAdherence": "Plana ne kadar uyuyorum?",
+  "stQBestHours": "Ne zaman en iyi odaklanıyorum?",
+  "stQConsistency": "Tutarlı mıyım?",
+  "stQQuality": "Odak kalitem nasıl değişiyor?",
+  "stQInterruptions": "Ne beni bölüyor?",
+  "stQModes": "Pomodoro mu derin çalışma mı bana daha iyi geliyor?",
+  "stQBrain": "Beynim nasıl gelişiyor?",
+  "stQProjects": "Projelerim yetişecek mi?",
+  "stQSleep": "Uykum yeterli mi?",
+  "stQBalance": "Dengeli miyim?",
+  "stQWeekly": "Haftalık rapor",
+  "stPeriodWeek": "Hafta",
+  "stPeriodMonth": "Ay",
+  "stPeriodQuarter": "3 ay",
+  "stPeriodYear": "Yıl",
+  "stPeriodAll": "Tümü",
+  "stShowList": "Liste olarak göster",
+  "stLoading": "Yükleniyor",
+  "stEmptyFocus": "Henüz veri yok. İlk odak oturumunu başlat, burası dolmaya başlar.",
+  "stEmptyFocusAction": "İlk odak oturumunu başlat",
+  "stEmptyRated": "Henüz puan verdiğin bir odak oturumu yok. Oturum bitince odak ve yorgunluk puanını verdiğinde burada görünür.",
+  "stEmptyPlan": "Bu dönemde planlanmış iş yok. Bir rutin ya da iş ekle; uyum ertesi günden itibaren ölçülür.",
+  "stEmptyPlanAction": "İş ekle",
+  "stEmptyProjects": "Henüz proje yok. Son tarihi ve toplam süresi olan bir proje ekle, kalan işi burada izle.",
+  "stEmptyProjectsAction": "Proje ekle",
+  "stEmptySleep": "Uyku pencereni henüz ayarlamadın. Ayarladığında planlanan uykun burada görünür.",
+  "stEmptySleepAction": "Uyku penceresini ayarla",
+  "stEmptyWeekly": "Bu hafta ve geçen hafta odak oturumu yok. İlk oturumdan sonra rapor hazır olur.",
+  "stNoSessionsHere": "Burada odak oturumu yok.",
+  "stMoreSessions": "ve {n} oturum daha",
+  "@stMoreSessions": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "stFreeSession": "Serbest odak",
+  "stBroken": "bozuldu",
+  "stFocusScoreShort": "odak {n}/5",
+  "@stFocusScoreShort": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "stPercent": "%{n}",
+  "@stPercent": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "stDays": "{n} gün",
+  "@stDays": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "stNeurons": "{n} nöron",
+  "@stNeurons": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "stNeuronsGained": "+{n} nöron",
+  "@stNeuronsGained": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "stPoints": "{n} puan",
+  "@stPoints": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "stNoCategory": "Kategorisiz",
+  "stUncategorized": "Alt kategorisiz",
+  "stDirectly": "Doğrudan bu kategori",
+  "stUpLevel": "Bir üst düzey",
+  "stNone": "yok",
+  "stTimeInsight": "En çok zamanı {name} alanına ayırdın: {time} (%{pct}).",
+  "@stTimeInsight": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      },
+      "pct": {
+        "type": "int"
+      }
+    }
+  },
+  "stTimeTotal": "Toplam odak: {time}. Bozulan oturumlardaki odak süresi de sayılır.",
+  "@stTimeTotal": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "stPlanned": "Planlanan",
+  "stDone": "Yapılan",
+  "stAdherence": "Plana uyum",
+  "stDoneOf": "{done} / {planned} iş",
+  "@stDoneOf": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "planned": {
+        "type": "int"
+      }
+    }
+  },
+  "stAdherenceInsight": "Planladığın {planned} işin {done} tanesini yaptın (%{pct}).",
+  "@stAdherenceInsight": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "planned": {
+        "type": "int"
+      },
+      "pct": {
+        "type": "int"
+      }
+    }
+  },
+  "stDailyAdherence": "Günlük uyum",
+  "stBestInsight": "En iyi odak saatin {from}–{to} (ortalama odak puanı {score}).",
+  "@stBestInsight": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      },
+      "score": {
+        "type": "String"
+      }
+    }
+  },
+  "stBestNeedMore": "En iyi saatini bulmak için aynı saat dilimlerinde en az 3 puanlı oturum gerekiyor.",
+  "stHeatCaption": "Her hücre o gün ve saatte başlayan oturumların ortalama odak puanı (1–5). Gri: oturum yok.",
+  "stScoreCount": "{score} · {n} oturum",
+  "@stScoreCount": {
+    "placeholders": {
+      "score": {
+        "type": "String"
+      },
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "stNoRating": "Puan yok",
+  "stStreakInsight": "Güncel serin {current} gün, en uzun serin {longest} gün.",
+  "@stStreakInsight": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "longest": {
+        "type": "int"
+      }
+    }
+  },
+  "stStreakCurrent": "Güncel seri",
+  "stStreakLongest": "En uzun seri",
+  "stCalendarCaption": "Son bir yılda {n} gün en az bir odak oturumu tamamladın.",
+  "@stCalendarCaption": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "stLess": "Az",
+  "stMore": "Çok",
+  "stFocusScore": "Odak puanı",
+  "stFatigueScore": "Yorgunluk puanı",
+  "stFocusFatigue": "Odak {focus} · Yorgunluk {fatigue}",
+  "@stFocusFatigue": {
+    "placeholders": {
+      "focus": {
+        "type": "String"
+      },
+      "fatigue": {
+        "type": "String"
+      }
+    }
+  },
+  "stQualityUp": "Odak puanın dönemin ikinci yarısında {d} puan yükseldi.",
+  "@stQualityUp": {
+    "placeholders": {
+      "d": {
+        "type": "String"
+      }
+    }
+  },
+  "stQualityDown": "Odak puanın dönemin ikinci yarısında {d} puan düştü.",
+  "@stQualityDown": {
+    "placeholders": {
+      "d": {
+        "type": "String"
+      }
+    }
+  },
+  "stQualityStable": "Odak puanın bu dönemde yaklaşık aynı kaldı.",
+  "stQualityNeedMore": "Eğilim için en az iki farklı zamanda puanlı oturum gerekiyor.",
+  "stQualityCaption": "Puanlar oturum sonunda senin verdiğin değerlerdir (1–5).",
+  "stInterruptions": "Kesinti",
+  "stPerSession": "Oturum başına",
+  "stByReason": "Sebebe göre",
+  "stByHour": "Günün saatine göre",
+  "stInterruptInsight": "Bu dönemde {n} kesinti oldu; en sık sebep: {reason}, en çok {hour} civarında.",
+  "@stInterruptInsight": {
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      },
+      "hour": {
+        "type": "String"
+      },
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "stNoInterruptions": "Bu dönemde odak oturumlarında hiç kesinti olmadı.",
+  "stReasonAppLeft": "Uygulamadan çıkış",
+  "stReasonShade": "Bildirim paneli",
+  "stReasonScreenOff": "Ekran kapandı",
+  "stReasonCall": "Telefon araması",
+  "stReasonAlarm": "Alarm",
+  "stReasonOther": "Diğer",
+  "stModesNeedMore": "Karşılaştırma için Pomodoro'dan {pomodoro}, derin çalışmadan {deep} oturum daha gerekiyor.",
+  "@stModesNeedMore": {
+    "placeholders": {
+      "pomodoro": {
+        "type": "int"
+      },
+      "deep": {
+        "type": "int"
+      }
+    }
+  },
+  "stModeProgress": "{mode}: {n} / 5 oturum",
+  "@stModeProgress": {
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      },
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "stModesHow": "Odak oturumunu başlatırken modu seç; her iki moddan en az 5 oturum olunca kendi verinle karşılaştırırız.",
+  "stModesPomodoroHigher": "Senin verinde Pomodoro'da odak puanın daha yüksek ({a} – {b}).",
+  "@stModesPomodoroHigher": {
+    "placeholders": {
+      "a": {
+        "type": "String"
+      },
+      "b": {
+        "type": "String"
+      }
+    }
+  },
+  "stModesDeepHigher": "Senin verinde derin çalışmada odak puanın daha yüksek ({a} – {b}).",
+  "@stModesDeepHigher": {
+    "placeholders": {
+      "a": {
+        "type": "String"
+      },
+      "b": {
+        "type": "String"
+      }
+    }
+  },
+  "stModesClose": "Senin verinde iki modda odak puanın birbirine yakın.",
+  "stModesScience": "Araştırmalarda iki yöntemin birbirinden genel olarak daha iyi olduğuna dair tutarlı bir kanıt yok; bu kıyas yalnız senin verindir.",
+  "stCompletion": "Tamamlanma oranı",
+  "stAvgLength": "Ortalama süre",
+  "stSessions": "Oturum",
+  "stModeSessions": "{mode} oturumları",
+  "@stModeSessions": {
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "stBrainInsight": "Beyin haritanda bu dönemde en çok {region} bölgesine nöron eklendi ({n}).",
+  "@stBrainInsight": {
+    "placeholders": {
+      "region": {
+        "type": "String"
+      },
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "stBrainNoGrowth": "Bu dönemde beyin haritana nöron eklenmedi.",
+  "stBrainCaption": "Çizgiler en çok nöron eklenen üç bölgenin toplamı. Bu dönemde bağlantı gücü: +{n}.",
+  "@stBrainCaption": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "stFadingTitle": "Sönen bölgeler",
+  "stFadingNone": "Şu an sönen bölge yok.",
+  "stFadingBody": "Bu bölgelerle ilişkili etkinliklere bir süredir zaman ayrılmadı. Nöronlar silinmez; yeniden çalışınca canlanır.",
+  "stBrightness": "Parlaklık %{n}",
+  "@stBrightness": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "stBrainMetaphor": "Beyin haritası bir metafordur, beyninin ölçümü değildir.",
+  "stOpenProject": "Projeyi aç",
+  "stProjectNoTotal": "Toplam süre girilmemiş; kalan işi hesaplamak için projeye toplam süre ekle.",
+  "stRemaining": "Kalan",
+  "stRemainingOf": "Kalan {left} / {total}",
+  "@stRemainingOf": {
+    "placeholders": {
+      "left": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "stProjectDone": "Proje tamamlandı.",
+  "stProjectNoForecast": "Tahmin için yakın zamanda çalışma ya da planlı parça yok.",
+  "stProjectFinishPlan": "Plana göre tahmini bitiş: {date}",
+  "@stProjectFinishPlan": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "stProjectFinishPace": "Son 14 günün temposuyla tahmini bitiş: {date}",
+  "@stProjectFinishPace": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "stProjectOnTime": "son tarih {date}, yetişiyor",
+  "@stProjectOnTime": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "stProjectLate": "son tarih {date}, bu tempoyla yetişmiyor",
+  "@stProjectLate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "stSleepPlanned": "Planlanan uyku",
+  "stSleepInsight": "Planlanan uykun ortalama {avg}; {diff}.",
+  "@stSleepInsight": {
+    "placeholders": {
+      "avg": {
+        "type": "String"
+      },
+      "diff": {
+        "type": "String"
+      }
+    }
+  },
+  "stSleepOnGoal": "hedefinle aynı",
+  "stSleepAbove": "hedefinden {d} fazla",
+  "@stSleepAbove": {
+    "placeholders": {
+      "d": {
+        "type": "String"
+      }
+    }
+  },
+  "stSleepBelow": "hedefinden {d} az",
+  "@stSleepBelow": {
+    "placeholders": {
+      "d": {
+        "type": "String"
+      }
+    }
+  },
+  "stSleepNotice": "Planlanan uykun 7 saatin altında. İstersen uyku pencereni gözden geçirebilirsin.",
+  "stSleepGoalLine": "Yatay çizgi uyku hedefin: {goal}. Değerler planlanan penceredir, ölçülen uyku değil.",
+  "@stSleepGoalLine": {
+    "placeholders": {
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "stBalanceAll": "Bu dönemde bütün alanlara zaman ayırdın.",
+  "stBalanceNeglected": "Bu dönemde {n} alana odak zamanı ayrılmadı: {names}.",
+  "@stBalanceNeglected": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      },
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "stBalanceCaption": "Odak oturumlarının kök kategorilere göre dağılımı. Dinlenme ve Uyku odakla ölçülmediği için ihmal sayılmaz.",
+  "stShareImage": "Görsel olarak paylaş",
+  "stShareError": "Görsel hazırlanamadı. Tekrar dene.",
+  "stWeekFocus": "Odak süresi",
+  "stWeekSessions": "Tamamlanan oturum",
+  "stWeekActiveDays": "Aktif gün",
+  "stSameAsLastWeek": "geçen haftayla aynı",
+  "stUpBy": "geçen haftadan {d} fazla",
+  "@stUpBy": {
+    "placeholders": {
+      "d": {
+        "type": "String"
+      }
+    }
+  },
+  "stDownBy": "geçen haftadan {d} az",
+  "@stDownBy": {
+    "placeholders": {
+      "d": {
+        "type": "String"
+      }
+    }
+  },
+  "stWeekTop": "En çok zaman: {name}",
+  "@stWeekTop": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
 }

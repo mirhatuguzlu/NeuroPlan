@@ -1,0 +1,136 @@
+{
+  "sources": [
+    {
+      "id": "S1",
+      "citation": "Nielsen JA et al. An evaluation of the left-brain vs. right-brain hypothesis with resting state functional connectivity MRI. PLoS ONE 2013.",
+      "url": "https://doi.org/10.1371/journal.pone.0071275",
+      "ref": "doi:10.1371/journal.pone.0071275"
+    },
+    {
+      "id": "S2",
+      "citation": "Erickson KI et al. Exercise training increases size of hippocampus and improves memory. PNAS 2011;108(7):3017-22.",
+      "url": "https://doi.org/10.1073/pnas.1015950108",
+      "ref": "doi:10.1073/pnas.1015950108 · PMID 21282661"
+    },
+    {
+      "id": "S3",
+      "citation": "Draganski B et al. Neuroplasticity: changes in grey matter induced by training. Nature 2004;427:311-2.",
+      "url": "https://doi.org/10.1038/427311a",
+      "ref": "doi:10.1038/427311a · PMID 14737157"
+    },
+    {
+      "id": "S4",
+      "citation": "Doyon J et al. Distinct contribution of the cortico-striatal and cortico-cerebellar systems to motor skill learning. Neuropsychologia 2003.",
+      "url": "https://doi.org/10.1016/S0028-3932(02)00158-6",
+      "ref": "doi:10.1016/S0028-3932(02)00158-6"
+    },
+    {
+      "id": "S5",
+      "citation": "Hyde KL et al. Musical training shapes structural brain development. J Neurosci 2009;29(10):3019-25.",
+      "url": "https://doi.org/10.1523/JNEUROSCI.5118-08.2009",
+      "ref": "doi:10.1523/JNEUROSCI.5118-08.2009 · PMID 19279238"
+    },
+    {
+      "id": "S6",
+      "citation": "Merrett DL, Peretz I, Wilson SJ. Moderating variables of music training-induced neuroplasticity: a review and discussion. Front Psychol 2013;4:606.",
+      "url": "https://doi.org/10.3389/fpsyg.2013.00606",
+      "ref": "doi:10.3389/fpsyg.2013.00606 · PMID 24058353"
+    },
+    {
+      "id": "S7",
+      "citation": "Mårtensson J et al. Growth of language-related brain areas after foreign language learning. NeuroImage 2012;63(1):240-4.",
+      "url": "https://doi.org/10.1016/j.neuroimage.2012.06.043",
+      "ref": "doi:10.1016/j.neuroimage.2012.06.043 · PMID 22750568"
+    },
+    {
+      "id": "S8",
+      "citation": "Draganski B et al. Temporal and spatial dynamics of brain structure changes during extensive learning. J Neurosci 2006;26(23):6314-7.",
+      "url": "https://doi.org/10.1523/JNEUROSCI.4628-05.2006",
+      "ref": "doi:10.1523/JNEUROSCI.4628-05.2006 · PMID 16763039"
+    },
+    {
+      "id": "S9",
+      "citation": "Niendam TA et al. Meta-analytic evidence for a superordinate cognitive control network subserving diverse executive functions. Cogn Affect Behav Neurosci 2012;12(2):241-68.",
+      "url": "https://doi.org/10.3758/s13415-011-0083-5",
+      "ref": "doi:10.3758/s13415-011-0083-5 · PMID 22282036"
+    },
+    {
+      "id": "S10",
+      "citation": "Bickart KC, Dickerson BC, Barrett LF. The amygdala as a hub in brain networks that support social life. Neuropsychologia 2014;63:235-48.",
+      "url": "https://doi.org/10.1016/j.neuropsychologia.2014.08.013",
+      "ref": "doi:10.1016/j.neuropsychologia.2014.08.013 · PMC4981504"
+    },
+    {
+      "id": "S11",
+      "citation": "Bickart KC et al. Amygdala volume and social network size in humans. Nat Neurosci 2011;14(2):163-4.",
+      "url": "https://doi.org/10.1038/nn.2724",
+      "ref": "doi:10.1038/nn.2724 · PMID 21186358"
+    },
+    {
+      "id": "S12",
+      "citation": "Allison T, Puce A, McCarthy G. Social perception from visual cues: role of the STS region. Trends Cogn Sci 2000.",
+      "url": "https://doi.org/10.1016/S1364-6613(00)01501-1",
+      "ref": "doi:10.1016/S1364-6613(00)01501-1"
+    },
+    {
+      "id": "S13",
+      "citation": "Hölzel BK et al. Mindfulness practice leads to increases in regional brain gray matter density. Psychiatry Res Neuroimaging 2011;191(1):36-43.",
+      "url": "https://doi.org/10.1016/j.pscychresns.2010.08.006",
+      "ref": "doi:10.1016/j.pscychresns.2010.08.006 · PMID 21071182"
+    },
+    {
+      "id": "S14",
+      "citation": "Kral TRA et al. Absence of structural brain changes from mindfulness-based stress reduction: two combined randomized controlled trials. Sci Adv 2022;8(20):eabk3316.",
+      "url": "https://doi.org/10.1126/sciadv.abk3316",
+      "ref": "doi:10.1126/sciadv.abk3316 · PMID 35594344"
+    },
+    {
+      "id": "S15",
+      "citation": "Fox KC et al. Is meditation associated with altered brain structure? A systematic review and meta-analysis. Neurosci Biobehav Rev 2014;43:48-73.",
+      "url": "https://doi.org/10.1016/j.neubiorev.2014.03.016",
+      "ref": "doi:10.1016/j.neubiorev.2014.03.016 · PMID 24705269"
+    },
+    {
+      "id": "S16",
+      "citation": "Beaty RE et al. Robust prediction of individual creative ability from brain functional connectivity. PNAS 2018;115(5):1087-92.",
+      "url": "https://doi.org/10.1073/pnas.1713532115",
+      "ref": "doi:10.1073/pnas.1713532115 · PMID 29339474"
+    },
+    {
+      "id": "S17",
+      "citation": "Beaty RE et al. Creative cognition and brain network dynamics. Trends Cogn Sci 2016.",
+      "url": "https://doi.org/10.1016/j.tics.2015.10.004",
+      "ref": "doi:10.1016/j.tics.2015.10.004"
+    },
+    {
+      "id": "S18",
+      "citation": "Rasch B, Born J. About sleep's role in memory. Physiol Rev 2013.",
+      "url": "https://doi.org/10.1152/physrev.00032.2012",
+      "ref": "doi:10.1152/physrev.00032.2012"
+    },
+    {
+      "id": "S19",
+      "citation": "Abel T et al. Sleep, plasticity and memory from molecules to whole-brain networks. Curr Biol 2013.",
+      "url": "https://doi.org/10.1016/j.cub.2013.07.025",
+      "ref": "doi:10.1016/j.cub.2013.07.025 · PMC4263505"
+    },
+    {
+      "id": "S20",
+      "citation": "Mednick S, Nakayama K, Stickgold R. Sleep-dependent learning: a nap is as good as a night. Nat Neurosci 2003;6(7):697-8.",
+      "url": "https://doi.org/10.1038/nn1078",
+      "ref": "doi:10.1038/nn1078 · PMID 12819785"
+    },
+    {
+      "id": "S21",
+      "citation": "Biwer F et al. Understanding effort regulation: comparing 'Pomodoro' breaks and self-regulated breaks. Br J Educ Psychol 2023;93 Suppl 2:353-67.",
+      "url": "https://doi.org/10.1111/bjep.12593",
+      "ref": "doi:10.1111/bjep.12593 · PMID 36859717"
+    },
+    {
+      "id": "S22",
+      "citation": "Smits EJC, Wenzel N, de Bruin A. Investigating the effectiveness of self-regulated, Pomodoro, and Flowtime break-taking techniques among students. Behav Sci 2025;15(7):861.",
+      "url": "https://doi.org/10.3390/bs15070861",
+      "ref": "doi:10.3390/bs15070861 · PMC12292963"
+    }
+  ]
+}

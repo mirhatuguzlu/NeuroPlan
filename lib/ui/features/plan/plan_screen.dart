@@ -166,10 +166,12 @@ class _Week extends ConsumerWidget {
               Expanded(
                 child: Text(
                   dateText(context, day.iso),
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    color: isToday ? theme.colorScheme.primary : null,
-                    fontWeight: isToday ? FontWeight.w700 : null,
-                  ),
+                  style: () {
+                    final s = theme.textTheme.titleMedium!.copyWith(
+                      color: isToday ? theme.colorScheme.primary : null,
+                    );
+                    return isToday ? weighted(s, FontWeight.w700) : s;
+                  }(),
                 ),
               ),
               Text(

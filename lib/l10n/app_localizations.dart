@@ -292,7 +292,7 @@ abstract class L10n {
   /// No description provided for @onbAppearanceBody.
   ///
   /// In tr, this message translates to:
-  /// **'Açık, koyu ya da cihazınla aynı. İstediğin zaman Profil\'den değiştirebilirsin.'**
+  /// **'Açık ya da koyu görünüm ve bir tema seç. İstediğin zaman Ayarlar\'dan değiştirebilirsin.'**
   String get onbAppearanceBody;
 
   /// No description provided for @onbSleepTitle.
@@ -1738,7 +1738,7 @@ abstract class L10n {
   /// No description provided for @profileTitle.
   ///
   /// In tr, this message translates to:
-  /// **'Profil ve ayarlar'**
+  /// **'Profil'**
   String get profileTitle;
 
   /// No description provided for @secGeneral.
@@ -4416,6 +4416,996 @@ abstract class L10n {
   /// In tr, this message translates to:
   /// **'Başlamak için önce işini seç.'**
   String get tgCofocusChooseFirst;
+
+  /// No description provided for @settingsTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ayarlar'**
+  String get settingsTitle;
+
+  /// No description provided for @settingTheme.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tema'**
+  String get settingTheme;
+
+  /// No description provided for @settingSleepGoal.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uyku hedefi'**
+  String get settingSleepGoal;
+
+  /// No description provided for @secData.
+  ///
+  /// In tr, this message translates to:
+  /// **'Veri ve kaynaklar'**
+  String get secData;
+
+  /// No description provided for @exportTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Verilerimi dışa aktar'**
+  String get exportTitle;
+
+  /// No description provided for @exportSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bütün verilerin tek bir JSON dosyası olarak; internet gerekmez.'**
+  String get exportSubtitle;
+
+  /// No description provided for @exportError.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dosya hazırlanamadı. Tekrar dene.'**
+  String get exportError;
+
+  /// No description provided for @sourcesTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bilimsel kaynaklar'**
+  String get sourcesTitle;
+
+  /// No description provided for @sourcesSubtitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uygulamadaki bilimsel ifadelerin dayandığı çalışmalar'**
+  String get sourcesSubtitle;
+
+  /// No description provided for @sourcesIntro.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uygulamadaki her bilimsel ifade bu listedeki hakemli bir kaynağa dayanır. Kanıt düzeyleri bölge sayfalarında yazar.'**
+  String get sourcesIntro;
+
+  /// No description provided for @sourcesCopy.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bağlantıyı kopyala'**
+  String get sourcesCopy;
+
+  /// No description provided for @themeSerious.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ciddi'**
+  String get themeSerious;
+
+  /// No description provided for @themeSeriousBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sakin otorite, önce okunabilirlik'**
+  String get themeSeriousBody;
+
+  /// No description provided for @themePlayful.
+  ///
+  /// In tr, this message translates to:
+  /// **'Eğlenceli'**
+  String get themePlayful;
+
+  /// No description provided for @themePlayfulBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yuvarlak hatlar, sıcak renkler'**
+  String get themePlayfulBody;
+
+  /// No description provided for @themeYoung.
+  ///
+  /// In tr, this message translates to:
+  /// **'Genç'**
+  String get themeYoung;
+
+  /// No description provided for @themeYoungBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Enerjik ve rahat okunur'**
+  String get themeYoungBody;
+
+  /// No description provided for @themeCoder.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kodcu'**
+  String get themeCoder;
+
+  /// No description provided for @themeCoderBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Terminal hissi; sayılar eş aralıklı'**
+  String get themeCoderBody;
+
+  /// No description provided for @themeCalm.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sakin'**
+  String get themeCalm;
+
+  /// No description provided for @themeCalmBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Düşük doygunluk, akşam için'**
+  String get themeCalmBody;
+
+  /// No description provided for @themeHighContrast.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yüksek kontrast'**
+  String get themeHighContrast;
+
+  /// No description provided for @themeHighContrastBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'En yüksek kontrast, kalın çerçeveler'**
+  String get themeHighContrastBody;
+
+  /// No description provided for @themeMinimal.
+  ///
+  /// In tr, this message translates to:
+  /// **'Minimal'**
+  String get themeMinimal;
+
+  /// No description provided for @themeMinimalBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gri yüzeyler, tek vurgu rengi'**
+  String get themeMinimalBody;
+
+  /// No description provided for @pfAnalyses.
+  ///
+  /// In tr, this message translates to:
+  /// **'Analizler'**
+  String get pfAnalyses;
+
+  /// No description provided for @pfWeekFocus.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu hafta odak'**
+  String get pfWeekFocus;
+
+  /// No description provided for @pfLastWeek.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geçen hafta {time}'**
+  String pfLastWeek(String time);
+
+  /// No description provided for @pfAdherence.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu hafta plana uyum'**
+  String get pfAdherence;
+
+  /// No description provided for @pfNoPlanYet.
+  ///
+  /// In tr, this message translates to:
+  /// **'Henüz planlı iş yok'**
+  String get pfNoPlanYet;
+
+  /// No description provided for @pfStreak.
+  ///
+  /// In tr, this message translates to:
+  /// **'Seri'**
+  String get pfStreak;
+
+  /// No description provided for @pfLongest.
+  ///
+  /// In tr, this message translates to:
+  /// **'En uzun: {n} gün'**
+  String pfLongest(int n);
+
+  /// No description provided for @pfStrongest.
+  ///
+  /// In tr, this message translates to:
+  /// **'En güçlü bölge'**
+  String get pfStrongest;
+
+  /// No description provided for @pfStrongestEmpty.
+  ///
+  /// In tr, this message translates to:
+  /// **'İlk odak oturumunla başlar'**
+  String get pfStrongestEmpty;
+
+  /// No description provided for @stQTime.
+  ///
+  /// In tr, this message translates to:
+  /// **'Zamanım nereye gidiyor?'**
+  String get stQTime;
+
+  /// No description provided for @stQAdherence.
+  ///
+  /// In tr, this message translates to:
+  /// **'Plana ne kadar uyuyorum?'**
+  String get stQAdherence;
+
+  /// No description provided for @stQBestHours.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ne zaman en iyi odaklanıyorum?'**
+  String get stQBestHours;
+
+  /// No description provided for @stQConsistency.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tutarlı mıyım?'**
+  String get stQConsistency;
+
+  /// No description provided for @stQQuality.
+  ///
+  /// In tr, this message translates to:
+  /// **'Odak kalitem nasıl değişiyor?'**
+  String get stQQuality;
+
+  /// No description provided for @stQInterruptions.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ne beni bölüyor?'**
+  String get stQInterruptions;
+
+  /// No description provided for @stQModes.
+  ///
+  /// In tr, this message translates to:
+  /// **'Pomodoro mu derin çalışma mı bana daha iyi geliyor?'**
+  String get stQModes;
+
+  /// No description provided for @stQBrain.
+  ///
+  /// In tr, this message translates to:
+  /// **'Beynim nasıl gelişiyor?'**
+  String get stQBrain;
+
+  /// No description provided for @stQProjects.
+  ///
+  /// In tr, this message translates to:
+  /// **'Projelerim yetişecek mi?'**
+  String get stQProjects;
+
+  /// No description provided for @stQSleep.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uykum yeterli mi?'**
+  String get stQSleep;
+
+  /// No description provided for @stQBalance.
+  ///
+  /// In tr, this message translates to:
+  /// **'Dengeli miyim?'**
+  String get stQBalance;
+
+  /// No description provided for @stQWeekly.
+  ///
+  /// In tr, this message translates to:
+  /// **'Haftalık rapor'**
+  String get stQWeekly;
+
+  /// No description provided for @stPeriodWeek.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hafta'**
+  String get stPeriodWeek;
+
+  /// No description provided for @stPeriodMonth.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ay'**
+  String get stPeriodMonth;
+
+  /// No description provided for @stPeriodQuarter.
+  ///
+  /// In tr, this message translates to:
+  /// **'3 ay'**
+  String get stPeriodQuarter;
+
+  /// No description provided for @stPeriodYear.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yıl'**
+  String get stPeriodYear;
+
+  /// No description provided for @stPeriodAll.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tümü'**
+  String get stPeriodAll;
+
+  /// No description provided for @stShowList.
+  ///
+  /// In tr, this message translates to:
+  /// **'Liste olarak göster'**
+  String get stShowList;
+
+  /// No description provided for @stLoading.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yükleniyor'**
+  String get stLoading;
+
+  /// No description provided for @stEmptyFocus.
+  ///
+  /// In tr, this message translates to:
+  /// **'Henüz veri yok. İlk odak oturumunu başlat, burası dolmaya başlar.'**
+  String get stEmptyFocus;
+
+  /// No description provided for @stEmptyFocusAction.
+  ///
+  /// In tr, this message translates to:
+  /// **'İlk odak oturumunu başlat'**
+  String get stEmptyFocusAction;
+
+  /// No description provided for @stEmptyRated.
+  ///
+  /// In tr, this message translates to:
+  /// **'Henüz puan verdiğin bir odak oturumu yok. Oturum bitince odak ve yorgunluk puanını verdiğinde burada görünür.'**
+  String get stEmptyRated;
+
+  /// No description provided for @stEmptyPlan.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu dönemde planlanmış iş yok. Bir rutin ya da iş ekle; uyum ertesi günden itibaren ölçülür.'**
+  String get stEmptyPlan;
+
+  /// No description provided for @stEmptyPlanAction.
+  ///
+  /// In tr, this message translates to:
+  /// **'İş ekle'**
+  String get stEmptyPlanAction;
+
+  /// No description provided for @stEmptyProjects.
+  ///
+  /// In tr, this message translates to:
+  /// **'Henüz proje yok. Son tarihi ve toplam süresi olan bir proje ekle, kalan işi burada izle.'**
+  String get stEmptyProjects;
+
+  /// No description provided for @stEmptyProjectsAction.
+  ///
+  /// In tr, this message translates to:
+  /// **'Proje ekle'**
+  String get stEmptyProjectsAction;
+
+  /// No description provided for @stEmptySleep.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uyku pencereni henüz ayarlamadın. Ayarladığında planlanan uykun burada görünür.'**
+  String get stEmptySleep;
+
+  /// No description provided for @stEmptySleepAction.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uyku penceresini ayarla'**
+  String get stEmptySleepAction;
+
+  /// No description provided for @stEmptyWeekly.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu hafta ve geçen hafta odak oturumu yok. İlk oturumdan sonra rapor hazır olur.'**
+  String get stEmptyWeekly;
+
+  /// No description provided for @stNoSessionsHere.
+  ///
+  /// In tr, this message translates to:
+  /// **'Burada odak oturumu yok.'**
+  String get stNoSessionsHere;
+
+  /// No description provided for @stMoreSessions.
+  ///
+  /// In tr, this message translates to:
+  /// **'ve {n} oturum daha'**
+  String stMoreSessions(int n);
+
+  /// No description provided for @stFreeSession.
+  ///
+  /// In tr, this message translates to:
+  /// **'Serbest odak'**
+  String get stFreeSession;
+
+  /// No description provided for @stBroken.
+  ///
+  /// In tr, this message translates to:
+  /// **'bozuldu'**
+  String get stBroken;
+
+  /// No description provided for @stFocusScoreShort.
+  ///
+  /// In tr, this message translates to:
+  /// **'odak {n}/5'**
+  String stFocusScoreShort(int n);
+
+  /// No description provided for @stPercent.
+  ///
+  /// In tr, this message translates to:
+  /// **'%{n}'**
+  String stPercent(int n);
+
+  /// No description provided for @stDays.
+  ///
+  /// In tr, this message translates to:
+  /// **'{n} gün'**
+  String stDays(int n);
+
+  /// No description provided for @stNeurons.
+  ///
+  /// In tr, this message translates to:
+  /// **'{n} nöron'**
+  String stNeurons(int n);
+
+  /// No description provided for @stNeuronsGained.
+  ///
+  /// In tr, this message translates to:
+  /// **'+{n} nöron'**
+  String stNeuronsGained(int n);
+
+  /// No description provided for @stPoints.
+  ///
+  /// In tr, this message translates to:
+  /// **'{n} puan'**
+  String stPoints(int n);
+
+  /// No description provided for @stNoCategory.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kategorisiz'**
+  String get stNoCategory;
+
+  /// No description provided for @stUncategorized.
+  ///
+  /// In tr, this message translates to:
+  /// **'Alt kategorisiz'**
+  String get stUncategorized;
+
+  /// No description provided for @stDirectly.
+  ///
+  /// In tr, this message translates to:
+  /// **'Doğrudan bu kategori'**
+  String get stDirectly;
+
+  /// No description provided for @stUpLevel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bir üst düzey'**
+  String get stUpLevel;
+
+  /// No description provided for @stNone.
+  ///
+  /// In tr, this message translates to:
+  /// **'yok'**
+  String get stNone;
+
+  /// No description provided for @stTimeInsight.
+  ///
+  /// In tr, this message translates to:
+  /// **'En çok zamanı {name} alanına ayırdın: {time} (%{pct}).'**
+  String stTimeInsight(String name, String time, int pct);
+
+  /// No description provided for @stTimeTotal.
+  ///
+  /// In tr, this message translates to:
+  /// **'Toplam odak: {time}. Bozulan oturumlardaki odak süresi de sayılır.'**
+  String stTimeTotal(String time);
+
+  /// No description provided for @stPlanned.
+  ///
+  /// In tr, this message translates to:
+  /// **'Planlanan'**
+  String get stPlanned;
+
+  /// No description provided for @stDone.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yapılan'**
+  String get stDone;
+
+  /// No description provided for @stAdherence.
+  ///
+  /// In tr, this message translates to:
+  /// **'Plana uyum'**
+  String get stAdherence;
+
+  /// No description provided for @stDoneOf.
+  ///
+  /// In tr, this message translates to:
+  /// **'{done} / {planned} iş'**
+  String stDoneOf(int done, int planned);
+
+  /// No description provided for @stAdherenceInsight.
+  ///
+  /// In tr, this message translates to:
+  /// **'Planladığın {planned} işin {done} tanesini yaptın (%{pct}).'**
+  String stAdherenceInsight(int done, int planned, int pct);
+
+  /// No description provided for @stDailyAdherence.
+  ///
+  /// In tr, this message translates to:
+  /// **'Günlük uyum'**
+  String get stDailyAdherence;
+
+  /// No description provided for @stBestInsight.
+  ///
+  /// In tr, this message translates to:
+  /// **'En iyi odak saatin {from}–{to} (ortalama odak puanı {score}).'**
+  String stBestInsight(String from, String to, String score);
+
+  /// No description provided for @stBestNeedMore.
+  ///
+  /// In tr, this message translates to:
+  /// **'En iyi saatini bulmak için aynı saat dilimlerinde en az 3 puanlı oturum gerekiyor.'**
+  String get stBestNeedMore;
+
+  /// No description provided for @stHeatCaption.
+  ///
+  /// In tr, this message translates to:
+  /// **'Her hücre o gün ve saatte başlayan oturumların ortalama odak puanı (1–5). Gri: oturum yok.'**
+  String get stHeatCaption;
+
+  /// No description provided for @stScoreCount.
+  ///
+  /// In tr, this message translates to:
+  /// **'{score} · {n} oturum'**
+  String stScoreCount(String score, int n);
+
+  /// No description provided for @stNoRating.
+  ///
+  /// In tr, this message translates to:
+  /// **'Puan yok'**
+  String get stNoRating;
+
+  /// No description provided for @stStreakInsight.
+  ///
+  /// In tr, this message translates to:
+  /// **'Güncel serin {current} gün, en uzun serin {longest} gün.'**
+  String stStreakInsight(int current, int longest);
+
+  /// No description provided for @stStreakCurrent.
+  ///
+  /// In tr, this message translates to:
+  /// **'Güncel seri'**
+  String get stStreakCurrent;
+
+  /// No description provided for @stStreakLongest.
+  ///
+  /// In tr, this message translates to:
+  /// **'En uzun seri'**
+  String get stStreakLongest;
+
+  /// No description provided for @stCalendarCaption.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son bir yılda {n} gün en az bir odak oturumu tamamladın.'**
+  String stCalendarCaption(int n);
+
+  /// No description provided for @stLess.
+  ///
+  /// In tr, this message translates to:
+  /// **'Az'**
+  String get stLess;
+
+  /// No description provided for @stMore.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çok'**
+  String get stMore;
+
+  /// No description provided for @stFocusScore.
+  ///
+  /// In tr, this message translates to:
+  /// **'Odak puanı'**
+  String get stFocusScore;
+
+  /// No description provided for @stFatigueScore.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yorgunluk puanı'**
+  String get stFatigueScore;
+
+  /// No description provided for @stFocusFatigue.
+  ///
+  /// In tr, this message translates to:
+  /// **'Odak {focus} · Yorgunluk {fatigue}'**
+  String stFocusFatigue(String focus, String fatigue);
+
+  /// No description provided for @stQualityUp.
+  ///
+  /// In tr, this message translates to:
+  /// **'Odak puanın dönemin ikinci yarısında {d} puan yükseldi.'**
+  String stQualityUp(String d);
+
+  /// No description provided for @stQualityDown.
+  ///
+  /// In tr, this message translates to:
+  /// **'Odak puanın dönemin ikinci yarısında {d} puan düştü.'**
+  String stQualityDown(String d);
+
+  /// No description provided for @stQualityStable.
+  ///
+  /// In tr, this message translates to:
+  /// **'Odak puanın bu dönemde yaklaşık aynı kaldı.'**
+  String get stQualityStable;
+
+  /// No description provided for @stQualityNeedMore.
+  ///
+  /// In tr, this message translates to:
+  /// **'Eğilim için en az iki farklı zamanda puanlı oturum gerekiyor.'**
+  String get stQualityNeedMore;
+
+  /// No description provided for @stQualityCaption.
+  ///
+  /// In tr, this message translates to:
+  /// **'Puanlar oturum sonunda senin verdiğin değerlerdir (1–5).'**
+  String get stQualityCaption;
+
+  /// No description provided for @stInterruptions.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kesinti'**
+  String get stInterruptions;
+
+  /// No description provided for @stPerSession.
+  ///
+  /// In tr, this message translates to:
+  /// **'Oturum başına'**
+  String get stPerSession;
+
+  /// No description provided for @stByReason.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sebebe göre'**
+  String get stByReason;
+
+  /// No description provided for @stByHour.
+  ///
+  /// In tr, this message translates to:
+  /// **'Günün saatine göre'**
+  String get stByHour;
+
+  /// No description provided for @stInterruptInsight.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu dönemde {n} kesinti oldu; en sık sebep: {reason}, en çok {hour} civarında.'**
+  String stInterruptInsight(String reason, String hour, int n);
+
+  /// No description provided for @stNoInterruptions.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu dönemde odak oturumlarında hiç kesinti olmadı.'**
+  String get stNoInterruptions;
+
+  /// No description provided for @stReasonAppLeft.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uygulamadan çıkış'**
+  String get stReasonAppLeft;
+
+  /// No description provided for @stReasonShade.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bildirim paneli'**
+  String get stReasonShade;
+
+  /// No description provided for @stReasonScreenOff.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ekran kapandı'**
+  String get stReasonScreenOff;
+
+  /// No description provided for @stReasonCall.
+  ///
+  /// In tr, this message translates to:
+  /// **'Telefon araması'**
+  String get stReasonCall;
+
+  /// No description provided for @stReasonAlarm.
+  ///
+  /// In tr, this message translates to:
+  /// **'Alarm'**
+  String get stReasonAlarm;
+
+  /// No description provided for @stReasonOther.
+  ///
+  /// In tr, this message translates to:
+  /// **'Diğer'**
+  String get stReasonOther;
+
+  /// No description provided for @stModesNeedMore.
+  ///
+  /// In tr, this message translates to:
+  /// **'Karşılaştırma için Pomodoro\'dan {pomodoro}, derin çalışmadan {deep} oturum daha gerekiyor.'**
+  String stModesNeedMore(int pomodoro, int deep);
+
+  /// No description provided for @stModeProgress.
+  ///
+  /// In tr, this message translates to:
+  /// **'{mode}: {n} / 5 oturum'**
+  String stModeProgress(String mode, int n);
+
+  /// No description provided for @stModesHow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Odak oturumunu başlatırken modu seç; her iki moddan en az 5 oturum olunca kendi verinle karşılaştırırız.'**
+  String get stModesHow;
+
+  /// No description provided for @stModesPomodoroHigher.
+  ///
+  /// In tr, this message translates to:
+  /// **'Senin verinde Pomodoro\'da odak puanın daha yüksek ({a} – {b}).'**
+  String stModesPomodoroHigher(String a, String b);
+
+  /// No description provided for @stModesDeepHigher.
+  ///
+  /// In tr, this message translates to:
+  /// **'Senin verinde derin çalışmada odak puanın daha yüksek ({a} – {b}).'**
+  String stModesDeepHigher(String a, String b);
+
+  /// No description provided for @stModesClose.
+  ///
+  /// In tr, this message translates to:
+  /// **'Senin verinde iki modda odak puanın birbirine yakın.'**
+  String get stModesClose;
+
+  /// No description provided for @stModesScience.
+  ///
+  /// In tr, this message translates to:
+  /// **'Araştırmalarda iki yöntemin birbirinden genel olarak daha iyi olduğuna dair tutarlı bir kanıt yok; bu kıyas yalnız senin verindir.'**
+  String get stModesScience;
+
+  /// No description provided for @stCompletion.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tamamlanma oranı'**
+  String get stCompletion;
+
+  /// No description provided for @stAvgLength.
+  ///
+  /// In tr, this message translates to:
+  /// **'Ortalama süre'**
+  String get stAvgLength;
+
+  /// No description provided for @stSessions.
+  ///
+  /// In tr, this message translates to:
+  /// **'Oturum'**
+  String get stSessions;
+
+  /// No description provided for @stModeSessions.
+  ///
+  /// In tr, this message translates to:
+  /// **'{mode} oturumları'**
+  String stModeSessions(String mode);
+
+  /// No description provided for @stBrainInsight.
+  ///
+  /// In tr, this message translates to:
+  /// **'Beyin haritanda bu dönemde en çok {region} bölgesine nöron eklendi ({n}).'**
+  String stBrainInsight(String region, int n);
+
+  /// No description provided for @stBrainNoGrowth.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu dönemde beyin haritana nöron eklenmedi.'**
+  String get stBrainNoGrowth;
+
+  /// No description provided for @stBrainCaption.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çizgiler en çok nöron eklenen üç bölgenin toplamı. Bu dönemde bağlantı gücü: +{n}.'**
+  String stBrainCaption(int n);
+
+  /// No description provided for @stFadingTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Sönen bölgeler'**
+  String get stFadingTitle;
+
+  /// No description provided for @stFadingNone.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şu an sönen bölge yok.'**
+  String get stFadingNone;
+
+  /// No description provided for @stFadingBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu bölgelerle ilişkili etkinliklere bir süredir zaman ayrılmadı. Nöronlar silinmez; yeniden çalışınca canlanır.'**
+  String get stFadingBody;
+
+  /// No description provided for @stBrightness.
+  ///
+  /// In tr, this message translates to:
+  /// **'Parlaklık %{n}'**
+  String stBrightness(int n);
+
+  /// No description provided for @stBrainMetaphor.
+  ///
+  /// In tr, this message translates to:
+  /// **'Beyin haritası bir metafordur, beyninin ölçümü değildir.'**
+  String get stBrainMetaphor;
+
+  /// No description provided for @stOpenProject.
+  ///
+  /// In tr, this message translates to:
+  /// **'Projeyi aç'**
+  String get stOpenProject;
+
+  /// No description provided for @stProjectNoTotal.
+  ///
+  /// In tr, this message translates to:
+  /// **'Toplam süre girilmemiş; kalan işi hesaplamak için projeye toplam süre ekle.'**
+  String get stProjectNoTotal;
+
+  /// No description provided for @stRemaining.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kalan'**
+  String get stRemaining;
+
+  /// No description provided for @stRemainingOf.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kalan {left} / {total}'**
+  String stRemainingOf(String left, String total);
+
+  /// No description provided for @stProjectDone.
+  ///
+  /// In tr, this message translates to:
+  /// **'Proje tamamlandı.'**
+  String get stProjectDone;
+
+  /// No description provided for @stProjectNoForecast.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tahmin için yakın zamanda çalışma ya da planlı parça yok.'**
+  String get stProjectNoForecast;
+
+  /// No description provided for @stProjectFinishPlan.
+  ///
+  /// In tr, this message translates to:
+  /// **'Plana göre tahmini bitiş: {date}'**
+  String stProjectFinishPlan(String date);
+
+  /// No description provided for @stProjectFinishPace.
+  ///
+  /// In tr, this message translates to:
+  /// **'Son 14 günün temposuyla tahmini bitiş: {date}'**
+  String stProjectFinishPace(String date);
+
+  /// No description provided for @stProjectOnTime.
+  ///
+  /// In tr, this message translates to:
+  /// **'son tarih {date}, yetişiyor'**
+  String stProjectOnTime(String date);
+
+  /// No description provided for @stProjectLate.
+  ///
+  /// In tr, this message translates to:
+  /// **'son tarih {date}, bu tempoyla yetişmiyor'**
+  String stProjectLate(String date);
+
+  /// No description provided for @stSleepPlanned.
+  ///
+  /// In tr, this message translates to:
+  /// **'Planlanan uyku'**
+  String get stSleepPlanned;
+
+  /// No description provided for @stSleepInsight.
+  ///
+  /// In tr, this message translates to:
+  /// **'Planlanan uykun ortalama {avg}; {diff}.'**
+  String stSleepInsight(String avg, String diff);
+
+  /// No description provided for @stSleepOnGoal.
+  ///
+  /// In tr, this message translates to:
+  /// **'hedefinle aynı'**
+  String get stSleepOnGoal;
+
+  /// No description provided for @stSleepAbove.
+  ///
+  /// In tr, this message translates to:
+  /// **'hedefinden {d} fazla'**
+  String stSleepAbove(String d);
+
+  /// No description provided for @stSleepBelow.
+  ///
+  /// In tr, this message translates to:
+  /// **'hedefinden {d} az'**
+  String stSleepBelow(String d);
+
+  /// No description provided for @stSleepNotice.
+  ///
+  /// In tr, this message translates to:
+  /// **'Planlanan uykun 7 saatin altında. İstersen uyku pencereni gözden geçirebilirsin.'**
+  String get stSleepNotice;
+
+  /// No description provided for @stSleepGoalLine.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yatay çizgi uyku hedefin: {goal}. Değerler planlanan penceredir, ölçülen uyku değil.'**
+  String stSleepGoalLine(String goal);
+
+  /// No description provided for @stBalanceAll.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu dönemde bütün alanlara zaman ayırdın.'**
+  String get stBalanceAll;
+
+  /// No description provided for @stBalanceNeglected.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu dönemde {n} alana odak zamanı ayrılmadı: {names}.'**
+  String stBalanceNeglected(int n, String names);
+
+  /// No description provided for @stBalanceCaption.
+  ///
+  /// In tr, this message translates to:
+  /// **'Odak oturumlarının kök kategorilere göre dağılımı. Dinlenme ve Uyku odakla ölçülmediği için ihmal sayılmaz.'**
+  String get stBalanceCaption;
+
+  /// No description provided for @stShareImage.
+  ///
+  /// In tr, this message translates to:
+  /// **'Görsel olarak paylaş'**
+  String get stShareImage;
+
+  /// No description provided for @stShareError.
+  ///
+  /// In tr, this message translates to:
+  /// **'Görsel hazırlanamadı. Tekrar dene.'**
+  String get stShareError;
+
+  /// No description provided for @stWeekFocus.
+  ///
+  /// In tr, this message translates to:
+  /// **'Odak süresi'**
+  String get stWeekFocus;
+
+  /// No description provided for @stWeekSessions.
+  ///
+  /// In tr, this message translates to:
+  /// **'Tamamlanan oturum'**
+  String get stWeekSessions;
+
+  /// No description provided for @stWeekActiveDays.
+  ///
+  /// In tr, this message translates to:
+  /// **'Aktif gün'**
+  String get stWeekActiveDays;
+
+  /// No description provided for @stSameAsLastWeek.
+  ///
+  /// In tr, this message translates to:
+  /// **'geçen haftayla aynı'**
+  String get stSameAsLastWeek;
+
+  /// No description provided for @stUpBy.
+  ///
+  /// In tr, this message translates to:
+  /// **'geçen haftadan {d} fazla'**
+  String stUpBy(String d);
+
+  /// No description provided for @stDownBy.
+  ///
+  /// In tr, this message translates to:
+  /// **'geçen haftadan {d} az'**
+  String stDownBy(String d);
+
+  /// No description provided for @stWeekTop.
+  ///
+  /// In tr, this message translates to:
+  /// **'En çok zaman: {name}'**
+  String stWeekTop(String name);
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

@@ -192,10 +192,10 @@ O sütunları vardır; tek istisna `id = user_id = auth.users.id` olmasıdır. Y
 |---|---|---|
 | `display_name` | text null | |
 | `locale` | text null: `tr` · `en` | null = cihaz dili |
-| `theme` | text null | Tema anahtarı; null = varsayılan |
+| `theme` | text null | Tema anahtarı: `playful` · `young` · `coder` · `calm` · `highContrast` · `minimal`; null = Ciddi (D54) |
 | `theme_mode` | text: `system` · `light` · `dark` | varsayılan `system` |
 | `timezone` | text not null | IANA adı, ilk açılışta cihazdan alınır |
-| `sleep_goal_minutes` | int null | Uyku hedefi; sihirbaz önerisi ve istatistik için |
+| `sleep_goal_minutes` | int null | Uyku hedefi (analiz); uyku penceresi bunu yazmaz, null = 8 saat (D54) |
 | `birth_year` | smallint null | AUTH-2: 13 yaş sınırı ve 13–17 korumaları için. Tam doğum tarihi tutulmaz. |
 | `onboarding_completed_at` | timestamptz null | null = ilk kurulum bitmedi. Sihirbaz taslağı yalnız cihazda tutulur. |
 | `location_lat`, `location_lon` | numeric(4,1) null | Gün doğumu ve namaz vakti için. 0,1°'ye yuvarlanır (≈ 11 km), gizlilik içindir. |

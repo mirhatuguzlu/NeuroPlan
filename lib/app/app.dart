@@ -14,11 +14,12 @@ class NeuroPlanApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final profile = ref.watch(profileProvider).value;
     listenNextUp(ref);
+    final theme = AppTheme.of(profile?.theme);
     return MaterialApp.router(
       onGenerateTitle: (c) => L10n.of(c).appTitle,
       routerConfig: ref.watch(routerProvider),
-      theme: buildTheme(Brightness.light),
-      darkTheme: buildTheme(Brightness.dark),
+      theme: buildTheme(Brightness.light, theme: theme),
+      darkTheme: buildTheme(Brightness.dark, theme: theme),
       themeMode: switch (profile?.themeMode) {
         'light' => ThemeMode.light,
         'dark' => ThemeMode.dark,

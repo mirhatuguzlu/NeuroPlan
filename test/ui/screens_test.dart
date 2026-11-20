@@ -134,7 +134,8 @@ void main() {
       expect(sleep.title, 'Uyku');
       expect(sleep.rootCategoryKey, 'rest_sleep');
       expect(data.rules.single.flexibility, 'fixed');
-      expect(data.profile.sleepGoalMinutes, 480);
+      // Hedef ayrı ayardır (D54): pencere onu yazmaz, boşken 8 saat sayılır.
+      expect(data.profile.sleepGoalMinutes, isNull);
     },
   );
 
@@ -297,11 +298,15 @@ void main() {
     },
   );
 
-  testWidgets('Profil: ayarlar açılır', (t) async {
+  testWidgets('Profil: özet kartları ve ayarlar açılır', (t) async {
     final h = await pumpApp(t);
     await h.tap(find.text('Profil').last);
-    expect(find.text('Profil ve ayarlar'), findsOneWidget);
+    expect(find.text('Bu hafta odak'), findsOneWidget);
+    expect(find.text('Zamanım nereye gidiyor?'), findsOneWidget);
+    await h.expectAccessible();
+    await h.tap(find.byTooltip('Ayarlar'));
     expect(find.text('Uyku penceresi'), findsOneWidget);
+    expect(find.text('Tema'), findsOneWidget);
     await h.expectAccessible();
   });
 

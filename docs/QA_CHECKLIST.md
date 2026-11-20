@@ -213,3 +213,33 @@ Hazırlık: SETUP_BACKEND §5–§7 yapılmış, `.env`'de dört `FIREBASE_*` de
 - [ ] Adım "Şimdilik geç" ile atlanınca Profil'de "Bildirimler kapalı · Aç" satırı görünür ve çalışır.
 - [ ] Profil → Google ile bağlan: tarayıcı **açılmaz**, alttan sistem hesap seçicisi gelir; hesap seçilince bağlanır. Cihazda Google hesabı yoksa sistemin "hesap ekle" akışı açılır.
 - [ ] Release (Play imzalı) sürümde de hesap seçici çalışır (Play imza SHA-1'i Google Cloud'da kayıtlı olmalı; yoksa "hata" görülür).
+
+## D. Profil, analiz ve temalar (Aşama 5)
+Otomatik testler: `flutter test test/ui/stats_test.dart` (12 sayfa boş/dolu, her tema × açık/koyu kontrast ve dokunma kuralı), `dart test` çekirdekte `test/stats/` (hesaplar ve 1 yıllık performans).
+
+### D1. Font testi (UX_RULES §7)
+- [ ] Her tema için `Il1| O0 rn m ğĞşŞıIiİçÇöÖüÜ 12:30 %50` dizisi 12sp, 14sp ve 16sp'de, açık ve koyu temada gerçek cihazda okunur; I/l/1 ve 0/O ayrılır. (Bir notta yazıp temaları sırayla değiştirerek bakılabilir.)
+- [ ] Kalın başlıklar gerçekten kalın görünür (değişken font `wght` ekseni). Alt menüde seçili sekmenin etiketi kalın.
+- [ ] Kodcu temasında büyük sayılar JetBrains Mono, gövde metni değil.
+
+### D2. Temalar
+- [ ] Ayarlar → Tema: yedi temanın her biri anında uygulanır; uygulama yeniden açılınca kalır; ikinci cihaza eşitlenir.
+- [ ] İlk kurulumda görünüm adımında tema seçilebilir.
+- [ ] Beyin sekmesi her temada okunur (sahne temanın koyu şemasından renk alır).
+- [ ] Yüksek Kontrast temada kart ve düğme çerçeveleri kalın, odaklı alan belirgin.
+
+### D3. Analiz sayfaları
+- [ ] Profil: dört kart (bu hafta odak, uyum, seri, en güçlü bölge); her karta dokununca kendi sayfası açılır.
+- [ ] Her sayfanın başlığı sorudur; altında tek cümlelik yorum var. Aralık seçici (Hafta / Ay / 3 ay / Yıl / Tümü) seçimi sayfalar arasında korunur.
+- [ ] Grafiğe dokununca değer ve ilgili oturumlar listesi açılır; çizgi grafikte dokunma ipucu görünür.
+- [ ] "Yıl" seçilince Plana uyum ve Uyku birkaç yüz ms içinde dolar, arayüz donmaz (arka planda hesap); geri dönüp tekrar girince anında açılır.
+- [ ] Hiç veri yokken her sayfa boş durumunu ve çalışan düğmesini gösterir.
+- [ ] TalkBack: grafiklerin tek cümlelik özeti okunur; "Liste olarak göster" açılınca değerler satır satır okunur.
+- [ ] Yazı ölçeği 2.0'da kartlar tek sütuna iner, metin kesilmez.
+- [ ] Profil modunda grafik sayfasını kaydırırken 16 ms'yi aşan kare yok (`flutter run --profile`).
+
+### D4. Paylaşım ve dışa aktarma
+- [ ] Haftalık rapor → "Görsel olarak paylaş": paylaşım menüsü açılır, görsel net (3×) ve koyu/açık temada okunur.
+- [ ] Ayarlar → Verilerimi dışa aktar: uçak modunda da çalışır; JSON dosyası Drive / Dosyalar'a kaydedilebilir ve açılınca tablolar görünür.
+- [ ] Ayarlar → Bilimsel kaynaklar: 22 kaynak listelenir; kopyalanan bağlantı doi.org'a gider.
+- [ ] Ayarlar → Uyku hedefi değiştirilince Uykum yeterli mi? sayfasındaki hedef çizgisi ve fark cümlesi değişir; uyku penceresini değiştirmek hedefi değiştirmez.

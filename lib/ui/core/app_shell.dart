@@ -196,11 +196,13 @@ class _Destination extends StatelessWidget {
                 child: Text(
                   label,
                   maxLines: 1,
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    color: selected
-                        ? scheme.onSurface
-                        : scheme.onSurfaceVariant,
-                    fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                  style: weighted(
+                    theme.textTheme.labelMedium!.copyWith(
+                      color: selected
+                          ? scheme.onSurface
+                          : scheme.onSurfaceVariant,
+                    ),
+                    selected ? FontWeight.w700 : FontWeight.w500,
                   ),
                 ),
               ),

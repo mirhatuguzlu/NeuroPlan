@@ -46,6 +46,10 @@ String weekdayShort(BuildContext context, int weekday) =>
 String weekdayLong(BuildContext context, int weekday) =>
     DateFormat.EEEE(context.localeName).format(DateTime(2024, 1, weekday));
 
+/// 1–12 → yerel kısa ay adı.
+String monthShort(BuildContext context, int month) =>
+    DateFormat.MMM(context.localeName).format(DateTime(2024, month));
+
 DateTime utcOf(int minute) =>
     DateTime.fromMillisecondsSinceEpoch(minute * 60000, isUtc: true);
 

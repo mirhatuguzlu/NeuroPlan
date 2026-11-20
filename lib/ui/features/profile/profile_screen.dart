@@ -1,376 +1,217 @@
-import 'package:drift/drift.dart' show Value;
+import 'dart:math' as math;
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:neuroplan_core/neuroplan_core.dart';
 
-import '../../../app/providers.dart';
 import '../../../app/theme.dart';
-import '../../../data/local/app_database.dart';
-import '../../../data/plan/plan_source.dart';
-import '../../../data/repositories/sleep_window.dart';
 import '../../core/app_shell.dart';
 import '../../core/format.dart';
-import '../../core/location.dart';
-import '../../core/prayer_fields.dart';
 import '../../core/states.dart';
-import 'account_tiles.dart';
-import '../../core/wizard.dart';
-import 'focus_settings.dart';
-import 'notification_settings.dart';
+import '../stats/stats_page.dart';
+import '../stats/stats_providers.dart';
 
-/// Profil (bu aşamada): kurulumda verilen her kararın sonradan değiştirildiği ayarlar.
+/// Profil: bu haftanın özeti ve analizlere giriş (Aşama 5 §1). Ayarlar ayrı ekrandadır.
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = context.l10n;
-    final data = ref.watch(planDataProvider);
+    final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(title: Text(l.profileTitle)),
-      body: AsyncView<PlanData?>(
-        value: data,
-        onRetry: () => ref.invalidate(planDataProvider),
-        data: (d) => d == null ? const SkeletonList() : _Settings(data: d),
+      appBar: AppBar(
+        title: Text(l.profileTitle),
+        actions: [
+          IconButton(
+            tooltip: l.settingsTitle,
+            icon: const Icon(Symbols.settings_rounded),
+            onPressed: () => context.push('/profile/settings'),
+          ),
+        ],
+      ),
+      body: AsyncView<StatsContext>(
+        value: ref.watch(statsContextProvider),
+        onRetry: () => ref.invalidate(statsSourceProvider),
+        data: (s) => ListView(
+          padding: EdgeInsets.fromLTRB(
+            Gap.l,
+            Gap.s,
+            Gap.l,
+            AppShell.bottomInset(context),
+          ),
+          children: [
+            _Summary(s: s),
+            const SizedBox(height: Gap.xl),
+            Semantics(
+              header: true,
+              child: Text(
+                l.pfAnalyses,
+                style: theme.textTheme.titleSmall?.copyWith(
+                  color: theme.colorScheme.primary,
+                ),
+              ),
+            ),
+            const SizedBox(height: Gap.s),
+            for (final p in StatPage.values)
+              ListTile(
+                leading: Icon(p.icon),
+                title: Text(p.question(l)),
+                trailing: const Icon(Symbols.chevron_right_rounded),
+                onTap: () => context.push('/profile/stats/${p.name}'),
+              ),
+          ],
+        ),
       ),
     );
   }
 }
 
-class _Settings extends ConsumerWidget {
-  const _Settings({required this.data});
-
-  final PlanData data;
-
-  Future<void> _update(
-    BuildContext context,
-    WidgetRef ref,
-    ProfilesCompanion c,
-  ) => guard(context, () => ref.read(profileRepositoryProvider).update(c));
+class _Summary extends ConsumerWidget {
+  const _Summary({required this.s});
+  final StatsContext s;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = context.l10n;
-    final p = data.profile;
-    final sleep = SleepWindow.find(data);
-    Widget section(String text) => Padding(
-      padding: const EdgeInsets.fromLTRB(Gap.l, Gap.xl, Gap.l, Gap.s),
-      child: Semantics(
-        header: true,
-        child: Text(
-          text,
-          style: Theme.of(context).textTheme.titleSmall
-              ?.copyWith(color: Theme.of(context).colorScheme.primary),
-        ),
-      ),
+    final week = DayRange.weekOf(s.today);
+    final summary = weekSummary(s.sessions, const [], week, s.today, s.cal);
+    final last = weekSummary(
+      s.sessions,
+      const [],
+      week.previous,
+      s.today,
+      s.cal,
     );
-
-    Future<void> saveSleep(int bed, int wake) => guard(
-      context,
-      () => SleepWindow.save(
-        db: ref.read(databaseProvider),
-        activities: ref.read(activityRepositoryProvider),
-        profiles: ref.read(profileRepositoryProvider),
-        existing: sleep,
-        title: l.sleepActivityTitle,
-        today: data.calendar
-            .dayOf(DateTime.now().millisecondsSinceEpoch ~/ 60000)
-            .iso,
-        bed: bed,
-        wake: wake,
+    final hist = ref.watch(planHistoryProvider(week));
+    final adh = hist.whenData((h) => adherence(h.items, week, s.today));
+    final st = streaks(s.sessions, s.cal, s.today);
+    final strongest = s.brain.regions.values
+        .where((r) => r.total > 0)
+        .fold<RegionState?>(
+          null,
+          (a, r) => a == null || r.total > a.total ? r : a,
+        );
+    final cards = [
+      _Card(
+        icon: Symbols.timer_rounded,
+        label: l.pfWeekFocus,
+        value: durationText(l, summary.focusMinutes),
+        sub: l.pfLastWeek(durationText(l, last.focusMinutes)),
+        page: StatPage.time,
       ),
-    );
-
-    return ListView(
-      padding: EdgeInsets.only(bottom: AppShell.bottomInset(context)),
-      children: [
-        section(l.secGeneral),
-        ExpansionTile(
-          leading: const Icon(Symbols.translate_rounded),
-          title: Text(l.settingLanguage),
-          subtitle: Text(switch (p.locale) {
-            'tr' => l.langTurkish,
-            'en' => l.langEnglish,
-            _ => l.langSystem,
-          }),
+      _Card(
+        icon: Symbols.task_alt_rounded,
+        label: l.pfAdherence,
+        value: switch (adh) {
+          AsyncData(value: Adherence(percent: final p?)) => l.stPercent(
+            p.round(),
+          ),
+          AsyncData() => '–',
+          _ => '…',
+        },
+        sub: switch (adh) {
+          AsyncData(value: final a) when a.planned > 0 => l.stDoneOf(
+            a.done,
+            a.planned,
+          ),
+          AsyncData() => l.pfNoPlanYet,
+          _ => l.stLoading,
+        },
+        page: StatPage.adherence,
+      ),
+      _Card(
+        icon: Symbols.local_fire_department_rounded,
+        label: l.pfStreak,
+        value: l.stDays(st.current),
+        sub: l.pfLongest(st.longest),
+        page: StatPage.consistency,
+      ),
+      _Card(
+        icon: Symbols.psychology_rounded,
+        label: l.pfStrongest,
+        value: strongest == null
+            ? '–'
+            : s.regions[strongest.key]?.name(context) ?? strongest.key,
+        sub: strongest == null
+            ? l.pfStrongestEmpty
+            : l.stNeurons(strongest.total ~/ unitsPerNeuron),
+        page: StatPage.brain,
+      ),
+    ];
+    return LayoutBuilder(
+      builder: (context, box) {
+        final one =
+            box.maxWidth < 320 ||
+            MediaQuery.textScalerOf(context).scale(1) > 1.5;
+        final w = one ? box.maxWidth : (box.maxWidth - Gap.m) / 2;
+        return Wrap(
+          spacing: Gap.m,
+          runSpacing: Gap.m,
           children: [
-            ChoiceList<String?>(
-              value: p.locale,
-              options: [
-                (null, l.langSystem, null),
-                ('tr', l.langTurkish, null),
-                ('en', l.langEnglish, null),
-              ],
-              onChanged: (v) =>
-                  _update(context, ref, ProfilesCompanion(locale: Value(v))),
-            ),
+            for (final c in cards) SizedBox(width: math.max(0, w), child: c),
           ],
-        ),
-        ExpansionTile(
-          leading: const Icon(Symbols.contrast_rounded),
-          title: Text(l.settingAppearance),
-          subtitle: Text(switch (p.themeMode) {
-            'light' => l.modeLight,
-            'dark' => l.modeDark,
-            _ => l.modeSystem,
-          }),
-          children: [
-            ChoiceList<String>(
-              value: p.themeMode,
-              options: [
-                ('system', l.modeSystem, null),
-                ('light', l.modeLight, null),
-                ('dark', l.modeDark, null),
-              ],
-              onChanged: (v) =>
-                  _update(context, ref, ProfilesCompanion(themeMode: Value(v))),
-            ),
-          ],
-        ),
-        SwitchListTile(
-          secondary: const Icon(Symbols.vibration_rounded),
-          title: Text(l.settingHaptics),
-          value: p.hapticsEnabled,
-          onChanged: (v) => _update(
-            context,
-            ref,
-            ProfilesCompanion(hapticsEnabled: Value(v)),
-          ),
-        ),
-
-        section(l.secPlan),
-        ListTile(
-          leading: const Icon(Symbols.bedtime_rounded),
-          title: Text(l.settingSleep),
-          subtitle: sleep == null ? Text(l.notSet) : null,
-        ),
-        TimeTile(
-          label: l.sleepBedtime,
-          minuteOfDay: sleep?.bed ?? 23 * 60,
-          onChanged: (v) => saveSleep(v, sleep?.wake ?? 7 * 60),
-        ),
-        TimeTile(
-          label: l.sleepWake,
-          minuteOfDay: sleep?.wake ?? 7 * 60,
-          onChanged: (v) => saveSleep(sleep?.bed ?? 23 * 60, v),
-        ),
-        _MinutesSetting(
-          label: l.settingMinChunk,
-          value: p.minChunkMinutes,
-          fallback: durationText(l, defaultMinChunk),
-          onCommit: (v) => _update(
-            context,
-            ref,
-            ProfilesCompanion(minChunkMinutes: Value(v)),
-          ),
-        ),
-        _MinutesSetting(
-          label: l.settingBuffer,
-          value: p.chunkBufferMinutes,
-          fallback: durationText(l, defaultChunkBuffer),
-          min: 0,
-          onCommit: (v) => _update(
-            context,
-            ref,
-            ProfilesCompanion(chunkBufferMinutes: Value(v)),
-          ),
-        ),
-        _MinutesSetting(
-          label: l.settingDailyCap,
-          value: p.dailyFocusCapMinutes,
-          fallback: l.noLimit,
-          onCommit: (v) => _update(
-            context,
-            ref,
-            ProfilesCompanion(dailyFocusCapMinutes: Value(v)),
-          ),
-        ),
-
-        section(l.secLocation),
-        _LocationTile(profile: p),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: Gap.s),
-          child: PrayerFields(
-            method: p.prayerMethod,
-            madhab: p.prayerMadhab ?? 'shafi',
-            hasLocation: p.locationLat != null,
-            onChanged: (m, h) => _update(
-              context,
-              ref,
-              ProfilesCompanion(
-                prayerMethod: Value(m),
-                prayerMadhab: Value(m == null ? null : h),
-              ),
-            ),
-          ),
-        ),
-
-        section(l.secNotifications),
-        const NotificationSettings(),
-
-        section(l.secFocus),
-        const FocusSettingsTiles(),
-
-        section(l.secAccount),
-        const AccountTiles(),
-
-        section(l.secAbout),
-        ListTile(
-          leading: const Icon(Symbols.info_rounded),
-          title: Text(l.aboutTitle),
-          subtitle: Text(l.aboutSubtitle),
-          trailing: const Icon(Symbols.chevron_right_rounded),
-          onTap: () => context.push('/profile/about'),
-        ),
-      ],
+        );
+      },
     );
   }
 }
 
-class _LocationTile extends ConsumerStatefulWidget {
-  const _LocationTile({required this.profile});
+class _Card extends StatelessWidget {
+  const _Card({
+    required this.icon,
+    required this.label,
+    required this.value,
+    required this.sub,
+    required this.page,
+  });
 
-  final Profile profile;
-
-  @override
-  ConsumerState<_LocationTile> createState() => _LocationTileState();
-}
-
-class _LocationTileState extends ConsumerState<_LocationTile> {
-  LocateResult? _result;
+  final IconData icon;
+  final String label;
+  final String value;
+  final String sub;
+  final StatPage page;
 
   @override
   Widget build(BuildContext context) {
-    final l = context.l10n;
-    final p = widget.profile;
-    final has = p.locationLat != null && p.locationLon != null;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        ListTile(
-          leading: const Icon(Symbols.location_on_rounded),
-          title: Text(l.settingLocation),
-          subtitle: Text(
-            has
-                ? l.locationValue(
-                    p.locationLat!.toStringAsFixed(1),
-                    p.locationLon!.toStringAsFixed(1),
-                  )
-                : l.notSet,
-          ),
-          trailing: has
-              ? IconButton(
-                  tooltip: l.locationRemove,
-                  icon: const Icon(Symbols.delete_rounded),
-                  onPressed: () => guard(
-                    context,
-                    () => ref
-                        .read(profileRepositoryProvider)
-                        .update(
-                          const ProfilesCompanion(
-                            locationLat: Value(null),
-                            locationLon: Value(null),
-                          ),
-                        ),
+    final theme = Theme.of(context);
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () => context.push('/profile/stats/${page.name}'),
+        child: Semantics(
+          button: true,
+          child: Padding(
+            padding: const EdgeInsets.all(Gap.l),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ExcludeSemantics(
+                  child: Icon(icon, color: theme.colorScheme.primary),
+                ),
+                const SizedBox(height: Gap.s),
+                Text(label, style: theme.textTheme.labelLarge),
+                const SizedBox(height: Gap.xs),
+                Text(
+                  value,
+                  style: theme.textTheme.headlineSmall,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: Gap.xs),
+                Text(
+                  sub,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
                   ),
-                )
-              : null,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: Gap.l),
-          child: BusyButton(
-            tonal: true,
-            label: l.locationAllow,
-            onPressed: () async {
-              final r = await locateAndSave(
-                ref.read(profileRepositoryProvider),
-              );
-              if (mounted) setState(() => _result = r);
-            },
-          ),
-        ),
-        if (_result != null && _result != LocateResult.saved)
-          Padding(
-            padding: const EdgeInsets.fromLTRB(Gap.l, Gap.s, Gap.l, 0),
-            child: Semantics(
-              liveRegion: true,
-              child: Text(
-                _result == LocateResult.denied
-                    ? l.locationDenied
-                    : l.locationError,
-                style: TextStyle(color: Theme.of(context).colorScheme.error),
-              ),
+                ),
+              ],
             ),
           ),
-      ],
+        ),
+      ),
     );
   }
-}
-
-/// Dakika ayarı: boş = motor varsayılanı; alandan çıkınca ya da onaylayınca kaydedilir.
-class _MinutesSetting extends StatefulWidget {
-  const _MinutesSetting({
-    required this.label,
-    required this.value,
-    required this.fallback,
-    required this.onCommit,
-    this.min = 5,
-  });
-
-  final String label;
-  final int? value;
-  final String fallback;
-  final int min;
-  final ValueChanged<int?> onCommit;
-
-  @override
-  State<_MinutesSetting> createState() => _MinutesSettingState();
-}
-
-class _MinutesSettingState extends State<_MinutesSetting> {
-  late final _c = TextEditingController(text: widget.value?.toString() ?? '');
-  late final _focus = FocusNode()..addListener(_onFocus);
-
-  void _onFocus() {
-    if (!_focus.hasFocus) _commit();
-  }
-
-  void _commit() {
-    final n = int.tryParse(_c.text);
-    final v = n != null && n >= widget.min && n <= 1440 ? n : null;
-    if (v != widget.value) widget.onCommit(v);
-  }
-
-  @override
-  void dispose() {
-    _focus.dispose();
-    _c.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.fromLTRB(Gap.l, Gap.s, Gap.l, Gap.s),
-    child: TextFormField(
-      controller: _c,
-      focusNode: _focus,
-      keyboardType: TextInputType.number,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      decoration: InputDecoration(
-        labelText: widget.label,
-        helperText: context.l10n.engineDefault(widget.fallback),
-        suffixText: context.l10n.wizMinutes,
-      ),
-      validator: (v) {
-        if (v == null || v.isEmpty) return null;
-        final n = int.tryParse(v);
-        return n == null || n < widget.min || n > 1440
-            ? context.l10n.wizNumberError(widget.min, 1440)
-            : null;
-      },
-      onFieldSubmitted: (_) => _commit(),
-    ),
-  );
 }

@@ -177,7 +177,7 @@ Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem 
 ## 2026-11-18 — D26: Tema bu aşamada
 **Karar:** Tek bir taban Material 3 teması var (tohum renk `#5B57D9`). Görünüm açık, koyu ya da cihazla aynı olur; varsayılan sistem fontu kullanılır. Ciddi / Eğlenceli / Genç / Kodcu temaları ve font testi tema aşamasında eklenecek; ilk kurulumdaki görünüm adımı o zaman tema seçeneklerini kazanacak.
 **Neden:** Proje sahibinin seçimi; font kararı gerçek cihaz testine bağlı (D10).
-**Durum:** Geçici.
+**Durum:** D54 ile değişti (temalar Aşama 5'te yapıldı).
 
 ## 2026-11-18 — D27: Bildirim, ana ekran widget'ı, cihaz tercihleri
 **Karar:**
@@ -413,3 +413,25 @@ Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem 
 - Beyin nöron yerleşiminin tohumu, oturum varsa kullanıcı kimliğidir; aynı hesabın beyni her cihazda aynı görünür. Hesapsız kurulumda kurulum başına rastgele tohum sürer.
 **Neden:** Proje sahibi aşamanın açıklarının kapatılmasını, Play ve hukuk işlerinin yayın öncesine kalmasını istedi.
 **Durum:** Kabul. İki cihazlı QA (QA_CHECKLIST C) proje sahibinde.
+
+## 2026-11-20 — D54: Aşama 5 — Profil, analiz ve temalar
+**Karar (proje sahibinin seçimleri):**
+- **Grafik:** `fl_chart` 1.3 çizgi ve sütun grafikleri çizer (dokununca değer, renkler temadan). Isı haritası ve GitHub tarzı yıllık takvim fl_chart'ta olmadığı için kendi widget'larımızdır. fl_chart eski `flutter/material`'i içe aktarıyor ama yalnız çizer; bütün renkler açıkça verildiği için `material_ui` temasıyla çatışmaz.
+- **Uyum yüzdesi iş sayısına göre:** geçmiş günlerde planlanan (taşınmamış) her oluşum bir iş, `done` olanlar yapılan. Uyku penceresi ve serbest zaman sayılmaz. Bugün henüz bitmediği için dahil değil. Planlananlar veritabanında değil kurallardan türediği için geçmiş aralık plan motoruyla yeniden kurulur (1 yıl ~0,5 sn): 31 günden uzun aralık ayrı isolate'te koşar ve sonuç plan verisi değişene dek bellekte kalır (`planHistoryProvider`). Diğer bütün analizler 1 yıllık sahte veride birlikte 36 ms tuttuğu için önbelleksizdir.
+- **Seri:** en az bir tamamlanan odak oturumu olan gün (sıralamadaki "aktif gün" ile aynı, D47). Oturum bittiği güne yazılır. Bugün oturum yoksa dünkü seri sürer.
+- **Uyku hedefi ayrı ayar:** uyku penceresi artık `sleep_goal_minutes`'i yazmaz. Boşsa hedef 8 saattir; planlanan uyku ortalaması 7 saatin altındaysa sakin bir not çıkar (tıbbi iddia yok). Değerler planlanan penceredir, ölçülen uyku değil.
+- **Dışa aktarma ve rapor görseli** cihazda üretilir, sistem paylaşım menüsüyle verilir (`share_plus`, `path_provider`). JSON biçimi DB_SCHEMA §6.4'tür: eşitlenen bütün tablolar, tarihler ISO metin.
+- **Temalar şimdi yapıldı (D26'nın yerine):** Ciddi (varsayılan, `profiles.theme = null`), Eğlenceli, Genç, Kodcu ve onaylanan üç ek tema Sakin, Yüksek Kontrast, Minimal (THEME-2). Her tema tohum renk + Material şema türü, font çifti, köşe yarıçapı ve ikon ağırlığı tanımlar. Yüksek Kontrast `contrastLevel: 1` ve kalın çerçeveler kullanır. Beyin sahnesi temanın koyu şemasından renk alır (THEME-4). İlk kurulumdaki görünüm adımında da tema seçilir.
+- **Fontlar** github.com/google/fonts'tan (OFL) gömülü: Atkinson Hyperlegible Next (gövde, bütün temalar), Nunito (Eğlenceli başlık), Lexend (Genç), JetBrains Mono (Kodcu sayılar). Hepsi değişken font olduğu için ağırlık `wght` eksenine de yazılır (`weighted()`); koddaki ağırlık değişikliği bu yardımcıyla yapılır.
+
+**Geçici kararlar (gece alındı, onay bekliyor):**
+- Grafik paleti dataviz skill'inin doğrulanmış paletidir ve temaya göre değişmez: kategorik sıra renk körlüğü güvenliğinin kendisidir. Doğrulayıcı bütün temaların kart yüzeylerinde geçti; açık modda 2. ve 3. seri 3:1'in altında kaldığı için bu serileri kullanan her grafikte "Liste olarak göster" görünümü vardır. Sıralı ölçek tek renk (mavi), koyu modda çapa çevrilir.
+- Adlı kategoriler (kök kategoriler, sebepler) tek renkli sıralı çubuklarla gösterilir; 9 kök için 9 renk kullanılmaz (dataviz: 8'den fazla kategorik renk yok, değere göre boyama yok).
+- Aralık seçici: son 7 / 30 / 91 / 365 gün ve "tümü" (kurulum ya da ilk oturumdan). Seçim bütün sayfalarda ortaktır. Profil kartlarındaki "bu hafta" pazartesi–pazar haftasıdır.
+- "En güçlü bölge" toplam nöronu en çok olan bölge. "Sönen bölge" parlaklığı bir yarılanmadan (14 gün) fazla düşmüş, nöronu olan bölge.
+- Burn-down proje ekranıyla aynı ölçüyü kullanır: yapılan ve planlanan parçalar. Tahmin önce planlı parçalar ve önerilerden, yetmezse son 14 günün temposundan yapılır.
+- En iyi odak saati: aynı iki saatlik dilimde en az 3 puanlı oturum; oturumun yerel başlangıç saati. Mod karşılaştırması her moddan en az 5 biten oturum ister; odak puanı farkı 0,3'ten küçükse "yakın" denir. Genel bir "daha iyi" iddiası yoktur (SCIENCE §4).
+- Isı haritası ve yıllık takvim hücreleri 48 dp'den küçüktür (24 saat sütunu telefona sığmaz); aynı bilgi liste görünümünde ve tek cümlelik özette vardır.
+- Temaların metin tonu (THEME-3) bu aşamada ayrışmadı; bütün temalar aynı metinleri kullanır.
+- Kaynak künyeleri `assets/seed/sources.json`'da (SCIENCE §5'ten üretildi, S1–S22); künye çevrilmez, "et al." kullanılır.
+**Durum:** Kabul (geçici maddeler onay bekliyor). D26 bu kararla kapandı.

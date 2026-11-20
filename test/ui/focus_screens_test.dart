@@ -89,6 +89,7 @@ void main() {
   testWidgets('Profil: odak tercihleri görünür', (t) async {
     final h = await pumpApp(t);
     await h.tap(find.text('Profil'));
+    await h.tap(find.byTooltip('Ayarlar'));
     await t.scrollUntilVisible(
       find.text('Odakta Rahatsız Etmeyin'),
       300,

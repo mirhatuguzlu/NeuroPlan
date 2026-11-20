@@ -4,7 +4,6 @@ import 'package:neuroplan_core/neuroplan_core.dart';
 import '../local/app_database.dart';
 import '../plan/plan_source.dart';
 import 'activity_repository.dart';
-import 'profile_repository.dart';
 
 /// Uyku penceresi sıradan, kesin bir aktivitedir ve motor onu dolu blok olarak korur.
 /// Ayrı bir şema alanı yoktur. Profil ekranı onu şu izle bulur: Dinlenme ve Uyku
@@ -53,11 +52,11 @@ class SleepWindow {
     ],
   );
 
-  /// Yoksa "her gün, kesin" kuralıyla oluşturur, varsa saatlerini günceller.
+  /// Yoksa "her gün, kesin" kuralıyla oluşturur, varsa saatlerini günceller. Uyku hedefi
+  /// ayrı bir ayardır; pencere onu değiştirmez (D54).
   static Future<void> save({
     required AppDatabase db,
     required ActivityRepository activities,
-    required ProfileRepository profiles,
     required SleepWindow? existing,
     required String title,
     required String today,
@@ -89,8 +88,5 @@ class SleepWindow {
         ),
       );
     }
-    await profiles.update(
-      ProfilesCompanion(sleepGoalMinutes: Value((wake - bed) % 1440)),
-    );
   });
 }
