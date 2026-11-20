@@ -124,5 +124,11 @@ class _NoNextUp extends NextUp {
   _NoNextUp() : super(Notifications());
 
   @override
-  Future<void> sync(view, l, {required lead, required exact}) async {}
+  Future<void> sync(
+    view,
+    l, {
+    required lead,
+    required exact,
+    auto = false,
+  }) async {}
 }

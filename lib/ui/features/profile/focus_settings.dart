@@ -3,6 +3,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../../app/focus_platform.dart';
+import '../../../app/next_up.dart';
 import '../../../app/providers.dart';
 import '../../../data/repositories/prefs_repository.dart';
 import '../../core/format.dart';
@@ -19,7 +20,7 @@ final _phonePermissionProvider = FutureProvider.autoDispose<bool>(
   (ref) => ref.watch(focusPlatformProvider).hasPhonePermission(),
 );
 
-/// Odak tercihleri (cihaza özel): Rahatsız Etmeyin ve gelen aramayı kaçış saymama.
+/// Odak tercihleri (cihaza özel): otomatik başlatma, Rahatsız Etmeyin, aramalar.
 /// İzin, anahtar açıldığı anda istenir.
 class FocusSettingsTiles extends ConsumerWidget {
   const FocusSettingsTiles({super.key});
@@ -31,8 +32,19 @@ class FocusSettingsTiles extends ConsumerWidget {
     final prefs = ref.read(prefsRepositoryProvider);
     final dnd = ref.watch(_dndPrefProvider).value ?? false;
     final phone = ref.watch(_phonePermissionProvider).value;
+    final auto = ref.watch(autoRunProvider).value ?? true;
     return Column(
       children: [
+        SwitchListTile(
+          secondary: const Icon(Symbols.play_circle_rounded),
+          title: Text(l.settingAutoRun),
+          subtitle: Text(l.settingAutoRunBody),
+          value: auto,
+          onChanged: (on) => guard(
+            context,
+            () => prefs.set(PrefsRepository.autoRun, on ? null : '0'),
+          ),
+        ),
         SwitchListTile(
           secondary: const Icon(Symbols.do_not_disturb_on_rounded),
           title: Text(l.settingFocusDnd),

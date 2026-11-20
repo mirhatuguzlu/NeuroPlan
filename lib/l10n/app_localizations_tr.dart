@@ -1521,6 +1521,24 @@ class L10nTr extends L10n {
   String get focusDndDenied => 'Rahatsız Etmeyin erişimi verilmedi.';
 
   @override
+  String get settingAutoRun => 'Saatinde otomatik başlat ve bitir';
+
+  @override
+  String get settingAutoRunBody =>
+      'Uygulama açıksa odak gerektiren iş saatinde kendiliğinden başlar, bitiş saatinde biter. Diğer işler için başlangıçta ve bitişte bildirim gelir.';
+
+  @override
+  String get autoFocusBody => 'Odaklanma zamanı. Dokun, oturum başlasın.';
+
+  @override
+  String autoStartBody(String time) {
+    return 'Şimdi başlıyor · $time';
+  }
+
+  @override
+  String get autoDoneBody => 'Bitiş saati geldi. Yaptın mı?';
+
+  @override
   String get settingFocusCalls => 'Gelen aramalar kaçış sayılmasın';
 
   @override

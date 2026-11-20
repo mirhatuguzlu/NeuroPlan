@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../l10n/app_localizations.dart';
+import 'auto_start.dart';
 import 'crash_reports.dart';
 import 'feature_flags.dart';
 import 'next_up.dart';
@@ -17,6 +18,7 @@ class NeuroPlanApp extends ConsumerWidget {
     final profile = ref.watch(profileProvider).value;
     listenNextUp(ref);
     ref.watch(featureFlagsSyncProvider);
+    ref.watch(autoStartProvider);
     ref.watch(crashReportsProvider);
     final theme = AppTheme.of(profile?.theme);
     return MaterialApp.router(

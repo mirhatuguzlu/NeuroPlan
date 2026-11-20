@@ -1529,6 +1529,24 @@ class L10nEn extends L10n {
   String get focusDndDenied => 'Do Not Disturb access wasn\'t granted.';
 
   @override
+  String get settingAutoRun => 'Start and end on time automatically';
+
+  @override
+  String get settingAutoRunBody =>
+      'While the app is open, items that need focus start on time and end at their end time. For other items you get a notification at the start and at the end.';
+
+  @override
+  String get autoFocusBody => 'Time to focus. Tap to start the session.';
+
+  @override
+  String autoStartBody(String time) {
+    return 'Starting now · $time';
+  }
+
+  @override
+  String get autoDoneBody => 'Time\'s up. Did you do it?';
+
+  @override
   String get settingFocusCalls => 'Don\'t count incoming calls as leaving';
 
   @override

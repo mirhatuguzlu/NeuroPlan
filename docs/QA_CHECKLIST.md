@@ -286,3 +286,18 @@ Otomatik testler: `flutter test` (tema matrisi 10 tema, `test/l10n/`, `test/ui/s
 - [ ] Ayarlar → Veriler → "Çökme raporları gönder" varsayılan açık; kapatılınca kalıcı (yeniden açılışta da kapalı).
 - [ ] Release derlemesinde ilk çökme Firebase Crashlytics panosunda görünür; raporda e-posta, ad ya da plan içeriği yok.
 - [ ] `crashReports` bayrağı false iken anahtar Ayarlar'da görünmez.
+
+## F. Saatinde otomatik başlat ve bitir (D63)
+Hazırlık: 2–3 dk sonra başlayan, 5 dk süren, "odak gerektirir" bir iş ve aynı saatlerde odak gerektirmeyen ikinci bir iş. Ayarlar → Odak → "Saatinde otomatik başlat ve bitir" açık (varsayılan).
+
+- [ ] **Uygulama öndeyken:** başlangıç saatinde (≤ 1 dk gecikmeyle) odak ekranı kendiliğinden açılır; mod işin varsayılanı, Pomodoro/derin süreleri son kullanılan. Başla'ya basılmaz.
+- [ ] Bitiş saatinde oturum kendiliğinden "tamamlandı" olur, bitiş adımları açılır; beyin kazanımı görünür.
+- [ ] **Uygulama arka plandayken / kapalıyken:** başlangıç saatinde "Odaklanma zamanı. Dokun, oturum başlasın." bildirimi; dokununca uygulama açılır ve oturum hemen başlar (soğuk açılışta da).
+- [ ] Oturum sürerken uygulamayı kapat (son uygulamalardan değil, geri tuşuyla), bitişten sonra aç → oturum bitiş anında tamamlanmış sayılır.
+- [ ] Odak gerektirmeyen iş: başlangıçta "Şimdi başlıyor · HH:MM", bitişte "Bitiş saati geldi. Yaptın mı?" bildirimi; ikincisine dokununca Bugün'de o satır açık gelir (Bitti / Atla), kendiliğinden "bitti" olmaz.
+- [ ] Uyku penceresi ve serbest zaman için "Yaptın mı?" gelmez.
+- [ ] Uygulamayı işin başlamasından 10 dk sonra aç → oturum kendiliğinden başlamaz (Bugün'den başlatılır).
+- [ ] Otomatik başlayan oturumu "Bitir" ile erken bitir, uygulamayı kapatıp aç → aynı iş yeniden başlamaz.
+- [ ] Anahtarı kapat → otomatik başlama, otomatik bitiş, başlangıç ve "yaptın mı?" bildirimleri durur; "X dk önce" hatırlatma (açıksa) sürer.
+- [ ] Ortak odak oturumu işin bitiş saatinde kendiliğinden bitmez.
+- [ ] Tam zamanlı bildirim izni kapalıyken bildirimler birkaç dakika gecikebilir (not et).

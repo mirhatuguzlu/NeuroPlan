@@ -28,6 +28,14 @@ final exactAlarmsProvider = StreamProvider<bool>(
       .map((v) => v == '1'),
 );
 
+/// "Saatinde otomatik başlat ve bitir" (cihaza özel, varsayılan açık; D63).
+final autoRunProvider = StreamProvider<bool>(
+  (ref) => ref
+      .watch(prefsRepositoryProvider)
+      .watch(PrefsRepository.autoRun)
+      .map((v) => v != '0'),
+);
+
 final nextUpProvider = Provider(
   (ref) => NextUp(ref.watch(notificationsProvider)),
 );
@@ -60,6 +68,7 @@ class NextUp {
     L10n l, {
     required int? lead,
     required bool exact,
+    bool auto = false,
   }) async {
     if (defaultTargetPlatform != TargetPlatform.android || kIsWeb) return;
     final now = view.nowMinute;
@@ -75,13 +84,19 @@ class NextUp {
       for (final i in upcoming.take(50)) '${i.id}@${i.start}',
       lead,
       exact,
+      auto,
       l.localeName,
     ].join('|');
     if (signature == _last) return;
     _last = signature;
     try {
       await _syncWidget(view, upcoming, l);
-      await _syncNotifications(view, upcoming, l, lead, exact);
+      await _syncNotifications(
+        view,
+        l,
+        reminders(view, l, lead: lead, auto: auto),
+        exact,
+      );
     } on Object catch (e) {
       _last = null; // bir sonraki değişiklikte yeniden denenir
       debugPrint('Sıradaki iş eşitlenemedi: $e');
@@ -150,15 +165,14 @@ class NextUp {
 
   Future<void> _syncNotifications(
     PlanView view,
-    List<PlannedInstance> upcoming,
     L10n l,
-    int? lead,
+    List<Reminder> reminders,
     bool exact,
   ) async {
     await _init();
     // Yalnız zamanlanmışlar: gösterilen odak bildirimleri (kalıcı, uyarı) silinmesin.
     await _plugin.cancelAllPendingNotifications();
-    if (lead == null) return;
+    if (reminders.isEmpty) return;
     final canExact =
         exact && (await _android?.canScheduleExactNotifications() ?? false);
     final details = NotificationDetails(
@@ -172,24 +186,85 @@ class NextUp {
       ),
     );
     var id = 0;
-    for (final i in upcoming.take(50)) {
-      final at = i.start! - lead;
-      if (at <= view.nowMinute) continue;
+    for (final r in reminders) {
       await _plugin.zonedSchedule(
         id: id++,
-        scheduledDate: tz.TZDateTime.from(utcOf(at), tz.UTC),
+        scheduledDate: tz.TZDateTime.from(utcOf(r.at), tz.UTC),
         notificationDetails: details,
         androidScheduleMode: canExact
             ? AndroidScheduleMode.exactAllowWhileIdle
             : AndroidScheduleMode.inexactAllowWhileIdle,
-        title: _title(view, i),
-        body: l.notifBody(
-          _clock(view, i.start!, l.localeName),
-          l.inDuration(durationText(l, lead)),
-        ),
+        title: r.title,
+        body: r.body,
+        payload: r.payload,
       );
     }
   }
+
+  /// Önümüzdeki 7 günün bildirimleri, zamana göre, en çok 50 tane:
+  /// [lead] dakika önce hatırlatma; [auto] açıksa başlangıçta "başla" ve odak gerektirmeyen
+  /// işin bitişinde "yaptın mı?" (D63). Dokununca: `focus:<id>` odağı başlatır, `open:<id>`
+  /// Bugün'de işi açar.
+  @visibleForTesting
+  List<Reminder> reminders(
+    PlanView view,
+    L10n l, {
+    int? lead,
+    bool auto = false,
+  }) {
+    final now = view.nowMinute;
+    final out = <Reminder>[];
+    for (final i in view.output.instances) {
+      if (!i.isTimed || i.status != InstanceStatus.planned) continue;
+      final s = i.start!, e = i.end!;
+      if (s >= now + 7 * 1440 || e <= now) continue;
+      final title = _title(view, i);
+      final clock = _clock(view, s, l.localeName);
+      // Başlangıçta zaten "başla" bildirimi varsa 0 dk önceki hatırlatma tekrar olur.
+      if (lead != null && !(auto && lead == 0 && !i.suggested)) {
+        out.add(
+          Reminder(
+            s - lead,
+            title,
+            l.notifBody(clock, l.inDuration(durationText(l, lead))),
+            'open:${i.id}',
+          ),
+        );
+      }
+      if (!auto || i.suggested) continue;
+      final focus = view.data.requiresFocus(i.activityId);
+      out.add(
+        Reminder(
+          s,
+          title,
+          focus ? l.autoFocusBody : l.autoStartBody(clock),
+          '${focus ? 'focus' : 'open'}:${i.id}',
+        ),
+      );
+      // Odak oturumu bitişte kendisi kapanır; uyku ve serbest zaman için soru anlamsız.
+      final kind = view.data.activities[i.activityId]?.kind;
+      final sleep = view.data.rootOf(i.activityId) == 'rest_sleep';
+      if (!focus && e > s && kind != 'free_time' && !sleep) {
+        out.add(Reminder(e, title, l.autoDoneBody, 'open:${i.id}'));
+      }
+    }
+    out.removeWhere((r) => r.at <= now);
+    out.sort((a, b) => a.at.compareTo(b.at));
+    return out.take(50).toList();
+  }
+}
+
+/// Zamanlanmış tek bildirim; [at] UTC dakika.
+class Reminder {
+  const Reminder(this.at, this.title, this.body, this.payload);
+
+  final int at;
+  final String title;
+  final String body;
+  final String payload;
+
+  @override
+  String toString() => 'Reminder($at, $title, $body, $payload)';
 }
 
 /// Plan, dil ya da bildirim tercihi değişince [NextUp]'ı eşitler (uygulama kökünde dinlenir).
@@ -204,10 +279,12 @@ void listenNextUp(WidgetRef ref) {
           l10nFor(ref.read(profileProvider).value?.locale),
           lead: ref.read(notifyLeadProvider).value,
           exact: ref.read(exactAlarmsProvider).value ?? false,
+          auto: ref.read(autoRunProvider).value ?? true,
         );
   }
 
   ref.listen(horizonProvider, (_, _) => run());
+  ref.listen(autoRunProvider, (_, _) => run());
   ref.listen(notifyLeadProvider, (_, _) => run());
   ref.listen(exactAlarmsProvider, (_, _) => run());
   ref.listen(profileProvider, (_, _) => run());

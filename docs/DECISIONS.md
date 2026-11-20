@@ -512,3 +512,19 @@ Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem 
 - `planEngineVersion` 2.
 - Test: çekirdekte sınır durumları; uygulamada sihirbaz taslağı → kayıt → Bugün/Plan görünümü için 8 saat seçimi × süreli/süresiz × 9 tekrar türü = 144 birleşim (`test/data/time_step_matrix_test.dart`) ve sihirbazdan uçtan uca ekran testi.
 **Durum:** Kabul.
+
+## 2026-11-21 — D63: Saatinde otomatik başlat ve bitir
+**Karar (proje sahibinin seçimi):**
+- **Odak gerektiren iş:** uygulama öndeyken başlangıç saatinde odak oturumu işin varsayılan moduyla ve son kullanılan süre ayarlarıyla kendiliğinden başlar (`autoStartProvider`, `lib/app/auto_start.dart`). Uygulama kapalı ya da arkadaysa tam başlangıç saatinde bildirim gelir; dokununca oturum hemen başlar (soğuk açılışta `getNotificationAppLaunchDetails`). Tam ekran niyeti (`USE_FULL_SCREEN_INTENT`) kullanılmaz: Play yalnız alarm ve arama uygulamalarına izin veriyor.
+- **Bitiş:** oturum işin planlanan bitişinde mod ne olursa olsun "tamamlandı" olur (beyin olayları dahil). Bitiş anı cihaz durumunda (`focus.runtime` → `end`) tutulur; uygulama kapalıyken geçtiyse açılışta bitiş anında tamamlanır. Süresiz işte, bitişi geçmiş işte ve ortak odakta otomatik bitiş yok.
+- **Odak gerektirmeyen iş:** başlangıçta "Şimdi başlıyor", bitişte "Yaptın mı?" bildirimi; dokununca Bugün'de satır açılır. Kendiliğinden "bitti" sayılmaz (uyum yüzdesi şişmesin). Uyku ve serbest zamanda "Yaptın mı?" yok.
+- **Ayar:** Ayarlar → Odak → "Saatinde otomatik başlat ve bitir", cihaza özel (`pref.auto_run`), varsayılan açık. Veritabanı değişmedi. Kapalıyken yalnız "X dk önce" hatırlatma kalır; 0 dk önce hatırlatma başlangıç bildirimiyle tekrarlanmaz.
+- Bildirimler eskisi gibi önümüzdeki 7 gün, en çok 50; bildirim yükü `focus:<id>` / `open:<id>`.
+**Geçici:**
+- Otomatik başlatma penceresi 5 dk: uygulama işin ortasında açılınca oturum kendiliğinden başlamaz (Bugün'den başlatılır); bildirime dokunuş bu sınıra bağlı değildir.
+- Saatsiz ve motorun önerdiği (`suggested`) işler otomatik başlamaz, başlangıç / "yaptın mı?" bildirimi almaz.
+- Bir oluşum için oturum bir kez açıldıysa (erken bitirilse ya da bozulsa da) yeniden otomatik başlamaz.
+- Önceki oturumun sonuç ekranı açıkken yeni oturum otomatik başlamaz.
+- Uygulama öndeyken başlangıç bildirimi de gelir (otomatik başlayan oturumla birlikte).
+- "Yaptın mı?" bildiriminden açılan satır listede çok aşağıdaysa (henüz kurulmadıysa) kaydırılmaz.
+**Durum:** Kabul. Gerçek cihazda henüz doğrulanmadı (QA_CHECKLIST F).

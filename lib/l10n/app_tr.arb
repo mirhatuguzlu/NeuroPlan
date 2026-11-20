@@ -906,6 +906,18 @@
   "settingFocusDnd": "Odakta Rahatsız Etmeyin",
   "settingFocusDndBody": "Oturum başlayınca açılır, bitince eski haline döner.",
   "focusDndDenied": "Rahatsız Etmeyin erişimi verilmedi.",
+  "settingAutoRun": "Saatinde otomatik başlat ve bitir",
+  "settingAutoRunBody": "Uygulama açıksa odak gerektiren iş saatinde kendiliğinden başlar, bitiş saatinde biter. Diğer işler için başlangıçta ve bitişte bildirim gelir.",
+  "autoFocusBody": "Odaklanma zamanı. Dokun, oturum başlasın.",
+  "autoStartBody": "Şimdi başlıyor · {time}",
+  "@autoStartBody": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "autoDoneBody": "Bitiş saati geldi. Yaptın mı?",
   "settingFocusCalls": "Gelen aramalar kaçış sayılmasın",
   "settingFocusCallsBody": "Telefon durumu izni ister. İzin yoksa dönüşte sorulur.",
   "settingFocusCallsOn": "İzin verildi. Kaldırmak için sistem ayarlarını kullan.",

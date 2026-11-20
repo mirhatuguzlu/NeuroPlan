@@ -2449,6 +2449,36 @@ abstract class L10n {
   /// **'Rahatsız Etmeyin erişimi verilmedi.'**
   String get focusDndDenied;
 
+  /// No description provided for @settingAutoRun.
+  ///
+  /// In tr, this message translates to:
+  /// **'Saatinde otomatik başlat ve bitir'**
+  String get settingAutoRun;
+
+  /// No description provided for @settingAutoRunBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uygulama açıksa odak gerektiren iş saatinde kendiliğinden başlar, bitiş saatinde biter. Diğer işler için başlangıçta ve bitişte bildirim gelir.'**
+  String get settingAutoRunBody;
+
+  /// No description provided for @autoFocusBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Odaklanma zamanı. Dokun, oturum başlasın.'**
+  String get autoFocusBody;
+
+  /// No description provided for @autoStartBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şimdi başlıyor · {time}'**
+  String autoStartBody(String time);
+
+  /// No description provided for @autoDoneBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bitiş saati geldi. Yaptın mı?'**
+  String get autoDoneBody;
+
   /// No description provided for @settingFocusCalls.
   ///
   /// In tr, this message translates to:

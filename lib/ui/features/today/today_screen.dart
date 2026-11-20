@@ -4,6 +4,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:neuroplan_core/neuroplan_core.dart';
 
+import '../../../app/auto_start.dart';
 import '../../../app/providers.dart';
 import '../../../app/theme.dart';
 import '../../core/app_shell.dart';
@@ -43,6 +44,8 @@ class _TodayBody extends ConsumerWidget {
     final l = context.l10n;
     final theme = Theme.of(context);
     final today = view.today;
+    final reveal = ref.watch(todayRevealProvider);
+    void revealed() => ref.read(todayRevealProvider.notifier).show(null);
     final out = view.output;
     final cal = view.calendar;
     final dayStart = cal.dayStart(Day.parse(today));
@@ -135,6 +138,8 @@ class _TodayBody extends ConsumerWidget {
             view: view,
             instance: i,
             actions: actions,
+            reveal: i.id == reveal,
+            onRevealed: revealed,
             highlight: i.id == current?.id || i.id == next?.id,
             conflictWith: overlaps[i.id],
             cyclic: cyclic.contains(i.activityId),
@@ -208,6 +213,8 @@ class _TodayBody extends ConsumerWidget {
               view: view,
               instance: i,
               actions: actions,
+              reveal: i.id == reveal,
+              onRevealed: revealed,
               cyclic: cyclic.contains(i.activityId),
               missingAnchor: missing.contains(i.ruleId),
             ),
@@ -493,6 +500,8 @@ class _InstanceTile extends StatefulWidget {
     this.cyclic = false,
     this.missingAnchor = false,
     this.dropped,
+    this.reveal = false,
+    this.onRevealed,
   });
 
   final PlanView view;
@@ -506,6 +515,10 @@ class _InstanceTile extends StatefulWidget {
   /// Tampondaki iş: true = isteğe bağlıydı ve düştü.
   final bool? dropped;
 
+  /// Bildirimden gelindi: satır açılır ve görünür kaydırılır (D63).
+  final bool reveal;
+  final VoidCallback? onRevealed;
+
   @override
   State<_InstanceTile> createState() => _InstanceTileState();
 }
@@ -515,8 +528,24 @@ class _InstanceTileState extends State<_InstanceTile> {
   var _justDone = false;
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.reveal) _reveal();
+  }
+
+  void _reveal() {
+    _open = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      Scrollable.ensureVisible(context, alignment: 0.3);
+      widget.onRevealed?.call();
+    });
+  }
+
+  @override
   void didUpdateWidget(_InstanceTile old) {
     super.didUpdateWidget(old);
+    if (widget.reveal && !old.reveal) _reveal();
     _justDone =
         old.instance.status != InstanceStatus.done &&
         widget.instance.status == InstanceStatus.done;

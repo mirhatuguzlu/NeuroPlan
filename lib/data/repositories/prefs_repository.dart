@@ -10,6 +10,9 @@ class PrefsRepository {
   static const notifyLead = 'pref.notify_lead_minutes';
   static const exactAlarms = 'pref.exact_alarms';
 
+  /// Saatinde otomatik başlat ve bitir (D63). Varsayılan açık: yalnız '0' kapalıdır.
+  static const autoRun = 'pref.auto_run';
+
   /// Odakta Rahatsız Etmeyin ('1' = açık).
   static const focusDnd = 'pref.focus_dnd';
 

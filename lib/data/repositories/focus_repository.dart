@@ -22,6 +22,18 @@ class FocusRepository {
             ]))
           .watch();
 
+  /// Bu oluşum için daha önce oturum açıldı mı (otomatik başlatma bir kez dener).
+  Future<bool> hasSessionFor(String planInstanceId) async =>
+      await (_db.select(_db.focusSessions)
+            ..where(
+              (s) =>
+                  s.deletedAt.isNull() &
+                  s.planInstanceId.equals(planInstanceId),
+            )
+            ..limit(1))
+          .getSingleOrNull() !=
+      null;
+
   /// Süren oturum (en çok bir tane; uygulama açılınca kurtarılır).
   Stream<FocusSession?> watchActive() =>
       (_db.select(_db.focusSessions)

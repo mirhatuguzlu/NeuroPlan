@@ -401,4 +401,80 @@ void main() {
       isNull,
     );
   });
+
+  group('planlanan bitiş (D63)', () {
+    final m0 = t0.millisecondsSinceEpoch ~/ 60000;
+    Future<PlannedInstance> timed({int minutes = 30}) async {
+      final i = await r.activityInstance();
+      return PlannedInstance(
+        id: i.id,
+        activityId: i.activityId,
+        date: i.date,
+        status: i.status,
+        source: i.source,
+        flexibility: i.flexibility,
+        start: m0,
+        end: m0 + minutes,
+      );
+    }
+
+    final end = t0.add(const Duration(minutes: 30));
+
+    test('bitiş saatinde kendiliğinden tamamlanır', () async {
+      r.now = end.subtract(const Duration(milliseconds: 200));
+      await r.c.start(
+        instance: await timed(),
+        settings: const FocusSettings(FocusMode.pomodoro),
+      );
+      expect(r.s.active, isTrue);
+      await r.settle(500);
+      expect(r.s.ended?.outcome, 'completed');
+      final row = await r.session(r.s.ended!.id);
+      expect(row.endedAt, end);
+    });
+
+    test(
+      'uygulama kapalıyken bitiş geçtiyse açılışta bitişte tamamlanır',
+      () async {
+        await r.c.start(
+          instance: await timed(),
+          settings: const FocusSettings(FocusMode.deep),
+        );
+        final id = r.s.session!.id;
+        await r.reopen(t0.add(const Duration(minutes: 50)));
+        expect(r.s.active, isFalse);
+        expect(r.s.ended?.outcome, 'completed');
+        final row = await r.session(id);
+        expect(row.endedAt, end);
+        expect(row.focusedSeconds, 30 * 60);
+      },
+    );
+
+    test('anahtar kapalıysa, süresiz işte ya da ortak odakta bitmez', () async {
+      await r.prefs.set(PrefsRepository.autoRun, '0');
+      await r.c.start(
+        instance: await timed(),
+        settings: const FocusSettings(FocusMode.free),
+      );
+      await r.reopen(t0.add(const Duration(minutes: 50)));
+      expect(r.s.active, isTrue);
+      await r.c.finish();
+      await r.prefs.set(PrefsRepository.autoRun, null);
+      await r.c.start(
+        instance: await timed(minutes: 0),
+        settings: const FocusSettings(FocusMode.free),
+      );
+      await r.reopen(t0.add(const Duration(hours: 2)));
+      expect(r.s.active, isTrue);
+      await r.c.finish();
+      r.now = t0;
+      await r.c.start(
+        instance: await timed(),
+        settings: const FocusSettings(FocusMode.free),
+        startAt: t0,
+      );
+      await r.reopen(t0.add(const Duration(minutes: 50)));
+      expect(r.s.active, isTrue);
+    });
+  });
 }

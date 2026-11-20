@@ -70,6 +70,10 @@ class FocusController extends Notifier<FocusState> {
   Timer? _boundary;
   Timer? _deadline;
   Timer? _debounce;
+  Timer? _endTimer;
+
+  /// İşin planlanan bitişi: oturum burada kendiliğinden "tamamlandı" olur (D63).
+  DateTime? _plannedEnd;
   DateTime? _alerted;
   var _pinned = false;
 
@@ -99,6 +103,7 @@ class FocusController extends Notifier<FocusState> {
       _boundary?.cancel();
       _deadline?.cancel();
       _debounce?.cancel();
+      _endTimer?.cancel();
     });
     _run(_recover);
     return const FocusState();
@@ -157,6 +162,12 @@ class FocusController extends Notifier<FocusState> {
     if (runtime?['session'] == s.id) {
       _pause = PauseKind.values.asNameMap()[runtime!['pause']];
       _guard = EscapeGuard.fromJson((runtime['guard'] as Map).cast());
+      final end = runtime['end'] as String?;
+      _plannedEnd = end == null ? null : DateTime.parse(end);
+    }
+    // Uygulama kapalıyken bitiş geçtiyse oturum bitiş anında tamamlanmış sayılır.
+    if (_plannedEnd case final end? when !end.isAfter(_now())) {
+      return _complete(end);
     }
     await _comeBack(_now());
     if (_session == null) return;
@@ -166,6 +177,7 @@ class FocusController extends Notifier<FocusState> {
     }
     await _showOngoing();
     _schedule();
+    _scheduleEnd();
     _emit();
   }
 
@@ -221,6 +233,20 @@ class FocusController extends Notifier<FocusState> {
     _ended = null;
     _needsPardon = false;
     _title = await _titleOf(instance.activityId);
+    // Ortak odağın kendi bitişi var; süresiz ya da bitişi geçmiş işte otomatik bitiş yok.
+    final end = instance.isTimed && instance.end! > instance.start!
+        ? DateTime.fromMillisecondsSinceEpoch(
+            instance.end! * 60000,
+            isUtc: true,
+          )
+        : null;
+    _plannedEnd =
+        startAt == null &&
+            end != null &&
+            end.isAfter(now) &&
+            await _prefs.get(PrefsRepository.autoRun) != '0'
+        ? end
+        : null;
     await _saveRuntime();
     await _saveSettings(settings);
     _syncPin(want: true);
@@ -229,6 +255,7 @@ class FocusController extends Notifier<FocusState> {
     }
     await _showOngoing();
     _schedule();
+    _scheduleEnd();
     _emit();
   });
 
@@ -274,10 +301,24 @@ class FocusController extends Notifier<FocusState> {
     await _changed();
   });
 
-  Future<void> finish() => _run(() async {
+  Future<void> finish() => _run(() => _complete(_now()));
+
+  void _scheduleEnd() {
+    _endTimer?.cancel();
+    final end = _plannedEnd;
+    if (end == null) return;
+    final wait = end.difference(_now());
+    _endTimer = Timer(wait.isNegative ? Duration.zero : wait, () {
+      _run(() async {
+        // Bu arada oturum bittiyse ya da yenisi başladıysa dokunma.
+        if (_session != null && _plannedEnd == end) await _complete(end);
+      });
+    });
+  }
+
+  Future<void> _complete(DateTime now) async {
     final s = _session;
     if (s == null) return;
-    final now = _now();
     final clock = _clock!.advance(now).close(now);
     _clock = clock;
     final focused = clock.focused(now).inSeconds;
@@ -292,7 +333,7 @@ class FocusController extends Notifier<FocusState> {
         );
     await _brainEvents(s);
     await _end(s.id, 'completed');
-  });
+  }
 
   /// Arama şüphesinde kullanıcı "evet, aramadaydım" dedi.
   Future<void> pardon() => _run(() async {
@@ -609,6 +650,8 @@ class FocusController extends Notifier<FocusState> {
     _boundary?.cancel();
     _deadline?.cancel();
     _debounce?.cancel();
+    _endTimer?.cancel();
+    _plannedEnd = null;
     _alerted = null;
     await _safe(_platform.stopOngoing);
     _syncPin(want: false);
@@ -663,6 +706,7 @@ class FocusController extends Notifier<FocusState> {
         'session': s.id,
         'pause': _pause?.name,
         'guard': _guard.toJson(),
+        'end': _plannedEnd?.toIso8601String(),
       }),
     );
   }
