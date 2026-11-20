@@ -405,3 +405,11 @@ Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem 
 - iOS aşamasında Runner aynı `env` çağrısını karşılayacak (`shortcut:` notu `lib/app/env.dart` içinde).
 **Neden:** Proje sahibi uygulamayı her başlatışta bayrak verme zorunluluğunun kaldırılmasını istedi; bayraksız başlatılan uygulama sessizce sunucusuz açılıyor ve Google girişi görünmüyordu.
 **Durum:** Kabul. Bayraksız `flutter run` ile gerçek cihazda doğrulandı (ayarlar dolu, Google oturumu korunuyor).
+
+## 2026-11-20 — D53: Aşama 4B kapanışı; Play ve hukuk süreçleri yayın öncesine
+**Karar:**
+- Play Console beyanları, KVKK standart sözleşmeleri ve hukuk metinlerinin avukat incelemesi (SETUP_BACKEND §10) Google Play'de yayından hemen önceye bırakıldı. Taslaklar `docs/legal/` altında hazır.
+- Misafirken var olan bir Google hesabına geçilince eski misafir hesabı sunucuda sahipsiz kalıyordu. Artık geçişten hemen sonra eski misafirin hâlâ geçerli belirteciyle `delete_account` çağrılır; verisi zaten cihazdan yeni kullanıcıya gönderilmektedir (D17, `SyncEngine.adoptUser`). Silme başarısız olursa yalnız günlüğe yazılır.
+- Beyin nöron yerleşiminin tohumu, oturum varsa kullanıcı kimliğidir; aynı hesabın beyni her cihazda aynı görünür. Hesapsız kurulumda kurulum başına rastgele tohum sürer.
+**Neden:** Proje sahibi aşamanın açıklarının kapatılmasını, Play ve hukuk işlerinin yayın öncesine kalmasını istedi.
+**Durum:** Kabul. İki cihazlı QA (QA_CHECKLIST C) proje sahibinde.

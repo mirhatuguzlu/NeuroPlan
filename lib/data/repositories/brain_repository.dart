@@ -164,8 +164,8 @@ class BrainRepository {
     await _prefs.set(rebuiltKey, DateTime.now().toUtc().toIso8601String());
   }
 
-  /// Nöron yerleşiminin tohumu. shortcut: giriş henüz yok, kurulum başına rastgele kimlik;
-  /// giriş aşamasında Supabase kullanıcı kimliğine geçilecek.
+  /// Hesapsız (yalnız cihaz) kurulumda nöron yerleşiminin tohumu: kurulum başına rastgele
+  /// kimlik. Oturum varsa BrainController kullanıcı kimliğini kullanır.
   Future<String> seed() async {
     final saved = await _prefs.get(seedKey);
     if (saved != null) return saved;

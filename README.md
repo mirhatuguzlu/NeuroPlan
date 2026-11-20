@@ -71,6 +71,7 @@ Mimari: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) · Veri modeli: [docs/DB_SC
 - [x] **Aşama 4B** — Birlikte: KVKK/GDPR/Play araştırması (SOCIAL_SAFETY), misafir + Google girişi ve eşitleme, yaş adımı, davet/QR/kullanıcı adıyla arkadaşlık, tek partner kısıtı, veritabanında plan görünürlüğü, ortak odak (Realtime) + LiveKit ses, ortak etkinlik/proje, ortak boş zaman, mesajlaşma, sıralama, sunucuda beyin hesabı (Dart → JS), beyin karşılaştırma, şikâyet/engel/moderasyon, hesap silme, pgTAP RLS testleri
 - [ ] Tema, font ve ikon kararları (font testi; tema aşamasında)
 - [ ] Tanıtım sitesi (`mirhatuguzlu.github.io/NeuroPlan/`); hesap silme sayfası alt bilgideki bağlantıyla bu sitenin içinde (D51, son aşama)
+- [ ] Google Play yayını: Play Console beyanları, KVKK standart sözleşmeleri, hukuk metinlerinin avukat incelemesi (SETUP_BACKEND §10, D53; yayından hemen önce)
 - [ ] Sonraki aşamalar [PRODUCT.md](docs/PRODUCT.md)'deki modüllere göre planlanacak
 
 ## Geliştirme ortamı

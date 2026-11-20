@@ -214,7 +214,10 @@ class BrainController extends Notifier<BrainViewState> {
         rootColors: look.colors,
         reducedMotion: look.reducedMotion,
         tier: state.tier,
-        seed: await ref.read(brainRepositoryProvider).seed(),
+        // Hesap varsa nöron yerleşimi her cihazda aynı olsun diye kullanıcı kimliğinden üretilir.
+        seed:
+            ref.read(authServiceProvider).user?.id ??
+            await ref.read(brainRepositoryProvider).seed(),
       ),
     );
     _scene.send(SceneVisibility(_visible));

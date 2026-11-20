@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -72,11 +74,29 @@ class AuthService {
         if (e.code != 'identity_already_exists') rethrow;
       }
     }
-    // shortcut: eski misafir kullanıcı sunucuda kalır; temizliği zamanlanmış görevle yapılacak.
+    final guestToken = (c.auth.currentUser?.isAnonymous ?? false)
+        ? c.auth.currentSession?.accessToken
+        : null;
     await c.auth.signInWithIdToken(
       provider: OAuthProvider.google,
       idToken: idToken,
     );
+    // Misafirin verisi cihazdan yeni kullanıcıya gönderilir (SyncEngine.adoptUser); sunucudaki
+    // eski misafir hesabı artık sahipsiz kalır ve kendi (henüz geçerli) belirteciyle silinir.
+    if (guestToken != null) {
+      unawaited(
+        c.functions
+            .invoke(
+              'delete_account',
+              headers: {'Authorization': 'Bearer $guestToken'},
+            )
+            .then<void>(
+              (_) {},
+              onError: (Object e) =>
+                  debugPrint('[auth] eski misafir silinemedi: $e'),
+            ),
+      );
+    }
     return ConnectResult.switched;
   }
 
