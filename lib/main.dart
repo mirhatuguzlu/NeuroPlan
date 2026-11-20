@@ -26,6 +26,11 @@ Future<void> main() async {
       url: Env.supabaseUrl,
       publishableKey: Env.supabaseAnonKey,
     );
+  } else {
+    debugPrint(
+      '[env] SUPABASE_URL boş: uygulama --dart-define-from-file=.env olmadan '
+      'başlatıldı; giriş, eşitleme ve Birlikte kapalı.',
+    );
   }
   final db = AppDatabase(driftDatabase(name: 'neuroplan'), systemData: system);
   final container = ProviderContainer(

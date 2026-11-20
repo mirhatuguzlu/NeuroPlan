@@ -522,6 +522,13 @@ Bu bölüm hukuki tavsiye değildir; avukatla birlikte yürüt.
 - `FIREBASE_API_KEY`, `FIREBASE_APP_ID`, `FIREBASE_SENDER_ID`, `FIREBASE_PROJECT_ID`
 
 **11.2 İki cihaz**
+
+> **Uygulama her zaman `.env` ile başlatılmalı.** `.env` olmadan derlenen uygulama sunucuyu hiç tanımaz: Profil'de "Yalnız bu cihazda" yazar, Google ile bağlan düğmesi çıkmaz, Birlikte çalışmaz.
+> - Terminalden: komutta mutlaka `--dart-define-from-file=.env` olmalı (aşağıda).
+> - Android Studio'nun ▶ (Run) düğmesi: **Run → Edit Configurations… → main.dart → Additional run args** alanında `--dart-define-from-file=.env` yazmalı. Bu bilgisayarda ayarlı. `.idea` klasörü git'e girmediği için başka bilgisayarda yeniden yazılır.
+> - Kontrol: terminalde `[env] SUPABASE_URL boş` satırı görünürse uygulama `.env`'siz başlamış demektir.
+> - `.env` değiştiyse hot reload yetmez: uygulamayı durdurup yeniden başlat.
+
 1. Cihazları USB ile bağla. Geliştirici seçenekleri → USB hata ayıklama açık olsun.
 2. Cihaz kimliklerini gör:
    ```bash
