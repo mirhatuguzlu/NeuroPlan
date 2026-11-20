@@ -475,7 +475,7 @@ Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem 
 - Abonelik altyapısının tamamı (sağlayıcı seçimi, satın alma, yetki servisi) Google Play yayınından önce ayrı bir adımda kurulacak. Bu aşamada abonelik kodu yazılmadı; `entitlements` tablosu (DB_SCHEMA §4.5) hazır bekliyor. Önerilen sağlayıcı RevenueCat'ti (makbuz doğrulama, yenileme, iOS'a aynı kod); karar o adımda verilecek.
 - Özellik bayrakları: Supabase'de salt okunur `feature_flags` tablosu + kod varsayılanı (açık). Uygulama açılışta ve ön plana dönüşte okur, `sync_state`'te önbellekler. Bayraklar: `together`, `messages`, `cofocus`, `voice`, `leaderboard`, `brainCompare`, `crashReports`.
 - Kapalı bölüm: Birlikte'nin tamamı kapalıysa açıklayan boş durum; alt özellik kapalıysa girişi görünmez (boş ya da işlevsiz düğme kalmaz).
-**Durum:** Kabul. Migration `20261120180000_feature_flags.sql` **uzak Supabase'e uygulanmadı** (proje sahibinin onayı bekleniyor); uygulanana dek istemci varsayılanla çalışır.
+**Durum:** Kabul. Migration `20261120180000_feature_flags.sql` proje sahibinin onayıyla 2026-11-20'de uzak Supabase'e uygulandı (RLS açık, `anon`/`authenticated` yalnız okur). Tablo boş; satır eklenene dek kod varsayılanı (açık) geçer.
 
 ## 2026-11-20 — D59: Çökme raporları Crashlytics; kullanım analitiği yok
 **Karar (proje sahibinin seçimi):**
@@ -502,3 +502,13 @@ Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem 
 - İmza: Play App Signing + yükleme anahtarı. `android/key.properties` (git-ignored) varsa release onunla imzalanır, yoksa hata ayıklama anahtarıyla (CI derleyebilsin diye; Play reddeder). Anahtarı proje sahibi üretir.
 - Sürüm: `X.Y.Z+N`, `N` her yüklemede artar; etiket `vX.Y.Z`, aday `vX.Y.Z-rc.N`. Bu aşama `1.0.0+1`, etiket `v1.0.0-rc.1` (proje sahibinin seçimi, push edilir).
 **Durum:** Kabul. Play Console beyanları, hukuk incelemesi ve mağaza görselleri proje sahibinde (yayından hemen önce, D53).
+
+## 2026-11-20 — D62: Süresiz saat aralığı zaman çizelgesine yerleşir
+**Sorun:** Sihirbazda "Bir saat aralığında" seçilip süre adımı boş geçilince motor işi saatsiz bırakıyordu; iş Bugün'de "Bugün bir ara"ya, Plan haftasında "—"ya düşüyordu.
+**Karar:**
+- Süresiz pencere, süresiz sabit saatli iş gibi **sıfır dakikayla** pencerenin ilk boş anına yerleşir (bugünse şimdiden önce değil). Boş zamanı yemez, çakışma üretmez. Bugün pencere geçtiyse süreli pencere gibi tampona düşer.
+- Saatsiz kalan tek iş, saati de süresi de olmayan iştir ("Saat yok"); süresi varsa eskisi gibi saat önerilir.
+- Sıfır dakikalık satırda "09:00–09:00 · 0 dk" yazılmaz; yalnız başlangıç saati görünür (Bugün ve Plan).
+- `planEngineVersion` 2.
+- Test: çekirdekte sınır durumları; uygulamada sihirbaz taslağı → kayıt → Bugün/Plan görünümü için 8 saat seçimi × süreli/süresiz × 9 tekrar türü = 144 birleşim (`test/data/time_step_matrix_test.dart`) ve sihirbazdan uçtan uca ekran testi.
+**Durum:** Kabul.

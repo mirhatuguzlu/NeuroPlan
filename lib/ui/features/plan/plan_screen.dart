@@ -205,7 +205,9 @@ class _Week extends ConsumerWidget {
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
           ),
-          subtitle: i.isTimed ? Text(durationText(l, i.end! - i.start!)) : null,
+          subtitle: i.isTimed && i.end! > i.start!
+              ? Text(durationText(l, i.end! - i.start!))
+              : null,
           trailing: i.status == InstanceStatus.planned
               ? IconButton(
                   tooltip: l.actionChangeTime,

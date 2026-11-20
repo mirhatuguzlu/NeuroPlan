@@ -10,7 +10,7 @@ import 'plan_types.dart';
 import 'timeline.dart';
 
 /// Algoritma değişince artar (docs/ARCHITECTURE.md §6, determinizm kuralı 5).
-const planEngineVersion = 1;
+const planEngineVersion = 2;
 
 /// Deterministik plan motoru: aynı girdi aynı planı üretir (SLOT-6).
 ///
@@ -674,9 +674,10 @@ final class _Run {
       return;
     }
 
-    if (d == null) return; // süresiz pencere ya da saatsiz iş: saatsiz kalır
     final isWindow = sLo != null || sHi != null || eLo != null || eHi != null;
-    for (final len in {d, ?dShort}) {
+    // Süresiz pencere, süresiz sabit saat gibi sıfır dakikayla ilk boş ana yerleşir (D62).
+    if (d == null && !isWindow) return; // saatsiz iş saatsiz kalır
+    for (final len in {d ?? 0, ?dShort}) {
       final limit = eHi ?? math.max(dayEnd, (sHi ?? 0) + len);
       var lo = math.max(sLo ?? cal.dayStart(o.day), _floor(o.day));
       if (eLo != null) lo = math.max(lo, eLo - len);

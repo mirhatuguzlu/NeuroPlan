@@ -559,7 +559,8 @@ class _InstanceTileState extends State<_InstanceTile> {
       if (done) (Symbols.check_circle_rounded, l.statusDone, false),
       if (skipped) (Symbols.skip_next_rounded, l.statusSkipped, false),
     ];
-    final range = i.isTimed
+    // Süresiz iş (sıfır dakika) yalnız başlangıç saatiyle görünür; "0 dk" yazılmaz.
+    final range = i.isTimed && i.end! > i.start!
         ? '${l.timeRange(clockText(context, cal, i.start!), clockText(context, cal, i.end!))}'
               ' · ${durationText(l, i.end! - i.start!)}'
         : null;

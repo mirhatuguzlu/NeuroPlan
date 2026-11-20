@@ -153,7 +153,7 @@ Kod: `packages/neuroplan_core/lib/src/plan/` (Aşama 2). Girdi ve çıktı tiple
    0. Kullanıcının sabitlediği oluşumlar: elle düzenlenen, "bitti" ile kapatılan, onaylı proje parçası.
    1. Sabit saatli ve astronomik çapalı kesin işler. Uyku da buradadır: sıradan, kesin bir aktivitedir.
    2. Göreli kesin işler, çapalarından sonra. Bağımlılık derinliğine göre sıralanır, çapanın gerçek saati kullanılır. Bu yüzden geç biten bir iş, ona bağlı işleri kaydırır.
-   3. Zaman pencereliler ve saati olan esnek işler. Esnek işler bütün kesin işlerden sonra yerleşir.
+   3. Zaman pencereliler ve saati olan esnek işler. Esnek işler bütün kesin işlerden sonra yerleşir. Süresiz pencere sıfır dakikayla pencerenin ilk boş anına yerleşir (D62).
    4. Saatsiz işler: süresi varsa saat önerilir (`suggested`). "Dönem başına N kez" oluşumları bu adımda dağıtılır: ilk ölçüt en az oluşum alan gün, sonra boş zamanı en çok olan gün, eşitlikte erken gün.
    5. Proje parçaları (`ChunkPlanner`).
    6. Kalan süre boş zamandır. Plansız günlerde (`auto_placement = false`) boş zaman hesaplanmaz.

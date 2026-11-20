@@ -467,4 +467,111 @@ void main() {
     expect(digest(a), digest(b));
     expect(a.engineVersion, planEngineVersion);
   });
+
+  group('süresiz saat aralığı (D62)', () {
+    PlanRule window(String from, String to, {int toDay = 0, int? minutes}) =>
+        rule(
+          'RW',
+          'W',
+          daily('2026-11-01'),
+          start: [clock(ConstraintOp.notBefore, from)],
+          end: [clock(ConstraintOp.notAfter, to, dayOffset: toDay)],
+          minutes: minutes,
+          flex: Flexibility.shiftable,
+        );
+
+    test('saatsiz kalmaz: her gün aralığın başına süresiz yerleşir', () {
+      final out = plan(
+        from: '2026-11-18',
+        to: '2026-11-24',
+        rules: [window('09:00', '17:00')],
+      );
+      final all = out.of('W');
+      expect(all, hasLength(7));
+      for (final i in all) {
+        expect(i.isTimed, isTrue, reason: i.date);
+        expect(out.span('W', i.date), '09:00–09:00');
+        expect(i.suggested, isFalse);
+      }
+      expect(out.issues, isEmpty);
+    });
+
+    test('aralığın başı doluysa ilk boş ana kayar, boş zamanı yemez', () {
+      final out = plan(
+        from: '2026-11-18',
+        rules: [
+          window('09:00', '17:00'),
+          rule(
+            'RM',
+            'M',
+            daily('2026-11-01'),
+            start: [atClock('09:00')],
+            minutes: 60,
+          ),
+        ],
+      );
+      expect(out.span('W'), '10:00–10:00');
+      expect(out.freeOf('2026-11-18'), ['00:00–09:00', '10:00–00:00']);
+      expect(out.issues, isEmpty);
+    });
+
+    test('bugün aralık geçtiyse tampona düşer, yarın yerinde', () {
+      final out = plan(
+        from: '2026-11-18',
+        to: '2026-11-19',
+        asOf: '2026-11-18T18:00',
+        rules: [window('09:00', '17:00')],
+      );
+      expect(out.overflow.map((o) => o.instanceId), [
+        ruleInstanceId('RW', '2026-11-18'),
+      ]);
+      expect(out.span('W', '2026-11-19'), '09:00–09:00');
+    });
+
+    test('bugün aralığın içindeysek şimdiye yerleşir', () {
+      final out = plan(
+        from: '2026-11-18',
+        asOf: '2026-11-18T10:30',
+        rules: [window('09:00', '17:00')],
+      );
+      expect(out.span('W'), '10:30–10:30');
+    });
+
+    test('gece yarısını aşan aralık başladığı günde kalır', () {
+      final out = plan(
+        from: '2026-11-18',
+        rules: [window('22:00', '02:00', toDay: 1)],
+      );
+      expect(out.one('W', '2026-11-18').date, '2026-11-18');
+      expect(out.span('W', '2026-11-18'), '22:00–22:00');
+    });
+
+    test('süreli aralık eskisi gibi; sığmayan süre tampona düşer', () {
+      final ok = plan(
+        from: '2026-11-18',
+        rules: [window('09:00', '17:00', minutes: 45)],
+      );
+      expect(ok.span('W'), '09:00–09:45');
+      final tight = plan(
+        from: '2026-11-18',
+        rules: [window('09:00', '10:00', minutes: 90)],
+      );
+      expect(tight.one('W').isTimed, isFalse);
+      expect(tight.overflow, hasLength(1));
+    });
+
+    test('saat yok: süresizse saatsiz, süreliyse önerilen saat', () {
+      final none = plan(
+        from: '2026-11-18',
+        rules: [rule('RN', 'N', daily('2026-11-01'))],
+      );
+      expect(none.one('N').isTimed, isFalse);
+      expect(none.overflow, isEmpty);
+      final suggested = plan(
+        from: '2026-11-18',
+        rules: [rule('RN', 'N', daily('2026-11-01'), minutes: 30)],
+      );
+      expect(suggested.one('N').suggested, isTrue);
+    });
+  });
 }
