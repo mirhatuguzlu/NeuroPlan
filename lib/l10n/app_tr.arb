@@ -140,10 +140,27 @@
     }
   },
   "untimedSection": "Bugün bir ara",
-  "afterAnchor": "{title} sonrası",
-  "@afterAnchor": {
+  "relAnchor": "{edge, select, end{{title} bitince} other{{title} başlamadan önce}}",
+  "@relAnchor": {
     "placeholders": {
+      "edge": {
+        "type": "String"
+      },
       "title": {
+        "type": "String"
+      }
+    }
+  },
+  "relAnchorOffset": "{edge, select, end{{title} bitiminden {duration} sonra} other{{title} başlamadan {duration} önce}}",
+  "@relAnchorOffset": {
+    "placeholders": {
+      "edge": {
+        "type": "String"
+      },
+      "title": {
+        "type": "String"
+      },
+      "duration": {
         "type": "String"
       }
     }

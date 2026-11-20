@@ -1,6 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:neuroplan_core/neuroplan_core.dart';
 
+import '../../l10n/app_localizations.dart';
 import 'format.dart';
 
 const rruleDays = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'];
@@ -49,7 +50,33 @@ String recurrenceText(BuildContext context, Recurrence r) {
   }
 }
 
-/// Zaman kısıtının özeti ("09:00", "14:00–18:00 arası", "Ders işine bağlı").
+/// Göreli kısıtın yönüyle özeti: "Ders bitiminden 30 dk sonra", "Ders başlamadan önce".
+/// Sihirbazın kurmadığı biçimler (ör. "başladıktan sonra") "Ders işine bağlı" olur.
+String? relativeText(
+  L10n l,
+  Timing t,
+  String Function(String activityId) titleOf,
+) {
+  for (final (isStart, list) in [(true, t.start), (false, t.end)]) {
+    for (final c in list) {
+      if (c.ref case ActivityRef(:final activityId, :final edge)) {
+        final title = titleOf(activityId);
+        final m = c.offsetMinutes;
+        // Sihirbaz: "o bitince başlasın" (başlangıç ≥ bitiş) / "o başlamadan bitsin".
+        final known = isStart
+            ? edge == Edge.end && m >= 0
+            : edge == Edge.start && m <= 0;
+        if (!known) return l.timeRelative(title);
+        return m == 0
+            ? l.relAnchor(edge.name, title)
+            : l.relAnchorOffset(edge.name, title, durationText(l, m.abs()));
+      }
+    }
+  }
+  return null;
+}
+
+/// Zaman kısıtının özeti ("09:00", "14:00–18:00 arası", "Ders bitince").
 String timingText(
   BuildContext context,
   Timing t,
@@ -58,11 +85,7 @@ String timingText(
   final l = context.l10n;
   final all = [...t.start, ...t.end];
   if (all.isEmpty) return l.timeNone;
-  for (final c in all) {
-    if (c.ref case ActivityRef(:final activityId)) {
-      return l.timeRelative(titleOf(activityId));
-    }
-  }
+  if (relativeText(l, t, titleOf) case final rel?) return rel;
   for (final c in all) {
     if (c.ref case AstroRef(:final event)) {
       return l.timeAstro(l.astroEvent(event.name));

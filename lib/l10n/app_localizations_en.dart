@@ -340,8 +340,21 @@ class L10nEn extends L10n {
   String get untimedSection => 'Sometime today';
 
   @override
-  String afterAnchor(String title) {
-    return 'After $title';
+  String relAnchor(String edge, String title) {
+    String _temp0 = intl.Intl.selectLogic(edge, {
+      'end': 'When $title ends',
+      'other': 'Before $title starts',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String relAnchorOffset(String edge, String title, String duration) {
+    String _temp0 = intl.Intl.selectLogic(edge, {
+      'end': '$duration after $title ends',
+      'other': '$duration before $title starts',
+    });
+    return '$_temp0';
   }
 
   @override

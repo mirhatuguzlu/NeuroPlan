@@ -341,8 +341,21 @@ class L10nTr extends L10n {
   String get untimedSection => 'Bugün bir ara';
 
   @override
-  String afterAnchor(String title) {
-    return '$title sonrası';
+  String relAnchor(String edge, String title) {
+    String _temp0 = intl.Intl.selectLogic(edge, {
+      'end': '$title bitince',
+      'other': '$title başlamadan önce',
+    });
+    return '$_temp0';
+  }
+
+  @override
+  String relAnchorOffset(String edge, String title, String duration) {
+    String _temp0 = intl.Intl.selectLogic(edge, {
+      'end': '$title bitiminden $duration sonra',
+      'other': '$title başlamadan $duration önce',
+    });
+    return '$_temp0';
   }
 
   @override

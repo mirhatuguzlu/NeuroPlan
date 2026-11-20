@@ -505,11 +505,17 @@ abstract class L10n {
   /// **'Bugün bir ara'**
   String get untimedSection;
 
-  /// No description provided for @afterAnchor.
+  /// No description provided for @relAnchor.
   ///
   /// In tr, this message translates to:
-  /// **'{title} sonrası'**
-  String afterAnchor(String title);
+  /// **'{edge, select, end{{title} bitince} other{{title} başlamadan önce}}'**
+  String relAnchor(String edge, String title);
+
+  /// No description provided for @relAnchorOffset.
+  ///
+  /// In tr, this message translates to:
+  /// **'{edge, select, end{{title} bitiminden {duration} sonra} other{{title} başlamadan {duration} önce}}'**
+  String relAnchorOffset(String edge, String title, String duration);
 
   /// No description provided for @overflowSection.
   ///

@@ -10,6 +10,7 @@ import '../../core/app_shell.dart';
 import '../../core/format.dart';
 import '../../core/instance_actions.dart';
 import '../../core/states.dart';
+import '../../core/summaries.dart';
 
 /// Bugün: zaman çizelgesi; şu anki ve sıradaki iş öne çıkar, boş dilimler görünür.
 class TodayScreen extends ConsumerWidget {
@@ -541,7 +542,23 @@ class _InstanceTileState extends State<_InstanceTile> {
       if (i.anchorActivityId != null)
         (
           Symbols.link_rounded,
-          l.afterAnchor(view.data.activities[i.anchorActivityId]?.title ?? ''),
+          // Motor gibi: varyantın saati varsa o, yoksa kuralınki.
+          relativeText(
+                l,
+                view.data.variants
+                        .where((v) => v.id == i.variantId)
+                        .firstOrNull
+                        ?.timing ??
+                    view.data.rules
+                        .where((r) => r.id == i.ruleId)
+                        .firstOrNull
+                        ?.timing ??
+                    Timing.none,
+                (id) => view.data.activities[id]?.title ?? '',
+              ) ??
+              l.timeRelative(
+                view.data.activities[i.anchorActivityId]?.title ?? '',
+              ),
           false,
         ),
       if (widget.conflictWith case final other?)
