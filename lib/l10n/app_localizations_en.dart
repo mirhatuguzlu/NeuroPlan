@@ -3539,4 +3539,22 @@ class L10nEn extends L10n {
   String stWeekTop(String name) {
     return 'Most time: $name';
   }
+
+  @override
+  String get editTitle => 'Edit';
+
+  @override
+  String editSaved(String title) {
+    return '$title updated';
+  }
+
+  @override
+  String get editHistoryNote =>
+      'Changes to time, repeat, duration and flexibility apply from today; past days stay as they were.';
+
+  @override
+  String get editMissing => 'It may have been deleted.';
+
+  @override
+  String get catRename => 'Rename';
 }

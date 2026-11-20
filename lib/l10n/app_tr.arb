@@ -1050,7 +1050,13 @@
   "onbAgeBody": "Yalnız yıl tutulur. Yaşına göre seni koruyan ayarlar kurulur; 13 yaşından küçükler uygulamayı kullanamaz.",
   "onbAgeTooYoung": "NöroPlan 13 yaş ve üstü içindir. Bu yıl seçiliyken devam edilemez.",
   "onbAgeSaved": "Doğum yılın kaydedildi: {year}. Yaş sonradan küçültülemez.",
-  "@onbAgeSaved": {"placeholders": {"year": {"type": "String"}}},
+  "@onbAgeSaved": {
+    "placeholders": {
+      "year": {
+        "type": "String"
+      }
+    }
+  },
   "tgOfflineTitle": "Birlikte bölümü sunucu ister",
   "tgOfflineBody": "Bu kurulumda sunucu ayarı yok. Plan, odak ve beyin cihazında tam çalışır.",
   "tgGuestTitle": "Arkadaşlarınla birlikte çalış",
@@ -1588,7 +1594,16 @@
   "featureOffBody": "Bakım ya da düzenleme için geçici olarak kapattık. Verilerin yerinde; bölüm açılınca kaldığın yerden devam edersin.",
   "settingCrashReports": "Çökme raporları gönder",
   "settingCrashReportsBody": "Uygulama çökerse kimliksiz hata ayrıntısı Firebase Crashlytics'e gider. Planların, notların ve adın gitmez.",
-  "@themeRowValue": {"placeholders": {"theme": {"type": "String"}, "mode": {"type": "String"}}},
+  "@themeRowValue": {
+    "placeholders": {
+      "theme": {
+        "type": "String"
+      },
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
   "pfAnalyses": "Analizler",
   "pfWeekFocus": "Bu hafta odak",
   "pfLastWeek": "Geçen hafta {time}",
@@ -2264,5 +2279,17 @@
         "type": "String"
       }
     }
-  }
+  },
+  "editTitle": "Düzenle",
+  "editSaved": "{title} güncellendi",
+  "@editSaved": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "editHistoryNote": "Saat, tekrar, süre ve esneklik değişiklikleri bugünden itibaren geçerli; geçmiş günler olduğu gibi kalır.",
+  "editMissing": "Silinmiş olabilir.",
+  "catRename": "Yeniden adlandır"
 }

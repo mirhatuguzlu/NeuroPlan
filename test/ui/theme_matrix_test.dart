@@ -24,9 +24,17 @@ const _screens = [
   '/brain/categories',
   '/brain/list',
   '/add',
+  _edit,
 ];
 
+/// Düzenleme özeti (D64): örnek verideki ilk kurallı işle açılır.
+const _edit = '/edit/<ilk iş>';
+
 Future<void> _visit(Harness h, String path, {bool a11y = true}) async {
+  if (path == _edit) {
+    final data = await h.tester.runAsync(() => h.read(planDataProvider.future));
+    path = '/edit/${data!.rules.first.activityId}';
+  }
   h.read(routerProvider).go(path);
   await h.settle();
   if (a11y) await h.expectAccessible();

@@ -22,7 +22,9 @@ class SleepWindow {
 
   static SleepWindow? find(PlanData data) {
     for (final r in data.rules) {
-      if (data.activities[r.activityId]?.rootCategoryKey != 'rest_sleep') {
+      // Bitiş tarihli kural, düzenlemeyle biten eski kuraldır (D64).
+      if (data.activities[r.activityId]?.rootCategoryKey != 'rest_sleep' ||
+          r.validUntil != null) {
         continue;
       }
       final start = r.timing.start.firstOrNull;

@@ -16,21 +16,50 @@ import 'category_picker.dart';
 import 'draft.dart';
 
 /// Aktivite ekleme sihirbazı (PLAN-1): her soru ayrı adım, isteğe bağlılar atlanabilir.
+/// [editId] ve [step] verilirse kayıtlı işin yalnız o adımı açılır ve Kaydet onu yazar (D64).
 class ActivityWizardScreen extends ConsumerStatefulWidget {
-  const ActivityWizardScreen({super.key});
+  const ActivityWizardScreen({super.key, this.editId, this.step});
+
+  final String? editId;
+  final String? step;
 
   @override
   ConsumerState<ActivityWizardScreen> createState() => _ActivityWizardState();
 }
 
 class _ActivityWizardState extends ConsumerState<ActivityWizardScreen> {
-  ActivityDraft get d => ref.read(activityDraftProvider);
+  ActivityDraft? _edit;
+
+  bool get _editing => widget.editId != null;
+
+  ActivityDraft get d => _edit ?? ref.read(activityDraftProvider);
 
   void _set(VoidCallback change) => setState(change);
 
   void _close() => context.canPop() ? context.pop() : context.go('/today');
 
+  String _today(PlanData data) => data.calendar
+      .dayOf(
+        (ref.read(nowProvider).value ?? DateTime.now())
+                .millisecondsSinceEpoch ~/
+            60000,
+      )
+      .iso;
+
   Future<void> _save(PlanData data) async {
+    if (_editing) {
+      await d.update(
+        ref.read(databaseProvider),
+        ref.read(activityRepositoryProvider),
+        data.calendar,
+        step: widget.step!,
+        today: _today(data),
+      );
+      if (!mounted) return;
+      showSnack(context, context.l10n.editSaved(d.title.trim()));
+      _close();
+      return;
+    }
     final saved = await d.save(
       ref.read(databaseProvider),
       ref.read(activityRepositoryProvider),
@@ -53,7 +82,13 @@ class _ActivityWizardState extends ConsumerState<ActivityWizardScreen> {
 
   Widget _wizard(BuildContext context, PlanData data) {
     final l = context.l10n;
-    final steps = <WizardStep>[
+    if (_editing && _edit == null) {
+      _edit = ActivityDraft.edit(data, widget.editId!, _today(data));
+      // Açılan adımın değeri taslaktan yeniden kurulur; diğerleri aynen kalır.
+      if (widget.step == 'when') _edit?.keepRecurrence = null;
+      if (widget.step == 'time') _edit?.keepTiming = null;
+    }
+    var steps = <WizardStep>[
       _what(l),
       WizardStep(
         id: 'category',
@@ -92,9 +127,38 @@ class _ActivityWizardState extends ConsumerState<ActivityWizardScreen> {
       WizardStep(
         id: 'summary',
         title: l.wizSummaryTitle,
-        body: _Summary(draft: d, data: data),
+        body: ActivitySummary(draft: d, data: data),
       ),
     ];
+    if (_editing) {
+      // "Şimdilik geç" yalnız temizleyen adımda kalır (son tarih, varyant, odak).
+      steps = [
+        for (final s in steps)
+          if (s.id == widget.step)
+            WizardStep(
+              id: s.id,
+              title: s.title,
+              subtitle: s.subtitle,
+              body: s.body,
+              optional: s.onSkip != null,
+              canNext: s.canNext,
+              onNext: s.onNext,
+              onSkip: s.onSkip,
+            ),
+      ];
+      if (_edit == null || steps.isEmpty) {
+        return Scaffold(
+          appBar: AppBar(),
+          body: MessageState(
+            icon: Symbols.info_rounded,
+            title: l.focusMissingTitle,
+            body: l.focusMissingBody,
+            actionLabel: l.commonBack,
+            onAction: _close,
+          ),
+        );
+      }
+    }
     return WizardScaffold(
       steps: steps,
       onClose: _close,
@@ -120,23 +184,26 @@ class _ActivityWizardState extends ConsumerState<ActivityWizardScreen> {
               v == null || v.trim().isEmpty ? l.wizWhatError : null,
           onChanged: (v) => _set(() => d.title = v),
         ),
-        const SizedBox(height: Gap.l),
-        Text(l.wizKind, style: Theme.of(context).textTheme.titleSmall),
-        ChoiceList<String>(
-          value: d.kind,
-          options: [
-            ('routine', l.kindRoutine, null),
-            ('one_off', l.kindOneOff, null),
-            ('task', l.kindTask, null),
-            ('project', l.kindProject, null),
-            ('free_time', l.kindFreeTime, null),
-            ('travel_prep', l.kindTravel, null),
-          ],
-          onChanged: (k) => _set(() {
-            d.kind = k;
-            if (k == 'one_off') d.rec = RecType.once;
-          }),
-        ),
+        // Tür düzenlemede değişmez (D64): kural, varyant ve proje verisi türe bağlı.
+        if (!_editing) ...[
+          const SizedBox(height: Gap.l),
+          Text(l.wizKind, style: Theme.of(context).textTheme.titleSmall),
+          ChoiceList<String>(
+            value: d.kind,
+            options: [
+              ('routine', l.kindRoutine, null),
+              ('one_off', l.kindOneOff, null),
+              ('task', l.kindTask, null),
+              ('project', l.kindProject, null),
+              ('free_time', l.kindFreeTime, null),
+              ('travel_prep', l.kindTravel, null),
+            ],
+            onChanged: (k) => _set(() {
+              d.kind = k;
+              if (k == 'one_off') d.rec = RecType.once;
+            }),
+          ),
+        ],
       ],
     ),
   );
@@ -342,7 +409,7 @@ class _ActivityWizardState extends ConsumerState<ActivityWizardScreen> {
     final follow = d.rec == RecType.follow;
     final others = [
       for (final a in data.activities.values)
-        if (a.kind != 'project' && a.kind != 'task') a,
+        if (a.kind != 'project' && a.kind != 'task' && a.id != widget.editId) a,
     ]..sort((a, b) => a.title.compareTo(b.title));
     final hasLocation = data.profile.locationLat != null;
     final prayer = data.profile.prayerMethod != null;
@@ -673,11 +740,19 @@ class _ActivityWizardState extends ConsumerState<ActivityWizardScreen> {
   );
 }
 
-class _Summary extends ConsumerWidget {
-  const _Summary({required this.draft, required this.data});
+/// Taslağın özeti: sihirbazın son adımı ve düzenleme ekranı (D64). [onEdit] verilirse
+/// her satır kendi adımını açar ve esneklik ile varyantlar her zaman görünür.
+class ActivitySummary extends ConsumerWidget {
+  const ActivitySummary({
+    super.key,
+    required this.draft,
+    required this.data,
+    this.onEdit,
+  });
 
   final ActivityDraft draft;
   final PlanData data;
+  final void Function(String step)? onEdit;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -696,10 +771,11 @@ class _Summary extends ConsumerWidget {
       _ => l.kindTravel,
     };
     final named = d.variants.where((v) => v.name.trim().isNotEmpty);
-    final rows = <(String, String)>[
-      (l.sumName, d.title.trim()),
-      (l.sumKind, kind),
-      (l.sumCategory, category ?? l.wizCategoryNone),
+    final editing = onEdit != null;
+    final rows = <(String, String, String?)>[
+      (l.sumName, d.title.trim(), 'what'),
+      (l.sumKind, kind, null),
+      (l.sumCategory, category ?? l.wizCategoryNone, 'category'),
       if (d.isProject) ...[
         (
           l.sumDeadline,
@@ -709,15 +785,17 @@ class _Summary extends ConsumerWidget {
                   context,
                   d.deadline!.toIso8601String().substring(0, 10),
                 ),
+          'deadline',
         ),
         (
           l.sumTotal,
           d.totalMinutes == 0 ? l.sumNotSet : durationText(l, d.totalMinutes),
+          'total',
         ),
         if (d.kind == 'project')
-          (l.sumSplit, d.autoSplit ? l.splitAuto : l.splitManual),
+          (l.sumSplit, d.autoSplit ? l.splitAuto : l.splitManual, 'chunks'),
       ] else ...[
-        (l.sumWhen, recurrenceText(context, d.recurrence())),
+        (l.sumWhen, recurrenceText(context, d.recurrence()), 'when'),
         (
           l.sumTime,
           d.time == TimeType.relative && d.relActivity == null
@@ -727,13 +805,31 @@ class _Summary extends ConsumerWidget {
                   d.timing(),
                   (id) => data.activities[id]?.title ?? '',
                 ),
+          'time',
         ),
+        if (editing)
+          (
+            l.wizFlex,
+            switch (d.flex) {
+              Flexibility.fixed => l.flexFixed,
+              Flexibility.shiftable => l.flexShiftable,
+              Flexibility.optional => l.flexOptional,
+            },
+            'flex',
+          ),
         (
           l.sumDuration,
           d.duration == null ? l.sumNotSet : durationText(l, d.duration!),
+          'duration',
         ),
-        if (named.length >= 2)
-          (l.sumVariants, named.map((v) => v.name.trim()).join(', ')),
+        if (named.length >= 2 || (editing && d.hasVariants))
+          (
+            l.sumVariants,
+            named.length >= 2
+                ? named.map((v) => v.name.trim()).join(', ')
+                : l.sumNotSet,
+            'variants',
+          ),
       ],
       if (d.hasFocus)
         (
@@ -747,11 +843,12 @@ class _Summary extends ConsumerWidget {
             false => l.focusNo,
             null => l.sumNotSet,
           },
+          'focus',
         ),
     ];
     return Column(
       children: [
-        for (final (label, value) in rows)
+        for (final (label, value, step) in rows)
           MergeSemantics(
             child: ListTile(
               contentPadding: EdgeInsets.zero,
@@ -760,6 +857,10 @@ class _Summary extends ConsumerWidget {
                 value,
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
+              trailing: editing && step != null
+                  ? const Icon(Symbols.chevron_right_rounded)
+                  : null,
+              onTap: editing && step != null ? () => onEdit!(step) : null,
             ),
           ),
       ],

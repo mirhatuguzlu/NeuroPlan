@@ -762,6 +762,12 @@ class _InstanceTileState extends State<_InstanceTile> {
                             label: Text(l.actionChangeTime),
                             onPressed: () => widget.actions.changeTime(i),
                           ),
+                          TextButton.icon(
+                            icon: const Icon(Symbols.edit_rounded),
+                            label: Text(l.editTitle),
+                            onPressed: () =>
+                                context.push('/edit/${i.activityId}'),
+                          ),
                         ],
                       ),
                     ),

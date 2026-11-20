@@ -76,7 +76,13 @@ class WizardScaffoldState extends State<WizardScaffold> {
     if (skip && step.onSkip != null) {
       // Atlamanın kendi eylemi (ör. alanı temizle) çalışır, sonra sonraki adıma geçilir.
       if (!await guard(context, step.onSkip!) || !mounted) return;
-      if (_index < widget.steps.length - 1) _go(_index + 1);
+      if (_index < widget.steps.length - 1) {
+        _go(_index + 1);
+        return;
+      }
+      // Son adımda atlamak da bitirir (düzenlemede tek adım: "temizle ve kaydet").
+      final saved = await guard(context, widget.onFinish);
+      if (saved && mounted) Haptics.success(context);
       return;
     }
     if (!skip && step.onNext != null) {

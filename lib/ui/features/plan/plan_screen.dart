@@ -215,6 +215,7 @@ class _Week extends ConsumerWidget {
                   onPressed: () => actions.changeTime(i),
                 )
               : null,
+          onTap: () => context.push('/edit/${i.activityId}'),
         ),
     ];
   }
@@ -228,8 +229,12 @@ class _Rules extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = context.l10n;
+    final now = ref.watch(nowProvider).value ?? DateTime.now();
+    final today = data.calendar.dayOf(now.millisecondsSinceEpoch ~/ 60000).iso;
     final byActivity = <String, List<ScheduleRule>>{};
     for (final r in data.rules) {
+      // Düzenlemeyle biten eski kural yalnız geçmişi taşır, listede görünmez (D64).
+      if (r.validUntil case final u? when u.compareTo(today) < 0) continue;
       (byActivity[r.activityId] ??= []).add(r);
     }
     final activities = data.activities.values.toList()
@@ -252,7 +257,7 @@ class _Rules extends ConsumerWidget {
         ListTile(
           title: Text(a.title),
           subtitle: subtitle == null ? null : Text(subtitle),
-          onTap: onTap,
+          onTap: onTap ?? () => context.push('/edit/${a.id}'),
           trailing: IconButton(
             tooltip: l.commonDelete,
             icon: const Icon(Symbols.delete_rounded),

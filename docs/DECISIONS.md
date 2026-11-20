@@ -528,3 +528,16 @@ Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem 
 - Uygulama öndeyken başlangıç bildirimi de gelir (otomatik başlayan oturumla birlikte).
 - "Yaptın mı?" bildiriminden açılan satır listede çok aşağıdaysa (henüz kurulmadıysa) kaydırılmaz.
 **Durum:** Kabul. Gerçek cihazda henüz doğrulanmadı (QA_CHECKLIST F).
+
+## 2026-11-21 — D64: Düzenleme
+**Karar (proje sahibinin seçimi):**
+- **Ekran:** işe dokununca (Plan → Kurallar, Plan haftası satırı, Bugün satırındaki "Düzenle", proje ekranındaki kalem, kategori ağacındaki iş) özet açılır (`/edit/:id`). Satıra dokununca sihirbazın yalnız o sorusu açılır (`/edit/:id/:step`); Kaydet yalnız o adımın alanlarını yazar ve özete döner. Özette Sil ve geri al var.
+- **Geçmiş korunur:** saat, tekrar, süre ya da esneklik değişir ve kural bugünden önce oluşum üretmiş olabilirse eski kural dün biter (`valid_until`), yenisi bugün başlar (`valid_from`). Geçmiş plan, uyum yüzdesi ve analizler değişmez. Kural bugün ya da sonra başlıyorsa yerinde güncellenir. Ad, kategori, odak, varyant gibi alanlar her yerde geçerlidir. Biten eski kural Kurallar listesinde ve uyku penceresi aramasında görünmez. Migration yok (alanlar zaten vardı).
+- **Tür değişmez:** kural, varyant ve proje verisi türe bağlı; başka türe geçmek için yeni iş eklenir.
+- Dokunulmayan tekrar ve saat aynen yazılır; sihirbazın kuramadığı biçimler (ör. uyku penceresi) bozulmaz. Uyku penceresinin saatine dokununca Ayarlar açılır (D30).
+- **Varyantlar** özetten yönetilir: ad, iptal eder, varsayılan, ekle, sil (aynı satırlar güncellenir). **Kategori** ağaçta yeniden adlandırılır.
+- Tek adımlı düzenlemede "Şimdilik geç" yalnız temizleyen adımda (son tarih, varyant, odak) görünür ve temizleyip kaydeder; ortak sihirbaz son adımdaki atlamada da bitirir.
+**Geçici:**
+- Bugün için önceden dokunulmuş oluşum (ör. bitti) eski kurala bağlı kalır; aynı gün saat değişirse bugünkü iş yeni kuraldan bir kez daha görünebilir.
+- Göreli saatte işin kendisi çapa listesinde yok; başka işler üzerinden döngü kurulursa motor `DependencyCycle` olarak gösterir (kayıtta engellenmez).
+**Durum:** Kabul. Gerçek cihazda henüz doğrulanmadı (QA_CHECKLIST G).

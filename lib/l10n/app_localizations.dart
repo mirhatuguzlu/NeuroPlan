@@ -5538,6 +5538,36 @@ abstract class L10n {
   /// In tr, this message translates to:
   /// **'En çok zaman: {name}'**
   String stWeekTop(String name);
+
+  /// No description provided for @editTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Düzenle'**
+  String get editTitle;
+
+  /// No description provided for @editSaved.
+  ///
+  /// In tr, this message translates to:
+  /// **'{title} güncellendi'**
+  String editSaved(String title);
+
+  /// No description provided for @editHistoryNote.
+  ///
+  /// In tr, this message translates to:
+  /// **'Saat, tekrar, süre ve esneklik değişiklikleri bugünden itibaren geçerli; geçmiş günler olduğu gibi kalır.'**
+  String get editHistoryNote;
+
+  /// No description provided for @editMissing.
+  ///
+  /// In tr, this message translates to:
+  /// **'Silinmiş olabilir.'**
+  String get editMissing;
+
+  /// No description provided for @catRename.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yeniden adlandır'**
+  String get catRename;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

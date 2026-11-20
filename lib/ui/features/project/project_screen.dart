@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart' show Value;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:neuroplan_core/neuroplan_core.dart';
@@ -23,7 +24,17 @@ class ProjectScreen extends ConsumerWidget {
     final plan = ref.watch(horizonProvider);
     final title = plan.value?.data.activities[activityId]?.title;
     return Scaffold(
-      appBar: AppBar(title: Text(title ?? '')),
+      appBar: AppBar(
+        title: Text(title ?? ''),
+        actions: [
+          if (title != null)
+            IconButton(
+              tooltip: l.editTitle,
+              icon: const Icon(Symbols.edit_rounded),
+              onPressed: () => context.push('/edit/$activityId'),
+            ),
+        ],
+      ),
       body: AsyncView<PlanView?>(
         value: plan,
         onRetry: () => ref.invalidate(planDataProvider),

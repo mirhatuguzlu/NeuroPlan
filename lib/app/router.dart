@@ -5,6 +5,7 @@ import 'package:material_ui/material_ui.dart';
 import '../data/local/app_database.dart';
 import '../ui/core/app_shell.dart';
 import '../ui/features/activity_wizard/activity_wizard_screen.dart';
+import '../ui/features/activity_wizard/edit_activity_screen.dart';
 import '../ui/features/brain/brain_list_screen.dart';
 import '../ui/features/brain/brain_screen.dart';
 import '../ui/features/brain/region_info.dart';
@@ -81,6 +82,27 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/add',
         parentNavigatorKey: _rootKey,
         pageBuilder: (_, s) => sharedAxisPage(s, const ActivityWizardScreen()),
+      ),
+      GoRoute(
+        path: '/edit/:id',
+        parentNavigatorKey: _rootKey,
+        pageBuilder: (_, s) => sharedAxisPage(
+          s,
+          EditActivityScreen(activityId: s.pathParameters['id']!),
+        ),
+        routes: [
+          GoRoute(
+            path: ':step',
+            parentNavigatorKey: _rootKey,
+            pageBuilder: (_, s) => sharedAxisPage(
+              s,
+              ActivityWizardScreen(
+                editId: s.pathParameters['id'],
+                step: s.pathParameters['step'],
+              ),
+            ),
+          ),
+        ],
       ),
       GoRoute(
         path: '/project/:id',

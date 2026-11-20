@@ -968,5 +968,10 @@
   "stSameAsLastWeek": "same as last week",
   "stUpBy": "{d} more than last week",
   "stDownBy": "{d} less than last week",
-  "stWeekTop": "Most time: {name}"
+  "stWeekTop": "Most time: {name}",
+  "editTitle": "Edit",
+  "editSaved": "{title} updated",
+  "editHistoryNote": "Changes to time, repeat, duration and flexibility apply from today; past days stay as they were.",
+  "editMissing": "It may have been deleted.",
+  "catRename": "Rename"
 }

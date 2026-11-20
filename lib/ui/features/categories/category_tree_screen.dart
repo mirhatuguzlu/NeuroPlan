@@ -103,6 +103,9 @@ class _RootCardState extends ConsumerState<_RootCard> {
 
   /// Satır içi "alt kategori ekle" alanının açık olduğu düğüm ('' = kök).
   String? _addingUnder;
+
+  /// Satır içinde yeniden adlandırılan kategori (D64).
+  String? _renaming;
   final _name = TextEditingController();
 
   @override
@@ -128,6 +131,26 @@ class _RootCardState extends ConsumerState<_RootCard> {
       setState(() => _addingUnder = null);
     }
   }
+
+  Future<void> _rename() async {
+    final id = _renaming!;
+    final ok = await guard(
+      context,
+      () => ref
+          .read(categoryRepositoryProvider)
+          .update(id, UserCategoriesCompanion(name: Value(_name.text.trim()))),
+    );
+    if (ok) {
+      _name.clear();
+      setState(() => _renaming = null);
+    }
+  }
+
+  void _startRename(UserCategory c) => setState(() {
+    _addingUnder = null;
+    _renaming = c.id;
+    _name.text = c.name;
+  });
 
   Future<void> _delete(UserCategory c) async {
     final l = context.l10n;
@@ -166,25 +189,38 @@ class _RootCardState extends ConsumerState<_RootCard> {
     List<Widget> branch(String? parent, int depth) => [
       for (final c in cats)
         if (c.parentId == parent && c.rootCategoryKey == root.key) ...[
-          _NodeTile(
-            item: (isCategory: true, id: c.id, name: c.name),
-            depth: depth,
-            icon: Symbols.folder_rounded,
-            onDrop: (d) =>
-                moveItem(context, ref, d, root: root.key, categoryId: c.id),
-            actions: [
-              IconButton(
-                tooltip: l.catAddSub,
-                icon: const Icon(Symbols.add_rounded),
-                onPressed: () => setState(() => _addingUnder = c.id),
-              ),
-              IconButton(
-                tooltip: l.commonDelete,
-                icon: const Icon(Symbols.delete_rounded),
-                onPressed: () => _delete(c),
-              ),
-            ],
-          ),
+          if (_renaming == c.id)
+            _addField(depth, rename: true)
+          else
+            _NodeTile(
+              item: (isCategory: true, id: c.id, name: c.name),
+              depth: depth,
+              icon: Symbols.folder_rounded,
+              onDrop: (d) =>
+                  moveItem(context, ref, d, root: root.key, categoryId: c.id),
+              onTap: () => _startRename(c),
+              actions: [
+                IconButton(
+                  tooltip: l.catRename,
+                  icon: const Icon(Symbols.edit_rounded),
+                  onPressed: () => _startRename(c),
+                ),
+                IconButton(
+                  tooltip: l.catAddSub,
+                  icon: const Icon(Symbols.add_rounded),
+                  onPressed: () => setState(() {
+                    _renaming = null;
+                    _name.clear();
+                    _addingUnder = c.id;
+                  }),
+                ),
+                IconButton(
+                  tooltip: l.commonDelete,
+                  icon: const Icon(Symbols.delete_rounded),
+                  onPressed: () => _delete(c),
+                ),
+              ],
+            ),
           if (_addingUnder == c.id) _addField(depth + 1),
           for (final a in activities)
             if (a.categoryId == c.id)
@@ -192,6 +228,7 @@ class _RootCardState extends ConsumerState<_RootCard> {
                 item: (isCategory: false, id: a.id, name: a.title),
                 depth: depth + 1,
                 icon: Symbols.circle_rounded,
+                onTap: () => context.push('/edit/${a.id}'),
               ),
           ...branch(c.id, depth + 1),
         ],
@@ -204,6 +241,7 @@ class _RootCardState extends ConsumerState<_RootCard> {
             item: (isCategory: false, id: a.id, name: a.title),
             depth: 0,
             icon: Symbols.circle_rounded,
+            onTap: () => context.push('/edit/${a.id}'),
           ),
       ...branch(null, 0),
     ];
@@ -289,8 +327,11 @@ class _RootCardState extends ConsumerState<_RootCard> {
                               child: TextButton.icon(
                                 icon: const Icon(Symbols.add_rounded),
                                 label: Text(l.catAddSub),
-                                onPressed: () =>
-                                    setState(() => _addingUnder = ''),
+                                onPressed: () => setState(() {
+                                  _renaming = null;
+                                  _name.clear();
+                                  _addingUnder = '';
+                                }),
                               ),
                             ),
                           ),
@@ -303,7 +344,8 @@ class _RootCardState extends ConsumerState<_RootCard> {
     );
   }
 
-  Widget _addField(int depth) => Padding(
+  /// Satır içi ad alanı: alt kategori ekler ya da [rename] ise yeniden adlandırır.
+  Widget _addField(int depth, {bool rename = false}) => Padding(
     padding: EdgeInsets.fromLTRB(Gap.l + depth * Gap.l, Gap.s, Gap.l, Gap.s),
     child: Row(
       children: [
@@ -314,19 +356,27 @@ class _RootCardState extends ConsumerState<_RootCard> {
             maxLength: 100,
             decoration: InputDecoration(labelText: context.l10n.catName),
             onChanged: (_) => setState(() {}),
-            onSubmitted: (_) => _name.text.trim().isEmpty ? null : _add(),
+            onSubmitted: (_) => _name.text.trim().isEmpty
+                ? null
+                : (rename ? _rename() : _add()),
           ),
         ),
         const SizedBox(width: Gap.s),
         IconButton(
           tooltip: context.l10n.commonClose,
           icon: const Icon(Symbols.close_rounded),
-          onPressed: () => setState(() => _addingUnder = null),
+          onPressed: () => setState(() {
+            _addingUnder = null;
+            _renaming = null;
+            _name.clear();
+          }),
         ),
         BusyButton(
           tonal: true,
-          label: context.l10n.actionAdd,
-          onPressed: _name.text.trim().isEmpty ? null : _add,
+          label: rename ? context.l10n.commonSave : context.l10n.actionAdd,
+          onPressed: _name.text.trim().isEmpty
+              ? null
+              : (rename ? _rename : _add),
         ),
       ],
     ),
@@ -340,10 +390,12 @@ class _NodeTile extends ConsumerWidget {
     required this.depth,
     required this.icon,
     this.onDrop,
+    this.onTap,
     this.actions = const [],
   });
 
   final Dragged item;
+  final VoidCallback? onTap;
   final int depth;
   final IconData icon;
   final void Function(Dragged)? onDrop;
@@ -357,35 +409,39 @@ class _NodeTile extends ConsumerWidget {
       data: item,
       label: item.name,
       bottomOverlay: AppShell.bottomInset(context),
-      builder: (context, handle) => Container(
-        color: highlighted ? scheme.secondaryContainer : null,
-        padding: EdgeInsetsDirectional.only(start: depth * Gap.l),
-        child: Row(
-          children: [
-            handle,
-            Expanded(
-              child: ListTile(
-                contentPadding: const EdgeInsetsDirectional.only(end: Gap.s),
-                leading: ExcludeSemantics(
-                  child: Icon(icon, size: item.isCategory ? 24 : 12),
-                ),
-                title: Text(item.name),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      tooltip: l.catMove,
-                      icon: const Icon(Symbols.drive_file_move_rounded),
-                      onPressed: () => context.push(
-                        '/move/${item.isCategory ? 'category' : 'activity'}/${item.id}',
+      // Material: satırın dokunma efekti vurgu renginin üstünde görünsün.
+      builder: (context, handle) => Material(
+        color: highlighted ? scheme.secondaryContainer : Colors.transparent,
+        child: Padding(
+          padding: EdgeInsetsDirectional.only(start: depth * Gap.l),
+          child: Row(
+            children: [
+              handle,
+              Expanded(
+                child: ListTile(
+                  contentPadding: const EdgeInsetsDirectional.only(end: Gap.s),
+                  leading: ExcludeSemantics(
+                    child: Icon(icon, size: item.isCategory ? 24 : 12),
+                  ),
+                  title: Text(item.name),
+                  onTap: onTap,
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        tooltip: l.catMove,
+                        icon: const Icon(Symbols.drive_file_move_rounded),
+                        onPressed: () => context.push(
+                          '/move/${item.isCategory ? 'category' : 'activity'}/${item.id}',
+                        ),
                       ),
-                    ),
-                    ...actions,
-                  ],
+                      ...actions,
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

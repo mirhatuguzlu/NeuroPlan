@@ -3461,4 +3461,22 @@ class L10nTr extends L10n {
   String stWeekTop(String name) {
     return 'En çok zaman: $name';
   }
+
+  @override
+  String get editTitle => 'Düzenle';
+
+  @override
+  String editSaved(String title) {
+    return '$title güncellendi';
+  }
+
+  @override
+  String get editHistoryNote =>
+      'Saat, tekrar, süre ve esneklik değişiklikleri bugünden itibaren geçerli; geçmiş günler olduğu gibi kalır.';
+
+  @override
+  String get editMissing => 'Silinmiş olabilir.';
+
+  @override
+  String get catRename => 'Yeniden adlandır';
 }

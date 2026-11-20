@@ -301,3 +301,14 @@ Hazırlık: 2–3 dk sonra başlayan, 5 dk süren, "odak gerektirir" bir iş ve 
 - [ ] Anahtarı kapat → otomatik başlama, otomatik bitiş, başlangıç ve "yaptın mı?" bildirimleri durur; "X dk önce" hatırlatma (açıksa) sürer.
 - [ ] Ortak odak oturumu işin bitiş saatinde kendiliğinden bitmez.
 - [ ] Tam zamanlı bildirim izni kapalıyken bildirimler birkaç dakika gecikebilir (not et).
+
+## G. Düzenleme (D64)
+
+- [ ] Plan → Kurallar'da bir işe dokun → özet açılır; her satır (Ad, Kategori, Ne zaman, Saat, Esneklik, Süre, Varyantlar, Odak) yalnız kendi sorusunu açar, Kaydet özete döner ve "X güncellendi" görünür.
+- [ ] Geçen haftadan beri süren bir rutinin saatini değiştir → Plan'da geçmiş günler eski saatte, bugün ve sonrası yeni saatte; Profil → plana uyum değişmez.
+- [ ] Bugün satırını aç → "Düzenle"; hafta satırına dokun → aynı özet.
+- [ ] Proje ekranındaki kalemden son tarih / toplam süre değişir, öneriler yeniden hesaplanır.
+- [ ] Varyant adını değiştir, birini sil, yenisini ekle → Bugün'deki seçici yeni listeyi gösterir.
+- [ ] Kategori ağacında kalem → ad değişir; işler aynı kategoride kalır.
+- [ ] Uyku işinin Saat satırı Ayarlar'ı açar; uyku penceresi bozulmaz.
+- [ ] Özetten Sil → "X silindi · Geri al".
