@@ -87,7 +87,11 @@ function shellMaterial(inner) {
       uniform vec3 uColor; uniform float uIntensity; uniform float uBase; uniform float uPower; uniform float uGain;
       varying vec3 vN; varying vec3 vV;
       void main() {
-        float f = pow(1.0 - abs(dot(normalize(vN), normalize(vV))), uPower);
+        // Mobil GPU hassasiyetinde dot 1'i az aşabiliyor: pow(negatif) = NaN, bloom bunu bütün
+        // kareye yayar ve kare siyah çıkar (dönerken flaş). Taban 0..1'e sabitlenir.
+        vec3 n = vN / max(length(vN), 1e-4);
+        vec3 v = vV / max(length(vV), 1e-4);
+        float f = pow(clamp(1.0 - abs(dot(n, v)), 0.0, 1.0), uPower);
         float a = (uBase + f * uGain) * uIntensity;
         gl_FragColor = vec4(uColor * a, a);
       }`,
@@ -502,7 +506,14 @@ function setupRenderer() {
     renderer.domElement.remove();
     renderer.dispose();
   }
-  renderer = new THREE.WebGLRenderer({ antialias: q.antialias, powerPreference: 'high-performance' });
+  // preserveDrawingBuffer: bazı Android WebView'lerinde (Android 16, Chrome 157) yeni kare
+  // gelmeyen her bileşimde tuval boş (siyah) gösteriliyor: dönerken ara ara flaş, durunca
+  // tamamen siyah ekran. Son kareyi korumak bunu önler.
+  renderer = new THREE.WebGLRenderer({
+    antialias: q.antialias,
+    powerPreference: 'high-performance',
+    preserveDrawingBuffer: true,
+  });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, q.pixelRatio));
   renderer.setClearColor(state.theme.background, 1);
   // Efekt zincirinde temizleme rengi iki kez sRGB'ye çevriliyor (gri zemin); sahne arka planı
