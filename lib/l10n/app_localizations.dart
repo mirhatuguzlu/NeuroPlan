@@ -5622,6 +5622,54 @@ abstract class L10n {
   /// In tr, this message translates to:
   /// **'Derin çalışma · {block} dk blok, {rest} dk mola · {layout}'**
   String sumDeep(int block, int rest, String layout);
+
+  /// No description provided for @focusPhaseCycleOf.
+  ///
+  /// In tr, this message translates to:
+  /// **'Odak · döngü {n}/{count}'**
+  String focusPhaseCycleOf(int n, int count);
+
+  /// No description provided for @focusPomodoroPlan.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} × {work} dk odak, {rest} dk mola; {every} döngüde bir {long} dk uzun mola'**
+  String focusPomodoroPlan(int count, int work, int rest, int every, int long);
+
+  /// No description provided for @wizPomodoroWork.
+  ///
+  /// In tr, this message translates to:
+  /// **'Çalışma süresi'**
+  String get wizPomodoroWork;
+
+  /// No description provided for @wizPomodoroCycles.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaç kez tekrar'**
+  String get wizPomodoroCycles;
+
+  /// No description provided for @wizPomodoroLongBreak.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uzun mola'**
+  String get wizPomodoroLongBreak;
+
+  /// No description provided for @wizPomodoroLongEvery.
+  ///
+  /// In tr, this message translates to:
+  /// **'Uzun mola kaç döngüde bir'**
+  String get wizPomodoroLongEvery;
+
+  /// No description provided for @wizPomodoroPreview.
+  ///
+  /// In tr, this message translates to:
+  /// **'{count} × {work} dk odak; molalarla planda {span} dk yer kaplar. İşin süresi buna göre ayarlandı.'**
+  String wizPomodoroPreview(int count, int work, int span);
+
+  /// No description provided for @sumPomodoro.
+  ///
+  /// In tr, this message translates to:
+  /// **'Pomodoro · {work} dk çalışma, {rest} dk mola · {layout}'**
+  String sumPomodoro(int work, int rest, String layout);
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

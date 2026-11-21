@@ -132,4 +132,61 @@ void main() {
     expect(blocks.length, 2);
     expect(hm(blocks.last.start), '15:00');
   });
+
+  test('Pomodoro: 4 × 25 dk, 5 dk mola → planda 10:00–11:55', () {
+    final out = plan(
+      from: day,
+      activities: [
+        const PlanActivity(
+          id: 'TEZ',
+          blocks: FocusBlocks(block: 25, rest: 5, longRest: 15, longEvery: 4),
+        ),
+      ],
+      rules: [
+        rule(
+          'R',
+          'TEZ',
+          OnceRecurrence(day),
+          start: [atClock('10:00')],
+          minutes: 100,
+        ),
+      ],
+    );
+    expect(out.span('TEZ', day), '10:00–11:55');
+  });
+
+  test(
+    'Pomodoro dağıtılınca uzun moladan sonraki blok en az uzun mola sonra',
+    () {
+      final out = plan(
+        from: day,
+        activities: [
+          const PlanActivity(
+            id: 'TEZ',
+            blocks: FocusBlocks(
+              block: 25,
+              rest: 5,
+              longRest: 15,
+              longEvery: 2,
+              spread: true,
+            ),
+          ),
+        ],
+        rules: [
+          rule(
+            'R',
+            'TEZ',
+            OnceRecurrence(day),
+            start: [atClock('10:00')],
+            minutes: 75,
+            flex: Flexibility.shiftable,
+          ),
+        ],
+      );
+      expect(
+        [for (final b in out.of('TEZ', day)) hm(b.start)],
+        ['10:00', '10:30', '11:10'],
+      );
+    },
+  );
 }

@@ -407,7 +407,7 @@ final class _Run {
               ..block = k
               ..blocks = parts.length
               ..after = prev.id
-              ..afterGap = blocks!.rest;
+              ..afterGap = blocks!.restAfter(k - 1);
         _add(child);
         prev = child;
       }

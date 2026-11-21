@@ -53,7 +53,7 @@ class AppDatabase extends _$AppDatabase {
   final SystemData systemData;
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -92,6 +92,16 @@ class AppDatabase extends _$AppDatabase {
           activities.focusBreakMinutes,
           activities.focusSpread,
           activities.focusGraceMinutes,
+        ]) {
+          await m.addColumn(activities, c);
+        }
+      }
+      if (from < 4) {
+        // D67: planlı Pomodoro.
+        for (final c in [
+          activities.focusCycles,
+          activities.focusLongBreakMinutes,
+          activities.focusLongEvery,
         ]) {
           await m.addColumn(activities, c);
         }

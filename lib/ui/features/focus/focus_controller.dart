@@ -218,7 +218,9 @@ class FocusController extends Notifier<FocusState> {
     await ref
         .read(planRepositoryProvider)
         .touch(instance, const PlanInstancesCompanion());
-    final run = ownMinutes != null && settings.mode == FocusMode.deep
+    final run =
+        ownMinutes != null &&
+            (settings.mode == FocusMode.deep || settings.planned)
         ? settings.copyWith(target: ownMinutes)
         : settings;
     final clock = FocusClock.start(run, now);
@@ -259,7 +261,7 @@ class FocusController extends Notifier<FocusState> {
         ? end
         : null;
     await _saveRuntime();
-    await _saveSettings(settings);
+    await _saveSettings(settings.defaults);
     _syncPin(want: true);
     if (await _prefs.get(PrefsRepository.focusDnd) == '1') {
       await _safe(_platform.enableDnd);

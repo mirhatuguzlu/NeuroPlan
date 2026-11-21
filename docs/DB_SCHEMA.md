@@ -239,6 +239,9 @@ O sütunları vardır; tek istisna `id = user_id = auth.users.id` olmasıdır. Y
 | `focus_break_minutes` | int null (1–60) | Bloklar arası mola; null = 10 (D66) |
 | `focus_spread` | bool null | Bloklar gün içine dağıtılır (yalnız kesin olmayan işte); null = üst üste (D66) |
 | `focus_grace_minutes` | int null (1–120) | Önerilen saatli odak işinde bildirime geç kalma payı; null = 10 (D66) |
+| `focus_cycles` | int null (1–24) | Planlı Pomodoro tekrar sayısı; işin süresi = tekrar × çalışma (`focus_block_minutes`, null = 25) (D67) |
+| `focus_long_break_minutes` | int null (1–60) | Pomodoro uzun molası; null = 15 (D67) |
+| `focus_long_every` | int null (2–12) | Uzun mola kaç döngüde bir; null = 4 (D67) |
 | `sort_order` | int | |
 
 Kuralı olmayan aktivite **tarihsiz bir yapılacak** olarak kalır (gelen kutusu).

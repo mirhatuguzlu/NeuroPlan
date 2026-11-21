@@ -982,5 +982,13 @@
   "focusSpreadYesHint": "Each block goes into a separate free slot on the same day.",
   "wizFocusGrace": "Grace period",
   "wizFocusGraceHint": "For this task's suggested time: come back to the notification within this time and the session starts. After that the task moves to the next free slot if it's shiftable, otherwise it's skipped.",
-  "sumDeep": "Deep work · {block} min blocks, {rest} min breaks · {layout}"
+  "sumDeep": "Deep work · {block} min blocks, {rest} min breaks · {layout}",
+  "focusPhaseCycleOf": "Focus · cycle {n} of {count}",
+  "focusPomodoroPlan": "{count} × {work} min focus, {rest} min breaks; a {long} min long break every {every} cycles",
+  "wizPomodoroWork": "Focus length",
+  "wizPomodoroCycles": "How many cycles",
+  "wizPomodoroLongBreak": "Long break",
+  "wizPomodoroLongEvery": "Long break every … cycles",
+  "wizPomodoroPreview": "{count} × {work} min of focus; with breaks it takes {span} min in the plan. The task length was set to match.",
+  "sumPomodoro": "Pomodoro · {work} min focus, {rest} min breaks · {layout}"
 }

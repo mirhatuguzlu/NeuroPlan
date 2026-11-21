@@ -3598,4 +3598,36 @@ class L10nEn extends L10n {
   String sumDeep(int block, int rest, String layout) {
     return 'Deep work · $block min blocks, $rest min breaks · $layout';
   }
+
+  @override
+  String focusPhaseCycleOf(int n, int count) {
+    return 'Focus · cycle $n of $count';
+  }
+
+  @override
+  String focusPomodoroPlan(int count, int work, int rest, int every, int long) {
+    return '$count × $work min focus, $rest min breaks; a $long min long break every $every cycles';
+  }
+
+  @override
+  String get wizPomodoroWork => 'Focus length';
+
+  @override
+  String get wizPomodoroCycles => 'How many cycles';
+
+  @override
+  String get wizPomodoroLongBreak => 'Long break';
+
+  @override
+  String get wizPomodoroLongEvery => 'Long break every … cycles';
+
+  @override
+  String wizPomodoroPreview(int count, int work, int span) {
+    return '$count × $work min of focus; with breaks it takes $span min in the plan. The task length was set to match.';
+  }
+
+  @override
+  String sumPomodoro(int work, int rest, String layout) {
+    return 'Pomodoro · $work min focus, $rest min breaks · $layout';
+  }
 }

@@ -333,3 +333,11 @@ Hazırlık: 2–3 dk sonra başlayan, 5 dk süren, "odak gerektirir" bir iş ve 
 - [ ] Önerilen saatli işte bildirime 10 dk içinde dokun → başlar; 15 dk sonra dokun → "Şimdi başlat / Saat … / Atla" sorusu.
 - [ ] Payı geçen kaydırılabilir iş kendiliğinden ilk boşluğa kayar ve yeni saatinde yeniden bildirim gelir.
 - [ ] Sunucu migration'ı uygulandıktan sonra giriş yapılı hesapta iş düzenlemesi eşitlenir.
+
+## J. Planlı Pomodoro (D67)
+
+- [ ] Sihirbaz → odak → Pomodoro: 25 dk çalışma, 5 dk mola, 4 tekrar, 15 dk uzun mola / 4 döngü; ipucu "4 × 25 dk odak; planda 115 dk"; süre 100 dk oldu.
+- [ ] 10:00'daki iş planda 10:00–11:55; saatinde bildirim, sayaçta "Odak · döngü 1/4".
+- [ ] Her döngü sonunda mola, mola bitince bildirim; 4. döngü bitince oturum kendiliğinden tamamlanır.
+- [ ] Kaydırılabilir + "Gün içine dağıt": 4 ayrı tek döngülük blok, günün boşluklarında.
+- [ ] Düzenlemede tekrar sayısını 6 yap: plan bugünden itibaren 6 döngüye göre uzar, geçmiş günler değişmez.

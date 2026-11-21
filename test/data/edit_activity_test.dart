@@ -107,7 +107,8 @@ void main() {
           ..title = 'İş'
           ..duration = 25
           ..focus = true
-          ..focusMode = 'pomodoro';
+          ..focusMode = 'pomodoro'
+          ..focusCycles = 1; // planlı Pomodoro: süre = 1 × 25 dk (D67)
         setup(original, a);
         final saved = await original.save(device.db, repo, cal);
 

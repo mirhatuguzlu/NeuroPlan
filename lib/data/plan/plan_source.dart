@@ -65,19 +65,25 @@ class PlanData {
     return 'free';
   }
 
-  /// Derin çalışma blok planı (D66): yalnız odak gerektiren derin çalışma işinde.
+  /// Blok planı: odak gerektiren derin çalışma (D66) ve Pomodoro (D67) işinde.
   FocusBlocks? focusBlocks(String activityId) {
     final a = activities[activityId];
-    if (a == null ||
-        !requiresFocus(activityId) ||
-        focusMode(activityId) != FocusMode.deep.name) {
-      return null;
-    }
-    return FocusBlocks(
-      block: a.focusBlockMinutes ?? 50,
-      rest: a.focusBreakMinutes ?? 10,
-      spread: a.focusSpread ?? false,
-    );
+    if (a == null || !requiresFocus(activityId)) return null;
+    return switch (focusMode(activityId)) {
+      'deep' => FocusBlocks(
+        block: a.focusBlockMinutes ?? 50,
+        rest: a.focusBreakMinutes ?? 10,
+        spread: a.focusSpread ?? false,
+      ),
+      'pomodoro' => FocusBlocks(
+        block: a.focusBlockMinutes ?? 25,
+        rest: a.focusBreakMinutes ?? 5,
+        longRest: a.focusLongBreakMinutes ?? 15,
+        longEvery: a.focusLongEvery ?? 4,
+        spread: a.focusSpread ?? false,
+      ),
+      _ => null,
+    };
   }
 
   /// Önerilen saatli odak işinde bildirime geç kalma payı (D66), dakika.

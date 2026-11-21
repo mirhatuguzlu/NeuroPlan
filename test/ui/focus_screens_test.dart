@@ -24,18 +24,21 @@ void main() {
                 PlanCalendar('Europe/Istanbul'),
               ),
     );
-    await h.tap(find.text('Okuma').last);
-    await h.tap(find.text('Şimdi başla'));
+    // Planlı Pomodoro süre alır (D67): motor saat önerir, öndeyken saatinde başlar.
+    if (mode != 'pomodoro') {
+      await h.tap(find.text('Okuma').last);
+      await h.tap(find.text('Şimdi başla'));
+    }
     return h;
   }
 
-  testWidgets('Şimdi başla → işin modunda sayaç; Bitir → 4 adım → Bugün', (
+  testWidgets('Pomodoro işi saatinde sayaçta; Bitir → 4 adım → Bugün', (
     t,
   ) async {
     final h = await openStart(t, mode: 'pomodoro');
     expect(find.text('Duraklat'), findsOneWidget);
     expect(find.text('25:00'), findsOneWidget);
-    expect(find.text('Odak · 1. döngü'), findsOneWidget);
+    expect(find.text('Odak · döngü 1/4'), findsOneWidget);
     expect(find.textContaining('Acil durum (3'), findsOneWidget);
     await h.expectAccessible();
 

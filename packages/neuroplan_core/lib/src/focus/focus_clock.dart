@@ -14,7 +14,8 @@ enum FocusMode {
   static FocusMode fromJson(String v) => values.byName(v);
 }
 
-/// Pomodoro `{"work":25,"break":5,"long_break":15,"long_every":4}`, derin çalışma
+/// Pomodoro `{"work":25,"break":5,"long_break":15,"long_every":4}` (planlı Pomodoro'da
+/// toplam saf odak `"target":100` da yazılır, D67), derin çalışma
 /// `{"target":120,"block":50,"break":10}` (dakika; `block` yoksa D66 öncesi: blok yok,
 /// mola isteğe bağlı). Serbest modda ayar yoktur.
 final class FocusSettings {
@@ -26,6 +27,7 @@ final class FocusSettings {
     this.longEvery = 4,
     this.target = 90,
     this.block,
+    this.planned = false,
   });
 
   /// Bozuk ya da eksik değer varsayılana döner; süreler en az 1 dakikadır.
@@ -37,6 +39,7 @@ final class FocusSettings {
 
     final deep = mode == FocusMode.deep;
     final block = deep ? valid('block') : null;
+    final planned = mode == FocusMode.pomodoro && valid('target') != null;
     return FocusSettings(
       mode,
       work: valid('work') ?? 25,
@@ -45,6 +48,7 @@ final class FocusSettings {
       longEvery: valid('long_every') ?? 4,
       target: valid('target') ?? 90,
       block: block,
+      planned: planned,
     );
   }
 
@@ -56,17 +60,25 @@ final class FocusSettings {
   final int longRest;
   final int longEvery;
 
-  /// Derin çalışmada toplam saf odak hedefi.
+  /// Derin çalışmada ve planlı Pomodoro'da toplam saf odak hedefi.
   final int target;
 
   /// Derin çalışma blok uzunluğu (D66); null = blok yok.
   final int? block;
 
-  /// Blok planlı derin çalışma: blok bitince mola başlar, hedefte oturum tamamlanır.
-  bool get blocked => mode == FocusMode.deep && block != null;
+  /// Planlı Pomodoro (D67): işin tekrar sayısı kadar döngü, hedefte biter.
+  final bool planned;
+
+  /// Blok planlı oturum: blok bitince mola başlar, hedefte oturum tamamlanır.
+  bool get blocked =>
+      (mode == FocusMode.deep && block != null) ||
+      (mode == FocusMode.pomodoro && planned);
+
+  /// Bir bloğun (Pomodoro'da odak döngüsünün) uzunluğu.
+  int get blockLength => mode == FocusMode.deep ? (block ?? target) : work;
 
   /// Blok planındaki blok sayısı (son blok kısa olabilir).
-  int get blockCount => blocked ? FocusBlocks.countOf(target, block!) : 1;
+  int get blockCount => blocked ? FocusBlocks.countOf(target, blockLength) : 1;
 
   Map<String, Object?>? toJson() => switch (mode) {
     FocusMode.free => null,
@@ -75,6 +87,7 @@ final class FocusSettings {
       'break': rest,
       'long_break': longRest,
       'long_every': longEvery,
+      if (planned) 'target': target,
     },
     FocusMode.deep => {
       'target': target,
@@ -90,6 +103,7 @@ final class FocusSettings {
     int? longEvery,
     int? target,
     int? block,
+    bool? planned,
   }) => FocusSettings(
     mode ?? this.mode,
     work: work ?? this.work,
@@ -98,23 +112,55 @@ final class FocusSettings {
     longEvery: longEvery ?? this.longEvery,
     target: target ?? this.target,
     block: block ?? this.block,
+    planned: planned ?? this.planned,
+  );
+
+  /// Cihazda saklanan son ayar: işe özel blok ve hedef taşınmaz.
+  FocusSettings get defaults => FocusSettings(
+    mode,
+    work: work,
+    rest: rest,
+    longRest: longRest,
+    longEvery: longEvery,
+    target: mode == FocusMode.deep && block == null ? target : 90,
   );
 }
 
-/// İşin derin çalışma blok planı (D66): [block] dk odak, aralarda [rest] dk mola; iş
-/// süresi saf odaktır, molalar süreyi uzatır. [spread]: bloklar gün içine dağıtılır.
+/// İşin blok planı: derin çalışmada (D66) ve Pomodoro'da (D67) [block] dk odak, aralarda
+/// [rest] dk mola; Pomodoro'da [longEvery] blokta bir [longRest] dk uzun mola. İş süresi
+/// saf odaktır, molalar süreyi uzatır. [spread]: bloklar gün içine dağıtılır.
 final class FocusBlocks {
-  const FocusBlocks({this.block = 50, this.rest = 10, this.spread = false});
+  const FocusBlocks({
+    this.block = 50,
+    this.rest = 10,
+    this.spread = false,
+    this.longRest,
+    this.longEvery,
+  });
 
   final int block;
   final int rest;
   final bool spread;
+  final int? longRest;
+  final int? longEvery;
 
   static int countOf(int focus, int block) =>
       focus <= 0 ? 1 : (focus + block - 1) ~/ block;
 
+  /// [done] blok bittikten sonraki molanın uzunluğu.
+  int restAfter(int done) =>
+      longRest != null && longEvery != null && done % longEvery! == 0
+      ? longRest!
+      : rest;
+
   /// [focus] dk saf odak üst üste yapılınca planda kaplanan süre.
-  int span(int focus) => focus + (countOf(focus, block) - 1) * rest;
+  int span(int focus) {
+    var total = focus;
+    for (var i = 1; i < countOf(focus, block); i++) {
+      total += restAfter(i);
+    }
+    return total;
+  }
 
   /// [span]'in tersi: planda [length] dk'ya sığan en uzun saf odak.
   int focusOf(int length) {
@@ -134,10 +180,12 @@ final class FocusBlocks {
       other is FocusBlocks &&
       other.block == block &&
       other.rest == rest &&
-      other.spread == spread;
+      other.spread == spread &&
+      other.longRest == longRest &&
+      other.longEvery == longEvery;
 
   @override
-  int get hashCode => Object.hash(block, rest, spread);
+  int get hashCode => Object.hash(block, rest, spread, longRest, longEvery);
 }
 
 enum SegmentKind {
@@ -316,7 +364,14 @@ final class FocusClock {
     switch (settings.mode) {
       case FocusMode.pomodoro:
         final before = _workSinceBreak(now, segments.length - 1);
-        return last.start.add(Duration(minutes: settings.work) - before);
+        final end = last.start.add(Duration(minutes: settings.work) - before);
+        if (!settings.blocked) return end;
+        // Planlı Pomodoro: son döngü hedefte biter (D67).
+        final reach = last.start.add(
+          Duration(minutes: settings.target) - focused(last.start),
+        );
+        if (end.isBefore(reach)) return end;
+        return reach.isAfter(now) ? reach : null;
       case FocusMode.deep:
         // Hedefe ulaşıldıysa sınır yok (fazı değiştirmez, yalnız bir kez haber verilir).
         final reach = last.start.add(
@@ -334,7 +389,7 @@ final class FocusClock {
   DateTime? _blockEnd(Segment last) {
     if (!settings.blocked) return null;
     final before = _workSinceBreak(last.start, segments.length - 1);
-    return last.start.add(Duration(minutes: settings.block!) - before);
+    return last.start.add(Duration(minutes: settings.blockLength) - before);
   }
 
   /// Blok planlı derin çalışmada hedefe ulaşılan an; ulaşılmadıysa null.

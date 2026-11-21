@@ -570,3 +570,17 @@ Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem 
 - Başlatma ekranındaki odak kuralı açıklaması (10 sn) kalktı; sistem sabitleme onayı ve kaçış uyarısı sürüyor.
 - Kesin saatli odak işine katılınmadan başka bir odak oturumu sürerken bitişi geçerse, oturum bitince bozulma kaydedilir.
 **Durum:** Kabul. Gerçek cihazda henüz doğrulanmadı (QA_CHECKLIST I). Sunucu migration'ı uygulanmadı: uygulanmadan bu alanları değiştiren işler eşitlemede reddedilir.
+
+## 2026-11-21 — D67: Planlı Pomodoro
+**Karar (proje sahibinin seçimi):**
+- Pomodoro, D66'daki derin çalışma tekniğiyle aynı: sihirbazda çalışma (varsayılan 25 dk), kısa mola (5), tekrar sayısı (4), uzun mola (15) ve kaç döngüde bir olduğu (4) seçilir.
+- İşin süresini tekrar belirler: süre = tekrar × çalışma (saf odak); sihirbazdaki süre buna göre güncellenir, düzenlemede kural da yazılır. Planda molalar ve uzun molalar yer kaplar (4 × 25 + 3 × 5 → 115 dk).
+- Sayaç "Odak · döngü 2/4" ve plan satırını gösterir; son döngü hedefte biter, mola açılmaz. Dağıtma, bildirimle başlatma, geç kalma payı, kaçırma ve Atla kuralları D66 ile aynı; dağıtılan Pomodoro'da her blok tek döngüdür ve uzun moladan sonraki blok en az uzun mola sonra başlar.
+- Veri: `activities.focus_cycles`, `focus_long_break_minutes`, `focus_long_every`; çalışma ve kısa mola D66 sütunlarında. Drift şema 4, migration `20261121130000_focus_pomodoro.sql`.
+**Geçici:**
+- Proje parçasında tekrar seçilmez: parça süresi kadar döngü yapılır.
+- Saati ve süresi olmayan Pomodoro işi klasik kalır (hedefsiz, elle bitirilir).
+- Geç katılımda geciken süre toplamdan düşer; son döngü kısalır, döngü sayısı azalabilir.
+- D67 öncesi Pomodoro işinde tekrar sayısı düzenleme açılınca süreden hesaplanır; motor da bu işlerin molalarını artık plana ekler.
+- Cihazda saklanan "son Pomodoro / derin çalışma ayarı" işe özel blok ve hedefi taşımaz.
+**Durum:** Kabul. Gerçek cihazda henüz doğrulanmadı (QA_CHECKLIST J). Sunucu migration'ı (D66 ile birlikte) uygulanmadı.

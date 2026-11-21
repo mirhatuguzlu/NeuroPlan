@@ -5182,6 +5182,38 @@ class $ActivitiesTable extends Activities
     type: DriftSqlType.int,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _focusCyclesMeta = const VerificationMeta(
+    'focusCycles',
+  );
+  @override
+  late final GeneratedColumn<int> focusCycles = GeneratedColumn<int>(
+    'focus_cycles',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _focusLongBreakMinutesMeta =
+      const VerificationMeta('focusLongBreakMinutes');
+  @override
+  late final GeneratedColumn<int> focusLongBreakMinutes = GeneratedColumn<int>(
+    'focus_long_break_minutes',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _focusLongEveryMeta = const VerificationMeta(
+    'focusLongEvery',
+  );
+  @override
+  late final GeneratedColumn<int> focusLongEvery = GeneratedColumn<int>(
+    'focus_long_every',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _sortOrderMeta = const VerificationMeta(
     'sortOrder',
   );
@@ -5216,6 +5248,9 @@ class $ActivitiesTable extends Activities
     focusBreakMinutes,
     focusSpread,
     focusGraceMinutes,
+    focusCycles,
+    focusLongBreakMinutes,
+    focusLongEvery,
     sortOrder,
   ];
   @override
@@ -5371,6 +5406,33 @@ class $ActivitiesTable extends Activities
         ),
       );
     }
+    if (data.containsKey('focus_cycles')) {
+      context.handle(
+        _focusCyclesMeta,
+        focusCycles.isAcceptableOrUnknown(
+          data['focus_cycles']!,
+          _focusCyclesMeta,
+        ),
+      );
+    }
+    if (data.containsKey('focus_long_break_minutes')) {
+      context.handle(
+        _focusLongBreakMinutesMeta,
+        focusLongBreakMinutes.isAcceptableOrUnknown(
+          data['focus_long_break_minutes']!,
+          _focusLongBreakMinutesMeta,
+        ),
+      );
+    }
+    if (data.containsKey('focus_long_every')) {
+      context.handle(
+        _focusLongEveryMeta,
+        focusLongEvery.isAcceptableOrUnknown(
+          data['focus_long_every']!,
+          _focusLongEveryMeta,
+        ),
+      );
+    }
     if (data.containsKey('sort_order')) {
       context.handle(
         _sortOrderMeta,
@@ -5468,6 +5530,18 @@ class $ActivitiesTable extends Activities
         DriftSqlType.int,
         data['${effectivePrefix}focus_grace_minutes'],
       ),
+      focusCycles: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}focus_cycles'],
+      ),
+      focusLongBreakMinutes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}focus_long_break_minutes'],
+      ),
+      focusLongEvery: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}focus_long_every'],
+      ),
       sortOrder: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}sort_order'],
@@ -5507,6 +5581,11 @@ class Activity extends DataClass implements Insertable<Activity> {
   final int? focusBreakMinutes;
   final bool? focusSpread;
   final int? focusGraceMinutes;
+
+  /// Planlı Pomodoro (D67): tekrar sayısı, uzun mola ve kaç döngüde bir olduğu.
+  final int? focusCycles;
+  final int? focusLongBreakMinutes;
+  final int? focusLongEvery;
   final int sortOrder;
   const Activity({
     required this.id,
@@ -5529,6 +5608,9 @@ class Activity extends DataClass implements Insertable<Activity> {
     this.focusBreakMinutes,
     this.focusSpread,
     this.focusGraceMinutes,
+    this.focusCycles,
+    this.focusLongBreakMinutes,
+    this.focusLongEvery,
     required this.sortOrder,
   });
   @override
@@ -5586,6 +5668,15 @@ class Activity extends DataClass implements Insertable<Activity> {
     if (!nullToAbsent || focusGraceMinutes != null) {
       map['focus_grace_minutes'] = Variable<int>(focusGraceMinutes);
     }
+    if (!nullToAbsent || focusCycles != null) {
+      map['focus_cycles'] = Variable<int>(focusCycles);
+    }
+    if (!nullToAbsent || focusLongBreakMinutes != null) {
+      map['focus_long_break_minutes'] = Variable<int>(focusLongBreakMinutes);
+    }
+    if (!nullToAbsent || focusLongEvery != null) {
+      map['focus_long_every'] = Variable<int>(focusLongEvery);
+    }
     map['sort_order'] = Variable<int>(sortOrder);
     return map;
   }
@@ -5640,6 +5731,15 @@ class Activity extends DataClass implements Insertable<Activity> {
       focusGraceMinutes: focusGraceMinutes == null && nullToAbsent
           ? const Value.absent()
           : Value(focusGraceMinutes),
+      focusCycles: focusCycles == null && nullToAbsent
+          ? const Value.absent()
+          : Value(focusCycles),
+      focusLongBreakMinutes: focusLongBreakMinutes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(focusLongBreakMinutes),
+      focusLongEvery: focusLongEvery == null && nullToAbsent
+          ? const Value.absent()
+          : Value(focusLongEvery),
       sortOrder: Value(sortOrder),
     );
   }
@@ -5674,6 +5774,11 @@ class Activity extends DataClass implements Insertable<Activity> {
       focusBreakMinutes: serializer.fromJson<int?>(json['focus_break_minutes']),
       focusSpread: serializer.fromJson<bool?>(json['focus_spread']),
       focusGraceMinutes: serializer.fromJson<int?>(json['focus_grace_minutes']),
+      focusCycles: serializer.fromJson<int?>(json['focus_cycles']),
+      focusLongBreakMinutes: serializer.fromJson<int?>(
+        json['focus_long_break_minutes'],
+      ),
+      focusLongEvery: serializer.fromJson<int?>(json['focus_long_every']),
       sortOrder: serializer.fromJson<int>(json['sort_order']),
     );
   }
@@ -5703,6 +5808,11 @@ class Activity extends DataClass implements Insertable<Activity> {
       'focus_break_minutes': serializer.toJson<int?>(focusBreakMinutes),
       'focus_spread': serializer.toJson<bool?>(focusSpread),
       'focus_grace_minutes': serializer.toJson<int?>(focusGraceMinutes),
+      'focus_cycles': serializer.toJson<int?>(focusCycles),
+      'focus_long_break_minutes': serializer.toJson<int?>(
+        focusLongBreakMinutes,
+      ),
+      'focus_long_every': serializer.toJson<int?>(focusLongEvery),
       'sort_order': serializer.toJson<int>(sortOrder),
     };
   }
@@ -5728,6 +5838,9 @@ class Activity extends DataClass implements Insertable<Activity> {
     Value<int?> focusBreakMinutes = const Value.absent(),
     Value<bool?> focusSpread = const Value.absent(),
     Value<int?> focusGraceMinutes = const Value.absent(),
+    Value<int?> focusCycles = const Value.absent(),
+    Value<int?> focusLongBreakMinutes = const Value.absent(),
+    Value<int?> focusLongEvery = const Value.absent(),
     int? sortOrder,
   }) => Activity(
     id: id ?? this.id,
@@ -5764,6 +5877,13 @@ class Activity extends DataClass implements Insertable<Activity> {
     focusGraceMinutes: focusGraceMinutes.present
         ? focusGraceMinutes.value
         : this.focusGraceMinutes,
+    focusCycles: focusCycles.present ? focusCycles.value : this.focusCycles,
+    focusLongBreakMinutes: focusLongBreakMinutes.present
+        ? focusLongBreakMinutes.value
+        : this.focusLongBreakMinutes,
+    focusLongEvery: focusLongEvery.present
+        ? focusLongEvery.value
+        : this.focusLongEvery,
     sortOrder: sortOrder ?? this.sortOrder,
   );
   Activity copyWithCompanion(ActivitiesCompanion data) {
@@ -5808,6 +5928,15 @@ class Activity extends DataClass implements Insertable<Activity> {
       focusGraceMinutes: data.focusGraceMinutes.present
           ? data.focusGraceMinutes.value
           : this.focusGraceMinutes,
+      focusCycles: data.focusCycles.present
+          ? data.focusCycles.value
+          : this.focusCycles,
+      focusLongBreakMinutes: data.focusLongBreakMinutes.present
+          ? data.focusLongBreakMinutes.value
+          : this.focusLongBreakMinutes,
+      focusLongEvery: data.focusLongEvery.present
+          ? data.focusLongEvery.value
+          : this.focusLongEvery,
       sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
     );
   }
@@ -5835,6 +5964,9 @@ class Activity extends DataClass implements Insertable<Activity> {
           ..write('focusBreakMinutes: $focusBreakMinutes, ')
           ..write('focusSpread: $focusSpread, ')
           ..write('focusGraceMinutes: $focusGraceMinutes, ')
+          ..write('focusCycles: $focusCycles, ')
+          ..write('focusLongBreakMinutes: $focusLongBreakMinutes, ')
+          ..write('focusLongEvery: $focusLongEvery, ')
           ..write('sortOrder: $sortOrder')
           ..write(')'))
         .toString();
@@ -5862,6 +5994,9 @@ class Activity extends DataClass implements Insertable<Activity> {
     focusBreakMinutes,
     focusSpread,
     focusGraceMinutes,
+    focusCycles,
+    focusLongBreakMinutes,
+    focusLongEvery,
     sortOrder,
   ]);
   @override
@@ -5888,6 +6023,9 @@ class Activity extends DataClass implements Insertable<Activity> {
           other.focusBreakMinutes == this.focusBreakMinutes &&
           other.focusSpread == this.focusSpread &&
           other.focusGraceMinutes == this.focusGraceMinutes &&
+          other.focusCycles == this.focusCycles &&
+          other.focusLongBreakMinutes == this.focusLongBreakMinutes &&
+          other.focusLongEvery == this.focusLongEvery &&
           other.sortOrder == this.sortOrder);
 }
 
@@ -5912,6 +6050,9 @@ class ActivitiesCompanion extends UpdateCompanion<Activity> {
   final Value<int?> focusBreakMinutes;
   final Value<bool?> focusSpread;
   final Value<int?> focusGraceMinutes;
+  final Value<int?> focusCycles;
+  final Value<int?> focusLongBreakMinutes;
+  final Value<int?> focusLongEvery;
   final Value<int> sortOrder;
   final Value<int> rowid;
   const ActivitiesCompanion({
@@ -5935,6 +6076,9 @@ class ActivitiesCompanion extends UpdateCompanion<Activity> {
     this.focusBreakMinutes = const Value.absent(),
     this.focusSpread = const Value.absent(),
     this.focusGraceMinutes = const Value.absent(),
+    this.focusCycles = const Value.absent(),
+    this.focusLongBreakMinutes = const Value.absent(),
+    this.focusLongEvery = const Value.absent(),
     this.sortOrder = const Value.absent(),
     this.rowid = const Value.absent(),
   });
@@ -5959,6 +6103,9 @@ class ActivitiesCompanion extends UpdateCompanion<Activity> {
     this.focusBreakMinutes = const Value.absent(),
     this.focusSpread = const Value.absent(),
     this.focusGraceMinutes = const Value.absent(),
+    this.focusCycles = const Value.absent(),
+    this.focusLongBreakMinutes = const Value.absent(),
+    this.focusLongEvery = const Value.absent(),
     this.sortOrder = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
@@ -5985,6 +6132,9 @@ class ActivitiesCompanion extends UpdateCompanion<Activity> {
     Expression<int>? focusBreakMinutes,
     Expression<bool>? focusSpread,
     Expression<int>? focusGraceMinutes,
+    Expression<int>? focusCycles,
+    Expression<int>? focusLongBreakMinutes,
+    Expression<int>? focusLongEvery,
     Expression<int>? sortOrder,
     Expression<int>? rowid,
   }) {
@@ -6009,6 +6159,10 @@ class ActivitiesCompanion extends UpdateCompanion<Activity> {
       if (focusBreakMinutes != null) 'focus_break_minutes': focusBreakMinutes,
       if (focusSpread != null) 'focus_spread': focusSpread,
       if (focusGraceMinutes != null) 'focus_grace_minutes': focusGraceMinutes,
+      if (focusCycles != null) 'focus_cycles': focusCycles,
+      if (focusLongBreakMinutes != null)
+        'focus_long_break_minutes': focusLongBreakMinutes,
+      if (focusLongEvery != null) 'focus_long_every': focusLongEvery,
       if (sortOrder != null) 'sort_order': sortOrder,
       if (rowid != null) 'rowid': rowid,
     });
@@ -6035,6 +6189,9 @@ class ActivitiesCompanion extends UpdateCompanion<Activity> {
     Value<int?>? focusBreakMinutes,
     Value<bool?>? focusSpread,
     Value<int?>? focusGraceMinutes,
+    Value<int?>? focusCycles,
+    Value<int?>? focusLongBreakMinutes,
+    Value<int?>? focusLongEvery,
     Value<int>? sortOrder,
     Value<int>? rowid,
   }) {
@@ -6059,6 +6216,10 @@ class ActivitiesCompanion extends UpdateCompanion<Activity> {
       focusBreakMinutes: focusBreakMinutes ?? this.focusBreakMinutes,
       focusSpread: focusSpread ?? this.focusSpread,
       focusGraceMinutes: focusGraceMinutes ?? this.focusGraceMinutes,
+      focusCycles: focusCycles ?? this.focusCycles,
+      focusLongBreakMinutes:
+          focusLongBreakMinutes ?? this.focusLongBreakMinutes,
+      focusLongEvery: focusLongEvery ?? this.focusLongEvery,
       sortOrder: sortOrder ?? this.sortOrder,
       rowid: rowid ?? this.rowid,
     );
@@ -6129,6 +6290,17 @@ class ActivitiesCompanion extends UpdateCompanion<Activity> {
     if (focusGraceMinutes.present) {
       map['focus_grace_minutes'] = Variable<int>(focusGraceMinutes.value);
     }
+    if (focusCycles.present) {
+      map['focus_cycles'] = Variable<int>(focusCycles.value);
+    }
+    if (focusLongBreakMinutes.present) {
+      map['focus_long_break_minutes'] = Variable<int>(
+        focusLongBreakMinutes.value,
+      );
+    }
+    if (focusLongEvery.present) {
+      map['focus_long_every'] = Variable<int>(focusLongEvery.value);
+    }
     if (sortOrder.present) {
       map['sort_order'] = Variable<int>(sortOrder.value);
     }
@@ -6161,6 +6333,9 @@ class ActivitiesCompanion extends UpdateCompanion<Activity> {
           ..write('focusBreakMinutes: $focusBreakMinutes, ')
           ..write('focusSpread: $focusSpread, ')
           ..write('focusGraceMinutes: $focusGraceMinutes, ')
+          ..write('focusCycles: $focusCycles, ')
+          ..write('focusLongBreakMinutes: $focusLongBreakMinutes, ')
+          ..write('focusLongEvery: $focusLongEvery, ')
           ..write('sortOrder: $sortOrder, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -17748,6 +17923,9 @@ typedef $$ActivitiesTableCreateCompanionBuilder = ActivitiesCompanion Function({
   Value<int?> focusBreakMinutes,
   Value<bool?> focusSpread,
   Value<int?> focusGraceMinutes,
+  Value<int?> focusCycles,
+  Value<int?> focusLongBreakMinutes,
+  Value<int?> focusLongEvery,
   Value<int> sortOrder,
   Value<int> rowid,
 });
@@ -17772,6 +17950,9 @@ typedef $$ActivitiesTableUpdateCompanionBuilder = ActivitiesCompanion Function({
   Value<int?> focusBreakMinutes,
   Value<bool?> focusSpread,
   Value<int?> focusGraceMinutes,
+  Value<int?> focusCycles,
+  Value<int?> focusLongBreakMinutes,
+  Value<int?> focusLongEvery,
   Value<int> sortOrder,
   Value<int> rowid,
 });
@@ -18034,6 +18215,21 @@ class $$ActivitiesTableFilterComposer
 
   ColumnFilters<int> get focusGraceMinutes => $composableBuilder(
     column: $table.focusGraceMinutes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get focusCycles => $composableBuilder(
+    column: $table.focusCycles,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get focusLongBreakMinutes => $composableBuilder(
+    column: $table.focusLongBreakMinutes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get focusLongEvery => $composableBuilder(
+    column: $table.focusLongEvery,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -18349,6 +18545,21 @@ class $$ActivitiesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get focusCycles => $composableBuilder(
+    column: $table.focusCycles,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get focusLongBreakMinutes => $composableBuilder(
+    column: $table.focusLongBreakMinutes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get focusLongEvery => $composableBuilder(
+    column: $table.focusLongEvery,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get sortOrder => $composableBuilder(
     column: $table.sortOrder,
     builder: (column) => ColumnOrderings(column),
@@ -18516,6 +18727,21 @@ class $$ActivitiesTableAnnotationComposer
 
   GeneratedColumn<int> get focusGraceMinutes => $composableBuilder(
     column: $table.focusGraceMinutes,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get focusCycles => $composableBuilder(
+    column: $table.focusCycles,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get focusLongBreakMinutes => $composableBuilder(
+    column: $table.focusLongBreakMinutes,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get focusLongEvery => $composableBuilder(
+    column: $table.focusLongEvery,
     builder: (column) => column,
   );
 
@@ -18798,6 +19024,9 @@ class $$ActivitiesTableTableManager
                 Value<int?> focusBreakMinutes = const Value.absent(),
                 Value<bool?> focusSpread = const Value.absent(),
                 Value<int?> focusGraceMinutes = const Value.absent(),
+                Value<int?> focusCycles = const Value.absent(),
+                Value<int?> focusLongBreakMinutes = const Value.absent(),
+                Value<int?> focusLongEvery = const Value.absent(),
                 Value<int> sortOrder = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ActivitiesCompanion(
@@ -18821,6 +19050,9 @@ class $$ActivitiesTableTableManager
                 focusBreakMinutes: focusBreakMinutes,
                 focusSpread: focusSpread,
                 focusGraceMinutes: focusGraceMinutes,
+                focusCycles: focusCycles,
+                focusLongBreakMinutes: focusLongBreakMinutes,
+                focusLongEvery: focusLongEvery,
                 sortOrder: sortOrder,
                 rowid: rowid,
               ),
@@ -18846,6 +19078,9 @@ class $$ActivitiesTableTableManager
                 Value<int?> focusBreakMinutes = const Value.absent(),
                 Value<bool?> focusSpread = const Value.absent(),
                 Value<int?> focusGraceMinutes = const Value.absent(),
+                Value<int?> focusCycles = const Value.absent(),
+                Value<int?> focusLongBreakMinutes = const Value.absent(),
+                Value<int?> focusLongEvery = const Value.absent(),
                 Value<int> sortOrder = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ActivitiesCompanion.insert(
@@ -18869,6 +19104,9 @@ class $$ActivitiesTableTableManager
                 focusBreakMinutes: focusBreakMinutes,
                 focusSpread: focusSpread,
                 focusGraceMinutes: focusGraceMinutes,
+                focusCycles: focusCycles,
+                focusLongBreakMinutes: focusLongBreakMinutes,
+                focusLongEvery: focusLongEvery,
                 sortOrder: sortOrder,
                 rowid: rowid,
               ),

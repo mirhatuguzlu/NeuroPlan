@@ -227,7 +227,8 @@ class ChoiceList<T> extends StatelessWidget {
   );
 }
 
-/// Hazır dakika değerleri arasından tek seçim (sayaçlı +/- yerine; daha az dokunuş).
+/// Hazır dakika (ya da sayı) değerleri arasından tek seçim (sayaçlı +/- yerine; daha az
+/// dokunuş).
 class MinuteChips extends StatelessWidget {
   const MinuteChips({
     super.key,
@@ -235,12 +236,16 @@ class MinuteChips extends StatelessWidget {
     required this.value,
     required this.options,
     required this.onChanged,
+    this.text,
   });
 
   final String label;
   final int value;
   final List<int> options;
   final ValueChanged<int> onChanged;
+
+  /// Seçenek metni; verilmezse "n dk".
+  final String Function(int)? text;
 
   @override
   Widget build(BuildContext context) => Padding(
@@ -256,7 +261,7 @@ class MinuteChips extends StatelessWidget {
           children: [
             for (final o in {...options, value}.toList()..sort())
               ChoiceChip(
-                label: Text(context.l10n.minutesShort(o)),
+                label: Text(text?.call(o) ?? context.l10n.minutesShort(o)),
                 selected: o == value,
                 onSelected: (_) => onChanged(o),
               ),

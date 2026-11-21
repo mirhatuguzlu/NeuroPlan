@@ -640,8 +640,65 @@ class _ActivityWizardState extends ConsumerState<ActivityWizardScreen> {
               ('pomodoro', l.modePomodoro, null),
               ('deep', l.modeDeep, null),
             ],
-            onChanged: (m) => _set(() => d.focusMode = m),
+            onChanged: (m) => _set(() => d.setFocusMode(m)),
           ),
+          // Pomodoro (D67): çalışma, mola, tekrar, uzun mola; süreyi tekrar belirler.
+          if (d.isPomodoro) ...[
+            const SizedBox(height: Gap.l),
+            MinuteChips(
+              label: l.wizPomodoroWork,
+              value: d.focusBlock,
+              options: const [15, 20, 25, 30, 45, 50],
+              onChanged: (v) => _set(() {
+                d.focusBlock = v;
+                d.syncPomodoroDuration();
+              }),
+            ),
+            MinuteChips(
+              label: l.wizFocusBreak,
+              value: d.focusBreak,
+              options: const [3, 5, 10, 15],
+              onChanged: (v) => _set(() => d.focusBreak = v),
+            ),
+            if (d.cyclesSetDuration)
+              MinuteChips(
+                label: l.wizPomodoroCycles,
+                value: d.focusCycles,
+                options: const [1, 2, 3, 4, 5, 6, 8],
+                text: (n) => '$n',
+                onChanged: (v) => _set(() {
+                  d.focusCycles = v;
+                  d.syncPomodoroDuration();
+                }),
+              ),
+            MinuteChips(
+              label: l.wizPomodoroLongBreak,
+              value: d.focusLongBreak,
+              options: const [10, 15, 20, 30],
+              onChanged: (v) => _set(() => d.focusLongBreak = v),
+            ),
+            MinuteChips(
+              label: l.wizPomodoroLongEvery,
+              value: d.focusLongEvery,
+              options: const [2, 3, 4, 5, 6],
+              text: (n) => '$n',
+              onChanged: (v) => _set(() => d.focusLongEvery = v),
+            ),
+            if (d.cyclesSetDuration)
+              _hint(
+                l.wizPomodoroPreview(
+                  d.focusCycles,
+                  d.focusBlock,
+                  FocusBlocks(
+                    block: d.focusBlock,
+                    rest: d.focusBreak,
+                    longRest: d.focusLongBreak,
+                    longEvery: d.focusLongEvery,
+                  ).span(d.focusCycles * d.focusBlock),
+                ),
+                error: false,
+              ),
+          ],
           // Derin çalışma blok planı (D66): süre saf odaktır, molalar süreyi uzatır.
           if (d.isDeep) ...[
             const SizedBox(height: Gap.l),
@@ -667,21 +724,21 @@ class _ActivityWizardState extends ConsumerState<ActivityWizardScreen> {
                 ),
                 error: false,
               ),
-            if (d.canSpread) ...[
-              const SizedBox(height: Gap.m),
-              Text(
-                l.wizFocusSpread,
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
-              ChoiceList<bool>(
-                value: d.focusSpread,
-                options: [
-                  (false, l.focusSpreadNo, l.focusSpreadNoHint),
-                  (true, l.focusSpreadYes, l.focusSpreadYesHint),
-                ],
-                onChanged: (v) => _set(() => d.focusSpread = v),
-              ),
-            ],
+          ],
+          if (d.canSpread) ...[
+            const SizedBox(height: Gap.m),
+            Text(
+              l.wizFocusSpread,
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+            ChoiceList<bool>(
+              value: d.focusSpread,
+              options: [
+                (false, l.focusSpreadNo, l.focusSpreadNoHint),
+                (true, l.focusSpreadYes, l.focusSpreadYesHint),
+              ],
+              onChanged: (v) => _set(() => d.focusSpread = v),
+            ),
           ],
           if (d.hasGrace) ...[
             const SizedBox(height: Gap.l),
@@ -887,7 +944,13 @@ class ActivitySummary extends ConsumerWidget {
           l.sumFocus,
           switch (d.focus) {
             true => switch (d.focusMode) {
-              'pomodoro' => l.modePomodoro,
+              'pomodoro' => l.sumPomodoro(
+                d.focusBlock,
+                d.focusBreak,
+                d.canSpread && d.focusSpread
+                    ? l.focusSpreadYes
+                    : l.focusSpreadNo,
+              ),
               'deep' => l.sumDeep(
                 d.focusBlock,
                 d.focusBreak,

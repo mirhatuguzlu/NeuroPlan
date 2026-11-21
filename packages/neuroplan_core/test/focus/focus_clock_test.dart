@@ -148,7 +148,9 @@ void main() {
 
     test('son blok hedefte biter; mola açılmaz, hedef anı bilinir', () {
       var c = FocusClock.start(deep, t0).advance(at(60)).resumeWork(at(60));
-      c = c.advance(at(120)).resumeWork(at(120)); // 2. blok 60–110, mola 110–120
+      c = c
+          .advance(at(120))
+          .resumeWork(at(120)); // 2. blok 60–110, mola 110–120
       expect(c.cycle, 3);
       expect(c.nextBoundary(at(121)), at(140)); // kalan 20 dk
       final end = c.advance(at(150));
@@ -178,6 +180,50 @@ void main() {
       expect(b.focusOf(55), 50);
       expect(b.parts(120), [50, 50, 20]);
       expect(FocusBlocks.countOf(5, 50), 1);
+    });
+  });
+
+  group('planlı Pomodoro (D67)', () {
+    // 3 × 25 dk, 5 dk mola, 2 döngüde bir 15 dk uzun mola.
+    const plan = FocusSettings(
+      FocusMode.pomodoro,
+      work: 25,
+      rest: 5,
+      longRest: 15,
+      longEvery: 2,
+      target: 75,
+      planned: true,
+    );
+
+    test('döngü sonunda mola, uzun mola sırası, son döngü hedefte biter', () {
+      expect(plan.blockCount, 3);
+      var c = FocusClock.start(plan, t0).advance(at(26));
+      expect(c.breakLength(at(26)), const Duration(minutes: 5));
+      c = c.advance(at(30)).resumeWork(at(30)).advance(at(56));
+      expect(c.breakLength(at(56)), const Duration(minutes: 15));
+      c = c.advance(at(70)).resumeWork(at(70));
+      expect(c.nextBoundary(at(71)), at(95));
+      final end = c.advance(at(100));
+      expect(end.phase, FocusPhase.working, reason: 'hedefte mola açılmaz');
+      expect(end.targetReachedAt(at(100)), at(95));
+    });
+
+    test('JSON: hedef yazılır, eski Pomodoro planlı değildir', () {
+      final back = FocusSettings.fromJson(FocusMode.pomodoro, plan.toJson());
+      expect((back.planned, back.target, back.longEvery), (true, 75, 2));
+      expect(
+        FocusSettings.fromJson(FocusMode.pomodoro, {'work': 25}).blocked,
+        isFalse,
+      );
+      expect(plan.defaults.planned, isFalse);
+    });
+
+    test('FocusBlocks: uzun molalar planda yer kaplar', () {
+      const b = FocusBlocks(block: 25, rest: 5, longRest: 15, longEvery: 4);
+      expect(b.span(100), 100 + 5 + 5 + 5);
+      expect(b.span(200), 200 + 6 * 5 + 15);
+      expect(b.focusOf(b.span(200)), 200);
+      expect([for (var i = 1; i <= 4; i++) b.restAfter(i)], [5, 5, 5, 15]);
     });
   });
 

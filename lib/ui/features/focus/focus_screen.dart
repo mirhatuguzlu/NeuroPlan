@@ -166,6 +166,10 @@ class _FocusScreenState extends ConsumerState<FocusScreen> {
     final shown = countdown ? boundary.difference(now) : focused;
     final label = switch (phase) {
       FocusPhase.working => switch (mode) {
+        FocusMode.pomodoro when clock.settings.blocked => l.focusPhaseCycleOf(
+          clock.cycle,
+          clock.settings.blockCount,
+        ),
         FocusMode.pomodoro => l.focusPhaseCycle(clock.cycle),
         FocusMode.deep when clock.settings.blocked => l.focusPhaseBlock(
           clock.cycle,
@@ -225,12 +229,20 @@ class _FocusScreenState extends ConsumerState<FocusScreen> {
                             if (clock.settings case final s when s.blocked) ...[
                               const SizedBox(height: Gap.xs),
                               Text(
-                                l.focusBlockPlan(
-                                  s.blockCount,
-                                  s.block!,
-                                  s.rest,
-                                  s.target,
-                                ),
+                                s.mode == FocusMode.pomodoro
+                                    ? l.focusPomodoroPlan(
+                                        s.blockCount,
+                                        s.work,
+                                        s.rest,
+                                        s.longEvery,
+                                        s.longRest,
+                                      )
+                                    : l.focusBlockPlan(
+                                        s.blockCount,
+                                        s.blockLength,
+                                        s.rest,
+                                        s.target,
+                                      ),
                                 style: theme.textTheme.bodyMedium,
                                 textAlign: TextAlign.center,
                               ),

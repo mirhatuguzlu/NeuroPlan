@@ -68,11 +68,20 @@ class FocusStarter {
     final from = slot ?? (i.isTimed && !i.suggested ? i.start! : now);
     final late = math.max(0, now - from);
     var settings = saved[mode]!;
-    if (mode == FocusMode.deep && blocks != null) {
-      settings = settings.copyWith(
-        block: i.blocks != null ? focus : blocks.block,
-        rest: blocks.rest,
-      );
+    // Dağıtılan blok tek bloktur; Pomodoro süresi bilinmiyorsa klasik (hedefsiz) kalır.
+    if (blocks != null) {
+      final block = i.blocks != null ? focus : blocks.block;
+      settings = switch (mode) {
+        FocusMode.deep => settings.copyWith(block: block, rest: blocks.rest),
+        FocusMode.pomodoro => settings.copyWith(
+          work: block,
+          rest: blocks.rest,
+          longRest: blocks.longRest,
+          longEvery: blocks.longEvery,
+          planned: focus != null,
+        ),
+        FocusMode.free => settings,
+      };
     }
     if (i.suggested && length != null) {
       // Motor saati geçen öneriyi kaydırır; oturum açılan iş yerinde kalsın.

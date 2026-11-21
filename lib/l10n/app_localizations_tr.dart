@@ -3520,4 +3520,36 @@ class L10nTr extends L10n {
   String sumDeep(int block, int rest, String layout) {
     return 'Derin çalışma · $block dk blok, $rest dk mola · $layout';
   }
+
+  @override
+  String focusPhaseCycleOf(int n, int count) {
+    return 'Odak · döngü $n/$count';
+  }
+
+  @override
+  String focusPomodoroPlan(int count, int work, int rest, int every, int long) {
+    return '$count × $work dk odak, $rest dk mola; $every döngüde bir $long dk uzun mola';
+  }
+
+  @override
+  String get wizPomodoroWork => 'Çalışma süresi';
+
+  @override
+  String get wizPomodoroCycles => 'Kaç kez tekrar';
+
+  @override
+  String get wizPomodoroLongBreak => 'Uzun mola';
+
+  @override
+  String get wizPomodoroLongEvery => 'Uzun mola kaç döngüde bir';
+
+  @override
+  String wizPomodoroPreview(int count, int work, int span) {
+    return '$count × $work dk odak; molalarla planda $span dk yer kaplar. İşin süresi buna göre ayarlandı.';
+  }
+
+  @override
+  String sumPomodoro(int work, int rest, String layout) {
+    return 'Pomodoro · $work dk çalışma, $rest dk mola · $layout';
+  }
 }

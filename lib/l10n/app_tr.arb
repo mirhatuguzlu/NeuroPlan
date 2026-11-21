@@ -2347,5 +2347,68 @@
         "type": "String"
       }
     }
+  },
+  "focusPhaseCycleOf": "Odak · döngü {n}/{count}",
+  "@focusPhaseCycleOf": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focusPomodoroPlan": "{count} × {work} dk odak, {rest} dk mola; {every} döngüde bir {long} dk uzun mola",
+  "@focusPomodoroPlan": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "work": {
+        "type": "int"
+      },
+      "rest": {
+        "type": "int"
+      },
+      "every": {
+        "type": "int"
+      },
+      "long": {
+        "type": "int"
+      }
+    }
+  },
+  "wizPomodoroWork": "Çalışma süresi",
+  "wizPomodoroCycles": "Kaç kez tekrar",
+  "wizPomodoroLongBreak": "Uzun mola",
+  "wizPomodoroLongEvery": "Uzun mola kaç döngüde bir",
+  "wizPomodoroPreview": "{count} × {work} dk odak; molalarla planda {span} dk yer kaplar. İşin süresi buna göre ayarlandı.",
+  "@wizPomodoroPreview": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "work": {
+        "type": "int"
+      },
+      "span": {
+        "type": "int"
+      }
+    }
+  },
+  "sumPomodoro": "Pomodoro · {work} dk çalışma, {rest} dk mola · {layout}",
+  "@sumPomodoro": {
+    "placeholders": {
+      "work": {
+        "type": "int"
+      },
+      "rest": {
+        "type": "int"
+      },
+      "layout": {
+        "type": "String"
+      }
+    }
   }
 }

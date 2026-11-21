@@ -96,6 +96,11 @@ class Activities extends Table with SyncColumns {
   IntColumn get focusBreakMinutes => integer().nullable()();
   BoolColumn get focusSpread => boolean().nullable()();
   IntColumn get focusGraceMinutes => integer().nullable()();
+
+  /// Planlı Pomodoro (D67): tekrar sayısı, uzun mola ve kaç döngüde bir olduğu.
+  IntColumn get focusCycles => integer().nullable()();
+  IntColumn get focusLongBreakMinutes => integer().nullable()();
+  IntColumn get focusLongEvery => integer().nullable()();
   IntColumn get sortOrder => integer().withDefault(const Constant(0))();
 }
 

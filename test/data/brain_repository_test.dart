@@ -154,6 +154,9 @@ void main() {
         'focus_break_minutes',
         'focus_spread',
         'focus_grace_minutes',
+        'focus_cycles',
+        'focus_long_break_minutes',
+        'focus_long_every',
       ]) {
         await v2.customStatement('ALTER TABLE activities DROP COLUMN $c');
       }
@@ -205,6 +208,9 @@ void main() {
         'focus_break_minutes',
         'focus_spread',
         'focus_grace_minutes',
+        'focus_cycles',
+        'focus_long_break_minutes',
+        'focus_long_every',
       ]) {
         await old.customStatement('ALTER TABLE activities DROP COLUMN $c');
       }

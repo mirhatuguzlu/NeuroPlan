@@ -151,6 +151,39 @@ void main() {
     },
   );
 
+  testWidgets(
+    'Pomodoro işi: tekrar süreyi belirler, planda molalarla, planlı oturum (D67)',
+    (t) async {
+      final h = await pumpApp(
+        t,
+        seed: (c) async {
+          final d = ActivityDraft(testNow)
+            ..title = 'Tez'
+            ..at = 10 * 60
+            ..focus = true
+            ..setFocusMode('pomodoro')
+            ..focusCycles = 4
+            ..syncPomodoroDuration();
+          await d.save(
+            c.read(databaseProvider),
+            c.read(activityRepositoryProvider),
+            PlanCalendar('Europe/Istanbul'),
+          );
+        },
+      );
+      final view = h.read(horizonProvider).value!;
+      final i = view.on('2026-11-18').single;
+      expect(i.end! - i.start!, 4 * 25 + 3 * 5, reason: '10:00–11:55');
+      final s = h.read(focusControllerProvider).clock!.settings;
+      expect(s.mode, FocusMode.pomodoro);
+      expect(
+        (s.planned, s.target, s.blockCount, s.work, s.rest),
+        (true, 100, 4, 25, 5),
+      );
+      expect(find.text('Odak · döngü 1/4'), findsOneWidget);
+    },
+  );
+
   testWidgets('bildirime dokunuş: Bugün\'de iş açılır', (t) async {
     final h = await pump(t, at: 12 * 60, focus: false);
     final id = h.read(horizonProvider).value!.on('2026-11-18').single.id;

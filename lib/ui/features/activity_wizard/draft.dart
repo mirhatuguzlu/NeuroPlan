@@ -78,16 +78,46 @@ class ActivityDraft {
   bool? focus;
   String focusMode = 'free';
 
-  /// Derin çalışma blok planı ve önerilen saatli işte geç kalma payı (D66).
-  int focusBlock = 50;
-  int focusBreak = 10;
+  /// Blok planı (derin çalışma D66, Pomodoro D67) ve önerilen saatli işte geç kalma payı.
+  /// Pomodoro'da [focusBlock] çalışma, [focusBreak] kısa mola süresidir.
+  int? blockMinutes;
+  int? breakMinutes;
+  int get focusBlock => blockMinutes ?? (focusMode == 'pomodoro' ? 25 : 50);
+  set focusBlock(int v) => blockMinutes = v;
+  int get focusBreak => breakMinutes ?? (focusMode == 'pomodoro' ? 5 : 10);
+  set focusBreak(int v) => breakMinutes = v;
   bool focusSpread = false;
   int focusGrace = 10;
+  int focusCycles = 4;
+  int focusLongBreak = 15;
+  int focusLongEvery = 4;
 
   bool get isDeep => hasFocus && focus == true && focusMode == 'deep';
+  bool get isPomodoro => hasFocus && focus == true && focusMode == 'pomodoro';
+  bool get hasBlocks => isDeep || isPomodoro;
+
+  /// Planlı Pomodoro'da işin süresini tekrar sayısı belirler (D67); proje parçası hariç.
+  bool get cyclesSetDuration => isPomodoro && !isProject;
 
   /// Bloklar yalnız kesin olmayan işte gün içine dağıtılabilir.
-  bool get canSpread => isDeep && !isProject && flex != Flexibility.fixed;
+  bool get canSpread => hasBlocks && !isProject && flex != Flexibility.fixed;
+
+  /// Mod değişince blok ve mola o modun varsayılanına döner.
+  void setFocusMode(String mode) {
+    if (mode == focusMode) return;
+    focusMode = mode;
+    blockMinutes = breakMinutes = null;
+    if (cyclesSetDuration) duration = focusCycles * focusBlock;
+  }
+
+  /// İşin süresi (saf odak): planlı Pomodoro'da tekrar × çalışma.
+  int? get planMinutes =>
+      cyclesSetDuration ? focusCycles * focusBlock : duration;
+
+  /// Pomodoro seçimi değişince süre tekrardan yeniden hesaplanır.
+  void syncPomodoroDuration() {
+    if (cyclesSetDuration) duration = focusCycles * focusBlock;
+  }
 
   /// Saati motorun önerdiği iş: bildirime geç kalma payı yalnız onda (dağıtılan bloklar da).
   bool get hasGrace =>
@@ -250,13 +280,16 @@ class ActivityDraft {
     title: Value(title.trim()),
     categoryId: Value(categoryId),
     rootCategoryKey: Value(categoryId == null ? rootKey : null),
-    estimatedMinutes: Value(isProject ? null : duration),
+    estimatedMinutes: Value(isProject ? null : planMinutes),
     requiresFocus: Value(hasFocus ? focus : null),
     focusMode: Value(hasFocus && focus == true ? focusMode : null),
-    focusBlockMinutes: Value(isDeep ? focusBlock : null),
-    focusBreakMinutes: Value(isDeep ? focusBreak : null),
+    focusBlockMinutes: Value(hasBlocks ? focusBlock : null),
+    focusBreakMinutes: Value(hasBlocks ? focusBreak : null),
     focusSpread: Value(canSpread ? focusSpread : null),
     focusGraceMinutes: Value(hasGrace ? focusGrace : null),
+    focusCycles: Value(cyclesSetDuration ? focusCycles : null),
+    focusLongBreakMinutes: Value(isPomodoro ? focusLongBreak : null),
+    focusLongEvery: Value(isPomodoro ? focusLongEvery : null),
   );
 
   ProjectsCompanion _project(PlanCalendar cal) {
@@ -281,8 +314,8 @@ class ActivityDraft {
   ScheduleRulesCompanion _rule() => ScheduleRulesCompanion(
     recurrence: Value(recurrence()),
     timing: Value(timing()),
-    durationMinMinutes: Value(duration),
-    durationMaxMinutes: Value(duration),
+    durationMinMinutes: Value(planMinutes),
+    durationMaxMinutes: Value(planMinutes),
     flexibility: Value(flex.name),
   );
 
@@ -320,10 +353,13 @@ class ActivityDraft {
       ..duration = a.estimatedMinutes
       ..focus = a.requiresFocus
       ..focusMode = a.focusMode ?? 'free'
-      ..focusBlock = a.focusBlockMinutes ?? 50
-      ..focusBreak = a.focusBreakMinutes ?? 10
+      ..blockMinutes = a.focusBlockMinutes
+      ..breakMinutes = a.focusBreakMinutes
       ..focusSpread = a.focusSpread ?? false
-      ..focusGrace = a.focusGraceMinutes ?? 10;
+      ..focusGrace = a.focusGraceMinutes ?? 10
+      ..focusCycles = a.focusCycles ?? 4
+      ..focusLongBreak = a.focusLongBreakMinutes ?? 15
+      ..focusLongEvery = a.focusLongEvery ?? 4;
     if (data.projectOf(activityId) case final p?) {
       d
         ..deadline = p.deadlineAt == null
@@ -369,6 +405,10 @@ class ActivityDraft {
           0,
           list.indexWhere((v) => v.id == group.defaultVariantId),
         );
+    }
+    // D67 öncesi Pomodoro işi: tekrar sayısı süreden çıkarılır.
+    if (a.focusCycles == null && d.cyclesSetDuration && d.duration != null) {
+      d.focusCycles = FocusBlocks.countOf(d.duration!, d.focusBlock);
     }
     return d;
   }
@@ -499,7 +539,10 @@ class ActivityDraft {
       if (isProject && projectSteps.contains(step)) {
         await activities.saveProject(a.id, _project(cal));
       }
-      if (!isProject && ruleSteps.contains(step)) {
+      // Pomodoro tekrarı süreyi değiştirir; kural da yazılır (D67).
+      if (!isProject &&
+          (ruleSteps.contains(step) ||
+              (step == 'focus' && cyclesSetDuration))) {
         final r = editingRule;
         final rule = _rule();
         if (r == null) {
