@@ -235,6 +235,10 @@ O sütunları vardır; tek istisna `id = user_id = auth.users.id` olmasıdır. Y
 | `priority` | smallint null: 1–3 | null = normal |
 | `requires_focus` | bool null | null = kategoriden miras |
 | `focus_mode` | text null: `free` · `pomodoro` · `deep` | null = kategoriden miras |
+| `focus_block_minutes` | int null (5–240) | Derin çalışma blok uzunluğu; null = 50 (D66) |
+| `focus_break_minutes` | int null (1–60) | Bloklar arası mola; null = 10 (D66) |
+| `focus_spread` | bool null | Bloklar gün içine dağıtılır (yalnız kesin olmayan işte); null = üst üste (D66) |
+| `focus_grace_minutes` | int null (1–120) | Önerilen saatli odak işinde bildirime geç kalma payı; null = 10 (D66) |
 | `sort_order` | int | |
 
 Kuralı olmayan aktivite **tarihsiz bir yapılacak** olarak kalır (gelen kutusu).

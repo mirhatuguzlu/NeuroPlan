@@ -155,6 +155,7 @@ class AndroidFocusPlatform implements FocusPlatform {
 
   /// Plan hatırlatmaları yeniden kurulurken bu kimlik silinmez (`next_up.dart`).
   static const breakOverId = 903;
+  static const breakOverPayload = 'resume:focus';
   static const _ongoingChannel = 'focus_ongoing';
 
   var _microphone = false;
@@ -372,6 +373,8 @@ class AndroidFocusPlatform implements FocusPlatform {
       scheduledDate: tz.TZDateTime.from(at.toUtc(), tz.UTC),
       title: title,
       body: body,
+      // Dokununca odak kaldığı yerden sürer (D66, `autoStartProvider`).
+      payload: breakOverPayload,
       androidScheduleMode: exact
           ? AndroidScheduleMode.exactAllowWhileIdle
           : AndroidScheduleMode.inexactAllowWhileIdle,

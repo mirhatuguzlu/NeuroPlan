@@ -4,6 +4,8 @@
 /// öldürülüp saatler sonra açılsa da [FocusClock.advance] faz sınırlarını tam anında kapatır.
 library;
 
+import 'dart:math' as math;
+
 enum FocusMode {
   free,
   pomodoro,
@@ -13,7 +15,8 @@ enum FocusMode {
 }
 
 /// Pomodoro `{"work":25,"break":5,"long_break":15,"long_every":4}`, derin çalışma
-/// `{"target":90}` (dakika). Serbest modda ayar yoktur.
+/// `{"target":120,"block":50,"break":10}` (dakika; `block` yoksa D66 öncesi: blok yok,
+/// mola isteğe bağlı). Serbest modda ayar yoktur.
 final class FocusSettings {
   const FocusSettings(
     this.mode, {
@@ -22,31 +25,48 @@ final class FocusSettings {
     this.longRest = 15,
     this.longEvery = 4,
     this.target = 90,
+    this.block,
   });
 
   /// Bozuk ya da eksik değer varsayılana döner; süreler en az 1 dakikadır.
   factory FocusSettings.fromJson(FocusMode mode, Map<String, Object?>? j) {
-    int read(String key, int fallback) {
+    int? valid(String key) {
       final v = j?[key];
-      return v is int && v >= 1 && v <= 24 * 60 ? v : fallback;
+      return v is int && v >= 1 && v <= 24 * 60 ? v : null;
     }
 
+    final deep = mode == FocusMode.deep;
+    final block = deep ? valid('block') : null;
     return FocusSettings(
       mode,
-      work: read('work', 25),
-      rest: read('break', 5),
-      longRest: read('long_break', 15),
-      longEvery: read('long_every', 4),
-      target: read('target', 90),
+      work: valid('work') ?? 25,
+      rest: valid('break') ?? (block != null ? 10 : 5),
+      longRest: valid('long_break') ?? 15,
+      longEvery: valid('long_every') ?? 4,
+      target: valid('target') ?? 90,
+      block: block,
     );
   }
 
   final FocusMode mode;
   final int work;
+
+  /// Pomodoro kısa molası; blok planlı derin çalışmada bloklar arası mola.
   final int rest;
   final int longRest;
   final int longEvery;
+
+  /// Derin çalışmada toplam saf odak hedefi.
   final int target;
+
+  /// Derin çalışma blok uzunluğu (D66); null = blok yok.
+  final int? block;
+
+  /// Blok planlı derin çalışma: blok bitince mola başlar, hedefte oturum tamamlanır.
+  bool get blocked => mode == FocusMode.deep && block != null;
+
+  /// Blok planındaki blok sayısı (son blok kısa olabilir).
+  int get blockCount => blocked ? FocusBlocks.countOf(target, block!) : 1;
 
   Map<String, Object?>? toJson() => switch (mode) {
     FocusMode.free => null,
@@ -56,7 +76,10 @@ final class FocusSettings {
       'long_break': longRest,
       'long_every': longEvery,
     },
-    FocusMode.deep => {'target': target},
+    FocusMode.deep => {
+      'target': target,
+      if (block != null) ...{'block': block, 'break': rest},
+    },
   };
 
   FocusSettings copyWith({
@@ -66,6 +89,7 @@ final class FocusSettings {
     int? longRest,
     int? longEvery,
     int? target,
+    int? block,
   }) => FocusSettings(
     mode ?? this.mode,
     work: work ?? this.work,
@@ -73,7 +97,47 @@ final class FocusSettings {
     longRest: longRest ?? this.longRest,
     longEvery: longEvery ?? this.longEvery,
     target: target ?? this.target,
+    block: block ?? this.block,
   );
+}
+
+/// İşin derin çalışma blok planı (D66): [block] dk odak, aralarda [rest] dk mola; iş
+/// süresi saf odaktır, molalar süreyi uzatır. [spread]: bloklar gün içine dağıtılır.
+final class FocusBlocks {
+  const FocusBlocks({this.block = 50, this.rest = 10, this.spread = false});
+
+  final int block;
+  final int rest;
+  final bool spread;
+
+  static int countOf(int focus, int block) =>
+      focus <= 0 ? 1 : (focus + block - 1) ~/ block;
+
+  /// [focus] dk saf odak üst üste yapılınca planda kaplanan süre.
+  int span(int focus) => focus + (countOf(focus, block) - 1) * rest;
+
+  /// [span]'in tersi: planda [length] dk'ya sığan en uzun saf odak.
+  int focusOf(int length) {
+    for (var f = length; f > 1; f--) {
+      if (span(f) <= length) return f;
+    }
+    return 1;
+  }
+
+  /// Dağıtılan blokların uzunlukları: [block], [block], …, kalan.
+  List<int> parts(int focus) => [
+    for (var left = focus; left > 0; left -= block) math.min(block, left),
+  ];
+
+  @override
+  bool operator ==(Object other) =>
+      other is FocusBlocks &&
+      other.block == block &&
+      other.rest == rest &&
+      other.spread == spread;
+
+  @override
+  int get hashCode => Object.hash(block, rest, spread);
 }
 
 enum SegmentKind {
@@ -222,6 +286,8 @@ final class FocusClock {
               ? settings.longRest
               : settings.rest,
         )
+      : settings.blocked
+      ? Duration(minutes: settings.rest)
       : Duration(minutes: suggestedBreakMinutes(workBefore));
 
   /// Açık molanın uzunluğu ya da (mola yoksa) şimdi başlayacak molanın önerisi.
@@ -256,25 +322,58 @@ final class FocusClock {
         final reach = last.start.add(
           Duration(minutes: settings.target) - focused(last.start),
         );
+        // Blok sonu geçmişse de döner: sayaç hemen ilerletilsin.
+        if (_blockEnd(last) case final b? when b.isBefore(reach)) return b;
         return reach.isAfter(now) ? reach : null;
       case FocusMode.free:
         return null;
     }
   }
 
-  /// Geçmiş sınırları tam anlarında kapatır: Pomodoro odak bloğu bitince mola başlar,
-  /// mola bitince sayaç "bekliyor"a geçer. Derin çalışma hedefi fazı değiştirmez.
+  /// Blok planlı derin çalışmada açık odak segmentinin blok sonu; blok yoksa null.
+  DateTime? _blockEnd(Segment last) {
+    if (!settings.blocked) return null;
+    final before = _workSinceBreak(last.start, segments.length - 1);
+    return last.start.add(Duration(minutes: settings.block!) - before);
+  }
+
+  /// Blok planlı derin çalışmada hedefe ulaşılan an; ulaşılmadıysa null.
+  DateTime? targetReachedAt(DateTime now) {
+    if (!settings.blocked) return null;
+    final target = Duration(minutes: settings.target);
+    if (focused(now) < target) return null;
+    final last = _last;
+    if (last == null || !last.open || last.kind != SegmentKind.work) {
+      return last?.end ?? now;
+    }
+    return last.start.add(target - focused(last.start));
+  }
+
+  /// Geçmiş sınırları tam anlarında kapatır: Pomodoro odak bloğu (ve blok planlı derin
+  /// çalışma bloğu) bitince mola başlar, mola bitince sayaç "bekliyor"a geçer. Derin
+  /// çalışma hedefi fazı değiştirmez.
   FocusClock advance(DateTime now) {
     var clock = this;
     for (var i = 0; i < 2; i++) {
       final last = clock._last;
       if (last == null || !last.open) break;
       if (last.kind == SegmentKind.work &&
-          clock.settings.mode != FocusMode.pomodoro) {
+          clock.settings.mode != FocusMode.pomodoro &&
+          !clock.settings.blocked) {
         break;
       }
-      final boundary = clock.nextBoundary(now)!;
-      if (boundary.isAfter(now)) break;
+      final DateTime? boundary;
+      if (last.kind == SegmentKind.work && clock.settings.blocked) {
+        // Hedef blok sonundan önce (ya da aynı anda) geliyorsa mola açılmaz.
+        final reach = last.start.add(
+          Duration(minutes: clock.settings.target) - clock.focused(last.start),
+        );
+        final b = clock._blockEnd(last)!;
+        boundary = b.isBefore(reach) ? b : null;
+      } else {
+        boundary = clock.nextBoundary(now);
+      }
+      if (boundary == null || boundary.isAfter(now)) break;
       final at = boundary.isBefore(last.start) ? last.start : boundary;
       clock = FocusClock(settings, [
         ...clock.segments.take(clock.segments.length - 1),

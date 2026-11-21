@@ -1981,23 +1981,11 @@ abstract class L10n {
   /// **'Vazgeç'**
   String get commonCancel;
 
-  /// No description provided for @actionFocus.
-  ///
-  /// In tr, this message translates to:
-  /// **'Odaklan'**
-  String get actionFocus;
-
   /// No description provided for @secFocus.
   ///
   /// In tr, this message translates to:
   /// **'Odak'**
   String get secFocus;
-
-  /// No description provided for @focusStart.
-  ///
-  /// In tr, this message translates to:
-  /// **'Başla'**
-  String get focusStart;
 
   /// No description provided for @focusMissingTitle.
   ///
@@ -2010,78 +1998,6 @@ abstract class L10n {
   /// In tr, this message translates to:
   /// **'Plan değişmiş olabilir. Bugün ekranından yeniden seç.'**
   String get focusMissingBody;
-
-  /// No description provided for @focusChangeDurations.
-  ///
-  /// In tr, this message translates to:
-  /// **'Süreleri değiştir'**
-  String get focusChangeDurations;
-
-  /// No description provided for @focusRuleHint.
-  ///
-  /// In tr, this message translates to:
-  /// **'Başlayınca Android uygulamayı sabitlemek için onay ister; sabitliyken başka uygulamaya geçilemez. Sabitlemeden çıkıp uygulamadan ayrılırsan ya da bildirim panelini çekersen 10 saniye içinde dönmen gerekir; yoksa oturum bozulur. Ekranı kapatmak ve gelen arama sayılmaz, molada çıkmak serbest.'**
-  String get focusRuleHint;
-
-  /// No description provided for @focusSummaryFree.
-  ///
-  /// In tr, this message translates to:
-  /// **'Süre sınırı yok; bitirdiğinde dur.'**
-  String get focusSummaryFree;
-
-  /// No description provided for @focusSummaryPomodoro.
-  ///
-  /// In tr, this message translates to:
-  /// **'{work} dk odak, {rest} dk mola; {every} döngüde bir {long} dk uzun mola.'**
-  String focusSummaryPomodoro(int work, int rest, int every, int long);
-
-  /// No description provided for @focusSummaryDeep.
-  ///
-  /// In tr, this message translates to:
-  /// **'Hedef {target} dk kesintisiz odak. İstersen, o ana kadarki odak süresine göre önerilen bir mola verebilirsin.'**
-  String focusSummaryDeep(int target);
-
-  /// No description provided for @focusOwnLength.
-  ///
-  /// In tr, this message translates to:
-  /// **'Kendi süresi kadar ({minutes} dk)'**
-  String focusOwnLength(int minutes);
-
-  /// No description provided for @focusOwnLengthHint.
-  ///
-  /// In tr, this message translates to:
-  /// **'Süre dolunca oturum kendiliğinden tamamlanır.'**
-  String get focusOwnLengthHint;
-
-  /// No description provided for @focusFieldWork.
-  ///
-  /// In tr, this message translates to:
-  /// **'Odak (dk)'**
-  String get focusFieldWork;
-
-  /// No description provided for @focusFieldBreak.
-  ///
-  /// In tr, this message translates to:
-  /// **'Mola (dk)'**
-  String get focusFieldBreak;
-
-  /// No description provided for @focusFieldLongBreak.
-  ///
-  /// In tr, this message translates to:
-  /// **'Uzun mola (dk)'**
-  String get focusFieldLongBreak;
-
-  /// No description provided for @focusFieldLongEvery.
-  ///
-  /// In tr, this message translates to:
-  /// **'Uzun mola kaç döngüde bir'**
-  String get focusFieldLongEvery;
-
-  /// No description provided for @focusFieldTarget.
-  ///
-  /// In tr, this message translates to:
-  /// **'Hedef (dk)'**
-  String get focusFieldTarget;
 
   /// No description provided for @focusPause.
   ///
@@ -5580,6 +5496,132 @@ abstract class L10n {
   /// In tr, this message translates to:
   /// **'Yeniden adlandır'**
   String get catRename;
+
+  /// No description provided for @focusPhaseBlock.
+  ///
+  /// In tr, this message translates to:
+  /// **'Blok {n}/{count}'**
+  String focusPhaseBlock(int n, int count);
+
+  /// No description provided for @focusBlockPlan.
+  ///
+  /// In tr, this message translates to:
+  /// **'{total} dk odak: {count} blok, en çok {block} dk; aralarda {rest} dk mola'**
+  String focusBlockPlan(int count, int block, int rest, int total);
+
+  /// No description provided for @focusSkipTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bu iş atlansın mı?'**
+  String get focusSkipTitle;
+
+  /// No description provided for @focusSkipBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Oturum bozulmuş sayılır ve bu oturumdaki odak süresi yazılmaz.'**
+  String get focusSkipBody;
+
+  /// No description provided for @actionStartNow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şimdi başla'**
+  String get actionStartNow;
+
+  /// No description provided for @blockLabel.
+  ///
+  /// In tr, this message translates to:
+  /// **'Blok {n}/{count}'**
+  String blockLabel(int n, int count);
+
+  /// No description provided for @statusMissed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kaçırıldı'**
+  String get statusMissed;
+
+  /// No description provided for @missedMinutes.
+  ///
+  /// In tr, this message translates to:
+  /// **'{n} dk kaçırıldı'**
+  String missedMinutes(int n);
+
+  /// No description provided for @missedTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'{title} kaçırıldı'**
+  String missedTitle(String title);
+
+  /// No description provided for @missedBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geç kalma payı doldu. Şimdi başlayabilir, önerilen saate bırakabilir ya da atlayabilirsin.'**
+  String get missedBody;
+
+  /// No description provided for @missedAt.
+  ///
+  /// In tr, this message translates to:
+  /// **'Saat {clock}'**
+  String missedAt(String clock);
+
+  /// No description provided for @wizFocusBlock.
+  ///
+  /// In tr, this message translates to:
+  /// **'Blok uzunluğu'**
+  String get wizFocusBlock;
+
+  /// No description provided for @wizFocusBreak.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bloklar arası mola'**
+  String get wizFocusBreak;
+
+  /// No description provided for @wizFocusSpread.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bloklar'**
+  String get wizFocusSpread;
+
+  /// No description provided for @focusSpreadNo.
+  ///
+  /// In tr, this message translates to:
+  /// **'Üst üste'**
+  String get focusSpreadNo;
+
+  /// No description provided for @focusSpreadNoHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Molalarla arka arkaya; planda süre molalar kadar uzar.'**
+  String get focusSpreadNoHint;
+
+  /// No description provided for @focusSpreadYes.
+  ///
+  /// In tr, this message translates to:
+  /// **'Gün içine dağıt'**
+  String get focusSpreadYes;
+
+  /// No description provided for @focusSpreadYesHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Her blok aynı günün ayrı bir boşluğuna konur.'**
+  String get focusSpreadYesHint;
+
+  /// No description provided for @wizFocusGrace.
+  ///
+  /// In tr, this message translates to:
+  /// **'Geç kalma payı'**
+  String get wizFocusGrace;
+
+  /// No description provided for @wizFocusGraceHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Saati önerilen bu işte bildirime bu süre içinde dönersen oturum başlar. Geçerse iş kaydırılabiliyorsa günün ilk boşluğuna kayar, değilse atlanır.'**
+  String get wizFocusGraceHint;
+
+  /// No description provided for @sumDeep.
+  ///
+  /// In tr, this message translates to:
+  /// **'Derin çalışma · {block} dk blok, {rest} dk mola · {layout}'**
+  String sumDeep(int block, int rest, String layout);
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

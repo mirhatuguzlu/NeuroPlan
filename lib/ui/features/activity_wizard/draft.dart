@@ -78,6 +78,24 @@ class ActivityDraft {
   bool? focus;
   String focusMode = 'free';
 
+  /// Derin çalışma blok planı ve önerilen saatli işte geç kalma payı (D66).
+  int focusBlock = 50;
+  int focusBreak = 10;
+  bool focusSpread = false;
+  int focusGrace = 10;
+
+  bool get isDeep => hasFocus && focus == true && focusMode == 'deep';
+
+  /// Bloklar yalnız kesin olmayan işte gün içine dağıtılabilir.
+  bool get canSpread => isDeep && !isProject && flex != Flexibility.fixed;
+
+  /// Saati motorun önerdiği iş: bildirime geç kalma payı yalnız onda (dağıtılan bloklar da).
+  bool get hasGrace =>
+      hasFocus &&
+      focus == true &&
+      !isProject &&
+      (time == TimeType.none || (canSpread && focusSpread));
+
   DateTime? deadline;
   int totalMinutes = 0;
   int? minChunk;
@@ -235,6 +253,10 @@ class ActivityDraft {
     estimatedMinutes: Value(isProject ? null : duration),
     requiresFocus: Value(hasFocus ? focus : null),
     focusMode: Value(hasFocus && focus == true ? focusMode : null),
+    focusBlockMinutes: Value(isDeep ? focusBlock : null),
+    focusBreakMinutes: Value(isDeep ? focusBreak : null),
+    focusSpread: Value(canSpread ? focusSpread : null),
+    focusGraceMinutes: Value(hasGrace ? focusGrace : null),
   );
 
   ProjectsCompanion _project(PlanCalendar cal) {
@@ -297,7 +319,11 @@ class ActivityDraft {
       ..rootKey = a.categoryId == null ? a.rootCategoryKey : null
       ..duration = a.estimatedMinutes
       ..focus = a.requiresFocus
-      ..focusMode = a.focusMode ?? 'free';
+      ..focusMode = a.focusMode ?? 'free'
+      ..focusBlock = a.focusBlockMinutes ?? 50
+      ..focusBreak = a.focusBreakMinutes ?? 10
+      ..focusSpread = a.focusSpread ?? false
+      ..focusGrace = a.focusGraceMinutes ?? 10;
     if (data.projectOf(activityId) case final p?) {
       d
         ..deadline = p.deadlineAt == null

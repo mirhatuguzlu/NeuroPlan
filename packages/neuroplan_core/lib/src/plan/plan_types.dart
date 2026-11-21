@@ -1,3 +1,4 @@
+import '../focus/focus_clock.dart';
 import '../model/json_checks.dart';
 import '../model/recurrence.dart';
 import '../model/timing.dart';
@@ -53,6 +54,7 @@ final class PlanActivity {
     this.variantId,
     this.priority,
     this.estimatedMinutes,
+    this.blocks,
   });
 
   final String id;
@@ -63,6 +65,10 @@ final class PlanActivity {
   /// 1 (yüksek) … 3 (düşük); null = 2.
   final int? priority;
   final int? estimatedMinutes;
+
+  /// Derin çalışma blok planı (D66): süre saf odaktır, molalar planda yer kaplar; gün
+  /// içine dağıtılırsa (kesin olmayan işte) her blok ayrı oluşum olur.
+  final FocusBlocks? blocks;
 }
 
 final class PlanRule {
@@ -319,6 +325,8 @@ final class PlannedInstance {
     this.persisted = false,
     this.isManual = false,
     this.suggested = false,
+    this.block,
+    this.blocks,
   });
 
   final String id;
@@ -344,6 +352,10 @@ final class PlannedInstance {
 
   /// Saatsiz işe motorun önerdiği saat.
   final bool suggested;
+
+  /// Gün içine dağıtılan derin çalışmada bu oluşumun sırası (1'den) ve blok sayısı.
+  final int? block;
+  final int? blocks;
 
   bool get isTimed => start != null && end != null;
 }

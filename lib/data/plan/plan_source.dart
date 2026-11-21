@@ -65,6 +65,25 @@ class PlanData {
     return 'free';
   }
 
+  /// Derin çalışma blok planı (D66): yalnız odak gerektiren derin çalışma işinde.
+  FocusBlocks? focusBlocks(String activityId) {
+    final a = activities[activityId];
+    if (a == null ||
+        !requiresFocus(activityId) ||
+        focusMode(activityId) != FocusMode.deep.name) {
+      return null;
+    }
+    return FocusBlocks(
+      block: a.focusBlockMinutes ?? 50,
+      rest: a.focusBreakMinutes ?? 10,
+      spread: a.focusSpread ?? false,
+    );
+  }
+
+  /// Önerilen saatli odak işinde bildirime geç kalma payı (D66), dakika.
+  int graceMinutes(String activityId) =>
+      activities[activityId]?.focusGraceMinutes ?? 10;
+
   Project? projectOf(String activityId) =>
       projects.where((p) => p.activityId == activityId).firstOrNull;
 
@@ -93,6 +112,7 @@ class PlanData {
           variantId: a.variantId,
           priority: a.priority,
           estimatedMinutes: a.estimatedMinutes,
+          blocks: focusBlocks(a.id),
         ),
     ],
     rules: [

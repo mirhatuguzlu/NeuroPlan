@@ -53,7 +53,7 @@ class AppDatabase extends _$AppDatabase {
   final SystemData systemData;
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -84,6 +84,17 @@ class AppDatabase extends _$AppDatabase {
         await delete(categoryRegionWeights).go();
         await delete(brainRegions).go();
         await _seedBrainData();
+      }
+      if (from < 3) {
+        // D66: derin çalışma blok planı ve geç kalma payı.
+        for (final c in [
+          activities.focusBlockMinutes,
+          activities.focusBreakMinutes,
+          activities.focusSpread,
+          activities.focusGraceMinutes,
+        ]) {
+          await m.addColumn(activities, c);
+        }
       }
     },
     beforeOpen: (_) => customStatement('PRAGMA foreign_keys = ON'),

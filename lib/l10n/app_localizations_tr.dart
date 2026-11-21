@@ -1204,13 +1204,7 @@ class L10nTr extends L10n {
   String get commonCancel => 'Vazgeç';
 
   @override
-  String get actionFocus => 'Odaklan';
-
-  @override
   String get secFocus => 'Odak';
-
-  @override
-  String get focusStart => 'Başla';
 
   @override
   String get focusMissingTitle => 'Bu iş artık planda yok';
@@ -1218,50 +1212,6 @@ class L10nTr extends L10n {
   @override
   String get focusMissingBody =>
       'Plan değişmiş olabilir. Bugün ekranından yeniden seç.';
-
-  @override
-  String get focusChangeDurations => 'Süreleri değiştir';
-
-  @override
-  String get focusRuleHint =>
-      'Başlayınca Android uygulamayı sabitlemek için onay ister; sabitliyken başka uygulamaya geçilemez. Sabitlemeden çıkıp uygulamadan ayrılırsan ya da bildirim panelini çekersen 10 saniye içinde dönmen gerekir; yoksa oturum bozulur. Ekranı kapatmak ve gelen arama sayılmaz, molada çıkmak serbest.';
-
-  @override
-  String get focusSummaryFree => 'Süre sınırı yok; bitirdiğinde dur.';
-
-  @override
-  String focusSummaryPomodoro(int work, int rest, int every, int long) {
-    return '$work dk odak, $rest dk mola; $every döngüde bir $long dk uzun mola.';
-  }
-
-  @override
-  String focusSummaryDeep(int target) {
-    return 'Hedef $target dk kesintisiz odak. İstersen, o ana kadarki odak süresine göre önerilen bir mola verebilirsin.';
-  }
-
-  @override
-  String focusOwnLength(int minutes) {
-    return 'Kendi süresi kadar ($minutes dk)';
-  }
-
-  @override
-  String get focusOwnLengthHint =>
-      'Süre dolunca oturum kendiliğinden tamamlanır.';
-
-  @override
-  String get focusFieldWork => 'Odak (dk)';
-
-  @override
-  String get focusFieldBreak => 'Mola (dk)';
-
-  @override
-  String get focusFieldLongBreak => 'Uzun mola (dk)';
-
-  @override
-  String get focusFieldLongEvery => 'Uzun mola kaç döngüde bir';
-
-  @override
-  String get focusFieldTarget => 'Hedef (dk)';
 
   @override
   String get focusPause => 'Duraklat';
@@ -3488,4 +3438,86 @@ class L10nTr extends L10n {
 
   @override
   String get catRename => 'Yeniden adlandır';
+
+  @override
+  String focusPhaseBlock(int n, int count) {
+    return 'Blok $n/$count';
+  }
+
+  @override
+  String focusBlockPlan(int count, int block, int rest, int total) {
+    return '$total dk odak: $count blok, en çok $block dk; aralarda $rest dk mola';
+  }
+
+  @override
+  String get focusSkipTitle => 'Bu iş atlansın mı?';
+
+  @override
+  String get focusSkipBody =>
+      'Oturum bozulmuş sayılır ve bu oturumdaki odak süresi yazılmaz.';
+
+  @override
+  String get actionStartNow => 'Şimdi başla';
+
+  @override
+  String blockLabel(int n, int count) {
+    return 'Blok $n/$count';
+  }
+
+  @override
+  String get statusMissed => 'Kaçırıldı';
+
+  @override
+  String missedMinutes(int n) {
+    return '$n dk kaçırıldı';
+  }
+
+  @override
+  String missedTitle(String title) {
+    return '$title kaçırıldı';
+  }
+
+  @override
+  String get missedBody =>
+      'Geç kalma payı doldu. Şimdi başlayabilir, önerilen saate bırakabilir ya da atlayabilirsin.';
+
+  @override
+  String missedAt(String clock) {
+    return 'Saat $clock';
+  }
+
+  @override
+  String get wizFocusBlock => 'Blok uzunluğu';
+
+  @override
+  String get wizFocusBreak => 'Bloklar arası mola';
+
+  @override
+  String get wizFocusSpread => 'Bloklar';
+
+  @override
+  String get focusSpreadNo => 'Üst üste';
+
+  @override
+  String get focusSpreadNoHint =>
+      'Molalarla arka arkaya; planda süre molalar kadar uzar.';
+
+  @override
+  String get focusSpreadYes => 'Gün içine dağıt';
+
+  @override
+  String get focusSpreadYesHint =>
+      'Her blok aynı günün ayrı bir boşluğuna konur.';
+
+  @override
+  String get wizFocusGrace => 'Geç kalma payı';
+
+  @override
+  String get wizFocusGraceHint =>
+      'Saati önerilen bu işte bildirime bu süre içinde dönersen oturum başlar. Geçerse iş kaydırılabiliyorsa günün ilk boşluğuna kayar, değilse atlanır.';
+
+  @override
+  String sumDeep(int block, int rest, String layout) {
+    return 'Derin çalışma · $block dk blok, $rest dk mola · $layout';
+  }
 }

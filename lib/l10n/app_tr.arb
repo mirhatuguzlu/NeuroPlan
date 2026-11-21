@@ -674,53 +674,9 @@
   "widgetNone": "Sıradaki iş yok",
   "widgetNow": "Şimdi başlıyor",
   "commonCancel": "Vazgeç",
-  "actionFocus": "Odaklan",
   "secFocus": "Odak",
-  "focusStart": "Başla",
   "focusMissingTitle": "Bu iş artık planda yok",
   "focusMissingBody": "Plan değişmiş olabilir. Bugün ekranından yeniden seç.",
-  "focusChangeDurations": "Süreleri değiştir",
-  "focusRuleHint": "Başlayınca Android uygulamayı sabitlemek için onay ister; sabitliyken başka uygulamaya geçilemez. Sabitlemeden çıkıp uygulamadan ayrılırsan ya da bildirim panelini çekersen 10 saniye içinde dönmen gerekir; yoksa oturum bozulur. Ekranı kapatmak ve gelen arama sayılmaz, molada çıkmak serbest.",
-  "focusSummaryFree": "Süre sınırı yok; bitirdiğinde dur.",
-  "focusSummaryPomodoro": "{work} dk odak, {rest} dk mola; {every} döngüde bir {long} dk uzun mola.",
-  "@focusSummaryPomodoro": {
-    "placeholders": {
-      "work": {
-        "type": "int"
-      },
-      "rest": {
-        "type": "int"
-      },
-      "every": {
-        "type": "int"
-      },
-      "long": {
-        "type": "int"
-      }
-    }
-  },
-  "focusSummaryDeep": "Hedef {target} dk kesintisiz odak. İstersen, o ana kadarki odak süresine göre önerilen bir mola verebilirsin.",
-  "@focusSummaryDeep": {
-    "placeholders": {
-      "target": {
-        "type": "int"
-      }
-    }
-  },
-  "focusOwnLength": "Kendi süresi kadar ({minutes} dk)",
-  "@focusOwnLength": {
-    "placeholders": {
-      "minutes": {
-        "type": "int"
-      }
-    }
-  },
-  "focusOwnLengthHint": "Süre dolunca oturum kendiliğinden tamamlanır.",
-  "focusFieldWork": "Odak (dk)",
-  "focusFieldBreak": "Mola (dk)",
-  "focusFieldLongBreak": "Uzun mola (dk)",
-  "focusFieldLongEvery": "Uzun mola kaç döngüde bir",
-  "focusFieldTarget": "Hedef (dk)",
   "focusPause": "Duraklat",
   "focusResume": "Devam",
   "focusFinish": "Bitir",
@@ -2300,5 +2256,96 @@
   },
   "editHistoryNote": "Saat, tekrar, süre ve esneklik değişiklikleri bugünden itibaren geçerli; geçmiş günler olduğu gibi kalır.",
   "editMissing": "Silinmiş olabilir.",
-  "catRename": "Yeniden adlandır"
+  "catRename": "Yeniden adlandır",
+  "focusPhaseBlock": "Blok {n}/{count}",
+  "@focusPhaseBlock": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "focusBlockPlan": "{total} dk odak: {count} blok, en çok {block} dk; aralarda {rest} dk mola",
+  "@focusBlockPlan": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "block": {
+        "type": "int"
+      },
+      "rest": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "focusSkipTitle": "Bu iş atlansın mı?",
+  "focusSkipBody": "Oturum bozulmuş sayılır ve bu oturumdaki odak süresi yazılmaz.",
+  "actionStartNow": "Şimdi başla",
+  "blockLabel": "Blok {n}/{count}",
+  "@blockLabel": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "statusMissed": "Kaçırıldı",
+  "missedMinutes": "{n} dk kaçırıldı",
+  "@missedMinutes": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "missedTitle": "{title} kaçırıldı",
+  "@missedTitle": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "missedBody": "Geç kalma payı doldu. Şimdi başlayabilir, önerilen saate bırakabilir ya da atlayabilirsin.",
+  "missedAt": "Saat {clock}",
+  "@missedAt": {
+    "placeholders": {
+      "clock": {
+        "type": "String"
+      }
+    }
+  },
+  "wizFocusBlock": "Blok uzunluğu",
+  "wizFocusBreak": "Bloklar arası mola",
+  "wizFocusSpread": "Bloklar",
+  "focusSpreadNo": "Üst üste",
+  "focusSpreadNoHint": "Molalarla arka arkaya; planda süre molalar kadar uzar.",
+  "focusSpreadYes": "Gün içine dağıt",
+  "focusSpreadYesHint": "Her blok aynı günün ayrı bir boşluğuna konur.",
+  "wizFocusGrace": "Geç kalma payı",
+  "wizFocusGraceHint": "Saati önerilen bu işte bildirime bu süre içinde dönersen oturum başlar. Geçerse iş kaydırılabiliyorsa günün ilk boşluğuna kayar, değilse atlanır.",
+  "sumDeep": "Derin çalışma · {block} dk blok, {rest} dk mola · {layout}",
+  "@sumDeep": {
+    "placeholders": {
+      "block": {
+        "type": "int"
+      },
+      "rest": {
+        "type": "int"
+      },
+      "layout": {
+        "type": "String"
+      }
+    }
+  }
 }

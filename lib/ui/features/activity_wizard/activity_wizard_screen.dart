@@ -642,6 +642,57 @@ class _ActivityWizardState extends ConsumerState<ActivityWizardScreen> {
             ],
             onChanged: (m) => _set(() => d.focusMode = m),
           ),
+          // Derin çalışma blok planı (D66): süre saf odaktır, molalar süreyi uzatır.
+          if (d.isDeep) ...[
+            const SizedBox(height: Gap.l),
+            MinuteChips(
+              label: l.wizFocusBlock,
+              value: d.focusBlock,
+              options: const [25, 40, 50, 60, 90],
+              onChanged: (v) => _set(() => d.focusBlock = v),
+            ),
+            MinuteChips(
+              label: l.wizFocusBreak,
+              value: d.focusBreak,
+              options: const [5, 10, 15, 20],
+              onChanged: (v) => _set(() => d.focusBreak = v),
+            ),
+            if (d.duration case final m? when m > 0)
+              _hint(
+                l.focusBlockPlan(
+                  FocusBlocks.countOf(m, d.focusBlock),
+                  d.focusBlock,
+                  d.focusBreak,
+                  m,
+                ),
+                error: false,
+              ),
+            if (d.canSpread) ...[
+              const SizedBox(height: Gap.m),
+              Text(
+                l.wizFocusSpread,
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              ChoiceList<bool>(
+                value: d.focusSpread,
+                options: [
+                  (false, l.focusSpreadNo, l.focusSpreadNoHint),
+                  (true, l.focusSpreadYes, l.focusSpreadYesHint),
+                ],
+                onChanged: (v) => _set(() => d.focusSpread = v),
+              ),
+            ],
+          ],
+          if (d.hasGrace) ...[
+            const SizedBox(height: Gap.l),
+            MinuteChips(
+              label: l.wizFocusGrace,
+              value: d.focusGrace,
+              options: const [5, 10, 15, 30],
+              onChanged: (v) => _set(() => d.focusGrace = v),
+            ),
+            _hint(l.wizFocusGraceHint, error: false),
+          ],
         ],
       ],
     ),
@@ -837,7 +888,13 @@ class ActivitySummary extends ConsumerWidget {
           switch (d.focus) {
             true => switch (d.focusMode) {
               'pomodoro' => l.modePomodoro,
-              'deep' => l.modeDeep,
+              'deep' => l.sumDeep(
+                d.focusBlock,
+                d.focusBreak,
+                d.canSpread && d.focusSpread
+                    ? l.focusSpreadYes
+                    : l.focusSpreadNo,
+              ),
               _ => l.modeFree,
             },
             false => l.focusNo,

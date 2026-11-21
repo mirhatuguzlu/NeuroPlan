@@ -128,6 +128,59 @@ void main() {
     });
   });
 
+  group('blok planlı derin çalışma (D66)', () {
+    const deep = FocusSettings(
+      FocusMode.deep,
+      target: 120,
+      block: 50,
+      rest: 10,
+    );
+
+    test('blok sonunda mola başlar, mola bitince bekler', () {
+      final c = FocusClock.start(deep, t0);
+      expect(deep.blockCount, 3);
+      expect(c.nextBoundary(at(10)), at(50));
+      final b = c.advance(at(55));
+      expect(b.phase, FocusPhase.onBreak);
+      expect(b.breakLength(at(55)), const Duration(minutes: 10));
+      expect(b.advance(at(61)).phase, FocusPhase.breakOver);
+    });
+
+    test('son blok hedefte biter; mola açılmaz, hedef anı bilinir', () {
+      var c = FocusClock.start(deep, t0).advance(at(60)).resumeWork(at(60));
+      c = c.advance(at(120)).resumeWork(at(120)); // 2. blok 60–110, mola 110–120
+      expect(c.cycle, 3);
+      expect(c.nextBoundary(at(121)), at(140)); // kalan 20 dk
+      final end = c.advance(at(150));
+      expect(end.phase, FocusPhase.working);
+      expect(end.targetReachedAt(at(150)), at(140));
+      expect(c.targetReachedAt(at(130)), isNull);
+    });
+
+    test('saatler sonra açılış: ilk blok kapanır, mola biter, bekler', () {
+      final c = FocusClock.start(deep, t0).advance(at(300));
+      expect(c.phase, FocusPhase.breakOver);
+      expect(c.focused(at(300)), const Duration(minutes: 50));
+    });
+
+    test('JSON: blok ve mola döner; eski kayıtta blok yok', () {
+      final back = FocusSettings.fromJson(FocusMode.deep, deep.toJson());
+      expect((back.target, back.block, back.rest), (120, 50, 10));
+      final old = FocusSettings.fromJson(FocusMode.deep, {'target': 90});
+      expect(old.blocked, isFalse);
+    });
+
+    test('FocusBlocks: planda kaplanan süre ve tersi', () {
+      const b = FocusBlocks();
+      expect(b.span(120), 140);
+      expect(b.focusOf(140), 120);
+      expect(b.span(50), 50);
+      expect(b.focusOf(55), 50);
+      expect(b.parts(120), [50, 50, 20]);
+      expect(FocusBlocks.countOf(5, 50), 1);
+    });
+  });
+
   test('gap: molada ve duraklatmada değişmez', () {
     final onBreak = FocusClock.start(pomodoro, t0).advance(at(26));
     expect(onBreak.gap(at(26), at(27)).segments, onBreak.segments);

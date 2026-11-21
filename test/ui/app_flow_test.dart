@@ -35,7 +35,9 @@ void main() {
     await h.tap(find.text('Müzik ve Ritim'));
     await h.tap(find.text('İleri'));
     await h.tap(find.text('İleri')); // her gün
-    await h.tap(find.text('İleri')); // sabit saat
+    // Saati olmayan odak işi Bugün'den "Şimdi başla" ile açılır (D66).
+    await h.tap(find.text('Saat yok, gün içinde bir ara'));
+    await h.tap(find.text('İleri'));
     await h.tap(find.text('Şimdilik geç')); // esneklik
     await h.tap(find.text('İleri')); // süre
     await h.tap(find.text('Şimdilik geç')); // varyant
@@ -58,8 +60,7 @@ void main() {
       scrollable: find.byType(Scrollable).first,
     );
     await h.tap(find.text('Gitar').last);
-    await h.tap(find.text('Odaklan'));
-    await h.tap(find.text('Başla'));
+    await h.tap(find.text('Şimdi başla'));
     Harness.focusNow = Harness.focusNow.add(const Duration(minutes: 10));
     await t.pump(const Duration(seconds: 1));
     await h.tap(find.text('Bitir'));

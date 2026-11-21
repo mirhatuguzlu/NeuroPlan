@@ -26,6 +26,15 @@ class PrefsRepository {
   /// Bugün kullanılan acil durum hakkı: `YYYY-MM-DD:n` (D34).
   static const focusEmergency = 'focus.emergency';
 
+  /// Önerilen saatli odak işlerinin son görülen başlangıcı: `{"<oluşum>": utcDakika}`.
+  /// Motor saati geçen öneriyi "şimdi"den sonraya kaydırır; geç kalma payı buna göre
+  /// hesaplanır (D66).
+  static const focusStarts = 'focus.starts';
+
+  /// Kaçırılan kesin saatli odak işinin bozulma sayıldığı ilk an (UTC dakika); öncesi
+  /// geriye dönük cezalandırılmaz (D66).
+  static const focusMissedSince = 'focus.missed_since';
+
   Stream<String?> watch(String key) =>
       (_db.select(_db.syncState)..where((s) => s.key.equals(key)))
           .watchSingleOrNull()

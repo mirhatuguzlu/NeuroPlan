@@ -171,6 +171,7 @@ class FocusController extends Notifier<FocusState> {
     }
     await _comeBack(_now());
     if (_session == null) return;
+    if (_clock!.targetReachedAt(_now()) case final at?) return _complete(at);
     await _syncArm(_now()); // sabitleme süreç ölünce gitmiş olabilir
     if (await _prefs.get(PrefsRepository.focusDnd) == '1') {
       await _safe(_platform.enableDnd);
@@ -195,7 +196,8 @@ class FocusController extends Notifier<FocusState> {
   /// [startAt]: ortak odakta sunucunun başlangıç anı (cihaz saatine çevrilmiş); sayaçlar
   /// senkron başlar. En çok 2 dk geriye alınır, ileri tarih yok sayılır.
   /// [ownMinutes]: "kendi süresi kadar" — oturum başlangıçtan bu kadar sonra kendiliğinden
-  /// tamamlanır; derin çalışma hedefi de bu süre olur (kayıtlı hedef değişmez).
+  /// tamamlanır; derin çalışma hedefi de bu süre olur (kayıtlı hedef değişmez). Blok
+  /// planlı derin çalışmada süre saf odaktır: oturum hedefe ulaşınca biter (D66).
   Future<void> start({
     required PlannedInstance instance,
     required FocusSettings settings,
@@ -246,7 +248,9 @@ class FocusController extends Notifier<FocusState> {
             isUtc: true,
           )
         : null;
-    _plannedEnd = startAt == null && ownMinutes != null && ownMinutes > 0
+    // Blok planlı derin çalışma hedefte biter (molalar süreyi uzatır); öbürleri sürede.
+    _plannedEnd =
+        startAt == null && ownMinutes != null && ownMinutes > 0 && !run.blocked
         ? now.add(Duration(minutes: ownMinutes))
         : startAt == null &&
               end != null &&
@@ -309,6 +313,29 @@ class FocusController extends Notifier<FocusState> {
   });
 
   Future<void> finish() => _run(() => _complete(_now()));
+
+  /// Sayaçtaki "Atla" (D66): oturum bozulmuş sayılır, odak süresi yazılmaz, iş atlanır.
+  Future<void> skip() => _run(() async {
+    final s = _session;
+    if (s == null) return;
+    final now = _now();
+    final clock = _clock!.advance(now).close(now);
+    _clock = clock;
+    await ref
+        .read(focusRepositoryProvider)
+        .finish(
+          s.id,
+          outcome: 'broken',
+          focusedSeconds: 0,
+          segments: clock.toJson(),
+          endedAt: now,
+        );
+    if (s.planInstanceId case final id?) {
+      await ref.read(planRepositoryProvider).setStatus(id, 'skipped');
+    }
+    await _brainEvents(s);
+    await _end(s.id, 'broken');
+  });
 
   void _scheduleEnd() {
     _endTimer?.cancel();
@@ -610,6 +637,8 @@ class FocusController extends Notifier<FocusState> {
     if (broken != null) return _break(broken);
     final before = _clock!;
     await _advance(now);
+    // Blok planlı derin çalışma hedefe ulaşınca kendiliğinden tamamlanır (D66).
+    if (_clock!.targetReachedAt(now) case final at?) return _complete(at);
     final after = _clock!.phase;
     final l = _l;
     final (title, body) = switch ((before.phase, after)) {

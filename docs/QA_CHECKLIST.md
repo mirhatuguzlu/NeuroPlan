@@ -319,3 +319,17 @@ Hazırlık: 2–3 dk sonra başlayan, 5 dk süren, "odak gerektirir" bir iş ve 
 - [ ] Anahtarı kapat → kayıtlı hedef (ör. 90 dk) geri gelir; süresi olmayan işte anahtar görünmez.
 - [ ] Molaya geç, uygulamayı arka plana al (ya da son uygulamalardan süpür) → mola bitince "Mola bitti" bildirimi gelir.
 - [ ] Molayı erken bitir → mola bitiş saatinde bildirim gelmez.
+
+## I. Derin çalışma blokları, bildirimle başlatma, kaçırma (D66)
+
+- [ ] Sihirbaz → odak → derin çalışma: blok 50, mola 10; 120 dk'lık kesin saatli iş planda 10:00–12:20 görünür.
+- [ ] Saatinde bildirim gelir, uygulama kapalıysa dokununca sayaç açılır: "Blok 1/3", "120 dk odak: 3 blok…".
+- [ ] 50. dakikada mola başlar; uygulamadan çık, mola bitince "Mola bitti" bildirimi gelir, dokununca odak sürer.
+- [ ] Hedefe ulaşınca oturum kendiliğinden tamamlanır.
+- [ ] Bugün satırında odak işinde Odaklan / Bitti / Atla yok; sayaçta Bitir ve Atla var. Atla onay ister, sonuç "bozuldu".
+- [ ] Kesin saatli işe 15 dk geç gir: oturum hemen başlar, satırda "15 dk kaçırıldı", iş planlanan bitişte biter, sonraki işler kaymaz.
+- [ ] Kesin saatli işe hiç girme: bitişten sonra açılışta satır "Kaçırıldı", beyinde bozulma etkisi.
+- [ ] Kaydırılabilir, saatsiz, dağıtılan derin çalışma: bloklar günün ayrı boşluklarında "Blok 2/3".
+- [ ] Önerilen saatli işte bildirime 10 dk içinde dokun → başlar; 15 dk sonra dokun → "Şimdi başlat / Saat … / Atla" sorusu.
+- [ ] Payı geçen kaydırılabilir iş kendiliğinden ilk boşluğa kayar ve yeni saatinde yeniden bildirim gelir.
+- [ ] Sunucu migration'ı uygulandıktan sonra giriş yapılı hesapta iş düzenlemesi eşitlenir.

@@ -1,29 +1,38 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:neuroplan/app/providers.dart';
+import 'package:neuroplan/ui/features/activity_wizard/draft.dart';
+import 'package:neuroplan_core/neuroplan_core.dart';
 
 import 'harness.dart';
-import 'screens_test.dart' show addDaily;
 
 void main() {
-  Future<Harness> openStart(WidgetTester t) async {
-    final h = await pumpApp(t, seed: (c) => addDaily(c, 'Okuma', focus: true));
+  /// Saati olmayan odak işi: Bugün satırındaki "Şimdi başla" doğrudan sayacı açar (D66).
+  Future<Harness> openStart(WidgetTester t, {String mode = 'free'}) async {
+    final h = await pumpApp(
+      t,
+      seed: (c) =>
+          (ActivityDraft(testNow)
+                ..title = 'Okuma'
+                ..rootKey = 'learning_memory'
+                ..time = TimeType.none
+                ..focus = true
+                ..focusMode = mode)
+              .save(
+                c.read(databaseProvider),
+                c.read(activityRepositoryProvider),
+                PlanCalendar('Europe/Istanbul'),
+              ),
+    );
     await h.tap(find.text('Okuma').last);
-    await h.tap(find.text('Odaklan'));
+    await h.tap(find.text('Şimdi başla'));
     return h;
   }
 
-  testWidgets('Odaklan → mod → Başla → sayaç; Bitir → 4 adım → Bugün', (
+  testWidgets('Şimdi başla → işin modunda sayaç; Bitir → 4 adım → Bugün', (
     t,
   ) async {
-    final h = await openStart(t);
-    expect(find.text('Başla'), findsOneWidget);
-    expect(find.textContaining('Süre sınırı yok'), findsOneWidget);
-    await h.expectAccessible();
-
-    await h.tap(find.text('Pomodoro'));
-    expect(find.textContaining('25 dk odak, 5 dk mola'), findsOneWidget);
-    await h.tap(find.text('Başla'));
+    final h = await openStart(t, mode: 'pomodoro');
     expect(find.text('Duraklat'), findsOneWidget);
     expect(find.text('25:00'), findsOneWidget);
     expect(find.text('Odak · 1. döngü'), findsOneWidget);
@@ -51,7 +60,7 @@ void main() {
     expect(find.textContaining('beyninin ölçümü değildir'), findsOneWidget);
     await h.expectAccessible();
     await h.tap(find.text('Bitti'));
-    expect(find.text('Sıradaki'), findsOneWidget);
+    expect(find.text('Okuma'), findsWidgets); // Bugün'e dönüldü
 
     final s = (await t.runAsync(
       () => h.read(focusRepositoryProvider).watchSessions().first,
@@ -64,7 +73,6 @@ void main() {
     '10 sn içinde dönülmezse sakin "bozuldu" ekranı, yeniden başlat',
     (t) async {
       final h = await openStart(t);
-      await h.tap(find.text('Başla'));
       expect(find.text('Duraklat'), findsOneWidget);
 
       Harness.focusNow = Harness.focusNow.add(const Duration(minutes: 3));
@@ -82,7 +90,7 @@ void main() {
       await h.expectAccessible();
 
       await h.tap(find.text('Yeniden başlat'));
-      expect(find.text('Başla'), findsOneWidget);
+      expect(find.text('Duraklat'), findsOneWidget);
     },
   );
 

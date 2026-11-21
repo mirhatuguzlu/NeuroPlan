@@ -227,6 +227,46 @@ class ChoiceList<T> extends StatelessWidget {
   );
 }
 
+/// Hazır dakika değerleri arasından tek seçim (sayaçlı +/- yerine; daha az dokunuş).
+class MinuteChips extends StatelessWidget {
+  const MinuteChips({
+    super.key,
+    required this.label,
+    required this.value,
+    required this.options,
+    required this.onChanged,
+  });
+
+  final String label;
+  final int value;
+  final List<int> options;
+  final ValueChanged<int> onChanged;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(bottom: Gap.m),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: Theme.of(context).textTheme.titleSmall),
+        const SizedBox(height: Gap.xs),
+        Wrap(
+          spacing: Gap.s,
+          runSpacing: Gap.s,
+          children: [
+            for (final o in {...options, value}.toList()..sort())
+              ChoiceChip(
+                label: Text(context.l10n.minutesShort(o)),
+                selected: o == value,
+                onSelected: (_) => onChanged(o),
+              ),
+          ],
+        ),
+      ],
+    ),
+  );
+}
+
 /// Saat seçen satır; sistem saat seçicisini açar (D29).
 class TimeTile extends StatelessWidget {
   const TimeTile({

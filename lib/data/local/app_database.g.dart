@@ -5135,6 +5135,53 @@ class $ActivitiesTable extends Activities
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _focusBlockMinutesMeta = const VerificationMeta(
+    'focusBlockMinutes',
+  );
+  @override
+  late final GeneratedColumn<int> focusBlockMinutes = GeneratedColumn<int>(
+    'focus_block_minutes',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _focusBreakMinutesMeta = const VerificationMeta(
+    'focusBreakMinutes',
+  );
+  @override
+  late final GeneratedColumn<int> focusBreakMinutes = GeneratedColumn<int>(
+    'focus_break_minutes',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _focusSpreadMeta = const VerificationMeta(
+    'focusSpread',
+  );
+  @override
+  late final GeneratedColumn<bool> focusSpread = GeneratedColumn<bool>(
+    'focus_spread',
+    aliasedName,
+    true,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("focus_spread" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _focusGraceMinutesMeta = const VerificationMeta(
+    'focusGraceMinutes',
+  );
+  @override
+  late final GeneratedColumn<int> focusGraceMinutes = GeneratedColumn<int>(
+    'focus_grace_minutes',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _sortOrderMeta = const VerificationMeta(
     'sortOrder',
   );
@@ -5165,6 +5212,10 @@ class $ActivitiesTable extends Activities
     priority,
     requiresFocus,
     focusMode,
+    focusBlockMinutes,
+    focusBreakMinutes,
+    focusSpread,
+    focusGraceMinutes,
     sortOrder,
   ];
   @override
@@ -5284,6 +5335,42 @@ class $ActivitiesTable extends Activities
         focusMode.isAcceptableOrUnknown(data['focus_mode']!, _focusModeMeta),
       );
     }
+    if (data.containsKey('focus_block_minutes')) {
+      context.handle(
+        _focusBlockMinutesMeta,
+        focusBlockMinutes.isAcceptableOrUnknown(
+          data['focus_block_minutes']!,
+          _focusBlockMinutesMeta,
+        ),
+      );
+    }
+    if (data.containsKey('focus_break_minutes')) {
+      context.handle(
+        _focusBreakMinutesMeta,
+        focusBreakMinutes.isAcceptableOrUnknown(
+          data['focus_break_minutes']!,
+          _focusBreakMinutesMeta,
+        ),
+      );
+    }
+    if (data.containsKey('focus_spread')) {
+      context.handle(
+        _focusSpreadMeta,
+        focusSpread.isAcceptableOrUnknown(
+          data['focus_spread']!,
+          _focusSpreadMeta,
+        ),
+      );
+    }
+    if (data.containsKey('focus_grace_minutes')) {
+      context.handle(
+        _focusGraceMinutesMeta,
+        focusGraceMinutes.isAcceptableOrUnknown(
+          data['focus_grace_minutes']!,
+          _focusGraceMinutesMeta,
+        ),
+      );
+    }
     if (data.containsKey('sort_order')) {
       context.handle(
         _sortOrderMeta,
@@ -5365,6 +5452,22 @@ class $ActivitiesTable extends Activities
         DriftSqlType.string,
         data['${effectivePrefix}focus_mode'],
       ),
+      focusBlockMinutes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}focus_block_minutes'],
+      ),
+      focusBreakMinutes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}focus_break_minutes'],
+      ),
+      focusSpread: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}focus_spread'],
+      ),
+      focusGraceMinutes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}focus_grace_minutes'],
+      ),
       sortOrder: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}sort_order'],
@@ -5398,6 +5501,12 @@ class Activity extends DataClass implements Insertable<Activity> {
   final int? priority;
   final bool? requiresFocus;
   final String? focusMode;
+
+  /// Derin çalışma blok planı ve geç kalma payı (D66); null = varsayılan.
+  final int? focusBlockMinutes;
+  final int? focusBreakMinutes;
+  final bool? focusSpread;
+  final int? focusGraceMinutes;
   final int sortOrder;
   const Activity({
     required this.id,
@@ -5416,6 +5525,10 @@ class Activity extends DataClass implements Insertable<Activity> {
     this.priority,
     this.requiresFocus,
     this.focusMode,
+    this.focusBlockMinutes,
+    this.focusBreakMinutes,
+    this.focusSpread,
+    this.focusGraceMinutes,
     required this.sortOrder,
   });
   @override
@@ -5461,6 +5574,18 @@ class Activity extends DataClass implements Insertable<Activity> {
     if (!nullToAbsent || focusMode != null) {
       map['focus_mode'] = Variable<String>(focusMode);
     }
+    if (!nullToAbsent || focusBlockMinutes != null) {
+      map['focus_block_minutes'] = Variable<int>(focusBlockMinutes);
+    }
+    if (!nullToAbsent || focusBreakMinutes != null) {
+      map['focus_break_minutes'] = Variable<int>(focusBreakMinutes);
+    }
+    if (!nullToAbsent || focusSpread != null) {
+      map['focus_spread'] = Variable<bool>(focusSpread);
+    }
+    if (!nullToAbsent || focusGraceMinutes != null) {
+      map['focus_grace_minutes'] = Variable<int>(focusGraceMinutes);
+    }
     map['sort_order'] = Variable<int>(sortOrder);
     return map;
   }
@@ -5503,6 +5628,18 @@ class Activity extends DataClass implements Insertable<Activity> {
       focusMode: focusMode == null && nullToAbsent
           ? const Value.absent()
           : Value(focusMode),
+      focusBlockMinutes: focusBlockMinutes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(focusBlockMinutes),
+      focusBreakMinutes: focusBreakMinutes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(focusBreakMinutes),
+      focusSpread: focusSpread == null && nullToAbsent
+          ? const Value.absent()
+          : Value(focusSpread),
+      focusGraceMinutes: focusGraceMinutes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(focusGraceMinutes),
       sortOrder: Value(sortOrder),
     );
   }
@@ -5533,6 +5670,10 @@ class Activity extends DataClass implements Insertable<Activity> {
       priority: serializer.fromJson<int?>(json['priority']),
       requiresFocus: serializer.fromJson<bool?>(json['requires_focus']),
       focusMode: serializer.fromJson<String?>(json['focus_mode']),
+      focusBlockMinutes: serializer.fromJson<int?>(json['focus_block_minutes']),
+      focusBreakMinutes: serializer.fromJson<int?>(json['focus_break_minutes']),
+      focusSpread: serializer.fromJson<bool?>(json['focus_spread']),
+      focusGraceMinutes: serializer.fromJson<int?>(json['focus_grace_minutes']),
       sortOrder: serializer.fromJson<int>(json['sort_order']),
     );
   }
@@ -5558,6 +5699,10 @@ class Activity extends DataClass implements Insertable<Activity> {
       'priority': serializer.toJson<int?>(priority),
       'requires_focus': serializer.toJson<bool?>(requiresFocus),
       'focus_mode': serializer.toJson<String?>(focusMode),
+      'focus_block_minutes': serializer.toJson<int?>(focusBlockMinutes),
+      'focus_break_minutes': serializer.toJson<int?>(focusBreakMinutes),
+      'focus_spread': serializer.toJson<bool?>(focusSpread),
+      'focus_grace_minutes': serializer.toJson<int?>(focusGraceMinutes),
       'sort_order': serializer.toJson<int>(sortOrder),
     };
   }
@@ -5579,6 +5724,10 @@ class Activity extends DataClass implements Insertable<Activity> {
     Value<int?> priority = const Value.absent(),
     Value<bool?> requiresFocus = const Value.absent(),
     Value<String?> focusMode = const Value.absent(),
+    Value<int?> focusBlockMinutes = const Value.absent(),
+    Value<int?> focusBreakMinutes = const Value.absent(),
+    Value<bool?> focusSpread = const Value.absent(),
+    Value<int?> focusGraceMinutes = const Value.absent(),
     int? sortOrder,
   }) => Activity(
     id: id ?? this.id,
@@ -5605,6 +5754,16 @@ class Activity extends DataClass implements Insertable<Activity> {
         ? requiresFocus.value
         : this.requiresFocus,
     focusMode: focusMode.present ? focusMode.value : this.focusMode,
+    focusBlockMinutes: focusBlockMinutes.present
+        ? focusBlockMinutes.value
+        : this.focusBlockMinutes,
+    focusBreakMinutes: focusBreakMinutes.present
+        ? focusBreakMinutes.value
+        : this.focusBreakMinutes,
+    focusSpread: focusSpread.present ? focusSpread.value : this.focusSpread,
+    focusGraceMinutes: focusGraceMinutes.present
+        ? focusGraceMinutes.value
+        : this.focusGraceMinutes,
     sortOrder: sortOrder ?? this.sortOrder,
   );
   Activity copyWithCompanion(ActivitiesCompanion data) {
@@ -5637,6 +5796,18 @@ class Activity extends DataClass implements Insertable<Activity> {
           ? data.requiresFocus.value
           : this.requiresFocus,
       focusMode: data.focusMode.present ? data.focusMode.value : this.focusMode,
+      focusBlockMinutes: data.focusBlockMinutes.present
+          ? data.focusBlockMinutes.value
+          : this.focusBlockMinutes,
+      focusBreakMinutes: data.focusBreakMinutes.present
+          ? data.focusBreakMinutes.value
+          : this.focusBreakMinutes,
+      focusSpread: data.focusSpread.present
+          ? data.focusSpread.value
+          : this.focusSpread,
+      focusGraceMinutes: data.focusGraceMinutes.present
+          ? data.focusGraceMinutes.value
+          : this.focusGraceMinutes,
       sortOrder: data.sortOrder.present ? data.sortOrder.value : this.sortOrder,
     );
   }
@@ -5660,13 +5831,17 @@ class Activity extends DataClass implements Insertable<Activity> {
           ..write('priority: $priority, ')
           ..write('requiresFocus: $requiresFocus, ')
           ..write('focusMode: $focusMode, ')
+          ..write('focusBlockMinutes: $focusBlockMinutes, ')
+          ..write('focusBreakMinutes: $focusBreakMinutes, ')
+          ..write('focusSpread: $focusSpread, ')
+          ..write('focusGraceMinutes: $focusGraceMinutes, ')
           ..write('sortOrder: $sortOrder')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
+  int get hashCode => Object.hashAll([
     id,
     createdAt,
     updatedAt,
@@ -5683,8 +5858,12 @@ class Activity extends DataClass implements Insertable<Activity> {
     priority,
     requiresFocus,
     focusMode,
+    focusBlockMinutes,
+    focusBreakMinutes,
+    focusSpread,
+    focusGraceMinutes,
     sortOrder,
-  );
+  ]);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -5705,6 +5884,10 @@ class Activity extends DataClass implements Insertable<Activity> {
           other.priority == this.priority &&
           other.requiresFocus == this.requiresFocus &&
           other.focusMode == this.focusMode &&
+          other.focusBlockMinutes == this.focusBlockMinutes &&
+          other.focusBreakMinutes == this.focusBreakMinutes &&
+          other.focusSpread == this.focusSpread &&
+          other.focusGraceMinutes == this.focusGraceMinutes &&
           other.sortOrder == this.sortOrder);
 }
 
@@ -5725,6 +5908,10 @@ class ActivitiesCompanion extends UpdateCompanion<Activity> {
   final Value<int?> priority;
   final Value<bool?> requiresFocus;
   final Value<String?> focusMode;
+  final Value<int?> focusBlockMinutes;
+  final Value<int?> focusBreakMinutes;
+  final Value<bool?> focusSpread;
+  final Value<int?> focusGraceMinutes;
   final Value<int> sortOrder;
   final Value<int> rowid;
   const ActivitiesCompanion({
@@ -5744,6 +5931,10 @@ class ActivitiesCompanion extends UpdateCompanion<Activity> {
     this.priority = const Value.absent(),
     this.requiresFocus = const Value.absent(),
     this.focusMode = const Value.absent(),
+    this.focusBlockMinutes = const Value.absent(),
+    this.focusBreakMinutes = const Value.absent(),
+    this.focusSpread = const Value.absent(),
+    this.focusGraceMinutes = const Value.absent(),
     this.sortOrder = const Value.absent(),
     this.rowid = const Value.absent(),
   });
@@ -5764,6 +5955,10 @@ class ActivitiesCompanion extends UpdateCompanion<Activity> {
     this.priority = const Value.absent(),
     this.requiresFocus = const Value.absent(),
     this.focusMode = const Value.absent(),
+    this.focusBlockMinutes = const Value.absent(),
+    this.focusBreakMinutes = const Value.absent(),
+    this.focusSpread = const Value.absent(),
+    this.focusGraceMinutes = const Value.absent(),
     this.sortOrder = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
@@ -5786,6 +5981,10 @@ class ActivitiesCompanion extends UpdateCompanion<Activity> {
     Expression<int>? priority,
     Expression<bool>? requiresFocus,
     Expression<String>? focusMode,
+    Expression<int>? focusBlockMinutes,
+    Expression<int>? focusBreakMinutes,
+    Expression<bool>? focusSpread,
+    Expression<int>? focusGraceMinutes,
     Expression<int>? sortOrder,
     Expression<int>? rowid,
   }) {
@@ -5806,6 +6005,10 @@ class ActivitiesCompanion extends UpdateCompanion<Activity> {
       if (priority != null) 'priority': priority,
       if (requiresFocus != null) 'requires_focus': requiresFocus,
       if (focusMode != null) 'focus_mode': focusMode,
+      if (focusBlockMinutes != null) 'focus_block_minutes': focusBlockMinutes,
+      if (focusBreakMinutes != null) 'focus_break_minutes': focusBreakMinutes,
+      if (focusSpread != null) 'focus_spread': focusSpread,
+      if (focusGraceMinutes != null) 'focus_grace_minutes': focusGraceMinutes,
       if (sortOrder != null) 'sort_order': sortOrder,
       if (rowid != null) 'rowid': rowid,
     });
@@ -5828,6 +6031,10 @@ class ActivitiesCompanion extends UpdateCompanion<Activity> {
     Value<int?>? priority,
     Value<bool?>? requiresFocus,
     Value<String?>? focusMode,
+    Value<int?>? focusBlockMinutes,
+    Value<int?>? focusBreakMinutes,
+    Value<bool?>? focusSpread,
+    Value<int?>? focusGraceMinutes,
     Value<int>? sortOrder,
     Value<int>? rowid,
   }) {
@@ -5848,6 +6055,10 @@ class ActivitiesCompanion extends UpdateCompanion<Activity> {
       priority: priority ?? this.priority,
       requiresFocus: requiresFocus ?? this.requiresFocus,
       focusMode: focusMode ?? this.focusMode,
+      focusBlockMinutes: focusBlockMinutes ?? this.focusBlockMinutes,
+      focusBreakMinutes: focusBreakMinutes ?? this.focusBreakMinutes,
+      focusSpread: focusSpread ?? this.focusSpread,
+      focusGraceMinutes: focusGraceMinutes ?? this.focusGraceMinutes,
       sortOrder: sortOrder ?? this.sortOrder,
       rowid: rowid ?? this.rowid,
     );
@@ -5906,6 +6117,18 @@ class ActivitiesCompanion extends UpdateCompanion<Activity> {
     if (focusMode.present) {
       map['focus_mode'] = Variable<String>(focusMode.value);
     }
+    if (focusBlockMinutes.present) {
+      map['focus_block_minutes'] = Variable<int>(focusBlockMinutes.value);
+    }
+    if (focusBreakMinutes.present) {
+      map['focus_break_minutes'] = Variable<int>(focusBreakMinutes.value);
+    }
+    if (focusSpread.present) {
+      map['focus_spread'] = Variable<bool>(focusSpread.value);
+    }
+    if (focusGraceMinutes.present) {
+      map['focus_grace_minutes'] = Variable<int>(focusGraceMinutes.value);
+    }
     if (sortOrder.present) {
       map['sort_order'] = Variable<int>(sortOrder.value);
     }
@@ -5934,6 +6157,10 @@ class ActivitiesCompanion extends UpdateCompanion<Activity> {
           ..write('priority: $priority, ')
           ..write('requiresFocus: $requiresFocus, ')
           ..write('focusMode: $focusMode, ')
+          ..write('focusBlockMinutes: $focusBlockMinutes, ')
+          ..write('focusBreakMinutes: $focusBreakMinutes, ')
+          ..write('focusSpread: $focusSpread, ')
+          ..write('focusGraceMinutes: $focusGraceMinutes, ')
           ..write('sortOrder: $sortOrder, ')
           ..write('rowid: $rowid')
           ..write(')'))
@@ -17517,6 +17744,10 @@ typedef $$ActivitiesTableCreateCompanionBuilder = ActivitiesCompanion Function({
   Value<int?> priority,
   Value<bool?> requiresFocus,
   Value<String?> focusMode,
+  Value<int?> focusBlockMinutes,
+  Value<int?> focusBreakMinutes,
+  Value<bool?> focusSpread,
+  Value<int?> focusGraceMinutes,
   Value<int> sortOrder,
   Value<int> rowid,
 });
@@ -17537,6 +17768,10 @@ typedef $$ActivitiesTableUpdateCompanionBuilder = ActivitiesCompanion Function({
   Value<int?> priority,
   Value<bool?> requiresFocus,
   Value<String?> focusMode,
+  Value<int?> focusBlockMinutes,
+  Value<int?> focusBreakMinutes,
+  Value<bool?> focusSpread,
+  Value<int?> focusGraceMinutes,
   Value<int> sortOrder,
   Value<int> rowid,
 });
@@ -17779,6 +18014,26 @@ class $$ActivitiesTableFilterComposer
 
   ColumnFilters<String> get focusMode => $composableBuilder(
     column: $table.focusMode,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get focusBlockMinutes => $composableBuilder(
+    column: $table.focusBlockMinutes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get focusBreakMinutes => $composableBuilder(
+    column: $table.focusBreakMinutes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get focusSpread => $composableBuilder(
+    column: $table.focusSpread,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get focusGraceMinutes => $composableBuilder(
+    column: $table.focusGraceMinutes,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -18074,6 +18329,26 @@ class $$ActivitiesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get focusBlockMinutes => $composableBuilder(
+    column: $table.focusBlockMinutes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get focusBreakMinutes => $composableBuilder(
+    column: $table.focusBreakMinutes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get focusSpread => $composableBuilder(
+    column: $table.focusSpread,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get focusGraceMinutes => $composableBuilder(
+    column: $table.focusGraceMinutes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get sortOrder => $composableBuilder(
     column: $table.sortOrder,
     builder: (column) => ColumnOrderings(column),
@@ -18223,6 +18498,26 @@ class $$ActivitiesTableAnnotationComposer
 
   GeneratedColumn<String> get focusMode =>
       $composableBuilder(column: $table.focusMode, builder: (column) => column);
+
+  GeneratedColumn<int> get focusBlockMinutes => $composableBuilder(
+    column: $table.focusBlockMinutes,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get focusBreakMinutes => $composableBuilder(
+    column: $table.focusBreakMinutes,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get focusSpread => $composableBuilder(
+    column: $table.focusSpread,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get focusGraceMinutes => $composableBuilder(
+    column: $table.focusGraceMinutes,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<int> get sortOrder =>
       $composableBuilder(column: $table.sortOrder, builder: (column) => column);
@@ -18499,6 +18794,10 @@ class $$ActivitiesTableTableManager
                 Value<int?> priority = const Value.absent(),
                 Value<bool?> requiresFocus = const Value.absent(),
                 Value<String?> focusMode = const Value.absent(),
+                Value<int?> focusBlockMinutes = const Value.absent(),
+                Value<int?> focusBreakMinutes = const Value.absent(),
+                Value<bool?> focusSpread = const Value.absent(),
+                Value<int?> focusGraceMinutes = const Value.absent(),
                 Value<int> sortOrder = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ActivitiesCompanion(
@@ -18518,6 +18817,10 @@ class $$ActivitiesTableTableManager
                 priority: priority,
                 requiresFocus: requiresFocus,
                 focusMode: focusMode,
+                focusBlockMinutes: focusBlockMinutes,
+                focusBreakMinutes: focusBreakMinutes,
+                focusSpread: focusSpread,
+                focusGraceMinutes: focusGraceMinutes,
                 sortOrder: sortOrder,
                 rowid: rowid,
               ),
@@ -18539,6 +18842,10 @@ class $$ActivitiesTableTableManager
                 Value<int?> priority = const Value.absent(),
                 Value<bool?> requiresFocus = const Value.absent(),
                 Value<String?> focusMode = const Value.absent(),
+                Value<int?> focusBlockMinutes = const Value.absent(),
+                Value<int?> focusBreakMinutes = const Value.absent(),
+                Value<bool?> focusSpread = const Value.absent(),
+                Value<int?> focusGraceMinutes = const Value.absent(),
                 Value<int> sortOrder = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => ActivitiesCompanion.insert(
@@ -18558,6 +18865,10 @@ class $$ActivitiesTableTableManager
                 priority: priority,
                 requiresFocus: requiresFocus,
                 focusMode: focusMode,
+                focusBlockMinutes: focusBlockMinutes,
+                focusBreakMinutes: focusBreakMinutes,
+                focusSpread: focusSpread,
+                focusGraceMinutes: focusGraceMinutes,
                 sortOrder: sortOrder,
                 rowid: rowid,
               ),

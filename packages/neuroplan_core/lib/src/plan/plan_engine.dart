@@ -10,7 +10,7 @@ import 'plan_types.dart';
 import 'timeline.dart';
 
 /// Algoritma değişince artar (docs/ARCHITECTURE.md §6, determinizm kuralı 5).
-const planEngineVersion = 2;
+const planEngineVersion = 3;
 
 /// Deterministik plan motoru: aynı girdi aynı planı üretir (SLOT-6).
 ///
@@ -53,6 +53,12 @@ final class _Occ {
   final PersistedInstance? persisted;
   final InstanceSource source;
   String? parentInstanceId;
+
+  /// Gün içine dağıtılan derin çalışma bloğu (D66): sırası, sayısı ve önceki blok.
+  int? block;
+  int? blocks;
+  String? after;
+  int afterGap = 0;
 
   int? start;
   int? end;
@@ -118,6 +124,7 @@ final class _Run {
   final _consumed = <String>{};
   final _dayRules = <int, _DayRule>{};
   final _byActDay = <String, List<_Occ>>{};
+  final _byId = <String, _Occ>{};
 
   /// "aktivite|gün" → (uygulanan varyant, oluşum kimliği): varyanta özel alt aktiviteler için.
   final _variantOnDay = <String, (String, String)>{};
@@ -350,6 +357,17 @@ final class _Run {
         dMax = v.durationMax ?? dMax;
       }
     }
+    // Kesin olmayan, gün içine dağıtılan derin çalışma: her blok ayrı oluşum (D66).
+    final blocks = act.blocks;
+    final focus = dMax ?? dMin ?? act.estimatedMinutes;
+    final parts =
+        blocks != null &&
+            blocks.spread &&
+            r.flexibility != Flexibility.fixed &&
+            focus != null
+        ? blocks.parts(focus)
+        : const <int>[];
+    if (parts.length > 1) dMin = dMax = parts.first;
     final o = _Occ(
       id: id,
       activityId: act.id,
@@ -364,6 +382,36 @@ final class _Run {
       parentInstanceId: parent,
     );
     _add(o);
+    if (parts.length > 1) {
+      o
+        ..block = 1
+        ..blocks = parts.length;
+      var prev = o;
+      for (var k = 2; k <= parts.length; k++) {
+        final childId = blockInstanceId(id, k);
+        _consumed.add(childId);
+        final child =
+            _Occ(
+                id: childId,
+                activityId: act.id,
+                day: d,
+                flex: r.flexibility,
+                timing: Timing.none,
+                rule: r,
+                dMin: parts[k - 1],
+                dMax: parts[k - 1],
+                variantId: variantId,
+                persisted: persistedById[childId],
+                parentInstanceId: parent,
+              )
+              ..block = k
+              ..blocks = parts.length
+              ..after = prev.id
+              ..afterGap = blocks!.rest;
+        _add(child);
+        prev = child;
+      }
+    }
     return o;
   }
 
@@ -372,6 +420,7 @@ final class _Run {
 
   void _add(_Occ o) {
     occs.add(o);
+    _byId[o.id] = o;
     (_byActDay[_key(o.activityId, o.day)] ??= []).add(o);
   }
 
@@ -642,15 +691,20 @@ final class _Run {
     // Çapası saatsiz kalan göreli iş de saatsiz kalır ("yemekten sonra" etiketiyle).
     if (o.anchorActivityId != null) return;
 
-    final d = o.dMax ?? o.dMin ?? activities[o.activityId]?.estimatedMinutes;
-    final dShort = o.dMin ?? d;
+    // Üst üste derin çalışmada süre saf odaktır; aradaki molalar da yer kaplar (D66).
+    final blocks = o.blocks == null ? activities[o.activityId]?.blocks : null;
+    int? span(int? m) => m == null || blocks == null ? m : blocks.span(m);
+    final d = span(
+      o.dMax ?? o.dMin ?? activities[o.activityId]?.estimatedMinutes,
+    );
+    final dShort = span(o.dMin) ?? d;
     final dayEnd = cal.dayEnd(o.day);
 
     if (sAt != null || eAt != null) {
       int s, e;
       if (sAt != null && eAt != null) {
         s = sAt;
-        e = eAt > sAt ? eAt : eAt + 1440;
+        e = s + span((eAt > sAt ? eAt : eAt + 1440) - sAt)!;
       } else if (sAt != null) {
         s = sAt;
         e = s + (d ?? 0);
@@ -681,6 +735,10 @@ final class _Run {
       final limit = eHi ?? math.max(dayEnd, (sHi ?? 0) + len);
       var lo = math.max(sLo ?? cal.dayStart(o.day), _floor(o.day));
       if (eLo != null) lo = math.max(lo, eLo - len);
+      // Dağıtılan blok öncekinden en az bir mola sonra başlar.
+      if (_byId[o.after]?.end case final prevEnd?) {
+        lo = math.max(lo, prevEnd + o.afterGap);
+      }
       final at = timeline.earliestFit(lo, sHi ?? limit - len, len, limit);
       if (at != null) {
         o.suggested = !isWindow;
@@ -794,6 +852,8 @@ final class _Run {
             persisted: o.persisted != null,
             isManual: o.persisted?.isManual ?? false,
             suggested: o.suggested,
+            block: o.block,
+            blocks: o.blocks,
           ),
       ],
       freeSlots: free,

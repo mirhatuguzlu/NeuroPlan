@@ -122,6 +122,29 @@ class _FocusScreenState extends ConsumerState<FocusScreen> {
     if (ok == true && mounted) await guard(context, _c.emergency);
   }
 
+  /// Atla geri alınamaz: oturum bozulur, odak sayılmaz (D66).
+  Future<void> _skip() async {
+    final l = context.l10n;
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (c) => AlertDialog(
+        title: Text(l.focusSkipTitle),
+        content: Text(l.focusSkipBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(c, false),
+            child: Text(l.commonCancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(c, true),
+            child: Text(l.actionSkip),
+          ),
+        ],
+      ),
+    );
+    if (ok == true && mounted) await guard(context, _c.skip);
+  }
+
   @override
   Widget build(BuildContext context) {
     ref.listen(focusControllerProvider.select((s) => s.needsPardon), (_, ask) {
@@ -144,6 +167,10 @@ class _FocusScreenState extends ConsumerState<FocusScreen> {
     final label = switch (phase) {
       FocusPhase.working => switch (mode) {
         FocusMode.pomodoro => l.focusPhaseCycle(clock.cycle),
+        FocusMode.deep when clock.settings.blocked => l.focusPhaseBlock(
+          clock.cycle,
+          clock.settings.blockCount,
+        ),
         FocusMode.deep when countdown => l.focusPhaseDeep(
           clock.settings.target,
         ),
@@ -195,6 +222,19 @@ class _FocusScreenState extends ConsumerState<FocusScreen> {
                               ),
                               textAlign: TextAlign.center,
                             ),
+                            if (clock.settings case final s when s.blocked) ...[
+                              const SizedBox(height: Gap.xs),
+                              Text(
+                                l.focusBlockPlan(
+                                  s.blockCount,
+                                  s.block!,
+                                  s.rest,
+                                  s.target,
+                                ),
+                                style: theme.textTheme.bodyMedium,
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
                             const SizedBox(height: Gap.xl),
                             if (state.session?.rootCategoryKey case final root?)
                               _RegionGlow(
@@ -235,6 +275,7 @@ class _FocusScreenState extends ConsumerState<FocusScreen> {
                     state: state,
                     now: now,
                     onEmergency: () => _emergency(state.emergencyLeft),
+                    onSkip: _skip,
                   ),
                 ],
               ),
@@ -257,11 +298,13 @@ class _Actions extends ConsumerWidget {
     required this.state,
     required this.now,
     required this.onEmergency,
+    required this.onSkip,
   });
 
   final FocusState state;
   final DateTime now;
   final VoidCallback onEmergency;
+  final VoidCallback onSkip;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -291,7 +334,9 @@ class _Actions extends ConsumerWidget {
             onPressed: () => guard(context, primary),
           ),
           const SizedBox(height: Gap.s),
-          if (working && clock.settings.mode == FocusMode.deep) ...[
+          if (working &&
+              clock.settings.mode == FocusMode.deep &&
+              !clock.settings.blocked) ...[
             OutlinedButton.icon(
               icon: const Icon(Symbols.coffee_rounded),
               label: Text(l.focusTakeBreak(clock.breakLength(now).inMinutes)),
@@ -304,6 +349,15 @@ class _Actions extends ConsumerWidget {
             label: Text(l.focusFinish),
             onPressed: () => guard(context, c.finish),
           ),
+          // Bugün satırındaki Bitti / Atla sayaca taşındı (D66).
+          if (state.session?.planInstanceId != null) ...[
+            const SizedBox(height: Gap.s),
+            TextButton.icon(
+              icon: const Icon(Symbols.skip_next_rounded),
+              label: Text(l.actionSkip),
+              onPressed: onSkip,
+            ),
+          ],
           if ((working || phase == FocusPhase.paused) && !emergencyOn) ...[
             const SizedBox(height: Gap.s),
             TextButton.icon(

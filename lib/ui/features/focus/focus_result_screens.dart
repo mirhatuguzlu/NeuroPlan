@@ -7,6 +7,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:neuroplan_core/neuroplan_core.dart';
 
+import '../../../app/auto_start.dart';
 import '../../../app/providers.dart';
 import '../../../app/theme.dart';
 import '../../../data/local/app_database.dart';
@@ -47,6 +48,7 @@ class FocusBrokenScreen extends ConsumerWidget {
         ? null
         : ref.watch(focusRegionsProvider(root)).value?.root?.name(context);
     final minutes = (s?.focusedSeconds ?? 0) ~/ 60;
+    final view = ref.watch(horizonProvider).value;
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, _) {
@@ -98,15 +100,19 @@ class FocusBrokenScreen extends ConsumerWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    if (s.planInstanceId != null)
+                    // Atlanan iş yeniden başlatılmaz; planlı iş doğrudan başlar (D66).
+                    if ((view, view?.byId[s.planInstanceId])
+                        case (final v?, final again?)
+                        when again.status == InstanceStatus.planned)
                       FilledButton.icon(
                         icon: const Icon(Symbols.restart_alt_rounded),
                         label: Text(l.focusRestart),
-                        onPressed: () => _leave(
-                          context,
-                          ref,
-                          '/focus/new/${s.planInstanceId}',
-                        ),
+                        onPressed: () => guard(context, () async {
+                          ref
+                              .read(focusControllerProvider.notifier)
+                              .acknowledge();
+                          await ref.read(focusStarterProvider).start(v, again);
+                        }),
                       ),
                     const SizedBox(height: Gap.s),
                     TextButton(

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:drift/drift.dart' show Value;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:neuroplan/data/local/app_database.dart';
@@ -147,6 +148,15 @@ void main() {
       await v2.customStatement(
         'ALTER TABLE category_region_weights DROP COLUMN detail_tr',
       );
+      // v3 (D66) sütunları da v1'de yok.
+      for (final c in [
+        'focus_block_minutes',
+        'focus_break_minutes',
+        'focus_spread',
+        'focus_grace_minutes',
+      ]) {
+        await v2.customStatement('ALTER TABLE activities DROP COLUMN $c');
+      }
       await v2.customStatement(
         'ALTER TABLE category_region_weights DROP COLUMN detail_en',
       );
@@ -178,6 +188,46 @@ void main() {
       expect(
         w.map((x) => x.detailEn),
         contains('Dorsal anterior cingulate cortex'),
+      );
+    },
+  );
+
+  test(
+    'Drift v2 → v3: işe blok planı ve geç kalma payı sütunları eklenir',
+    () async {
+      final dir = await Directory.systemTemp.createTemp('neuroplan_mig3');
+      addTearDown(() => dir.delete(recursive: true));
+      final file = File('${dir.path}/db.sqlite');
+      final old = AppDatabase(NativeDatabase(file), systemData: systemData);
+      await old.select(old.activities).get(); // oluşturur
+      for (final c in [
+        'focus_block_minutes',
+        'focus_break_minutes',
+        'focus_spread',
+        'focus_grace_minutes',
+      ]) {
+        await old.customStatement('ALTER TABLE activities DROP COLUMN $c');
+      }
+      await old.customStatement('PRAGMA user_version = 2');
+      await old.close();
+
+      final db = AppDatabase(NativeDatabase(file), systemData: systemData);
+      addTearDown(db.close);
+      await db
+          .into(db.activities)
+          .insert(
+            ActivitiesCompanion.insert(
+              id: 'a',
+              kind: 'task',
+              title: 'Tez',
+              focusBlockMinutes: const Value(40),
+              focusSpread: const Value(true),
+            ),
+          );
+      final a = await db.select(db.activities).getSingle();
+      expect(
+        (a.focusBlockMinutes, a.focusSpread, a.focusGraceMinutes),
+        (40, true, null),
       );
     },
   );

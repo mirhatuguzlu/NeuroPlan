@@ -14,7 +14,6 @@ import '../ui/features/categories/move_screen.dart';
 import '../ui/features/focus/focus_controller.dart';
 import '../ui/features/focus/focus_result_screens.dart';
 import '../ui/features/focus/focus_screen.dart';
-import '../ui/features/focus/focus_start_screen.dart';
 import '../ui/features/onboarding/onboarding_screen.dart';
 import '../ui/features/plan/plan_screen.dart';
 import '../ui/features/profile/about_screen.dart';
@@ -166,14 +165,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         pageBuilder: (_, s) => sharedAxisPage(s, const FocusScreen()),
       ),
       // Kardeş yollar: odak ekranı bunların altında kurulmasın (immersive açmasın).
-      GoRoute(
-        path: '/focus/new/:instance',
-        parentNavigatorKey: _rootKey,
-        pageBuilder: (_, s) => sharedAxisPage(
-          s,
-          FocusStartScreen(instanceId: s.pathParameters['instance']!),
-        ),
-      ),
       GoRoute(
         path: '/focus/broken/:id',
         parentNavigatorKey: _rootKey,

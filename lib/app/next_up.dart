@@ -209,8 +209,8 @@ class NextUp {
 
   /// Önümüzdeki 7 günün bildirimleri, zamana göre, en çok 50 tane:
   /// [lead] dakika önce hatırlatma; [auto] açıksa başlangıçta "başla" ve odak gerektirmeyen
-  /// işin bitişinde "yaptın mı?" (D63). Dokununca: `focus:<id>` odağı başlatır, `open:<id>`
-  /// Bugün'de işi açar.
+  /// işin bitişinde "yaptın mı?" (D63). Dokununca: `focus:<id>@<başlangıç>` odağı başlatır
+  /// (önerilen saatli odak işi dahil, D66), `open:<id>` Bugün'de işi açar.
   @visibleForTesting
   List<Reminder> reminders(
     PlanView view,
@@ -226,8 +226,12 @@ class NextUp {
       if (s >= now + 7 * 1440 || e <= now) continue;
       final title = _title(view, i);
       final clock = _clock(view, s, l.localeName);
+      final focus = view.data.requiresFocus(i.activityId);
+      // Önerilen saatli odak işi de başlangıçta bildirim alır; geç kalma payı oradan
+      // sayılır (D66).
+      final starts = auto && (!i.suggested || focus);
       // Başlangıçta zaten "başla" bildirimi varsa 0 dk önceki hatırlatma tekrar olur.
-      if (lead != null && !(auto && lead == 0 && !i.suggested)) {
+      if (lead != null && !(starts && lead == 0)) {
         out.add(
           Reminder(
             s - lead,
@@ -237,16 +241,16 @@ class NextUp {
           ),
         );
       }
-      if (!auto || i.suggested) continue;
-      final focus = view.data.requiresFocus(i.activityId);
+      if (!starts) continue;
       out.add(
         Reminder(
           s,
           title,
           focus ? l.autoFocusBody : l.autoStartBody(clock),
-          '${focus ? 'focus' : 'open'}:${i.id}',
+          focus ? 'focus:${i.id}@$s' : 'open:${i.id}',
         ),
       );
+      if (i.suggested) continue;
       // Odak oturumu bitişte kendisi kapanır; uyku ve serbest zaman için soru anlamsız.
       final kind = view.data.activities[i.activityId]?.kind;
       final sleep = view.data.rootOf(i.activityId) == 'rest_sleep';

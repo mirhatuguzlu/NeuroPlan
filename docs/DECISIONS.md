@@ -550,3 +550,23 @@ Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem 
 - Tam zamanlı bildirim izni kapalıysa uyarı birkaç dakika gecikebilir.
 - Pomodoro'da odak bloğu bitişi (mola başlangıcı) hâlâ Dart zamanlayıcısıyla; uygulama ölüyken mola başlangıcı açılışta işlenir, o molanın bitiş uyarısı da o zaman kurulur.
 **Durum:** Kabul. Gerçek cihazda henüz doğrulanmadı (QA_CHECKLIST H).
+
+## 2026-11-21 — D66: Derin çalışma blokları, bildirimle başlatma, geç kalma ve kaçırma
+**Karar (proje sahibinin seçimi):**
+- **Blok planı (işe özel):** derin çalışmada işin süresi saf odaktır; blok ve mola uzunluğu sihirbazın odak adımında seçilir (varsayılan 50 / 10 dk). Blok sayısı süreden hesaplanır (120 dk → 50 + 50 + 20). Molalar süreye eklenir: üst üste bloklar planda 10:00–12:20 kaplar (kesin saatli işte de). Sayaç blok sonunda molaya geçer, mola bitince "Mola bitti" bildirimi gelir, dokununca odak sürer; hedefte oturum kendiliğinden tamamlanır. Sayaçta "Blok 2/3" ve plan satırı görünür.
+- **Gün içine dağıt:** yalnız kesin olmayan işte; her blok ayrı oluşum (1. blok oluşumun kendisi, sonrakiler `blockInstanceId`), öncekinden en az bir mola sonra aynı günün ilk boşluğuna. Yer yoksa tampon (isteğe bağlıda düşer); ertesi güne taşınmaz. Motor sürümü 3.
+- **Odaklan tuşu kalktı:** başlatma ekranı (D65'in "kendi süresi kadar" anahtarı dahil) silindi; oturum işin modu, blok planı ve süresiyle doğrudan açılır. Bugün satırında odak işinde Bitti / Atla yok, sayaçta var. Saati hiç belli olmayan odak işinde "Şimdi başla" kalır. Sayaçtaki **Atla** oturumu bozulmuş sayar, odak süresini yazmaz, işi atlar.
+- **Kesin saatli** (kullanıcının saat verdiği) odak işi saatinde başlamış sayılır: bitişine kadar uygulamaya dönüş ya da bildirime dokunuş oturumu o an açar; geciken süre saf odaktan düşer, iş planlanan bitişte biter, sonraki işler kaymaz. Hiç gelinmezse bitişten sonra oturum bozulmuş kaydedilir (odak 0), iş "kaçırıldı" (`failed`). "Sunucuda başlatma" cihazda yapılır: internet gerekmez.
+- **Önerilen saatli** (motorun yerleştirdiği) odak işi de başlangıçta bildirim alır. İşin **geç kalma payı** (sihirbazda, varsayılan 10 dk) içinde dönülürse oturum açılır ve iş o saate sabitlenir. Pay geçince kaydırılabilir iş motorca günün ilk boşluğuna kayar, kesin ve isteğe bağlı iş atlanır. Pay geçtikten sonra dokunulan bildirim Bugün'de tek soru açar: Şimdi başlat / önerilen saatte / Atla.
+- Kaçan dakikalar Bugün satırında görünür ("15 dk kaçırıldı"), iş sürerken canlı.
+- Veri: `activities.focus_block_minutes`, `focus_break_minutes`, `focus_spread`, `focus_grace_minutes` (Drift şema 3, migration `20261121120000_focus_blocks.sql`).
+**Geçici:**
+- Kaçırma kararları uygulama çalışırken verilir (açılışta, öndeyken ya da arka planda süreç canlıyken dakikada bir); uygulama hiç açılmazsa plan ve bildirimler açılışta güncellenir.
+- Bozulma cezası yalnız bu sürüm ilk açıldıktan sonra başlayan işlere uygulanır (`focus.missed_since`); önceki günler geriye dönük cezalandırılmaz.
+- Önerilen saatin "son görülen" hali cihazda tutulur (`focus.starts`); hiç görülmemiş öneride pay, bildirimdeki saatten ya da motorun o anki saatinden sayılır.
+- Kaydırılan önerilen işin eski yeri planda ayrıca "kaçırıldı" diye gösterilmez; kaçan süre yalnız katılınan ya da kesin saatli işte görünür.
+- Pay geçince kaydırılan iş aynı süreç ömründe öndeyken kendiliğinden başlamaz; yeni saatindeki bildirimle başlar.
+- Dağıtılan blokların ilki dışındakiler saatsizdir (pencere kısıtı taşımaz); dağıtma kapatılınca daha önce dokunulmuş blok satırları ayrı iş olarak kalır.
+- Başlatma ekranındaki odak kuralı açıklaması (10 sn) kalktı; sistem sabitleme onayı ve kaçış uyarısı sürüyor.
+- Kesin saatli odak işine katılınmadan başka bir odak oturumu sürerken bitişi geçerse, oturum bitince bozulma kaydedilir.
+**Durum:** Kabul. Gerçek cihazda henüz doğrulanmadı (QA_CHECKLIST I). Sunucu migration'ı uygulanmadı: uygulanmadan bu alanları değiştiren işler eşitlemede reddedilir.

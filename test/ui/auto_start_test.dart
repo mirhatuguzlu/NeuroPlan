@@ -60,7 +60,7 @@ void main() {
     for (final (autoOff, focus, at) in [
       (true, true, 10 * 60),
       (false, false, 10 * 60),
-      (false, true, 9 * 60 + 50), // 10 dk önce başladı: pencere 5 dk
+      (false, true, 9 * 60 + 20), // bitişi (09:50) geçti
       (false, true, 10 * 60 + 30), // henüz değil
     ]) {
       final h = await pump(t, autoOff: autoOff, focus: focus, at: at);
@@ -72,6 +72,84 @@ void main() {
       await t.pumpWidget(const SizedBox());
     }
   });
+
+  testWidgets(
+    'kesin saatli işe geç katılım: geciken süre düşer, bitişte biter (D66)',
+    (t) async {
+      final h = await pump(t, at: 9 * 60 + 50);
+      final s = h.read(focusControllerProvider);
+      expect(s.active, isTrue);
+      expect(s.session!.startedAt, testNow, reason: 'dönüş anında başlar');
+      Harness.focusNow = testNow.add(const Duration(minutes: 20));
+      await t.pump(const Duration(minutes: 20));
+      await h.settle();
+      final ended = h.read(focusControllerProvider).ended;
+      expect(ended?.outcome, 'completed');
+      final row = await t.runAsync(
+        () => h.read(focusRepositoryProvider).find(ended!.id),
+      );
+      expect(row!.focusedSeconds, 20 * 60);
+    },
+  );
+
+  testWidgets('hiç gelinmeyen kesin saatli odak işi bozulma sayılır (D66)', (
+    t,
+  ) async {
+    final h = await pumpApp(
+      t,
+      seed: (c) async {
+        final db = c.read(databaseProvider);
+        await (ActivityDraft(testNow)
+              ..title = 'Ders'
+              ..at = 8 * 60
+              ..duration = 30
+              ..focus = true)
+            .save(
+              db,
+              c.read(activityRepositoryProvider),
+              PlanCalendar('Europe/Istanbul'),
+            );
+        await c
+            .read(prefsRepositoryProvider)
+            .set(PrefsRepository.focusMissedSince, '0');
+      },
+    );
+    final sessions = await t.runAsync(
+      () => h.read(focusRepositoryProvider).watchSessions().first,
+    );
+    expect(sessions, hasLength(1));
+    expect(sessions!.single.outcome, 'broken');
+    expect(sessions.single.focusedSeconds, 0);
+    final i = h.read(horizonProvider).value!.on('2026-11-18').single;
+    expect(i.status, InstanceStatus.failed);
+    expect(h.read(focusControllerProvider).active, isFalse);
+    expect(find.text('Kaçırıldı'), findsOneWidget);
+  });
+
+  testWidgets(
+    'Bugün: odak işinde Bitti / Atla yok; saatsiz odak işi "Şimdi başla"',
+    (t) async {
+      final h = await pumpApp(
+        t,
+        seed: (c) async {
+          await (ActivityDraft(testNow)
+                ..title = 'Okuma'
+                ..time = TimeType.none
+                ..focus = true)
+              .save(
+                c.read(databaseProvider),
+                c.read(activityRepositoryProvider),
+                PlanCalendar('Europe/Istanbul'),
+              );
+        },
+      );
+      await h.tap(find.text('Okuma'));
+      expect(find.text('Bitti'), findsNothing);
+      expect(find.text('Atla'), findsNothing);
+      await h.tap(find.text('Şimdi başla'));
+      expect(h.read(focusControllerProvider).active, isTrue);
+    },
+  );
 
   testWidgets('bildirime dokunuş: Bugün\'de iş açılır', (t) async {
     final h = await pump(t, at: 12 * 60, focus: false);
@@ -113,7 +191,7 @@ void main() {
     expect(of(lead: 10, auto: true), [
       '10:20 Ders: 10:30 · 10 dk sonra [open:${id['Ders']}]',
       '10:30 Ders: Odaklanma zamanı. Dokun, oturum başlasın. '
-          '[focus:${id['Ders']}]',
+          '[focus:${id['Ders']}@${cal.wallToUtc(Day.parse('2026-11-18'), 10 * 60 + 30)}]',
       '11:50 Yürüyüş: 12:00 · 10 dk sonra [open:${id['Yürüyüş']}]',
       '12:00 Yürüyüş: Şimdi başlıyor · 12:00 [open:${id['Yürüyüş']}]',
       '12:30 Yürüyüş: Bitiş saati geldi. Yaptın mı? [open:${id['Yürüyüş']}]',

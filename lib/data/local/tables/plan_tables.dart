@@ -90,6 +90,12 @@ class Activities extends Table with SyncColumns {
   IntColumn get priority => integer().nullable()();
   BoolColumn get requiresFocus => boolean().nullable()();
   TextColumn get focusMode => text().nullable()();
+
+  /// Derin çalışma blok planı ve geç kalma payı (D66); null = varsayılan.
+  IntColumn get focusBlockMinutes => integer().nullable()();
+  IntColumn get focusBreakMinutes => integer().nullable()();
+  BoolColumn get focusSpread => boolean().nullable()();
+  IntColumn get focusGraceMinutes => integer().nullable()();
   IntColumn get sortOrder => integer().withDefault(const Constant(0))();
 }
 

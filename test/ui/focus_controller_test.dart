@@ -418,6 +418,52 @@ void main() {
     );
   });
 
+  group('D66', () {
+    test('Atla: oturum bozulur, odak yazılmaz, iş atlanır', () async {
+      final i = await r.activityInstance();
+      await r.c.start(
+        instance: i,
+        settings: const FocusSettings(FocusMode.free),
+      );
+      final id = r.s.session!.id;
+      r.now = t0.add(const Duration(minutes: 20));
+      await r.c.skip();
+      expect(r.s.ended?.outcome, 'broken');
+      final row = await r.session(id);
+      expect(row.focusedSeconds, 0);
+      final plan = await (r.db.select(
+        r.db.planInstances,
+      )..where((p) => p.id.equals(i.id))).getSingle();
+      expect(plan.status, 'skipped');
+    });
+
+    test(
+      'blok planlı derin çalışma: blok sonunda mola, hedefte tamamlanır',
+      () async {
+        // 2 dk hedef, 1 dk blok, 1 dk mola: 1 dk odak → mola → devam → 1 dk odak → bitti.
+        await r.start(
+          const FocusSettings(FocusMode.deep, target: 2, block: 1, rest: 1),
+        );
+        r.now = t0.add(const Duration(minutes: 1, seconds: 1));
+        await r.reopen(r.now);
+        expect(r.s.clock!.phase, FocusPhase.onBreak);
+        expect(
+          r.platform.breakOverAt,
+          t0.add(const Duration(minutes: 2)),
+          reason: 'mola bitişi sistem alarmına kuruldu',
+        );
+        r.now = t0.add(const Duration(minutes: 2, seconds: 5));
+        await r.c.resume();
+        final id = r.s.session!.id;
+        await r.reopen(t0.add(const Duration(minutes: 10)));
+        expect(r.s.ended?.outcome, 'completed');
+        final row = await r.session(id);
+        expect(row.focusedSeconds, 120);
+        expect(row.endedAt, t0.add(const Duration(minutes: 3, seconds: 5)));
+      },
+    );
+  });
+
   group('planlanan bitiş (D63)', () {
     final m0 = t0.millisecondsSinceEpoch ~/ 60000;
     Future<PlannedInstance> timed({int minutes = 30}) async {

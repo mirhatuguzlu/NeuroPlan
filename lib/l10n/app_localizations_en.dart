@@ -1206,13 +1206,7 @@ class L10nEn extends L10n {
   String get commonCancel => 'Cancel';
 
   @override
-  String get actionFocus => 'Focus';
-
-  @override
   String get secFocus => 'Focus';
-
-  @override
-  String get focusStart => 'Start';
 
   @override
   String get focusMissingTitle => 'This item is no longer in your plan';
@@ -1220,50 +1214,6 @@ class L10nEn extends L10n {
   @override
   String get focusMissingBody =>
       'Your plan may have changed. Pick it again from Today.';
-
-  @override
-  String get focusChangeDurations => 'Change durations';
-
-  @override
-  String get focusRuleHint =>
-      'When you start, Android asks to pin the app; while pinned you can\'t switch to other apps. If you unpin and leave the app or pull down the notification shade, come back within 10 seconds or the session breaks. Turning off the screen and incoming calls don\'t count, and leaving during a break is fine.';
-
-  @override
-  String get focusSummaryFree => 'No time limit; stop when you\'re done.';
-
-  @override
-  String focusSummaryPomodoro(int work, int rest, int every, int long) {
-    return '$work min focus, $rest min break; a $long min long break every $every cycles.';
-  }
-
-  @override
-  String focusSummaryDeep(int target) {
-    return 'Target: $target min of uninterrupted focus. You can take a break, suggested from how long you\'ve focused so far.';
-  }
-
-  @override
-  String focusOwnLength(int minutes) {
-    return 'Its own length ($minutes min)';
-  }
-
-  @override
-  String get focusOwnLengthHint =>
-      'The session completes on its own when the time is up.';
-
-  @override
-  String get focusFieldWork => 'Focus (min)';
-
-  @override
-  String get focusFieldBreak => 'Break (min)';
-
-  @override
-  String get focusFieldLongBreak => 'Long break (min)';
-
-  @override
-  String get focusFieldLongEvery => 'Long break every … cycles';
-
-  @override
-  String get focusFieldTarget => 'Target (min)';
 
   @override
   String get focusPause => 'Pause';
@@ -3566,4 +3516,86 @@ class L10nEn extends L10n {
 
   @override
   String get catRename => 'Rename';
+
+  @override
+  String focusPhaseBlock(int n, int count) {
+    return 'Block $n of $count';
+  }
+
+  @override
+  String focusBlockPlan(int count, int block, int rest, int total) {
+    return '$total min of focus: $count blocks of up to $block min, $rest min breaks in between';
+  }
+
+  @override
+  String get focusSkipTitle => 'Skip this task?';
+
+  @override
+  String get focusSkipBody =>
+      'The session counts as broken and this session\'s focus time isn\'t recorded.';
+
+  @override
+  String get actionStartNow => 'Start now';
+
+  @override
+  String blockLabel(int n, int count) {
+    return 'Block $n of $count';
+  }
+
+  @override
+  String get statusMissed => 'Missed';
+
+  @override
+  String missedMinutes(int n) {
+    return '$n min missed';
+  }
+
+  @override
+  String missedTitle(String title) {
+    return 'You missed $title';
+  }
+
+  @override
+  String get missedBody =>
+      'The grace period is over. You can start now, keep the suggested time or skip it.';
+
+  @override
+  String missedAt(String clock) {
+    return 'At $clock';
+  }
+
+  @override
+  String get wizFocusBlock => 'Block length';
+
+  @override
+  String get wizFocusBreak => 'Break between blocks';
+
+  @override
+  String get wizFocusSpread => 'Blocks';
+
+  @override
+  String get focusSpreadNo => 'Back to back';
+
+  @override
+  String get focusSpreadNoHint =>
+      'One after another with breaks; the plan grows by the breaks.';
+
+  @override
+  String get focusSpreadYes => 'Spread through the day';
+
+  @override
+  String get focusSpreadYesHint =>
+      'Each block goes into a separate free slot on the same day.';
+
+  @override
+  String get wizFocusGrace => 'Grace period';
+
+  @override
+  String get wizFocusGraceHint =>
+      'For this task\'s suggested time: come back to the notification within this time and the session starts. After that the task moves to the next free slot if it\'s shiftable, otherwise it\'s skipped.';
+
+  @override
+  String sumDeep(int block, int rest, String layout) {
+    return 'Deep work · $block min blocks, $rest min breaks · $layout';
+  }
 }

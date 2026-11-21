@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:neuroplan_core/neuroplan_core.dart';
 
+import '../../app/auto_start.dart';
 import '../../app/providers.dart';
 import '../../data/local/app_database.dart';
 import 'format.dart';
@@ -36,6 +37,10 @@ class InstanceActions {
       );
     }
   }
+
+  /// Saati hiç belli olmayan odak işi için "Şimdi başla" (D66); saatli işler bildirimle.
+  Future<void> startFocus(PlannedInstance i) =>
+      guard(context, () => ref.read(focusStarterProvider).start(view, i));
 
   Future<void> skip(PlannedInstance i) async {
     final ok = await guard(

@@ -52,6 +52,22 @@ class _TodayBody extends ConsumerWidget {
     final dayEnd = cal.dayEnd(Day.parse(today));
     final now = view.nowMinute;
     final actions = InstanceActions(context, ref, view);
+    final joined = ref.watch(_sessionStartsProvider).value ?? const {};
+    // Odak işinin başlangıcından katılınana (yoksa şimdiye) kadar geçen süre (D66).
+    int? missedOf(PlannedInstance i) {
+      if (!i.isTimed || !view.data.requiresFocus(i.activityId)) return null;
+      if (joined[i.id] case final at?) {
+        return at < i.end! ? at - i.start! : null;
+      }
+      if (i.suggested || i.status != InstanceStatus.planned) return null;
+      return (now < i.end! ? now : i.end!) - i.start!;
+    }
+
+    if (ref.watch(missedFocusProvider) case final id?) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (context.mounted) _askMissed(context, ref, id);
+      });
+    }
 
     final header = Padding(
       padding: const EdgeInsets.fromLTRB(Gap.l, Gap.l, Gap.l, Gap.s),
@@ -144,6 +160,7 @@ class _TodayBody extends ConsumerWidget {
             conflictWith: overlaps[i.id],
             cyclic: cyclic.contains(i.activityId),
             missingAnchor: missing.contains(i.ruleId),
+            missedMinutes: missedOf(i),
           ),
         ),
       for (final s in out.freeSlots[today] ?? const <TimeSlot>[])
@@ -236,6 +253,72 @@ class _TodayBody extends ConsumerWidget {
       ],
     );
   }
+}
+
+/// Oluşumların ilk odak oturumunun başlangıcı (UTC dakika).
+final _sessionStartsProvider = StreamProvider<Map<String, int>>(
+  (ref) => ref
+      .watch(focusRepositoryProvider)
+      .watchSessions()
+      .map(
+        (list) => {
+          // Liste yeniden eskiye: en son yazılan en erken oturumdur.
+          for (final s in list)
+            ?s.planInstanceId: s.startedAt.millisecondsSinceEpoch ~/ 60000,
+        },
+      ),
+);
+
+/// Geç kalma payı geçtikten sonra bildirimine dokunulan iş (D66): tek kısa soru.
+Future<void> _askMissed(BuildContext context, WidgetRef ref, String id) async {
+  ref.read(missedFocusProvider.notifier).ask(null);
+  final view = ref.read(horizonProvider).value;
+  final i = view?.byId[id];
+  if (view == null || i == null || i.status != InstanceStatus.planned) return;
+  final l = context.l10n;
+  final title = view.data.activities[i.activityId]?.title ?? '';
+  final now = view.nowMinute;
+  // Motor saati geçen öneriyi ilk boşluğa kaydırdı; o an şimdiyse ayrıca sorulmaz.
+  final later =
+      i.isTimed && i.flexibility == Flexibility.shiftable && i.start! > now + 1
+      ? i.start!
+      : null;
+  final choice = await showDialog<String>(
+    context: context,
+    builder: (c) => AlertDialog(
+      title: Text(l.missedTitle(title)),
+      content: Text(l.missedBody),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(c, 'skip'),
+          child: Text(l.actionSkip),
+        ),
+        if (later != null)
+          TextButton(
+            onPressed: () => Navigator.pop(c, 'later'),
+            child: Text(l.missedAt(clockText(context, view.calendar, later))),
+          ),
+        FilledButton(
+          onPressed: () => Navigator.pop(c, 'now'),
+          child: Text(l.actionStartNow),
+        ),
+      ],
+    ),
+  );
+  if (!context.mounted || choice == null) return;
+  final plans = ref.read(planRepositoryProvider);
+  DateTime utc(int m) =>
+      DateTime.fromMillisecondsSinceEpoch(m * 60000, isUtc: true);
+  await guard(context, () async {
+    switch (choice) {
+      case 'now':
+        await ref.read(focusStarterProvider).start(view, i, slot: now);
+      case 'later':
+        await plans.moveOnce(i, utc(i.start!), utc(i.end!));
+      default:
+        await plans.skip(i);
+    }
+  });
 }
 
 class _SectionTitle extends StatelessWidget {
@@ -502,6 +585,7 @@ class _InstanceTile extends StatefulWidget {
     this.dropped,
     this.reveal = false,
     this.onRevealed,
+    this.missedMinutes,
   });
 
   final PlanView view;
@@ -518,6 +602,9 @@ class _InstanceTile extends StatefulWidget {
   /// Bildirimden gelindi: satır açılır ve görünür kaydırılır (D63).
   final bool reveal;
   final VoidCallback? onRevealed;
+
+  /// Odak işinin başlangıcından katılınana (ya da şimdiye) kadar kaçan süre (D66).
+  final int? missedMinutes;
 
   @override
   State<_InstanceTile> createState() => _InstanceTileState();
@@ -563,10 +650,17 @@ class _InstanceTileState extends State<_InstanceTile> {
     final cal = view.calendar;
     final activity = view.data.activities[i.activityId];
     final done = i.status == InstanceStatus.done;
-    final skipped = i.status == InstanceStatus.skipped;
+    final failed = i.status == InstanceStatus.failed;
+    final skipped = i.status == InstanceStatus.skipped || failed;
+    final focus = view.data.requiresFocus(i.activityId);
     final labels = <(IconData, String, bool)>[
-      if (view.data.requiresFocus(i.activityId))
-        (Symbols.timer_rounded, l.focusLabel, false),
+      if (focus) (Symbols.timer_rounded, l.focusLabel, false),
+      if (i.block case final b?)
+        (Symbols.view_week_rounded, l.blockLabel(b, i.blocks!), false),
+      if (failed)
+        (Symbols.event_busy_rounded, l.statusMissed, true)
+      else if (widget.missedMinutes case final m? when m > 0)
+        (Symbols.schedule_rounded, l.missedMinutes(m), true),
       if (i.suggested) (Symbols.lightbulb_rounded, l.suggestedLabel, false),
       if (i.anchorActivityId != null)
         (
@@ -738,25 +832,26 @@ class _InstanceTileState extends State<_InstanceTile> {
                       child: Wrap(
                         spacing: Gap.s,
                         children: [
-                          // Odak gerektiren bugünkü iş (D25 kapanışı).
-                          if (view.data.requiresFocus(i.activityId) &&
-                              i.date == view.today)
+                          // Odak işi saatinde bildirimle başlar; Bitti / Atla
+                          // sayaçtadır. Saati hiç belli olmayan iş buradan (D66).
+                          if (focus && !i.isTimed && i.date == view.today)
                             TextButton.icon(
                               icon: const Icon(Symbols.timer_rounded),
-                              label: Text(l.actionFocus),
-                              onPressed: () =>
-                                  context.push('/focus/new/${i.id}'),
+                              label: Text(l.actionStartNow),
+                              onPressed: () => widget.actions.startFocus(i),
                             ),
-                          TextButton.icon(
-                            icon: const Icon(Symbols.check_circle_rounded),
-                            label: Text(l.actionDone),
-                            onPressed: () => widget.actions.complete(i),
-                          ),
-                          TextButton.icon(
-                            icon: const Icon(Symbols.skip_next_rounded),
-                            label: Text(l.actionSkip),
-                            onPressed: () => widget.actions.skip(i),
-                          ),
+                          if (!focus) ...[
+                            TextButton.icon(
+                              icon: const Icon(Symbols.check_circle_rounded),
+                              label: Text(l.actionDone),
+                              onPressed: () => widget.actions.complete(i),
+                            ),
+                            TextButton.icon(
+                              icon: const Icon(Symbols.skip_next_rounded),
+                              label: Text(l.actionSkip),
+                              onPressed: () => widget.actions.skip(i),
+                            ),
+                          ],
                           TextButton.icon(
                             icon: const Icon(Symbols.schedule_rounded),
                             label: Text(l.actionChangeTime),

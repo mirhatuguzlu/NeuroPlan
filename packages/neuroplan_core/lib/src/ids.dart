@@ -17,6 +17,10 @@ String ruleInstanceId(String ruleId, String occurrenceDate) =>
 String perPeriodInstanceId(String ruleId, String periodStart, int index) =>
     _uuid.v5(neuroplanNamespace, 'period:$ruleId:$periodStart:$index');
 
+/// Gün içine dağıtılan derin çalışmanın [index]. bloğu (2'den; 1. blok oluşumun kendisi).
+String blockInstanceId(String instanceId, int index) =>
+    _uuid.v5(neuroplanNamespace, 'block:$instanceId:$index');
+
 /// Ortak etkinliğin kişinin kendi planındaki kopyası (Aşama 4B): her cihazda aynı kimlik.
 String sharedMirrorActivityId(String sharedActivityId) =>
     _uuid.v5(neuroplanNamespace, 'shared:$sharedActivityId');
