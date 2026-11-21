@@ -341,3 +341,9 @@ Hazırlık: 2–3 dk sonra başlayan, 5 dk süren, "odak gerektirir" bir iş ve 
 - [ ] Her döngü sonunda mola, mola bitince bildirim; 4. döngü bitince oturum kendiliğinden tamamlanır.
 - [ ] Kaydırılabilir + "Gün içine dağıt": 4 ayrı tek döngülük blok, günün boşluklarında.
 - [ ] Düzenlemede tekrar sayısını 6 yap: plan bugünden itibaren 6 döngüye göre uzar, geçmiş günler değişmez.
+
+## K. Molada Rahatsız Etmeyin (D68)
+
+- [ ] Ayarlar → Odakta Rahatsız Etmeyin açık, izin verilmiş. Oturum başlayınca DND açılır.
+- [ ] Mola başlayınca (Pomodoro döngü sonu ya da "Mola ver") DND kapanır, bildirimler gelir; "Devam"/mola bitti bildirimine dokununca yeniden açılır.
+- [ ] Acil durum duraklatmasında DND kapanır, devamda açılır; oturum bitince önceki ayar geri gelir.

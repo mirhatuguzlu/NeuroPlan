@@ -125,6 +125,22 @@ void main() {
   });
   tearDown(() => r.dispose());
 
+  test(
+    'DND molada kapanır, odağa dönünce açılır; bitişte kapanır (D68)',
+    () async {
+      r.platform.dndAccess = true;
+      await r.prefs.set(PrefsRepository.focusDnd, '1');
+      await r.start(const FocusSettings(FocusMode.deep));
+      expect(r.platform.dndOn, isTrue);
+      await r.c.takeBreak();
+      expect(r.platform.dndOn, isFalse, reason: 'molada telefon serbest');
+      await r.c.resume();
+      expect(r.platform.dndOn, isTrue);
+      await r.c.finish();
+      expect(r.platform.dndOn, isFalse);
+    },
+  );
+
   test('başlatma: segment açılır, kalıcı bildirim ve DND', () async {
     r.platform.dndAccess = true;
     await r.prefs.set(PrefsRepository.focusDnd, '1');

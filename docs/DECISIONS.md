@@ -584,3 +584,8 @@ Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem 
 - D67 öncesi Pomodoro işinde tekrar sayısı düzenleme açılınca süreden hesaplanır; motor da bu işlerin molalarını artık plana ekler.
 - Cihazda saklanan "son Pomodoro / derin çalışma ayarı" işe özel blok ve hedefi taşımaz.
 **Durum:** Kabul. Gerçek cihazda henüz doğrulanmadı (QA_CHECKLIST J). Sunucu migration'ı (D66 ile birlikte) uygulanmadı.
+
+## 2026-11-21 — D68: Molada Rahatsız Etmeyin kapanır
+**Karar (proje sahibinin isteği):** Ayarlarda "Odakta Rahatsız Etmeyin" açıksa DND yalnız kural işlerken (odakta ve normal duraklatmada) açık kalır. Mola başlayınca (Pomodoro / blok sonunda kendiliğinden ya da elle), mola bitip "devam" beklenirken ve acil durum duraklatmasında önceki filtreye döner; odağa dönünce yeniden açılır. Uygulama sabitlemesiyle aynı kural (D36). Uygulama yeniden açılınca DND faza göre kurulur.
+**Geçici:** Acil durum duraklatması da molayla aynı sayıldı (telefon serbest).
+**Durum:** Kabul. Gerçek cihazda henüz doğrulanmadı (QA_CHECKLIST K).

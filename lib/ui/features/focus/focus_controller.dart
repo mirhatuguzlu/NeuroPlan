@@ -172,10 +172,8 @@ class FocusController extends Notifier<FocusState> {
     await _comeBack(_now());
     if (_session == null) return;
     if (_clock!.targetReachedAt(_now()) case final at?) return _complete(at);
-    await _syncArm(_now()); // sabitleme süreç ölünce gitmiş olabilir
-    if (await _prefs.get(PrefsRepository.focusDnd) == '1') {
-      await _safe(_platform.enableDnd);
-    }
+    // Sabitleme süreç ölünce gitmiş olabilir; DND faza göre yeniden kurulur.
+    await _syncArm(_now());
     await _showOngoing();
     _schedule();
     _scheduleEnd();
@@ -263,9 +261,7 @@ class FocusController extends Notifier<FocusState> {
     await _saveRuntime();
     await _saveSettings(settings.defaults);
     _syncPin(want: true);
-    if (await _prefs.get(PrefsRepository.focusDnd) == '1') {
-      await _safe(_platform.enableDnd);
-    }
+    await _syncDnd(want: true);
     await _showOngoing();
     _schedule();
     _scheduleEnd();
@@ -582,7 +578,23 @@ class FocusController extends Notifier<FocusState> {
       if (r != null) await _record(r);
     }
     _syncPin(want: want);
+    await _syncDnd(want: want);
     _syncAlert();
+  }
+
+  var _dndOn = false;
+
+  /// Rahatsız Etmeyin (ayarda açıksa) yalnız kural işlerken açık; molada ve acil durumda
+  /// telefon serbest olsun diye önceki filtreye döner (D68). Geri yükleme her seferinde
+  /// denenir: süreç ölüp açıldığında DND native tarafta açık kalmış olabilir.
+  Future<void> _syncDnd({required bool want}) async {
+    if (!want) {
+      _dndOn = false;
+      return _safe(_platform.restoreDnd);
+    }
+    if (_dndOn || await _prefs.get(PrefsRepository.focusDnd) != '1') return;
+    _dndOn = true;
+    await _safe(_platform.enableDnd);
   }
 
   /// Uygulama kural işlerken sabitlenir; molada ve acil durumda çıkmak serbest olsun diye
@@ -709,7 +721,7 @@ class FocusController extends Notifier<FocusState> {
     await _safe(_platform.stopOngoing);
     await _safe(_platform.cancelBreakOver);
     _syncPin(want: false);
-    await _safe(_platform.restoreDnd);
+    await _syncDnd(want: false);
     // Bozulmada native uyarı "Odak bozuldu"ya dönüştü; o bildirim kalır.
     if (outcome != 'broken') await _safe(_platform.clearEscapeAlert);
     _session = null;
