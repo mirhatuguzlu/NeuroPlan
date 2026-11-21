@@ -569,7 +569,7 @@ Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem 
 - Dağıtılan blokların ilki dışındakiler saatsizdir (pencere kısıtı taşımaz); dağıtma kapatılınca daha önce dokunulmuş blok satırları ayrı iş olarak kalır.
 - Başlatma ekranındaki odak kuralı açıklaması (10 sn) kalktı; sistem sabitleme onayı ve kaçış uyarısı sürüyor.
 - Kesin saatli odak işine katılınmadan başka bir odak oturumu sürerken bitişi geçerse, oturum bitince bozulma kaydedilir.
-**Durum:** Kabul. Gerçek cihazda henüz doğrulanmadı (QA_CHECKLIST I). Sunucu migration'ı uygulanmadı: uygulanmadan bu alanları değiştiren işler eşitlemede reddedilir.
+**Durum:** Kabul. Gerçek cihazda henüz doğrulanmadı (QA_CHECKLIST I). Sunucu migration'ı 2026-11-21'de uzakta uygulandı.
 
 ## 2026-11-21 — D67: Planlı Pomodoro
 **Karar (proje sahibinin seçimi):**
@@ -583,7 +583,7 @@ Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem 
 - Geç katılımda geciken süre toplamdan düşer; son döngü kısalır, döngü sayısı azalabilir.
 - D67 öncesi Pomodoro işinde tekrar sayısı düzenleme açılınca süreden hesaplanır; motor da bu işlerin molalarını artık plana ekler.
 - Cihazda saklanan "son Pomodoro / derin çalışma ayarı" işe özel blok ve hedefi taşımaz.
-**Durum:** Kabul. Gerçek cihazda henüz doğrulanmadı (QA_CHECKLIST J). Sunucu migration'ı (D66 ile birlikte) uygulanmadı.
+**Durum:** Kabul. Gerçek cihazda henüz doğrulanmadı (QA_CHECKLIST J). Sunucu migration'ı 2026-11-21'de uzakta uygulandı.
 
 ## 2026-11-21 — D68: Molada Rahatsız Etmeyin kapanır
 **Karar (proje sahibinin isteği):** Ayarlarda "Odakta Rahatsız Etmeyin" açıksa DND yalnız kural işlerken (odakta ve normal duraklatmada) açık kalır. Mola başlayınca (Pomodoro / blok sonunda kendiliğinden ya da elle), mola bitip "devam" beklenirken ve acil durum duraklatmasında önceki filtreye döner; odağa dönünce yeniden açılır. Uygulama sabitlemesiyle aynı kural (D36). Uygulama yeniden açılınca DND faza göre kurulur.
