@@ -602,7 +602,7 @@ Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem 
 - Kalıcı bildirimdeki Bitir aynı kuralları soru sormadan uygular: molada kalan saatsiz bekler, odakta 5 dk'dan çok varken oturum bozulur.
 - Bugün ya da yarın boşluk yoksa kalan o gün saatsiz bekler. Saatli kalan geç kalma payı geçince atlanır (kaydırılmaz).
 - Kalanın süresi blok planına göre plana molalarıyla yerleşir (70 dk → 50 + 20, arada 10 dk mola).
-**Durum:** Kabul. Gerçek cihazda henüz doğrulanmadı (QA_CHECKLIST L). Sunucu migration'ı uygulanmadı: uygulanmadan kalan kısım satırları eşitlemede reddedilir.
+**Durum:** Kabul. Gerçek cihazda henüz doğrulanmadı (QA_CHECKLIST L). Sunucu migration'ı 2026-11-21'de uzakta uygulandı.
 
 ## 2026-11-21 — D70: Mola bitince odak sormadan sürer
 **Karar (proje sahibinin isteği):** D34'teki "mola bitti, Devam'a bas" beklemesi kalktı.
