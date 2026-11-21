@@ -3552,4 +3552,32 @@ class L10nTr extends L10n {
   String sumPomodoro(int work, int rest, String layout) {
     return 'Pomodoro · $work dk çalışma, $rest dk mola · $layout';
   }
+
+  @override
+  String get focusFinishEarlyTitle => 'Şimdi bitirilsin mi?';
+
+  @override
+  String focusFinishEarlyBody(int n) {
+    return 'Hedefe $n dk var. Şimdi bitirirsen oturum bozulmuş sayılır: çalıştığın süre analizlerde görünür ama beyni beslemez. Son 5 dakikada ya da molada bitirebilirsin.';
+  }
+
+  @override
+  String get focusKeepGoing => 'Devam et';
+
+  @override
+  String remainderTitle(int n) {
+    return 'Yaptığın kısım sayıldı. Kalan $n dk nerede beklesin?';
+  }
+
+  @override
+  String get remainderToday => 'Bugün uygun bir boşlukta';
+
+  @override
+  String get remainderUntimed => 'Saatsiz beklesin (bugün)';
+
+  @override
+  String get remainderTomorrow => 'Yarına taşı';
+
+  @override
+  String get remainderDrop => 'Kalanı kaldır';
 }

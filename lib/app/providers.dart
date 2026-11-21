@@ -154,6 +154,15 @@ class PlanView {
     for (final i in output.instances)
       if (i.date == date) i,
   ];
+
+  /// [date] gününde [from]'dan (UTC dakika) sonraki ilk [length] dk'lık boşluk; yoksa null.
+  int? firstFree(String date, int from, int length) {
+    for (final s in output.freeSlots[date] ?? const <TimeSlot>[]) {
+      final at = s.start > from ? s.start : from;
+      if (at + length <= s.end) return at;
+    }
+    return null;
+  }
 }
 
 /// Plan verisi ve "şimdi" hazır olunca motoru [range] aralığında çalıştırır.

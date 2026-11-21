@@ -8999,6 +8999,17 @@ class $PlanInstancesTable extends PlanInstances
     type: DriftSqlType.int,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _plannedMinutesMeta = const VerificationMeta(
+    'plannedMinutes',
+  );
+  @override
+  late final GeneratedColumn<int> plannedMinutes = GeneratedColumn<int>(
+    'planned_minutes',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -9018,6 +9029,7 @@ class $PlanInstancesTable extends PlanInstances
     movedFromId,
     isManual,
     engineVersion,
+    plannedMinutes,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -9144,6 +9156,15 @@ class $PlanInstancesTable extends PlanInstances
         ),
       );
     }
+    if (data.containsKey('planned_minutes')) {
+      context.handle(
+        _plannedMinutesMeta,
+        plannedMinutes.isAcceptableOrUnknown(
+          data['planned_minutes']!,
+          _plannedMinutesMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -9223,6 +9244,10 @@ class $PlanInstancesTable extends PlanInstances
         DriftSqlType.int,
         data['${effectivePrefix}engine_version'],
       ),
+      plannedMinutes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}planned_minutes'],
+      ),
     );
   }
 
@@ -9253,6 +9278,9 @@ class PlanInstance extends DataClass implements Insertable<PlanInstance> {
   final String? movedFromId;
   final bool isManual;
   final int? engineVersion;
+
+  /// Molada bitirilen işin kalan saf odağı (D69); `parent_instance_id` asıl işi gösterir.
+  final int? plannedMinutes;
   const PlanInstance({
     required this.id,
     required this.createdAt,
@@ -9271,6 +9299,7 @@ class PlanInstance extends DataClass implements Insertable<PlanInstance> {
     this.movedFromId,
     required this.isManual,
     this.engineVersion,
+    this.plannedMinutes,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -9312,6 +9341,9 @@ class PlanInstance extends DataClass implements Insertable<PlanInstance> {
     if (!nullToAbsent || engineVersion != null) {
       map['engine_version'] = Variable<int>(engineVersion);
     }
+    if (!nullToAbsent || plannedMinutes != null) {
+      map['planned_minutes'] = Variable<int>(plannedMinutes);
+    }
     return map;
   }
 
@@ -9350,6 +9382,9 @@ class PlanInstance extends DataClass implements Insertable<PlanInstance> {
       engineVersion: engineVersion == null && nullToAbsent
           ? const Value.absent()
           : Value(engineVersion),
+      plannedMinutes: plannedMinutes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(plannedMinutes),
     );
   }
 
@@ -9380,6 +9415,7 @@ class PlanInstance extends DataClass implements Insertable<PlanInstance> {
       movedFromId: serializer.fromJson<String?>(json['moved_from_id']),
       isManual: serializer.fromJson<bool>(json['is_manual']),
       engineVersion: serializer.fromJson<int?>(json['engine_version']),
+      plannedMinutes: serializer.fromJson<int?>(json['planned_minutes']),
     );
   }
   @override
@@ -9405,6 +9441,7 @@ class PlanInstance extends DataClass implements Insertable<PlanInstance> {
       'moved_from_id': serializer.toJson<String?>(movedFromId),
       'is_manual': serializer.toJson<bool>(isManual),
       'engine_version': serializer.toJson<int?>(engineVersion),
+      'planned_minutes': serializer.toJson<int?>(plannedMinutes),
     };
   }
 
@@ -9426,6 +9463,7 @@ class PlanInstance extends DataClass implements Insertable<PlanInstance> {
     Value<String?> movedFromId = const Value.absent(),
     bool? isManual,
     Value<int?> engineVersion = const Value.absent(),
+    Value<int?> plannedMinutes = const Value.absent(),
   }) => PlanInstance(
     id: id ?? this.id,
     createdAt: createdAt ?? this.createdAt,
@@ -9448,6 +9486,9 @@ class PlanInstance extends DataClass implements Insertable<PlanInstance> {
     engineVersion: engineVersion.present
         ? engineVersion.value
         : this.engineVersion,
+    plannedMinutes: plannedMinutes.present
+        ? plannedMinutes.value
+        : this.plannedMinutes,
   );
   PlanInstance copyWithCompanion(PlanInstancesCompanion data) {
     return PlanInstance(
@@ -9480,6 +9521,9 @@ class PlanInstance extends DataClass implements Insertable<PlanInstance> {
       engineVersion: data.engineVersion.present
           ? data.engineVersion.value
           : this.engineVersion,
+      plannedMinutes: data.plannedMinutes.present
+          ? data.plannedMinutes.value
+          : this.plannedMinutes,
     );
   }
 
@@ -9502,7 +9546,8 @@ class PlanInstance extends DataClass implements Insertable<PlanInstance> {
           ..write('parentInstanceId: $parentInstanceId, ')
           ..write('movedFromId: $movedFromId, ')
           ..write('isManual: $isManual, ')
-          ..write('engineVersion: $engineVersion')
+          ..write('engineVersion: $engineVersion, ')
+          ..write('plannedMinutes: $plannedMinutes')
           ..write(')'))
         .toString();
   }
@@ -9526,6 +9571,7 @@ class PlanInstance extends DataClass implements Insertable<PlanInstance> {
     movedFromId,
     isManual,
     engineVersion,
+    plannedMinutes,
   );
   @override
   bool operator ==(Object other) =>
@@ -9547,7 +9593,8 @@ class PlanInstance extends DataClass implements Insertable<PlanInstance> {
           other.parentInstanceId == this.parentInstanceId &&
           other.movedFromId == this.movedFromId &&
           other.isManual == this.isManual &&
-          other.engineVersion == this.engineVersion);
+          other.engineVersion == this.engineVersion &&
+          other.plannedMinutes == this.plannedMinutes);
 }
 
 class PlanInstancesCompanion extends UpdateCompanion<PlanInstance> {
@@ -9568,6 +9615,7 @@ class PlanInstancesCompanion extends UpdateCompanion<PlanInstance> {
   final Value<String?> movedFromId;
   final Value<bool> isManual;
   final Value<int?> engineVersion;
+  final Value<int?> plannedMinutes;
   final Value<int> rowid;
   const PlanInstancesCompanion({
     this.id = const Value.absent(),
@@ -9587,6 +9635,7 @@ class PlanInstancesCompanion extends UpdateCompanion<PlanInstance> {
     this.movedFromId = const Value.absent(),
     this.isManual = const Value.absent(),
     this.engineVersion = const Value.absent(),
+    this.plannedMinutes = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   PlanInstancesCompanion.insert({
@@ -9607,6 +9656,7 @@ class PlanInstancesCompanion extends UpdateCompanion<PlanInstance> {
     this.movedFromId = const Value.absent(),
     this.isManual = const Value.absent(),
     this.engineVersion = const Value.absent(),
+    this.plannedMinutes = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        activityId = Value(activityId),
@@ -9630,6 +9680,7 @@ class PlanInstancesCompanion extends UpdateCompanion<PlanInstance> {
     Expression<String>? movedFromId,
     Expression<bool>? isManual,
     Expression<int>? engineVersion,
+    Expression<int>? plannedMinutes,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -9650,6 +9701,7 @@ class PlanInstancesCompanion extends UpdateCompanion<PlanInstance> {
       if (movedFromId != null) 'moved_from_id': movedFromId,
       if (isManual != null) 'is_manual': isManual,
       if (engineVersion != null) 'engine_version': engineVersion,
+      if (plannedMinutes != null) 'planned_minutes': plannedMinutes,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -9672,6 +9724,7 @@ class PlanInstancesCompanion extends UpdateCompanion<PlanInstance> {
     Value<String?>? movedFromId,
     Value<bool>? isManual,
     Value<int?>? engineVersion,
+    Value<int?>? plannedMinutes,
     Value<int>? rowid,
   }) {
     return PlanInstancesCompanion(
@@ -9692,6 +9745,7 @@ class PlanInstancesCompanion extends UpdateCompanion<PlanInstance> {
       movedFromId: movedFromId ?? this.movedFromId,
       isManual: isManual ?? this.isManual,
       engineVersion: engineVersion ?? this.engineVersion,
+      plannedMinutes: plannedMinutes ?? this.plannedMinutes,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -9752,6 +9806,9 @@ class PlanInstancesCompanion extends UpdateCompanion<PlanInstance> {
     if (engineVersion.present) {
       map['engine_version'] = Variable<int>(engineVersion.value);
     }
+    if (plannedMinutes.present) {
+      map['planned_minutes'] = Variable<int>(plannedMinutes.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -9778,6 +9835,7 @@ class PlanInstancesCompanion extends UpdateCompanion<PlanInstance> {
           ..write('movedFromId: $movedFromId, ')
           ..write('isManual: $isManual, ')
           ..write('engineVersion: $engineVersion, ')
+          ..write('plannedMinutes: $plannedMinutes, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -20828,6 +20886,7 @@ typedef $$PlanInstancesTableCreateCompanionBuilder =
       Value<String?> movedFromId,
       Value<bool> isManual,
       Value<int?> engineVersion,
+      Value<int?> plannedMinutes,
       Value<int> rowid,
     });
 typedef $$PlanInstancesTableUpdateCompanionBuilder =
@@ -20849,6 +20908,7 @@ typedef $$PlanInstancesTableUpdateCompanionBuilder =
       Value<String?> movedFromId,
       Value<bool> isManual,
       Value<int?> engineVersion,
+      Value<int?> plannedMinutes,
       Value<int> rowid,
     });
 
@@ -21037,6 +21097,11 @@ class $$PlanInstancesTableFilterComposer
 
   ColumnFilters<int> get engineVersion => $composableBuilder(
     column: $table.engineVersion,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get plannedMinutes => $composableBuilder(
+    column: $table.plannedMinutes,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -21250,6 +21315,11 @@ class $$PlanInstancesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get plannedMinutes => $composableBuilder(
+    column: $table.plannedMinutes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   $$ActivitiesTableOrderingComposer get activityId {
     final $$ActivitiesTableOrderingComposer composer = $composerBuilder(
       composer: this,
@@ -21415,6 +21485,11 @@ class $$PlanInstancesTableAnnotationComposer
 
   GeneratedColumn<int> get engineVersion => $composableBuilder(
     column: $table.engineVersion,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get plannedMinutes => $composableBuilder(
+    column: $table.plannedMinutes,
     builder: (column) => column,
   );
 
@@ -21611,6 +21686,7 @@ class $$PlanInstancesTableTableManager
                 Value<String?> movedFromId = const Value.absent(),
                 Value<bool> isManual = const Value.absent(),
                 Value<int?> engineVersion = const Value.absent(),
+                Value<int?> plannedMinutes = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => PlanInstancesCompanion(
                 id: id,
@@ -21630,6 +21706,7 @@ class $$PlanInstancesTableTableManager
                 movedFromId: movedFromId,
                 isManual: isManual,
                 engineVersion: engineVersion,
+                plannedMinutes: plannedMinutes,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -21651,6 +21728,7 @@ class $$PlanInstancesTableTableManager
                 Value<String?> movedFromId = const Value.absent(),
                 Value<bool> isManual = const Value.absent(),
                 Value<int?> engineVersion = const Value.absent(),
+                Value<int?> plannedMinutes = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => PlanInstancesCompanion.insert(
                 id: id,
@@ -21670,6 +21748,7 @@ class $$PlanInstancesTableTableManager
                 movedFromId: movedFromId,
                 isManual: isManual,
                 engineVersion: engineVersion,
+                plannedMinutes: plannedMinutes,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

@@ -197,6 +197,7 @@ class PlanData {
           source: InstanceSource.fromJson(i.source),
           variantId: i.variantId,
           isManual: i.isManual,
+          minutes: i.plannedMinutes,
         ),
     ],
   );

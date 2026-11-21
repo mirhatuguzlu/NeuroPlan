@@ -58,13 +58,15 @@ class FocusStarter {
     final mode = FocusMode.fromJson(data.focusMode(i.activityId));
     final blocks = data.focusBlocks(i.activityId);
     final length = i.isTimed ? i.end! - i.start! : null;
-    // Saf odak: dağıtılan blokta ve proje parçasında süresi, üst üste blokta molalar
-    // hariç süre (molaları yalnız kural oluşumunda motor ekler).
-    final focus = i.blocks != null || i.ruleId == null
-        ? length
-        : length != null
-        ? (blocks?.focusOf(length) ?? length)
-        : plannedMinutes(data, i);
+    // Saf odak: kalan işte kalan süre (D69), dağıtılan blokta ve proje parçasında süresi,
+    // üst üste blokta molalar hariç süre (molaları yalnız kural oluşumunda motor ekler).
+    final focus =
+        i.minutes ??
+        (i.blocks != null || i.ruleId == null
+            ? length
+            : length != null
+            ? (blocks?.focusOf(length) ?? length)
+            : plannedMinutes(data, i));
     final from = slot ?? (i.isTimed && !i.suggested ? i.start! : now);
     final late = math.max(0, now - from);
     var settings = saved[mode]!;

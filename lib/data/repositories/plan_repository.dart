@@ -148,6 +148,40 @@ class PlanRepository {
     );
   }
 
+  /// Odak oturumu tamamlandı (D69): iş "bitti", gerçek başlangıç ve bitişiyle.
+  Future<PlanInstance> markDone(String id, DateTime start, DateTime end) =>
+      _writer.update(
+        _db.planInstances,
+        id,
+        PlanInstancesCompanion(
+          status: const Value('done'),
+          startAt: Value(start.toUtc()),
+          endAt: Value(end.toUtc()),
+        ),
+      );
+
+  /// Molada bitirilen işin kalan kısmı (D69): verilen saatte ya da saatsiz bekler.
+  Future<PlanInstance> addRemainder({
+    required String activityId,
+    required String parentId,
+    required String date,
+    required int minutes,
+    DateTime? start,
+    DateTime? end,
+  }) => _writer.insert(
+    _db.planInstances,
+    PlanInstancesCompanion.insert(
+      id: newId(),
+      activityId: activityId,
+      occurrenceDate: date,
+      startAt: Value(start?.toUtc()),
+      endAt: Value(end?.toUtc()),
+      source: 'manual',
+      parentInstanceId: Value(parentId),
+      plannedMinutes: Value(minutes),
+    ),
+  );
+
   Future<PlanInstance> skip(PlannedInstance i) =>
       touch(i, const PlanInstancesCompanion(status: Value('skipped')));
 

@@ -190,4 +190,7 @@ class PlanInstances extends Table with SyncColumns {
       text().nullable().references(PlanInstances, #id)();
   BoolColumn get isManual => boolean().withDefault(const Constant(false))();
   IntColumn get engineVersion => integer().nullable()();
+
+  /// Molada bitirilen işin kalan saf odağı (D69); `parent_instance_id` asıl işi gösterir.
+  IntColumn get plannedMinutes => integer().nullable()();
 }

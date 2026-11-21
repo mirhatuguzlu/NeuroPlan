@@ -661,6 +661,8 @@ final class _Run {
 
   void _place(_Occ o, Set<String> cyclic) {
     if (cyclic.contains(o.activityId)) return;
+    // Saatsiz bekleyen kalan iş (D69) yerleştirilmez; kullanıcı kendisi başlatır.
+    if (o.persisted?.minutes != null) return;
     int? sAt, eAt, sLo, sHi, eLo, eHi;
     int? pick(int? cur, int v, bool max) =>
         cur == null ? v : (max ? math.max(cur, v) : math.min(cur, v));
@@ -851,9 +853,13 @@ final class _Run {
             anchorActivityId: o.anchorActivityId,
             persisted: o.persisted != null,
             isManual: o.persisted?.isManual ?? false,
-            suggested: o.suggested,
+            // Kalan iş önerilen saatli iş gibi davranır: bildirim ve geç kalma payı.
+            suggested:
+                o.suggested ||
+                (o.persisted?.minutes != null && o.start != null),
             block: o.block,
             blocks: o.blocks,
+            minutes: o.persisted?.minutes,
           ),
       ],
       freeSlots: free,

@@ -222,6 +222,7 @@ final class PersistedInstance {
     this.source = InstanceSource.rule,
     this.variantId,
     this.isManual = false,
+    this.minutes,
   });
 
   final String id;
@@ -234,6 +235,9 @@ final class PersistedInstance {
   final InstanceSource source;
   final String? variantId;
   final bool isManual;
+
+  /// Molada bitirilen işin kalan saf odağı (D69); saatsizse saatsiz bekler.
+  final int? minutes;
 }
 
 /// Profil ayarları (docs/DB_SCHEMA.md §3.1); null = motor varsayılanı.
@@ -327,6 +331,7 @@ final class PlannedInstance {
     this.suggested = false,
     this.block,
     this.blocks,
+    this.minutes,
   });
 
   final String id;
@@ -356,6 +361,9 @@ final class PlannedInstance {
   /// Gün içine dağıtılan derin çalışmada bu oluşumun sırası (1'den) ve blok sayısı.
   final int? block;
   final int? blocks;
+
+  /// Kalan iş (D69): saf odak süresi; oturum bu kadar sürer.
+  final int? minutes;
 
   bool get isTimed => start != null && end != null;
 }

@@ -434,6 +434,68 @@ void main() {
     );
   });
 
+  group('Bitir (D69)', () {
+    const deep = FocusSettings(
+      FocusMode.deep,
+      target: 120,
+      block: 50,
+      rest: 10,
+    );
+
+    test(
+      'odakta erken Bitir: bozulur, süre yazılır, beyin beslenmez',
+      () async {
+        await r.start(deep);
+        final id = r.s.session!.id;
+        r.now = t0.add(const Duration(minutes: 20));
+        expect(r.c.finishKind(), FinishKind.broken);
+        await r.c.finish();
+        expect(r.s.ended?.outcome, 'broken');
+        expect((await r.session(id)).focusedSeconds, 20 * 60);
+        final types = {
+          for (final e in await r.db.select(r.db.brainEvents).get()) e.type,
+        };
+        expect(types, isNot(contains('neuron_gain')));
+      },
+    );
+
+    test('son 5 dakikada Bitir: iş biter, plandaki iş "bitti" olur', () async {
+      final i = await r.activityInstance();
+      await r.c.start(
+        instance: i,
+        settings: const FocusSettings(
+          FocusMode.deep,
+          target: 10,
+          block: 10,
+          rest: 5,
+        ),
+      );
+      r.now = t0.add(const Duration(minutes: 6));
+      expect(r.c.finishKind(), FinishKind.complete);
+      await r.c.finish();
+      expect(r.s.ended?.outcome, 'completed');
+      final row = await (r.db.select(
+        r.db.planInstances,
+      )..where((p) => p.id.equals(i.id))).getSingle();
+      expect(row.status, 'done');
+      expect(row.endAt, t0.add(const Duration(minutes: 6)));
+    });
+
+    test('molada Bitir: kalan saf odak hesaplanır', () async {
+      await r.start(deep);
+      await r.reopen(t0.add(const Duration(minutes: 55)));
+      expect(r.s.clock!.phase, FocusPhase.onBreak);
+      expect(r.c.finishKind(), FinishKind.remainder);
+      expect(r.c.remainderMinutes(), 70);
+    });
+
+    test('hedefsiz oturumda Bitir her zaman bitirir', () async {
+      await r.start(const FocusSettings(FocusMode.free));
+      r.now = t0.add(const Duration(minutes: 3));
+      expect(r.c.finishKind(), FinishKind.complete);
+    });
+  });
+
   group('D66', () {
     test('Atla: oturum bozulur, odak yazılmaz, iş atlanır', () async {
       final i = await r.activityInstance();

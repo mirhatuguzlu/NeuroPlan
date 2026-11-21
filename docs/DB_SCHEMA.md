@@ -372,6 +372,7 @@ Aynı güne birden çok kayıt düşerse en kısıtlayıcı olan kazanır (`none
 | `variant_id` | uuid null → variants | O gün seçilen varyant |
 | `parent_instance_id` | uuid null → plan_instances | Varyant alt aktivitesinin ya da `follow` oluşumunun üst oluşumu |
 | `moved_from_id` | uuid null → plan_instances | |
+| `planned_minutes` | int null (1–1440) | Molada bitirilen işin kalan saf odağı (D69); `parent_instance_id` asıl işi gösterir; saatsizse saatsiz bekler |
 | `is_manual` | bool default false | Kullanıcı saati ya da süreyi değiştirdi; motor bu satırı yeniden yazmaz |
 | `engine_version` | int null | Motorun ürettiği satırlarda |
 

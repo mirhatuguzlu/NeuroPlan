@@ -347,3 +347,11 @@ Hazırlık: 2–3 dk sonra başlayan, 5 dk süren, "odak gerektirir" bir iş ve 
 - [ ] Ayarlar → Odakta Rahatsız Etmeyin açık, izin verilmiş. Oturum başlayınca DND açılır.
 - [ ] Mola başlayınca (Pomodoro döngü sonu ya da "Mola ver") DND kapanır, bildirimler gelir; "Devam"/mola bitti bildirimine dokununca yeniden açılır.
 - [ ] Acil durum duraklatmasında DND kapanır, devamda açılır; oturum bitince önceki ayar geri gelir.
+
+## L. Erken bitirme ve kalan kısım (D69)
+
+- [ ] 120 dk derin çalışma, ilk molada Bitir → "Kalan 70 dk nerede beklesin?" → Bugün: kalan satır mola bitişinden sonraki ilk boşlukta, saatinde bildirim.
+- [ ] Aynısı "Saatsiz": Bugün'de saatsiz satır, "Şimdi başla" 70 dk'lık oturum açar. "Yarına taşı": yarının ilk boşluğunda. "Kalanı kaldır": satır yok.
+- [ ] Odakta 20. dakikada Bitir → onay; onaylayınca "Oturum bozuldu", profil analizinde 20 dk görünür, beyinde kazanç yok.
+- [ ] Hedefe 4 dk kala Bitir → onay sorulmadan tamamlanır, Bugün'de iş "Bitti".
+- [ ] Tamamlanan her odak işi Bugün'de "Bitti" görünür, plana uyum yüzdesine girer.

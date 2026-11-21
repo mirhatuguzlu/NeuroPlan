@@ -2410,5 +2410,27 @@
         "type": "String"
       }
     }
-  }
+  },
+  "focusFinishEarlyTitle": "Şimdi bitirilsin mi?",
+  "focusFinishEarlyBody": "Hedefe {n} dk var. Şimdi bitirirsen oturum bozulmuş sayılır: çalıştığın süre analizlerde görünür ama beyni beslemez. Son 5 dakikada ya da molada bitirebilirsin.",
+  "@focusFinishEarlyBody": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "focusKeepGoing": "Devam et",
+  "remainderTitle": "Yaptığın kısım sayıldı. Kalan {n} dk nerede beklesin?",
+  "@remainderTitle": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "remainderToday": "Bugün uygun bir boşlukta",
+  "remainderUntimed": "Saatsiz beklesin (bugün)",
+  "remainderTomorrow": "Yarına taşı",
+  "remainderDrop": "Kalanı kaldır"
 }

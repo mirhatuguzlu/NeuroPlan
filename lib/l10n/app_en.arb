@@ -990,5 +990,13 @@
   "wizPomodoroLongBreak": "Long break",
   "wizPomodoroLongEvery": "Long break every … cycles",
   "wizPomodoroPreview": "{count} × {work} min of focus; with breaks it takes {span} min in the plan. The task length was set to match.",
-  "sumPomodoro": "Pomodoro · {work} min focus, {rest} min breaks · {layout}"
+  "sumPomodoro": "Pomodoro · {work} min focus, {rest} min breaks · {layout}",
+  "focusFinishEarlyTitle": "Finish now?",
+  "focusFinishEarlyBody": "You're {n} min from the goal. Finishing now counts as a broken session: the time shows in your insights but doesn't feed the brain. You can finish in the last 5 minutes or during a break.",
+  "focusKeepGoing": "Keep going",
+  "remainderTitle": "What you did counts. Where should the remaining {n} min wait?",
+  "remainderToday": "In a free slot today",
+  "remainderUntimed": "Wait without a time (today)",
+  "remainderTomorrow": "Move to tomorrow",
+  "remainderDrop": "Drop the rest"
 }

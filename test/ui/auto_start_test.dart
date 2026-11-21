@@ -4,6 +4,7 @@ import 'package:neuroplan/app/auto_start.dart';
 import 'package:neuroplan/app/next_up.dart';
 import 'package:neuroplan/app/notifications.dart';
 import 'package:neuroplan/app/providers.dart';
+import 'package:neuroplan/data/local/app_database.dart';
 import 'package:neuroplan/data/repositories/prefs_repository.dart';
 import 'package:neuroplan/l10n/app_localizations.dart';
 import 'package:neuroplan/ui/core/format.dart';
@@ -183,6 +184,75 @@ void main() {
       expect(find.text('Odak · döngü 1/4'), findsOneWidget);
     },
   );
+
+  /// 10:00'da 120 dk derin çalışma (50 / 10), 55. dakikada molada Bitir (D69).
+  Future<(Harness, PlanInstance)> finishOnBreak(
+    WidgetTester t,
+    String option,
+  ) async {
+    final h = await pumpApp(
+      t,
+      seed: (c) =>
+          (ActivityDraft(testNow)
+                ..title = 'Tez'
+                ..at = 10 * 60
+                ..duration = 120
+                ..focus = true
+                ..setFocusMode('deep'))
+              .save(
+                c.read(databaseProvider),
+                c.read(activityRepositoryProvider),
+                PlanCalendar('Europe/Istanbul'),
+              ),
+    );
+    expect(h.read(focusControllerProvider).active, isTrue);
+    Harness.focusNow = testNow.add(const Duration(minutes: 55));
+    await t.pump(const Duration(minutes: 55));
+    await h.settle();
+    expect(h.read(focusControllerProvider).clock!.phase, FocusPhase.onBreak);
+    await h.tap(find.text('Bitir'));
+    expect(
+      find.text('Yaptığın kısım sayıldı. Kalan 70 dk nerede beklesin?'),
+      findsOneWidget,
+    );
+    await h.tap(find.text(option));
+    expect(h.read(focusControllerProvider).ended?.outcome, 'completed');
+    final db = h.read(databaseProvider);
+    final rest = await t.runAsync(
+      () => (db.select(
+        db.planInstances,
+      )..where((p) => p.plannedMinutes.isNotNull())).getSingle(),
+    );
+    return (h, rest!);
+  }
+
+  testWidgets('molada Bitir → bugünün ilk boşluğu: kalan 70 dk ayrı satır', (
+    t,
+  ) async {
+    final (h, rest) = await finishOnBreak(t, 'Bugün uygun bir boşlukta');
+    // Mola 10:50–11:00: kalan en erken mola bitişinde başlar.
+    final at = PlanCalendar('Europe/Istanbul')
+        .wallToUtc(Day.parse('2026-11-18'), 11 * 60);
+    expect(rest.plannedMinutes, 70);
+    expect(
+      rest.startAt,
+      DateTime.fromMillisecondsSinceEpoch(at * 60000, isUtc: true),
+    );
+    // 70 dk = 50 + 20, arada 10 dk mola.
+    expect(rest.endAt!.difference(rest.startAt!), const Duration(minutes: 80));
+    final view = h.read(horizonProvider).value!;
+    expect(view.byId[rest.parentInstanceId]!.status, InstanceStatus.done);
+    expect(view.byId[rest.id]!.minutes, 70);
+  });
+
+  testWidgets('molada Bitir → saatsiz: kalan Bugün sayfasında bekler', (
+    t,
+  ) async {
+    final (h, rest) = await finishOnBreak(t, 'Saatsiz beklesin (bugün)');
+    expect(rest.startAt, isNull);
+    final i = h.read(horizonProvider).value!.byId[rest.id]!;
+    expect((i.isTimed, i.minutes, i.suggested), (false, 70, false));
+  });
 
   testWidgets('bildirime dokunuş: Bugün\'de iş açılır', (t) async {
     final h = await pump(t, at: 12 * 60, focus: false);

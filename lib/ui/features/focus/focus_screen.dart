@@ -122,6 +122,70 @@ class _FocusScreenState extends ConsumerState<FocusScreen> {
     if (ok == true && mounted) await guard(context, _c.emergency);
   }
 
+  /// Bitir (D69): son 5 dk'da iş biter; molada kalanın yeri sorulur; odakta erken
+  /// bitirmek oturumu bozar, önce onay istenir.
+  Future<void> _finish() async {
+    final l = context.l10n;
+    switch (_c.finishKind()) {
+      case FinishKind.complete:
+        await guard(context, _c.finish);
+      case FinishKind.broken:
+        final left =
+            (_c.leftToGoal(ref.read(focusNowProvider)())?.inMinutes ?? 0) + 1;
+        final ok = await showDialog<bool>(
+          context: context,
+          builder: (c) => AlertDialog(
+            title: Text(l.focusFinishEarlyTitle),
+            content: Text(l.focusFinishEarlyBody(left)),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(c, false),
+                child: Text(l.focusKeepGoing),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.pop(c, true),
+                child: Text(l.focusFinish),
+              ),
+            ],
+          ),
+        );
+        if (ok == true && mounted) await guard(context, _c.finish);
+      case FinishKind.remainder:
+        final left = _c.remainderMinutes();
+        final place = await showDialog<RemainderPlace>(
+          context: context,
+          builder: (c) => SimpleDialog(
+            title: Text(l.remainderTitle(left)),
+            children: [
+              for (final (p, label) in [
+                (RemainderPlace.today, l.remainderToday),
+                (RemainderPlace.untimed, l.remainderUntimed),
+                (RemainderPlace.tomorrow, l.remainderTomorrow),
+                (RemainderPlace.drop, l.remainderDrop),
+              ])
+                SimpleDialogOption(
+                  onPressed: () => Navigator.pop(c, p),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: Gap.s),
+                    child: Text(label),
+                  ),
+                ),
+              SimpleDialogOption(
+                onPressed: () => Navigator.pop(c),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: Gap.s),
+                  child: Text(l.commonCancel),
+                ),
+              ),
+            ],
+          ),
+        );
+        if (place != null && mounted) {
+          await guard(context, () => _c.finish(rest: place));
+        }
+    }
+  }
+
   /// Atla geri alınamaz: oturum bozulur, odak sayılmaz (D66).
   Future<void> _skip() async {
     final l = context.l10n;
@@ -288,6 +352,7 @@ class _FocusScreenState extends ConsumerState<FocusScreen> {
                     now: now,
                     onEmergency: () => _emergency(state.emergencyLeft),
                     onSkip: _skip,
+                    onFinish: _finish,
                   ),
                 ],
               ),
@@ -311,12 +376,14 @@ class _Actions extends ConsumerWidget {
     required this.now,
     required this.onEmergency,
     required this.onSkip,
+    required this.onFinish,
   });
 
   final FocusState state;
   final DateTime now;
   final VoidCallback onEmergency;
   final VoidCallback onSkip;
+  final VoidCallback onFinish;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -359,7 +426,7 @@ class _Actions extends ConsumerWidget {
           OutlinedButton.icon(
             icon: const Icon(Symbols.stop_rounded),
             label: Text(l.focusFinish),
-            onPressed: () => guard(context, c.finish),
+            onPressed: onFinish,
           ),
           // Bugün satırındaki Bitti / Atla sayaca taşındı (D66).
           if (state.session?.planInstanceId != null) ...[

@@ -310,7 +310,128 @@ class FocusController extends Notifier<FocusState> {
     await _changed();
   });
 
-  Future<void> finish() => _run(() => _complete(_now()));
+  /// Hedefe kalan süre: blok planlı oturumda saf odak, planlı bitişte duvar saati
+  /// (hangisi kısaysa); hedefsiz oturumda null.
+  Duration? leftToGoal(DateTime now) {
+    final c = _clock;
+    if (c == null) return null;
+    Duration? left;
+    if (c.settings.blocked) {
+      left = Duration(minutes: c.settings.target) - c.focused(now);
+    }
+    if (_plannedEnd case final end?) {
+      final wall = end.difference(now);
+      if (left == null || wall < left) left = wall;
+    }
+    return left;
+  }
+
+  /// "Bitir"in sonucu (D69): son 5 dk'da ya da hedefsiz oturumda iş biter; molada
+  /// yapılan sayılır ve kalan bekler; odak sürerken oturum bozulur.
+  FinishKind finishKind() {
+    final left = leftToGoal(_now());
+    if (left == null || left <= const Duration(minutes: 5)) {
+      return FinishKind.complete;
+    }
+    return switch (_clock!.phase) {
+      FocusPhase.onBreak || FocusPhase.breakOver => FinishKind.remainder,
+      _ => FinishKind.broken,
+    };
+  }
+
+  /// Molada bitirilirse bekleyecek kalan saf odak (dakika, yukarı yuvarlanır).
+  int remainderMinutes() {
+    final c = _clock;
+    if (c == null) return 0;
+    final now = _now();
+    final left = c.settings.blocked
+        ? Duration(minutes: c.settings.target) - c.focused(now)
+        : leftToGoal(now) ?? Duration.zero;
+    return left.isNegative ? 0 : (left.inSeconds / 60).ceil();
+  }
+
+  /// [rest]: molada bitirince kalan saf odağın nerede bekleyeceği.
+  Future<void> finish({RemainderPlace rest = RemainderPlace.untimed}) =>
+      _run(() async {
+        final s = _session;
+        if (s == null) return;
+        final now = _now();
+        switch (finishKind()) {
+          case FinishKind.complete:
+            await _complete(now);
+          case FinishKind.broken:
+            await _breakEarly(now);
+          case FinishKind.remainder:
+            final minutes = remainderMinutes();
+            // Kalan en erken süren molanın bitişinde başlar; hemen yeni oturum açılmasın.
+            final breakEnd = _clock!.nextBoundary(now);
+            final from = breakEnd != null && breakEnd.isAfter(now)
+                ? breakEnd
+                : now;
+            await _complete(now);
+            if (rest != RemainderPlace.drop && minutes > 0) {
+              await _addRemainder(s, minutes, rest, from);
+            }
+        }
+      });
+
+  /// Hedefe 5 dk'dan çok varken odakta Bitir: oturum bozulur; çalışılan süre analiz
+  /// için yazılır, beyni beslemez (bozulma cezası işler, D31).
+  Future<void> _breakEarly(DateTime now) async {
+    final s = _session!;
+    final clock = _clock!.advance(now).close(now);
+    _clock = clock;
+    await ref
+        .read(focusRepositoryProvider)
+        .finish(
+          s.id,
+          outcome: 'broken',
+          focusedSeconds: clock.focused(now).inSeconds,
+          segments: clock.toJson(),
+          endedAt: now,
+        );
+    await _brainEvents(s);
+    await _end(s.id, 'broken');
+  }
+
+  /// Kalan kısım aynı işin ayrı satırı olur (D69): bugünün ilk boşluğu, yarının ilk
+  /// boşluğu ya da saatsiz. Boşluk yoksa o gün saatsiz bekler.
+  Future<void> _addRemainder(
+    FocusSession s,
+    int minutes,
+    RemainderPlace rest,
+    DateTime from,
+  ) async {
+    final view = ref.read(horizonProvider).value;
+    final parent = s.planInstanceId;
+    final activity = s.activityId;
+    if (view == null || parent == null || activity == null) return;
+    final length = view.data.focusBlocks(activity)?.span(minutes) ?? minutes;
+    final today = Day.parse(view.today);
+    final (date, earliest) = switch (rest) {
+      RemainderPlace.tomorrow => (
+        today.add(1),
+        view.calendar.dayStart(today.add(1)),
+      ),
+      _ => (today, (from.millisecondsSinceEpoch + 59999) ~/ 60000),
+    };
+    final at = rest == RemainderPlace.untimed
+        ? null
+        : view.firstFree(date.iso, earliest, length);
+    DateTime? utc(int? m) => m == null
+        ? null
+        : DateTime.fromMillisecondsSinceEpoch(m * 60000, isUtc: true);
+    await ref
+        .read(planRepositoryProvider)
+        .addRemainder(
+          activityId: activity,
+          parentId: parent,
+          date: date.iso,
+          minutes: minutes,
+          start: utc(at),
+          end: utc(at == null ? null : at + length),
+        );
+  }
 
   /// Sayaçtaki "Atla" (D66): oturum bozulmuş sayılır, odak süresi yazılmaz, iş atlanır.
   Future<void> skip() => _run(() async {
@@ -363,6 +484,10 @@ class FocusController extends Notifier<FocusState> {
           segments: clock.toJson(),
           endedAt: now,
         );
+    // Plandaki iş bitti; gerçek başlangıç ve bitişiyle yerinde kalır (D69).
+    if (s.planInstanceId case final id?) {
+      await ref.read(planRepositoryProvider).markDone(id, s.startedAt, now);
+    }
     await _brainEvents(s);
     await _end(s.id, 'completed');
   }
@@ -843,6 +968,21 @@ class FocusController extends Notifier<FocusState> {
     );
   }
 }
+
+/// "Bitir"in sonucu (D69).
+enum FinishKind {
+  /// Hedefsiz oturum ya da hedefe en çok 5 dk kaldı: iş bitti.
+  complete,
+
+  /// Molada: yapılan sayılır, kalan bekler.
+  remainder,
+
+  /// Odak sürerken hedefe 5 dk'dan çok var: oturum bozulur, beyni beslemez.
+  broken,
+}
+
+/// Molada bitirilen işin kalanı nerede bekler (D69).
+enum RemainderPlace { today, untimed, tomorrow, drop }
 
 /// Son kullanılan Pomodoro / derin çalışma ayarları (cihaza özel).
 Future<Map<FocusMode, FocusSettings>> savedFocusSettings(

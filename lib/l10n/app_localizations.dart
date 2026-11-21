@@ -5670,6 +5670,54 @@ abstract class L10n {
   /// In tr, this message translates to:
   /// **'Pomodoro · {work} dk çalışma, {rest} dk mola · {layout}'**
   String sumPomodoro(int work, int rest, String layout);
+
+  /// No description provided for @focusFinishEarlyTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Şimdi bitirilsin mi?'**
+  String get focusFinishEarlyTitle;
+
+  /// No description provided for @focusFinishEarlyBody.
+  ///
+  /// In tr, this message translates to:
+  /// **'Hedefe {n} dk var. Şimdi bitirirsen oturum bozulmuş sayılır: çalıştığın süre analizlerde görünür ama beyni beslemez. Son 5 dakikada ya da molada bitirebilirsin.'**
+  String focusFinishEarlyBody(int n);
+
+  /// No description provided for @focusKeepGoing.
+  ///
+  /// In tr, this message translates to:
+  /// **'Devam et'**
+  String get focusKeepGoing;
+
+  /// No description provided for @remainderTitle.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yaptığın kısım sayıldı. Kalan {n} dk nerede beklesin?'**
+  String remainderTitle(int n);
+
+  /// No description provided for @remainderToday.
+  ///
+  /// In tr, this message translates to:
+  /// **'Bugün uygun bir boşlukta'**
+  String get remainderToday;
+
+  /// No description provided for @remainderUntimed.
+  ///
+  /// In tr, this message translates to:
+  /// **'Saatsiz beklesin (bugün)'**
+  String get remainderUntimed;
+
+  /// No description provided for @remainderTomorrow.
+  ///
+  /// In tr, this message translates to:
+  /// **'Yarına taşı'**
+  String get remainderTomorrow;
+
+  /// No description provided for @remainderDrop.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kalanı kaldır'**
+  String get remainderDrop;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

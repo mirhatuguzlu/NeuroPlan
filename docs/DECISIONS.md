@@ -589,3 +589,17 @@ Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem 
 **Karar (proje sahibinin isteği):** Ayarlarda "Odakta Rahatsız Etmeyin" açıksa DND yalnız kural işlerken (odakta ve normal duraklatmada) açık kalır. Mola başlayınca (Pomodoro / blok sonunda kendiliğinden ya da elle), mola bitip "devam" beklenirken ve acil durum duraklatmasında önceki filtreye döner; odağa dönünce yeniden açılır. Uygulama sabitlemesiyle aynı kural (D36). Uygulama yeniden açılınca DND faza göre kurulur.
 **Geçici:** Acil durum duraklatması da molayla aynı sayıldı (telefon serbest).
 **Durum:** Kabul. Gerçek cihazda henüz doğrulanmadı (QA_CHECKLIST K).
+
+## 2026-11-21 — D69: Erken bitirme ve kalan kısım
+**Karar (proje sahibinin seçimi):**
+- **Molada Bitir** (mola sürerken ya da mola bitip devam beklenirken): oturum tamamlanır, yapılan kısım sayılır ve beyni besler. Kalan saf odak için sorulur: bugünün uygun boşluğu (ertesi güne geçmeden; en erken süren molanın bitişinden sonra), saatsiz (bugün, "Şimdi başla" ile), yarının ilk boşluğu ya da kaldır. Kalan, aynı işin ayrı satırıdır (`plan_instances.planned_minutes`, `parent_instance_id` asıl işi gösterir); saatliyse önerilen saatli iş gibi bildirim ve geç kalma payı kuralları işler.
+- **Odak sürerken Bitir:** hedefe en çok 5 dk kaldıysa iş bitmiş sayılır. Değilse oturum bozulur: çalışılan süre plan ve profil analizleri için yazılır, beyni beslemez (bozulma cezası D31). Önce onay istenir.
+- Hedefsiz oturumda (serbest mod, süresi bilinmeyen iş, ortak odak) Bitir eskisi gibi tamamlar.
+- **Tamamlanan odak oturumu plandaki işi "bitti" yapar** (gerçek başlangıç ve bitişle). D66'da Bitti tuşu sayaca taşınınca odak işleri hiç "bitti" olamıyordu; plana uyum analizi bunu saymıyordu.
+- Veri: `plan_instances.planned_minutes` (Drift şema 5, migration `20261121140000_plan_instance_minutes.sql`).
+**Geçici:**
+- Duraklatılmış (normal ya da acil durum) oturumda Bitir "odak sürerken" sayılır.
+- Kalıcı bildirimdeki Bitir aynı kuralları soru sormadan uygular: molada kalan saatsiz bekler, odakta 5 dk'dan çok varken oturum bozulur.
+- Bugün ya da yarın boşluk yoksa kalan o gün saatsiz bekler. Saatli kalan geç kalma payı geçince atlanır (kaydırılmaz).
+- Kalanın süresi blok planına göre plana molalarıyla yerleşir (70 dk → 50 + 20, arada 10 dk mola).
+**Durum:** Kabul. Gerçek cihazda henüz doğrulanmadı (QA_CHECKLIST L). Sunucu migration'ı uygulanmadı: uygulanmadan kalan kısım satırları eşitlemede reddedilir.

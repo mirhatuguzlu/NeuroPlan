@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:neuroplan/app/providers.dart';
+import 'package:neuroplan/ui/features/focus/focus_controller.dart';
 import 'package:neuroplan/ui/features/activity_wizard/draft.dart';
 import 'package:neuroplan_core/neuroplan_core.dart';
 
@@ -32,7 +33,7 @@ void main() {
     return h;
   }
 
-  testWidgets('Pomodoro işi saatinde sayaçta; Bitir → 4 adım → Bugün', (
+  testWidgets('Pomodoro işi saatinde sayaçta; odakta erken Bitir onay ister', (
     t,
   ) async {
     final h = await openStart(t, mode: 'pomodoro');
@@ -46,6 +47,17 @@ void main() {
     await t.pump(const Duration(seconds: 1));
     expect(find.text('15:00'), findsOneWidget);
 
+    // Hedefe 90 dk var: Bitir oturumu bozar, önce sorulur (D69).
+    await h.tap(find.text('Bitir'));
+    expect(find.text('Şimdi bitirilsin mi?'), findsOneWidget);
+    await h.tap(find.text('Devam et'));
+    expect(h.read(focusControllerProvider).active, isTrue);
+  });
+
+  testWidgets('Şimdi başla → serbest odak; Bitir → 4 adım → Bugün', (t) async {
+    final h = await openStart(t);
+    Harness.focusNow = Harness.focusNow.add(const Duration(minutes: 10));
+    await t.pump(const Duration(seconds: 1));
     await h.tap(find.text('Bitir'));
     expect(find.text('Ne kadar odaklanabildin?'), findsOneWidget);
     await h.expectAccessible();

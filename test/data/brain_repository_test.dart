@@ -161,6 +161,9 @@ void main() {
         await v2.customStatement('ALTER TABLE activities DROP COLUMN $c');
       }
       await v2.customStatement(
+        'ALTER TABLE plan_instances DROP COLUMN planned_minutes',
+      );
+      await v2.customStatement(
         'ALTER TABLE category_region_weights DROP COLUMN detail_en',
       );
       await v2.customStatement(
@@ -214,6 +217,9 @@ void main() {
       ]) {
         await old.customStatement('ALTER TABLE activities DROP COLUMN $c');
       }
+      await old.customStatement(
+        'ALTER TABLE plan_instances DROP COLUMN planned_minutes',
+      );
       await old.customStatement('PRAGMA user_version = 2');
       await old.close();
 

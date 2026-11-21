@@ -3630,4 +3630,32 @@ class L10nEn extends L10n {
   String sumPomodoro(int work, int rest, String layout) {
     return 'Pomodoro · $work min focus, $rest min breaks · $layout';
   }
+
+  @override
+  String get focusFinishEarlyTitle => 'Finish now?';
+
+  @override
+  String focusFinishEarlyBody(int n) {
+    return 'You\'re $n min from the goal. Finishing now counts as a broken session: the time shows in your insights but doesn\'t feed the brain. You can finish in the last 5 minutes or during a break.';
+  }
+
+  @override
+  String get focusKeepGoing => 'Keep going';
+
+  @override
+  String remainderTitle(int n) {
+    return 'What you did counts. Where should the remaining $n min wait?';
+  }
+
+  @override
+  String get remainderToday => 'In a free slot today';
+
+  @override
+  String get remainderUntimed => 'Wait without a time (today)';
+
+  @override
+  String get remainderTomorrow => 'Move to tomorrow';
+
+  @override
+  String get remainderDrop => 'Drop the rest';
 }
