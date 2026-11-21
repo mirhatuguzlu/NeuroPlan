@@ -636,6 +636,22 @@ class FocusController extends Notifier<FocusState> {
     _syncAlert();
     await _resolve(r);
     if (_session != null) await _advance(now);
+    // Mola bittiyse dönüşte sormadan sürer (D70; D34'teki "Devam" beklemesi kalktı).
+    if (_session != null && _clock!.phase == FocusPhase.breakOver) {
+      await _resumeAfterBreak(now);
+    }
+  }
+
+  /// Mola bitti, kullanıcı uygulamada: sonraki odak bloğu hemen başlar.
+  Future<void> _resumeAfterBreak(DateTime now) async {
+    _clock = _clock!.resumeWork(now);
+    _pause = null;
+    await _changed();
+  }
+
+  bool get _visible {
+    final s = WidgetsBinding.instance.lifecycleState;
+    return s == null || s == AppLifecycleState.resumed;
   }
 
   Future<void> _resolve(GuardResult? r) async {
@@ -778,6 +794,10 @@ class FocusController extends Notifier<FocusState> {
     await _advance(now);
     // Blok planlı derin çalışma hedefe ulaşınca kendiliğinden tamamlanır (D66).
     if (_clock!.targetReachedAt(now) case final at?) return _complete(at);
+    // Uygulama öndeyken mola bitti: sormadan sürer, "mola bitti" uyarısı gerekmez (D70).
+    if (_clock!.phase == FocusPhase.breakOver && _visible) {
+      return _resumeAfterBreak(now);
+    }
     final after = _clock!.phase;
     final l = _l;
     final (title, body) = switch ((before.phase, after)) {

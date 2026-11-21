@@ -355,3 +355,10 @@ Hazırlık: 2–3 dk sonra başlayan, 5 dk süren, "odak gerektirir" bir iş ve 
 - [ ] Odakta 20. dakikada Bitir → onay; onaylayınca "Oturum bozuldu", profil analizinde 20 dk görünür, beyinde kazanç yok.
 - [ ] Hedefe 4 dk kala Bitir → onay sorulmadan tamamlanır, Bugün'de iş "Bitti".
 - [ ] Tamamlanan her odak işi Bugün'de "Bitti" görünür, plana uyum yüzdesine girer.
+
+## M. Mola sonunda odak sürer (D70)
+
+- [ ] Uygulama öndeyken mola bitince sayaç kendiliğinden odağa geçer; "Devam" sorulmaz.
+- [ ] Molada başka uygulamaya geç; mola bitince "Mola bitti" bildirimi; dokununca uygulama açılır ve odak hemen sürer.
+- [ ] Molada ekranı kilitle; mola bitince ekran uyanır / bildirim gelir; kilidi açınca uygulama önde ve odak sürüyor.
+- [ ] Android 14+ cihazda Ayarlar → Uygulamalar → NöroPlan → "Tam ekran bildirimleri" iznini kontrol et; kapalıysa yalnız üstten uyarı gelir.

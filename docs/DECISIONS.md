@@ -603,3 +603,14 @@ Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem 
 - Bugün ya da yarın boşluk yoksa kalan o gün saatsiz bekler. Saatli kalan geç kalma payı geçince atlanır (kaydırılmaz).
 - Kalanın süresi blok planına göre plana molalarıyla yerleşir (70 dk → 50 + 20, arada 10 dk mola).
 **Durum:** Kabul. Gerçek cihazda henüz doğrulanmadı (QA_CHECKLIST L). Sunucu migration'ı uygulanmadı: uygulanmadan kalan kısım satırları eşitlemede reddedilir.
+
+## 2026-11-21 — D70: Mola bitince odak sormadan sürer
+**Karar (proje sahibinin isteği):** D34'teki "mola bitti, Devam'a bas" beklemesi kalktı.
+- Uygulama öndeyken mola bitince sonraki odak bloğu hemen başlar.
+- Mola uygulama dışındayken bittiyse sayaç bekler (dışarıdayken 10 sn kuralı işlemesin diye); uygulamaya dönüş, açılış ya da "Mola bitti" bildirimine dokunuş odağı o an sürdürür, ayrıca sorulmaz.
+- "Mola bitti" bildirimi alarm kategorisinde ve tam ekran niyetiyle (`USE_FULL_SCREEN_INTENT`) kurulur: telefon kilitliyken uygulama öne gelir, kilit açılınca sayaç önde olur ve odak sürer.
+**Geçici:**
+- Android 14+ tam ekran niyeti yalnız alarm / arama uygulamalarına varsayılan verilir; izin yoksa sistem yalnız üstten uyarı gösterir (dokununca açılır). Play beyanında "alarm/zamanlayıcı" gerekçesi yazılmalı (RELEASE).
+- Telefon açık ve başka uygulamadayken Android arka plandan uygulama açmaya izin vermez; bu durumda bildirime dokunmak gerekir.
+- Uygulama kilit ekranının üstünde gösterilmez (`showWhenLocked` yok): planların kilitli ekranda görünmemesi için.
+**Durum:** Kabul. Gerçek cihazda henüz doğrulanmadı (QA_CHECKLIST M).

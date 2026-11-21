@@ -57,6 +57,7 @@ Toplanmayanlar: kesin konum, kişiler, fotoğraf / video, dosyalar, takvim, sağ
 3. Uzak Supabase'e migration'lar uygulandı mı (`supabase db push --remote`), Edge Functions yayımlandı mı.
 4. Gizlilik politikası, kullanım şartları, topluluk kuralları ve çocuk güvenliği sayfaları yayında (tanıtım sitesi, D51).
 5. Firebase konsolunda Crashlytics açık; ilk sürümden sonra panoda kayıt görünüyor.
+6. Play Console → Uygulama içeriği → **Tam ekran amaç (USE_FULL_SCREEN_INTENT) beyanı**: "Odak zamanlayıcısı: mola bitiminde kullanıcıyı odağa döndüren alarm" (D70). Beyan kabul edilmezse izin Android 14+ cihazlarda kapalı gelir; uygulama üstten uyarıyla çalışmayı sürdürür.
 
 ## 6. Mağaza görselleri listesi
 Görseller gerçek uygulamadan, örnek ama gerçekçi yetişkin / öğrenci verisiyle alınır (ör. "Tez", "Gitar", "Koşu"). **Çocuk karakter, oyuncak, çizgi film figürü, ana sınıfı renk paleti ya da "çocuk" kelimesi kullanılmaz.** Eğlenceli tema gösterilecekse yanında Ciddi ya da Kodcu da olur.

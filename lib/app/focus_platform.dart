@@ -384,7 +384,10 @@ class AndroidFocusPlatform implements FocusPlatform {
           channelName,
           importance: Importance.high,
           priority: Priority.high,
-          category: AndroidNotificationCategory.reminder,
+          category: AndroidNotificationCategory.alarm,
+          // Kilitliyken uygulamayı öne getirir: kilit açılınca sayaç önde, odak sürer (D70).
+          // İzin verilmemişse (Android 14+ özel erişim) sistem üstten uyarı gösterir.
+          fullScreenIntent: true,
         ),
       ),
     );

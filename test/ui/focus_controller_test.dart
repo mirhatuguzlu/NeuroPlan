@@ -243,25 +243,22 @@ void main() {
     },
   );
 
-  test(
-    'Pomodoro: mola başlayınca çıkmak serbest, mola bitince bekler',
-    () async {
-      await r.start(const FocusSettings(FocusMode.pomodoro, work: 1, rest: 5));
-      r.now = t0.add(const Duration(seconds: 90));
-      await r.back(); // geciken zamanlayıcı dönüşte yetişir
-      expect(r.s.clock!.phase, FocusPhase.onBreak);
-      await r.leave();
-      expect(r.platform.alertDeadline, isNull);
-      r.now = t0.add(const Duration(minutes: 20));
-      await r.back();
-      expect(r.s.active, isTrue);
-      expect(r.s.clock!.phase, FocusPhase.breakOver);
-      expect(await r.interruptions(), isEmpty);
-      await r.c.resume();
-      expect(r.s.clock!.phase, FocusPhase.working);
-      expect(r.s.clock!.focused(r.now), const Duration(minutes: 1));
-    },
-  );
+  test('Pomodoro: mola başlayınca çıkmak serbest, mola bitince dönüşte sormadan sürer', () async {
+    await r.start(const FocusSettings(FocusMode.pomodoro, work: 1, rest: 5));
+    r.now = t0.add(const Duration(seconds: 90));
+    await r.back(); // geciken zamanlayıcı dönüşte yetişir
+    expect(r.s.clock!.phase, FocusPhase.onBreak);
+    await r.leave();
+    expect(r.platform.alertDeadline, isNull);
+    r.now = t0.add(const Duration(minutes: 20));
+    await r.back();
+    expect(r.s.active, isTrue);
+    // D70: "Devam" beklenmez; sonraki blok dönüş anında başlar.
+    expect(r.s.clock!.phase, FocusPhase.working);
+    expect(await r.interruptions(), isEmpty);
+    expect(r.s.clock!.focused(r.now), const Duration(minutes: 1));
+    expect(r.s.clock!.segments.last.start, r.now);
+  });
 
   test('acil durumda çıkmak serbest; günde 3 kez', () async {
     await r.start(const FocusSettings(FocusMode.free));
@@ -398,12 +395,27 @@ void main() {
       expect(r.s.clock!.focused(r.now), const Duration(minutes: 45));
     });
 
-    test('Pomodoro: saatler sonra açılışta mola bitmiş, bekliyor', () async {
+    test('Pomodoro: saatler sonra açılışta mola bitmiş, odak sürer', () async {
       await r.start(const FocusSettings(FocusMode.pomodoro));
       await r.reopen(t0.add(const Duration(hours: 3)));
       expect(r.s.active, isTrue);
-      expect(r.s.clock!.phase, FocusPhase.breakOver);
+      expect(r.s.clock!.phase, FocusPhase.working);
       expect(r.s.clock!.focused(r.now), const Duration(minutes: 25));
+      expect(r.s.clock!.segments.last.start, r.now, reason: 'açılış anında');
+    });
+
+    test('arka planda mola bitince bekler, uyarı kurulur (D70)', () async {
+      await r.start(const FocusSettings(FocusMode.pomodoro, work: 1, rest: 1));
+      r.now = t0.add(const Duration(seconds: 61));
+      await r.back();
+      expect(r.s.clock!.phase, FocusPhase.onBreak);
+      expect(r.platform.breakOverAt, t0.add(const Duration(minutes: 2)));
+      await r.leave();
+      expect(
+        r.s.clock!.phase,
+        FocusPhase.onBreak,
+        reason: 'dışarıdayken sürmez',
+      );
     });
 
     test('çıkış son tarihten önce mola başladıysa bozulmaz', () async {
