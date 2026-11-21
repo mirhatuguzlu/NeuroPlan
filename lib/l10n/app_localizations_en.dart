@@ -1242,6 +1242,15 @@ class L10nEn extends L10n {
   }
 
   @override
+  String focusOwnLength(int minutes) {
+    return 'Its own length ($minutes min)';
+  }
+
+  @override
+  String get focusOwnLengthHint =>
+      'The session completes on its own when the time is up.';
+
+  @override
   String get focusFieldWork => 'Focus (min)';
 
   @override

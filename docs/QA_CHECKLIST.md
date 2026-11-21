@@ -312,3 +312,10 @@ Hazırlık: 2–3 dk sonra başlayan, 5 dk süren, "odak gerektirir" bir iş ve 
 - [ ] Kategori ağacında kalem → ad değişir; işler aynı kategoride kalır.
 - [ ] Uyku işinin Saat satırı Ayarlar'ı açar; uyku penceresi bozulmaz.
 - [ ] Özetten Sil → "X silindi · Geri al".
+
+## H. Kendi süresi kadar ve mola bitti uyarısı (D65)
+
+- [ ] 5 dk'lık derin çalışma işinde Odaklan → "Kendi süresi kadar (5 dk)" açık, özet "Hedef 5 dk"; Başla → 5 dk sonra oturum kendiliğinden tamamlanır.
+- [ ] Anahtarı kapat → kayıtlı hedef (ör. 90 dk) geri gelir; süresi olmayan işte anahtar görünmez.
+- [ ] Molaya geç, uygulamayı arka plana al (ya da son uygulamalardan süpür) → mola bitince "Mola bitti" bildirimi gelir.
+- [ ] Molayı erken bitir → mola bitiş saatinde bildirim gelmez.

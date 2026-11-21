@@ -194,10 +194,13 @@ class FocusController extends Notifier<FocusState> {
   /// Bugün ekranındaki işten oturum başlatır.
   /// [startAt]: ortak odakta sunucunun başlangıç anı (cihaz saatine çevrilmiş); sayaçlar
   /// senkron başlar. En çok 2 dk geriye alınır, ileri tarih yok sayılır.
+  /// [ownMinutes]: "kendi süresi kadar" — oturum başlangıçtan bu kadar sonra kendiliğinden
+  /// tamamlanır; derin çalışma hedefi de bu süre olur (kayıtlı hedef değişmez).
   Future<void> start({
     required PlannedInstance instance,
     required FocusSettings settings,
     DateTime? startAt,
+    int? ownMinutes,
   }) => _run(() async {
     if (_session != null) return;
     // Uyarı bildirimi için izin, gerektiği anda istenir (D27 ile aynı ilke).
@@ -213,14 +216,17 @@ class FocusController extends Notifier<FocusState> {
     await ref
         .read(planRepositoryProvider)
         .touch(instance, const PlanInstancesCompanion());
-    final clock = FocusClock.start(settings, now);
+    final run = ownMinutes != null && settings.mode == FocusMode.deep
+        ? settings.copyWith(target: ownMinutes)
+        : settings;
+    final clock = FocusClock.start(run, now);
     _session = await ref
         .read(focusRepositoryProvider)
         .start(
           mode: settings.mode.name,
           planInstanceId: instance.id,
           activityId: instance.activityId,
-          settings: settings.toJson(),
+          settings: run.toJson(),
           plannedMinutes: instance.isTimed
               ? instance.end! - instance.start!
               : null,
@@ -240,11 +246,12 @@ class FocusController extends Notifier<FocusState> {
             isUtc: true,
           )
         : null;
-    _plannedEnd =
-        startAt == null &&
-            end != null &&
-            end.isAfter(now) &&
-            await _prefs.get(PrefsRepository.autoRun) != '0'
+    _plannedEnd = startAt == null && ownMinutes != null && ownMinutes > 0
+        ? now.add(Duration(minutes: ownMinutes))
+        : startAt == null &&
+              end != null &&
+              end.isAfter(now) &&
+              await _prefs.get(PrefsRepository.autoRun) != '0'
         ? end
         : null;
     await _saveRuntime();
@@ -568,6 +575,25 @@ class FocusController extends Notifier<FocusState> {
     _boundary?.cancel();
     final now = _now();
     final at = _clock?.nextBoundary(now);
+    // Mola bitişi sistem alarmıyla; "bitti"de dokunulmaz ki yeni gelen uyarı silinmesin.
+    switch (_clock?.phase) {
+      case FocusPhase.onBreak:
+        final l = _l;
+        unawaited(
+          _safe(
+            () => _platform.scheduleBreakOver(
+              at!,
+              l.focusBreakOverTitle,
+              l.focusBreakOverBody,
+              channelName: l.focusAlertChannel,
+            ),
+          ),
+        );
+      case FocusPhase.breakOver:
+        break;
+      case _:
+        unawaited(_safe(_platform.cancelBreakOver));
+    }
     if (at == null) return;
     final wait = at.difference(now);
     _boundary = Timer(
@@ -590,10 +616,6 @@ class FocusController extends Notifier<FocusState> {
       (FocusPhase.working, FocusPhase.onBreak) => (
         l.focusBreakTitle,
         l.focusBreakBody(_clock!.breakLength(now).inMinutes),
-      ),
-      (FocusPhase.onBreak, FocusPhase.breakOver) => (
-        l.focusBreakOverTitle,
-        l.focusBreakOverBody,
       ),
       (FocusPhase.working, FocusPhase.working)
           when before.settings.mode == FocusMode.deep =>
@@ -654,6 +676,7 @@ class FocusController extends Notifier<FocusState> {
     _plannedEnd = null;
     _alerted = null;
     await _safe(_platform.stopOngoing);
+    await _safe(_platform.cancelBreakOver);
     _syncPin(want: false);
     await _safe(_platform.restoreDnd);
     // Bozulmada native uyarı "Odak bozuldu"ya dönüştü; o bildirim kalır.

@@ -324,6 +324,8 @@
   "focusSummaryFree": "No time limit; stop when you're done.",
   "focusSummaryPomodoro": "{work} min focus, {rest} min break; a {long} min long break every {every} cycles.",
   "focusSummaryDeep": "Target: {target} min of uninterrupted focus. You can take a break, suggested from how long you've focused so far.",
+  "focusOwnLength": "Its own length ({minutes} min)",
+  "focusOwnLengthHint": "The session completes on its own when the time is up.",
   "focusFieldWork": "Focus (min)",
   "focusFieldBreak": "Break (min)",
   "focusFieldLongBreak": "Long break (min)",

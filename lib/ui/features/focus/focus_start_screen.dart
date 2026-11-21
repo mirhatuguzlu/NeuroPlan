@@ -29,6 +29,18 @@ class FocusStartScreen extends ConsumerStatefulWidget {
 class _FocusStartScreenState extends ConsumerState<FocusStartScreen> {
   FocusMode? _mode;
   Map<FocusMode, FocusSettings>? _settings;
+  bool _useOwn = true;
+
+  /// İşin kendi süresi: saatliyse aralık, değilse kuralın / işin süresi.
+  static int? _ownMinutes(PlanView v, PlannedInstance i) {
+    if (i.isTimed) return i.end! > i.start! ? i.end! - i.start! : null;
+    final r = v.data.rules.where((r) => r.id == i.ruleId).firstOrNull;
+    final m =
+        r?.durationMaxMinutes ??
+        r?.durationMinMinutes ??
+        v.data.activities[i.activityId]?.estimatedMinutes;
+    return m != null && m > 0 ? m : null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +64,7 @@ class _FocusStartScreenState extends ConsumerState<FocusStartScreen> {
           v.data.focusMode(i.activityId),
         );
         final settings = _settings![mode]!;
+        final own = _useOwn ? _ownMinutes(v, i) : null;
         return ListView(
           padding: const EdgeInsets.fromLTRB(Gap.xl, Gap.l, Gap.xl, Gap.xxl),
           children: [
@@ -78,9 +91,26 @@ class _FocusStartScreenState extends ConsumerState<FocusStartScreen> {
               selected: {mode},
               onSelectionChanged: (m) => setState(() => _mode = m.single),
             ),
+            if (_ownMinutes(v, i) case final m?)
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                value: _useOwn,
+                onChanged: (on) => setState(() => _useOwn = on),
+                title: Text(l.focusOwnLength(m)),
+                subtitle: Text(l.focusOwnLengthHint),
+              ),
             const SizedBox(height: Gap.l),
-            Text(_summary(l, settings), style: theme.textTheme.bodyLarge),
-            if (mode != FocusMode.free)
+            Text(
+              _summary(
+                l,
+                own != null && mode == FocusMode.deep
+                    ? settings.copyWith(target: own)
+                    : settings,
+              ),
+              style: theme.textTheme.bodyLarge,
+            ),
+            if (mode == FocusMode.pomodoro ||
+                (mode == FocusMode.deep && own == null))
               ExpansionTile(
                 tilePadding: EdgeInsets.zero,
                 title: Text(l.focusChangeDurations),
@@ -143,7 +173,13 @@ class _FocusStartScreenState extends ConsumerState<FocusStartScreen> {
                   context,
                   () => ref
                       .read(focusControllerProvider.notifier)
-                      .start(instance: instance, settings: _settings![_mode!]!),
+                      .start(
+                        instance: instance,
+                        settings: _settings![_mode!]!,
+                        ownMinutes: _useOwn && view != null
+                            ? _ownMinutes(view, instance)
+                            : null,
+                      ),
                 ),
               ),
             ),

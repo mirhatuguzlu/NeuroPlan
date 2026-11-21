@@ -11,6 +11,7 @@ import 'package:timezone/timezone.dart' as tz;
 import '../data/repositories/prefs_repository.dart';
 import '../l10n/app_localizations.dart';
 import '../ui/core/format.dart';
+import 'focus_platform.dart';
 import 'notifications.dart';
 import 'providers.dart';
 
@@ -171,7 +172,12 @@ class NextUp {
   ) async {
     await _init();
     // Yalnız zamanlanmışlar: gösterilen odak bildirimleri (kalıcı, uyarı) silinmesin.
-    await _plugin.cancelAllPendingNotifications();
+    // Odak oturumunun zamanlanmış "mola bitti" uyarısı burada silinmez.
+    for (final p in await _plugin.pendingNotificationRequests()) {
+      if (p.id != AndroidFocusPlatform.breakOverId) {
+        await _plugin.cancel(id: p.id);
+      }
+    }
     if (reminders.isEmpty) return;
     final canExact =
         exact && (await _android?.canScheduleExactNotifications() ?? false);

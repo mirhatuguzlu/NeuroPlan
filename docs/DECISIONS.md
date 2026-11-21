@@ -541,3 +541,12 @@ Kimlikler deterministik kalır: kural oluşumu için `v5(kural, gün)`, "dönem 
 - Bugün için önceden dokunulmuş oluşum (ör. bitti) eski kurala bağlı kalır; aynı gün saat değişirse bugünkü iş yeni kuraldan bir kez daha görünebilir.
 - Göreli saatte işin kendisi çapa listesinde yok; başka işler üzerinden döngü kurulursa motor `DependencyCycle` olarak gösterir (kayıtta engellenmez).
 **Durum:** Kabul. Gerçek cihazda henüz doğrulanmadı (QA_CHECKLIST G).
+
+## 2026-11-21 — D65: Kendi süresi kadar odak, zamanlı "mola bitti" uyarısı
+**Karar:**
+- **Kendi süresi kadar:** odak başlatma ekranında mod seçicinin altında anahtar; işin süresi biliniyorsa (saatli işte aralık, değilse kuralın / işin süresi) görünür ve varsayılan açıktır. Açıkken oturum başlangıçtan o kadar sonra mod ne olursa olsun "tamamlandı" olur (D63'teki planlanan bitişin yerine geçer, `pref.auto_run`'dan bağımsız); derin çalışmada hedef de bu süre olur. Yeni mod yok, veritabanı değişmedi; oturumun `settings`'ine kullanılan hedef yazılır, kayıtlı derin çalışma hedefi ezilmez.
+- **Mola bitti uyarısı** Dart zamanlayıcısı yerine `zonedSchedule` ile sistem alarmına kurulur (kimlik 903): uygulama arkadayken ya da süpürülmüşken de gelir. Mola başlayınca kurulur, moladan erken dönüşte ve oturum bitince silinir. Plan hatırlatmaları yeniden kurulurken bu kimlik silinmez.
+**Geçici:**
+- Tam zamanlı bildirim izni kapalıysa uyarı birkaç dakika gecikebilir.
+- Pomodoro'da odak bloğu bitişi (mola başlangıcı) hâlâ Dart zamanlayıcısıyla; uygulama ölüyken mola başlangıcı açılışta işlenir, o molanın bitiş uyarısı da o zaman kurulur.
+**Durum:** Kabul. Gerçek cihazda henüz doğrulanmadı (QA_CHECKLIST H).

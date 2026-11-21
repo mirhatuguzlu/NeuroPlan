@@ -1240,6 +1240,15 @@ class L10nTr extends L10n {
   }
 
   @override
+  String focusOwnLength(int minutes) {
+    return 'Kendi süresi kadar ($minutes dk)';
+  }
+
+  @override
+  String get focusOwnLengthHint =>
+      'Süre dolunca oturum kendiliğinden tamamlanır.';
+
+  @override
   String get focusFieldWork => 'Odak (dk)';
 
   @override

@@ -2041,6 +2041,18 @@ abstract class L10n {
   /// **'Hedef {target} dk kesintisiz odak. İstersen, o ana kadarki odak süresine göre önerilen bir mola verebilirsin.'**
   String focusSummaryDeep(int target);
 
+  /// No description provided for @focusOwnLength.
+  ///
+  /// In tr, this message translates to:
+  /// **'Kendi süresi kadar ({minutes} dk)'**
+  String focusOwnLength(int minutes);
+
+  /// No description provided for @focusOwnLengthHint.
+  ///
+  /// In tr, this message translates to:
+  /// **'Süre dolunca oturum kendiliğinden tamamlanır.'**
+  String get focusOwnLengthHint;
+
   /// No description provided for @focusFieldWork.
   ///
   /// In tr, this message translates to:

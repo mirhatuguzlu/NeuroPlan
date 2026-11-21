@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 import 'notifications.dart';
 
@@ -51,6 +52,16 @@ abstract interface class FocusPlatform {
     String body, {
     required String channelName,
   });
+
+  /// "Mola bitti" uyarısı sistem alarmıyla [at]'te gelir: uygulama arkadayken ya da
+  /// süpürülmüşken de (D65). Yeniden kurmak öncekinin yerini alır.
+  Future<void> scheduleBreakOver(
+    DateTime at,
+    String title,
+    String body, {
+    required String channelName,
+  });
+  Future<void> cancelBreakOver();
 }
 
 enum FocusSignal {
@@ -141,6 +152,9 @@ class AndroidFocusPlatform implements FocusPlatform {
   static const _events = EventChannel('neuroplan/focus_events');
   static const _ongoingId = 900;
   static const _phaseId = 902;
+
+  /// Plan hatırlatmaları yeniden kurulurken bu kimlik silinmez (`next_up.dart`).
+  static const breakOverId = 903;
   static const _ongoingChannel = 'focus_ongoing';
 
   var _microphone = false;
@@ -343,6 +357,38 @@ class AndroidFocusPlatform implements FocusPlatform {
       ),
     );
   }
+
+  @override
+  Future<void> scheduleBreakOver(
+    DateTime at,
+    String title,
+    String body, {
+    required String channelName,
+  }) async {
+    final channel = await _alertChannel(channelName);
+    final exact = await _n.android?.canScheduleExactNotifications() ?? false;
+    await _n.plugin.zonedSchedule(
+      id: breakOverId,
+      scheduledDate: tz.TZDateTime.from(at.toUtc(), tz.UTC),
+      title: title,
+      body: body,
+      androidScheduleMode: exact
+          ? AndroidScheduleMode.exactAllowWhileIdle
+          : AndroidScheduleMode.inexactAllowWhileIdle,
+      notificationDetails: NotificationDetails(
+        android: AndroidNotificationDetails(
+          channel,
+          channelName,
+          importance: Importance.high,
+          priority: Priority.high,
+          category: AndroidNotificationCategory.reminder,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Future<void> cancelBreakOver() => _n.plugin.cancel(id: breakOverId);
 }
 
 /// Android dışı (testler, ileride iOS gelene kadar): hiçbir sistem çağrısı yapılmaz.
@@ -389,4 +435,13 @@ class _NoFocusPlatform implements FocusPlatform {
     String body, {
     required String channelName,
   }) async {}
+  @override
+  Future<void> scheduleBreakOver(
+    DateTime at,
+    String title,
+    String body, {
+    required String channelName,
+  }) async {}
+  @override
+  Future<void> cancelBreakOver() async {}
 }

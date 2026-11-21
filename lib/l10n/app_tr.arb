@@ -707,6 +707,15 @@
       }
     }
   },
+  "focusOwnLength": "Kendi süresi kadar ({minutes} dk)",
+  "@focusOwnLength": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "focusOwnLengthHint": "Süre dolunca oturum kendiliğinden tamamlanır.",
   "focusFieldWork": "Odak (dk)",
   "focusFieldBreak": "Mola (dk)",
   "focusFieldLongBreak": "Uzun mola (dk)",

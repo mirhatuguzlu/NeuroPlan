@@ -300,6 +300,22 @@ void main() {
       },
     );
 
+    test('molada "mola bitti" uyarısı mola sonuna kurulur; erken dönüş ve bitiş siler', () async {
+      await r.start(const FocusSettings(FocusMode.deep));
+      expect(r.platform.breakOverAt, isNull);
+      await r.c.takeBreak();
+      await r.settle();
+      expect(r.platform.breakOverAt, r.s.clock!.nextBoundary(r.now));
+      await r.c.resume();
+      await r.settle();
+      expect(r.platform.breakOverAt, isNull);
+      await r.c.takeBreak();
+      await r.settle();
+      expect(r.platform.breakOverAt, isNotNull);
+      await r.c.finish();
+      expect(r.platform.breakOverAt, isNull);
+    });
+
     test('sabitleme onayı pencere odağını alır; kaçış sayılmaz', () async {
       await r.start(const FocusSettings(FocusMode.free));
       r.platform.signalsCtl.add(FocusSignal.windowFocusLost);
@@ -447,6 +463,28 @@ void main() {
         final row = await r.session(id);
         expect(row.endedAt, end);
         expect(row.focusedSeconds, 30 * 60);
+      },
+    );
+
+    test(
+      'kendi süresi kadar: başlangıçtan o kadar sonra biter, hedef o olur',
+      () async {
+        await r.prefs.set(PrefsRepository.autoRun, '0');
+        await r.c.start(
+          instance: await timed(),
+          settings: const FocusSettings(FocusMode.deep),
+          ownMinutes: 5,
+        );
+        final id = r.s.session!.id;
+        expect(r.s.clock!.settings.target, 5);
+        await r.reopen(t0.add(const Duration(minutes: 20)));
+        expect(r.s.ended?.outcome, 'completed');
+        final row = await r.session(id);
+        expect(row.endedAt, t0.add(const Duration(minutes: 5)));
+        // Kayıtlı derin çalışma hedefi bir işin süresiyle ezilmez.
+        final saved = await savedFocusSettings(r.prefs);
+        expect(saved[FocusMode.deep]!.target, 90);
+        await r.prefs.set(PrefsRepository.autoRun, null);
       },
     );
 

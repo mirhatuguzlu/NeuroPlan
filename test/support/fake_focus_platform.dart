@@ -59,4 +59,16 @@ class FakeFocusPlatform implements FocusPlatform {
     String body, {
     required String channelName,
   }) async => phaseAlerts.add(title);
+
+  /// Kurulu "mola bitti" uyarısının anı; null = yok.
+  DateTime? breakOverAt;
+  @override
+  Future<void> scheduleBreakOver(
+    DateTime at,
+    String title,
+    String body, {
+    required String channelName,
+  }) async => breakOverAt = at;
+  @override
+  Future<void> cancelBreakOver() async => breakOverAt = null;
 }
